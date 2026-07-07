@@ -54,12 +54,11 @@
             </div>
 
             <!-- Main study room layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <!-- LEFT SIDE: Interactive Diagram (if exists) + List of Topics (span 7 or 5 depending on diagram) -->
-                <div class="{{ $diagram ? 'lg:col-span-7' : 'lg:col-span-4' }} space-y-6">
+            @if($diagram)
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     
-                    @if($diagram)
+                    <!-- LEFT SIDE: Interactive Diagram + List of Topics (span 7) -->
+                    <div class="lg:col-span-7 space-y-6">
                         <!-- Interactive Diagram Card -->
                         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
                             <div class="relative bg-[#eef3f8] rounded-xl overflow-hidden aspect-[16/10] border border-[#dce4ec] flex items-center justify-center shadow-inner">
@@ -136,45 +135,117 @@
                                 @endforeach
                             </div>
                         </div>
-                    @endif
 
-                    <!-- Topic List Sidebar (Vertical listing of sub-chapters) -->
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3">
-                        <h4 class="font-bold text-slate-800 text-xs tracking-wide uppercase">Topik Sub-Bab</h4>
-                        <div class="space-y-1">
+                        <!-- Topic List Sidebar (Vertical listing of sub-chapters) -->
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+                            <h4 class="font-bold text-slate-800 text-xs tracking-wide uppercase">Topik Sub-Bab</h4>
+                            <div class="space-y-1">
+                                <template x-for="module in modules" :key="module.id">
+                                    <button 
+                                        @click="activeModuleId = module.id"
+                                        class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition text-left"
+                                        :class="activeModuleId === module.id ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'"
+                                    >
+                                        <!-- Bullet marker -->
+                                        <span class="h-1.5 w-1.5 rounded-full shrink-0" :class="activeModuleId === module.id ? 'bg-[#0091ff]' : 'bg-gray-300'"></span>
+                                        <span class="truncate" x-text="module.title"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Jump to other Chapters menu -->
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+                            <h4 class="font-bold text-slate-800 text-xs tracking-wide uppercase">Pindah Bab Buku</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                @foreach($chapters as $c)
+                                    <a 
+                                        href="{{ route('courses.chapters.show', [$course->id, $c->id]) }}" 
+                                        class="px-3 py-2 text-center rounded-lg text-[10px] font-bold border transition duration-150 {{ $c->id == $chapter->id ? 'bg-slate-900 text-white border-slate-950' : 'bg-white text-slate-600 border-gray-100 hover:bg-slate-50' }}"
+                                    >
+                                        BAB {{ $c->order }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT SIDE: Content Reader / Active Module Viewer (span 5) -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[480px]">
+                            
+                            <!-- Article Content Area -->
+                            <div class="p-6 md:p-8 space-y-6">
+                                <!-- Topic Badge & Nav Bar -->
+                                <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                                    <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+                                        Materi Pembelajaran
+                                    </span>
+                                    
+                                    <span class="text-[10px] text-gray-400 font-semibold">
+                                        Mode Belajar Mandiri
+                                    </span>
+                                </div>
+
+                                <!-- Title and HTML Content -->
+                                <div class="space-y-4">
+                                    <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="getActiveModule().title">
+                                        Memuat materi...
+                                    </h2>
+                                    
+                                    <!-- Active Module Content body (rendered with HTML) -->
+                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveModule().content">
+                                        Memuat isi modul pembelajaran...
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer Navigation inside Card -->
+                            <div class="border-t border-gray-100 p-4 bg-gray-50/50 flex items-center justify-between rounded-b-2xl">
+                                <button 
+                                    @click="prevModule()" 
+                                    :disabled="isFirst()" 
+                                    class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                >
+                                    ← Sebelumnya
+                                </button>
+                                
+                                <button 
+                                    @click="nextModule()" 
+                                    :disabled="isLast()" 
+                                    class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                >
+                                    Selanjutnya →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            @else
+                <!-- Full-Width Layout for Chapters without Diagram (e.g. BAB 2, 4, 5) -->
+                <div class="space-y-6">
+                    
+                    <!-- Top horizontal Sub-Chapter Navigation Bar -->
+                    <div class="bg-white p-4 rounded-xl shadow-xs border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
                             <template x-for="module in modules" :key="module.id">
                                 <button 
                                     @click="activeModuleId = module.id"
-                                    class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition text-left"
-                                    :class="activeModuleId === module.id ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800'"
+                                    class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
+                                    :class="activeModuleId === module.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
-                                    <!-- Bullet marker -->
-                                    <span class="h-1.5 w-1.5 rounded-full shrink-0" :class="activeModuleId === module.id ? 'bg-[#0091ff]' : 'bg-gray-300'"></span>
-                                    <span class="truncate" x-text="module.title"></span>
+                                    <span x-text="module.title"></span>
                                 </button>
                             </template>
                         </div>
                     </div>
 
-                    <!-- Jump to other Chapters menu -->
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3">
-                        <h4 class="font-bold text-slate-800 text-xs tracking-wide uppercase">Pindah Bab Buku</h4>
-                        <div class="grid grid-cols-2 gap-2">
-                            @foreach($chapters as $c)
-                                <a 
-                                    href="{{ route('courses.chapters.show', [$course->id, $c->id]) }}" 
-                                    class="px-3 py-2 text-center rounded-lg text-[10px] font-bold border transition duration-150 {{ $c->id == $chapter->id ? 'bg-slate-900 text-white border-slate-950' : 'bg-white text-slate-600 border-gray-100 hover:bg-slate-50' }}"
-                                >
-                                    BAB {{ $c->order }}
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT SIDE: Content Reader / Active Module Viewer (span 5 or 8 depending on diagram) -->
-                <div class="{{ $diagram ? 'lg:col-span-5' : 'lg:col-span-8' }}">
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[480px]">
+                    <!-- Full Width Content Reader Card -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[480px] w-full">
                         
                         <!-- Article Content Area -->
                         <div class="p-6 md:p-8 space-y-6">
@@ -185,7 +256,7 @@
                                 </span>
                                 
                                 <span class="text-[10px] text-gray-400 font-semibold">
-                                    Mode Belajar Mandiri
+                                    Mode Belajar Mandiri (Lebar Penuh)
                                 </span>
                             </div>
 
@@ -221,9 +292,24 @@
                             </button>
                         </div>
                     </div>
-                </div>
 
-            </div>
+                    <!-- Bottom horizontal Chapter Switcher Bar -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+                        <h4 class="font-bold text-slate-800 text-xs tracking-wide uppercase">Pindah Bab Buku</h4>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($chapters as $c)
+                                <a 
+                                    href="{{ route('courses.chapters.show', [$course->id, $c->id]) }}" 
+                                    class="px-4 py-2.5 text-center rounded-lg text-xs font-bold border transition duration-150 {{ $c->id == $chapter->id ? 'bg-slate-900 text-white border-slate-950' : 'bg-white text-slate-600 border-gray-100 hover:bg-slate-50' }}"
+                                >
+                                    BAB {{ $c->order }}: {{ str_replace("BAB {$c->order}: ", "", $c->title) }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
