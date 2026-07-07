@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('diagrams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('chapter_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->string('image_path');
             $table->timestamps();
