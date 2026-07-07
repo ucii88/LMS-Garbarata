@@ -1,0 +1,370 @@
+@section('topbar_title', 'Dashboard')
+
+<x-app-layout>
+    @php
+        $toneMap = [
+            'blue' => [
+                'stat' => 'bg-blue-50 text-blue-600 ring-blue-100/50 border-l-blue-500',
+                'badge' => 'bg-blue-50 text-blue-600 border-blue-100',
+                'button' => 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500',
+                'panel' => 'bg-blue-100 text-blue-700',
+            ],
+            'amber' => [
+                'stat' => 'bg-amber-50 text-amber-600 ring-amber-100/50 border-l-amber-500',
+                'badge' => 'bg-amber-50 text-amber-600 border-amber-100',
+                'button' => 'bg-amber-600 hover:bg-amber-700 focus:ring-amber-500',
+                'panel' => 'bg-amber-100 text-amber-700',
+            ],
+            'emerald' => [
+                'stat' => 'bg-emerald-50 text-emerald-600 ring-emerald-100/50 border-l-emerald-500',
+                'badge' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                'button' => 'bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500',
+                'panel' => 'bg-emerald-100 text-emerald-700',
+            ],
+            'rose' => [
+                'stat' => 'bg-rose-50 text-rose-600 ring-rose-100/50 border-l-rose-500',
+                'badge' => 'bg-rose-50 text-rose-600 border-rose-100',
+                'button' => 'bg-rose-600 hover:bg-rose-700 focus:ring-rose-500',
+                'panel' => 'bg-rose-100 text-rose-700',
+            ],
+            'slate' => [
+                'stat' => 'bg-slate-50 text-slate-600 ring-slate-100 border-l-slate-400',
+                'badge' => 'bg-slate-100 text-slate-600 border-slate-200',
+                'button' => 'bg-slate-900 hover:bg-slate-800 focus:ring-slate-500',
+                'panel' => 'bg-slate-200 text-slate-700',
+            ],
+        ];
+    @endphp
+
+    <div class="space-y-8 select-none" x-data="{ showModal: false }">
+        <!-- Flash Messages -->
+        @if (session('success'))
+            <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-xs font-semibold text-emerald-800 shadow-sm flex items-center space-x-2">
+                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="rounded-xl border border-rose-100 bg-rose-50/50 p-4 text-xs font-semibold text-rose-800 shadow-sm flex items-center space-x-2">
+                <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
+
+        <!-- Premium Hero Welcome Banner -->
+        <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 md:p-10 shadow-sm border border-slate-800">
+            <!-- Subtle background geometric mesh decoration -->
+            <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+            
+            <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="max-w-2xl space-y-3">
+                    <span class="inline-flex items-center rounded-full bg-indigo-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-400 border border-indigo-500/20">
+                        {{ $badgeLabel }}
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+                        {{ $headline }}
+                    </h1>
+                    <p class="text-xs md:text-sm leading-relaxed text-slate-300">
+                        {{ $description }}
+                    </p>
+                </div>
+
+                @if ($primaryAction)
+                    <div class="shrink-0">
+                        <a href="{{ $primaryAction['href'] }}" class="inline-flex items-center justify-center rounded-xl bg-white hover:bg-slate-50 text-slate-900 px-5 py-3 text-xs font-bold transition-all shadow shadow-white/5 border border-slate-200">
+                            {{ $primaryAction['label'] }}
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </section>
+
+        <!-- Stats Overview Cards Grid -->
+        <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach ($stats as $stat)
+                @php
+                    $tone = $toneMap[$stat['tone']] ?? $toneMap['slate'];
+                @endphp
+                <article class="rounded-xl border border-[#f0f0f0] bg-white p-5 shadow-sm hover:shadow-md transition duration-200 border-l-4 {{ $tone['stat'] }}">
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                {{ $stat['label'] }}
+                            </p>
+                            <p class="text-2xl font-extrabold text-slate-800">
+                                {{ $stat['value'] }}
+                            </p>
+                        </div>
+                        <div class="h-10 w-10 flex items-center justify-center rounded-lg bg-white shadow-sm border border-gray-100">
+                            <span class="text-xs font-black text-gray-500">
+                                {{ strtoupper(substr($stat['label'], 0, 1)) }}
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            @endforeach
+        </section>
+
+        <!-- Tab and Details Section -->
+        @if ($isPeserta)
+            <!-- Tabs Menu matching Mockup -->
+            <div class="border-b border-[#f0f0f0]">
+                <nav class="-mb-px flex space-x-8">
+                    <a href="#" class="border-b-2 border-blue-500 py-3 px-1 text-sm font-semibold text-blue-600 transition flex items-center space-x-2">
+                        <span>Materi Belajar</span>
+                        <span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-2xs font-semibold text-blue-600 border border-blue-100">Aktif</span>
+                    </a>
+                    <a href="#" class="border-b-2 border-transparent py-3 px-1 text-sm font-semibold text-gray-400 hover:text-gray-600 transition flex items-center space-x-2 cursor-not-allowed">
+                        <span>Kuis & Ujian</span>
+                        <span class="rounded-full bg-gray-50 px-2.5 py-0.5 text-2xs font-semibold text-gray-400 border border-gray-100">Segera Hadir</span>
+                    </a>
+                    <a href="#" class="border-b-2 border-transparent py-3 px-1 text-sm font-semibold text-gray-400 hover:text-gray-600 transition flex items-center space-x-2 cursor-not-allowed">
+                        <span>Latihan Mandiri</span>
+                        <span class="rounded-full bg-gray-50 px-2.5 py-0.5 text-2xs font-semibold text-gray-400 border border-gray-100">Segera Hadir</span>
+                    </a>
+                </nav>
+            </div>
+        @endif
+
+        <div class="grid gap-6 lg:grid-cols-12">
+            <!-- Left Side: Role Specific Main Section (span 8) -->
+            <div class="lg:col-span-8 space-y-6">
+                <!-- 1. DASHBOARD ADMIN: USER MANAGEMENT -->
+                @if ($isAdmin)
+                    <section id="manajemen-user" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
+                        <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <h2 class="text-base font-bold text-slate-800">Manajemen Pengguna</h2>
+                                <p class="text-xs text-slate-400 mt-1">Tambahkan atau hapus akun instruktur dan peserta dari dashboard.</p>
+                            </div>
+                            <button @click="showModal = true" class="inline-flex items-center justify-center rounded-lg bg-slate-900 hover:bg-slate-800 px-4 py-2.5 text-xs font-bold text-white transition shadow-sm">
+                                Tambah User
+                            </button>
+                        </div>
+
+                        <div class="mt-5 overflow-hidden rounded-xl border border-[#f0f0f0]">
+                            <table class="min-w-full divide-y divide-[#f0f0f0] text-left text-xs">
+                                <thead class="bg-gray-50">
+                                    <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                        <th class="px-5 py-3">Nama</th>
+                                        <th class="px-5 py-3">Email</th>
+                                        <th class="px-5 py-3">Role</th>
+                                        <th class="px-5 py-3">Terdaftar</th>
+                                        <th class="px-5 py-3 text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#f0f0f0] bg-white text-slate-700">
+                                    @foreach ($items as $item)
+                                        <tr class="transition hover:bg-slate-50/50">
+                                            <td class="px-5 py-3.5 font-bold text-slate-800">{{ $item->name }}</td>
+                                            <td class="px-5 py-3.5 text-slate-500">{{ $item->email }}</td>
+                                            <td class="px-5 py-3.5">
+                                                @php
+                                                    $roleTone = $item->role === 'admin' ? 'rose' : ($item->role === 'instruktur' ? 'amber' : 'blue');
+                                                    $roleStyle = $toneMap[$roleTone];
+                                                @endphp
+                                                <span class="inline-flex rounded-full border px-2.5 py-0.5 text-2xs font-bold capitalize {{ $roleStyle['badge'] }}">
+                                                    {{ $item->role }}
+                                                </span>
+                                            </td>
+                                            <td class="px-5 py-3.5 text-slate-400">{{ $item->created_at->format('d M Y') }}</td>
+                                            <td class="px-5 py-3.5 text-right">
+                                                @if ($item->id !== $user->id)
+                                                    <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="font-bold text-rose-600 transition hover:text-rose-800">
+                                                            Hapus
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <span class="text-2xs font-semibold italic text-slate-400">Akun Anda</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                @endif
+
+                <!-- 2. DASHBOARD INSTRUCTOR: COURSE WORKSPACE -->
+                @if ($isInstruktur)
+                    <section id="kelola-kursus" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
+                        <div class="border-b border-[#f0f0f0] pb-5">
+                            <h2 class="text-base font-bold text-slate-800">Daftar Kursus Aktif</h2>
+                            <p class="text-xs text-slate-400 mt-1">Kelola materi, modul, dan diagram interaktif pada satu tempat.</p>
+                        </div>
+
+                        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                            @forelse ($items as $course)
+                                <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/50 p-5 space-y-4 hover:border-gray-300 transition duration-150">
+                                    <div class="flex items-center justify-between">
+                                        <span class="inline-flex rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider {{ $course->is_published ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-slate-200 text-slate-600' }}">
+                                            {{ $course->is_published ? 'Published' : 'Draft' }}
+                                        </span>
+                                        <span class="text-2xs font-bold text-slate-400">{{ $course->modules_count }} modul</span>
+                                    </div>
+
+                                    <div class="space-y-1">
+                                        <h3 class="text-sm font-bold text-slate-800 leading-snug">{{ $course->title }}</h3>
+                                        <p class="text-2xs text-slate-500 line-clamp-2 leading-relaxed">{{ $course->description }}</p>
+                                    </div>
+
+                                    <div class="flex items-center justify-between border-t border-gray-200/60 pt-3">
+                                        <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Diagram interaktif</span>
+                                        <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center justify-center rounded-lg bg-slate-900 hover:bg-slate-800 px-3.5 py-1.5 text-2xs font-bold text-white transition shadow-sm">
+                                            Buka
+                                        </a>
+                                    </div>
+                                </article>
+                            @empty
+                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-xs text-slate-400 sm:col-span-2">
+                                    Belum ada kursus yang tersedia.
+                                </div>
+                            @endforelse
+                        </div>
+                    </section>
+                @endif
+
+                <!-- 3. DASHBOARD STUDENT: COURSE CATALOG -->
+                @if ($isPeserta)
+                    <section id="materi-kursus" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
+                        <div class="border-b border-[#f0f0f0] pb-5">
+                            <h2 class="text-base font-bold text-slate-800">Materi Kursus Tersedia</h2>
+                            <p class="text-xs text-slate-400 mt-1">Pilih materi untuk membuka diagram dan membaca modul pembelajaran.</p>
+                        </div>
+
+                        <div class="mt-5 space-y-4">
+                            @forelse ($items as $course)
+                                <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 hover:bg-slate-50/80 transition duration-150">
+                                    <div class="space-y-1.5 max-w-xl">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="inline-flex rounded-full bg-blue-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-blue-600 border border-blue-100">
+                                                Aktif
+                                            </span>
+                                            <span class="text-2xs font-bold text-slate-400">{{ $course->modules_count ?? 0 }} modul</span>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-800 leading-snug">{{ $course->title }}</h3>
+                                        <p class="text-2xs text-slate-500 leading-relaxed">{{ $course->description }}</p>
+                                    </div>
+
+                                    <div class="shrink-0 flex items-center space-x-4 border-t md:border-t-0 border-[#f0f0f0] pt-3 md:pt-0">
+                                        <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Interaktif Diagram</span>
+                                        <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-xs font-bold text-white transition shadow-sm">
+                                            Mulai Belajar →
+                                        </a>
+                                    </div>
+                                </article>
+                            @empty
+                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-xs text-slate-400">
+                                    Belum ada materi kursus yang dipublikasikan.
+                                </div>
+                            @endforelse
+                        </div>
+                    </section>
+                @endif
+            </div>
+
+            <!-- Right Side: Cards Grid / Coming Soon Cards (span 4) -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm space-y-5">
+                    <h2 class="text-sm font-bold text-slate-800">Aktivitas Lanjutan</h2>
+                    
+                    <div class="space-y-3.5">
+                        @foreach ($cards as $card)
+                            @php
+                                $tone = $toneMap[$card['tone']] ?? $toneMap['slate'];
+                            @endphp
+                            <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/50 p-4 space-y-3 hover:border-gray-200 transition duration-150">
+                                <div class="flex items-center justify-between">
+                                    <span class="inline-flex rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider {{ $tone['badge'] }}">
+                                        {{ $card['meta'] }}
+                                    </span>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <h3 class="text-xs font-bold text-slate-800 leading-snug">{{ $card['title'] }}</h3>
+                                    <p class="text-[10px] text-slate-500 leading-relaxed">{{ $card['description'] }}</p>
+                                </div>
+
+                                <div class="pt-1">
+                                    @if (!($card['disabled'] ?? false))
+                                        <a href="{{ $card['href'] }}" class="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-700 transition">
+                                            {{ $card['action'] }} <span class="ml-1">→</span>
+                                        </a>
+                                    @else
+                                        <span class="inline-flex items-center text-xs font-bold text-gray-400 cursor-not-allowed">
+                                            {{ $card['action'] }}
+                                        </span>
+                                    @endif
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Add User Modal -->
+        @if ($isAdmin)
+            <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+                <div class="flex min-h-screen items-center justify-center px-4 py-10 text-center sm:block sm:p-0">
+                    <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 transition-opacity" @click="showModal = false"></div>
+
+                    <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+
+                    <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full max-w-md align-middle overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-2xl transition-all">
+                        <div class="border-b border-slate-100 px-6 py-5">
+                            <h3 class="text-sm font-bold text-slate-900" id="modal-title">Tambah Pengguna Baru</h3>
+                            <p class="text-[10px] text-slate-400 mt-1">Buat akun admin, instruktur, atau peserta baru.</p>
+                        </div>
+
+                        <form id="addUserForm" action="{{ route('admin.users.store') }}" method="POST" class="space-y-4 px-6 py-5 text-xs text-slate-700">
+                            @csrf
+
+                            <div class="space-y-1">
+                                <label for="name" class="block font-bold text-slate-700">Nama Lengkap</label>
+                                <input type="text" name="name" id="name" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="email" class="block font-bold text-slate-700">Alamat Email</label>
+                                <input type="email" name="email" id="email" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="password" class="block font-bold text-slate-700">Password</label>
+                                <input type="password" name="password" id="password" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label for="role" class="block font-bold text-slate-700">Peran</label>
+                                <select name="role" id="role" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="peserta">Peserta</option>
+                                    <option value="instruktur">Instruktur</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                        </form>
+
+                        <div class="flex flex-col-reverse gap-2 border-t border-slate-100 bg-slate-50 px-6 py-4 sm:flex-row sm:justify-end text-xs">
+                            <button type="button" @click="showModal = false" class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 font-bold text-slate-700 transition hover:bg-slate-50">
+                                Batal
+                            </button>
+                            <button type="submit" form="addUserForm" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 font-bold text-white transition shadow-sm">
+                                Simpan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    </div>
+</x-app-layout>
