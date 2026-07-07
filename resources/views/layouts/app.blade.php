@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased text-slate-800 bg-[#f4f5f7]">
-        <div class="min-h-screen flex bg-[#f4f5f7]">
+        <div x-data class="min-h-screen flex bg-[#f4f5f7]">
             <!-- Left Sidebar -->
             @include('layouts.sidebar')
 
@@ -27,14 +27,14 @@
                 <!-- Page Header (Optional) -->
                 @isset($header)
                     <div class="bg-white border-b border-gray-100 py-4 px-8">
-                        <div class="max-w-7xl mx-auto">
+                        <div class="w-full">
                             {{ $header }}
                         </div>
                     </div>
                 @endisset
 
                 <!-- Main Page Content -->
-                <main class="flex-1 py-8 px-8 max-w-7xl w-full mx-auto">
+                <main class="flex-1 py-8 px-8 w-full">
                     {{ $slot }}
                 </main>
             </div>

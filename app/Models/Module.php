@@ -15,6 +15,7 @@ class Module extends Model
         'course_id',
         'title',
         'content',
+        'image_path',
         'order',
     ];
 
