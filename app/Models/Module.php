@@ -12,18 +12,18 @@ class Module extends Model
     use HasFactory;
 
     protected $fillable = [
-        'course_id',
+        'chapter_id',
         'title',
         'content',
         'order',
     ];
 
     /**
-     * Get the course that owns the module.
+     * Get the chapter that owns the module.
      */
-    public function course(): BelongsTo
+    public function chapter(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Chapter::class);
     }
 
     /**

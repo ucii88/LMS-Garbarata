@@ -22,18 +22,18 @@ class Course extends Model
     ];
 
     /**
-     * Get the modules for the course.
+     * Get the chapters for the course.
      */
-    public function modules(): HasMany
+    public function chapters(): HasMany
     {
-        return $this->hasMany(Module::class)->orderBy('order');
+        return $this->hasMany(Chapter::class)->orderBy('order');
     }
 
     /**
-     * Get the diagrams for the course.
+     * Get all of the modules for the course.
      */
-    public function diagrams(): HasMany
+    public function modules(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
     {
-        return $this->hasMany(Diagram::class);
+        return $this->hasManyThrough(Module::class, Chapter::class);
     }
 }
