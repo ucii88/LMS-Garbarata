@@ -5,7 +5,7 @@
         activeModuleId: {{ $modules->first() ? $modules->first()->id : 'null' }},
         modules: {{ $modules->toJson() }},
         getActiveModule() {
-            return this.modules.find(m => m.id === this.activeModuleId) || { title: '', content: '' };
+            return this.modules.find(m => m.id === this.activeModuleId) || { title: '', content: '', image_path: null };
         },
         nextModule() {
             const index = this.modules.findIndex(m => m.id === this.activeModuleId);
@@ -27,13 +27,13 @@
         }
     }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            
+
             <!-- Navigation Back & Title Bar -->
             <div class="flex items-center justify-between">
                 <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
                     ← Kembali ke Silabus Kursus
                 </a>
-                
+
                 <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
                     Bab {{ $chapter->order }} dari {{ $chapters->count() }}
                 </span>
@@ -54,21 +54,22 @@
             </div>
 
             <!-- Main study room layout -->
-            @if($diagram)
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    
-                    <!-- LEFT SIDE: Interactive Diagram + List of Topics (span 7) -->
-                    <div class="lg:col-span-7 space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- LEFT SIDE: Interactive Diagram (if exists) + List of Topics (span 7 or 5 depending on diagram) -->
+                <div class="{{ $diagram ? 'lg:col-span-7' : 'lg:col-span-4' }} space-y-6">
+
+                    @if($diagram)
                         <!-- Interactive Diagram Card -->
                         <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                            <div class="relative bg-[#eef3f8] rounded-xl overflow-hidden aspect-[16/10] border border-[#dce4ec] flex items-center justify-center shadow-inner">
-                                
+                            <div class="relative bg-[#eef3f8] rounded-xl overflow-hidden aspect-[1755/896] w-full border border-[#dce4ec] flex items-center justify-center shadow-inner">
+
                                 @if($diagram->image_path && file_exists(public_path($diagram->image_path)))
-                                    <img src="{{ asset($diagram->image_path) }}" class="w-full h-full object-cover select-none" alt="Diagram {{ $chapter->title }}">
+                                    <img src="{{ asset($diagram->image_path) }}" class="w-full h-full object-contain select-none" alt="Diagram {{ $chapter->title }}">
                                 @else
                                     <!-- Dynamic Fallback SVG Schematic based on Chapter Order -->
                                     <div class="absolute inset-0 flex flex-col items-center justify-center p-8 select-none">
-                                        
+
                                         @if($chapter->order == 7)
                                             <!-- Electrical Panel Fallback Schematic -->
                                             <svg class="w-full h-full max-h-[260px] opacity-[0.06] text-[#0091ff]" viewBox="0 0 800 400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -115,7 +116,7 @@
 
                                 <!-- Overlay Hotspots -->
                                 @foreach($diagram->hotspots as $hotspot)
-                                    <button 
+                                    <button
                                         @click="activeModuleId = {{ $hotspot->target_module_id }}"
                                         class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none"
                                         style="left: {{ $hotspot->x_percent }}%; top: {{ $hotspot->y_percent }}%;"
@@ -233,7 +234,7 @@
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="module in modules" :key="module.id">
-                                <button 
+                                <button
                                     @click="activeModuleId = module.id"
                                     class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
                                     :class="activeModuleId === module.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
@@ -244,9 +245,26 @@
                         </div>
                     </div>
 
-                    <!-- Full Width Content Reader Card -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[480px] w-full">
-                        
+                    <!-- Jump to other Chapters menu -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+                        <h4 class="font-bold text-slate-800 text-xs tracking-wide uppercase">Pindah Bab Buku</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            @foreach($chapters as $c)
+                                <a
+                                    href="{{ route('courses.chapters.show', [$course->id, $c->id]) }}"
+                                    class="px-3 py-2 text-center rounded-lg text-[10px] font-bold border transition duration-150 {{ $c->id == $chapter->id ? 'bg-slate-900 text-white border-slate-950' : 'bg-white text-slate-600 border-gray-100 hover:bg-slate-50' }}"
+                                >
+                                    BAB {{ $c->order }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE: Content Reader / Active Module Viewer (span 5 or 8 depending on diagram) -->
+                <div class="{{ $diagram ? 'lg:col-span-5' : 'lg:col-span-8' }}">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[480px]">
+
                         <!-- Article Content Area -->
                         <div class="p-6 md:p-8 space-y-6">
                             <!-- Topic Badge & Nav Bar -->
@@ -254,7 +272,7 @@
                                 <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
                                     Materi Pembelajaran
                                 </span>
-                                
+
                                 <span class="text-[10px] text-gray-400 font-semibold">
                                     Mode Belajar Mandiri (Lebar Penuh)
                                 </span>
@@ -265,7 +283,13 @@
                                 <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="getActiveModule().title">
                                     Memuat materi...
                                 </h2>
-                                
+
+                                <template x-if="getActiveModule().image_path">
+                                    <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-sm">
+                                        <img :src="'/' + getActiveModule().image_path" class="w-full max-h-72 object-contain rounded-lg select-none" :alt="getActiveModule().title">
+                                    </div>
+                                </template>
+
                                 <!-- Active Module Content body (rendered with HTML) -->
                                 <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveModule().content">
                                     Memuat isi modul pembelajaran...
@@ -275,17 +299,17 @@
 
                         <!-- Footer Navigation inside Card -->
                         <div class="border-t border-gray-100 p-4 bg-gray-50/50 flex items-center justify-between rounded-b-2xl">
-                            <button 
-                                @click="prevModule()" 
-                                :disabled="isFirst()" 
+                            <button
+                                @click="prevModule()"
+                                :disabled="isFirst()"
                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 ← Sebelumnya
                             </button>
-                            
-                            <button 
-                                @click="nextModule()" 
-                                :disabled="isLast()" 
+
+                            <button
+                                @click="nextModule()"
+                                :disabled="isLast()"
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 Selanjutnya →

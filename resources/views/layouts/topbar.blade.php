@@ -1,6 +1,19 @@
 <header class="bg-white border-b border-[#f0f0f0] h-16 flex items-center justify-between px-8 sticky top-0 z-40 select-none">
     <!-- Left Section: Dynamic Page Title -->
-    <div>
+    <div class="flex items-center space-x-3">
+        <button
+            type="button"
+            @click="$store.ui.toggleSidebar()"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition focus:outline-none"
+            aria-label="Toggle sidebar"
+        >
+            <svg x-show="!$store.ui.sidebarCollapsed" x-cloak class="h-4.5 w-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <svg x-show="$store.ui.sidebarCollapsed" x-cloak class="h-4.5 w-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
         <h1 class="text-base font-bold text-slate-800 tracking-tight">
             @yield('topbar_title', 'Dashboard')
         </h1>

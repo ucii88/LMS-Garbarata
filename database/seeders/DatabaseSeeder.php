@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Course;
 use App\Models\Chapter;
-use App\Models\Module;
+use App\Models\Course;
 use App\Models\Diagram;
 use App\Models\Hotspot;
+use App\Models\Module;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -21,37 +21,54 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Seed Users (Admin, Instruktur, Peserta)
-        $admin = User::create([
+        $this->seedUsers();
+
+        $course = $this->seedCourse();
+        $chapters = $this->seedChapters($course);
+
+        $this->seedChapterOne($chapters['chapter1']);
+        $this->seedChapterTwo($chapters['chapter2']);
+        $this->seedChapterThree($chapters['chapter3']);
+        $this->seedChapterSeven($chapters['chapter7']);
+
+    }
+
+    private function seedUsers(): void
+    {
+        User::create([
             'name' => 'Administrator LMS',
             'email' => 'admin@lms.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
         ]);
 
-        $instruktur = User::create([
+        User::create([
             'name' => 'Capt. Hermawan (Instruktur)',
             'email' => 'instruktur@lms.com',
             'password' => Hash::make('password'),
             'role' => 'instruktur',
         ]);
 
-        $peserta = User::create([
+        User::create([
             'name' => 'Budi Santoso (Peserta)',
             'email' => 'peserta@lms.com',
             'password' => Hash::make('password'),
             'role' => 'peserta',
         ]);
+    }
 
-        // 2. Seed Course
-        $course = Course::create([
+    private function seedCourse(): Course
+    {
+        return Course::create([
             'title' => 'Pengenalan dan Pengoperasian Garbarata',
             'description' => 'Mata kuliah/training dasar mengenai komponen mekanik, sistem elektrik, keselamatan kerja, dan standar operasional prosedur (SOP) pengoperasian Garbarata (Passenger Boarding Bridge) di bandar udara.',
             'thumbnail' => 'course_garbarata.jpg',
             'is_published' => true,
         ]);
+    }
 
-        // 3. Seed Chapters (BAB 1 - BAB 7)
+    private function seedChapters(Course $course): array
+    {
         $chapter1 = Chapter::create([
             'course_id' => $course->id,
             'title' => 'BAB 1: Deskripsi Garbarata',
@@ -70,19 +87,19 @@ class DatabaseSeeder extends Seeder
             'order' => 3,
         ]);
 
-        $chapter4 = Chapter::create([
+        Chapter::create([
             'course_id' => $course->id,
             'title' => 'BAB 4: Perawatan, Inspeksi & Penyelesaian Masalah',
             'order' => 4,
         ]);
 
-        $chapter5 = Chapter::create([
+        Chapter::create([
             'course_id' => $course->id,
             'title' => 'BAB 5: Daftar Suku Cadang',
             'order' => 5,
         ]);
 
-        $chapter6 = Chapter::create([
+        Chapter::create([
             'course_id' => $course->id,
             'title' => 'BAB 6: Katalog Bagian Utama',
             'order' => 6,
@@ -97,34 +114,52 @@ class DatabaseSeeder extends Seeder
         // ==========================================
         // 4. SEED MODULES FOR BAB 1: Deskripsi Garbarata
         // ==========================================
+        return [
+            'chapter1' => $chapter1,
+            'chapter2' => $chapter2,
+            'chapter3' => $chapter3,
+            'chapter7' => $chapter7,
+        ];
+    }
+
+    private function seedChapterOne(Chapter $chapter): void
+    {
         $module1_1 = Module::create([
-            'chapter_id' => $chapter1->id,
+            'chapter_id' => $chapter->id,
             'title' => '1.1 Rotunda (Pangkal Garbarata)',
+            'image_path' => 'images/modules/rotunda.png',
             'content' => '<p><strong>Rotunda</strong> adalah bagian pangkal atau poros utama Garbarata yang terhubung langsung dengan terminal bandara (departure gate).</p><p>Karakteristik penting Rotunda:</p><ul><li>Memiliki engsel rotasi horizontal yang memungkinkan terowongan Garbarata berputar ke kiri dan kanan hingga sudut tertentu.</li><li>Memiliki sistem penyeimbang beban agar struktur terowongan tetap kokoh ketika memanjang.</li><li>Dilengkapi pintu transisi aman dari gedung terminal menuju area Garbarata.</li></ul>',
             'order' => 1,
         ]);
 
         $module1_2 = Module::create([
-            'chapter_id' => $chapter1->id,
+            'chapter_id' => $chapter->id,
             'title' => '1.2 Telescopic Tunnel (Terowongan)',
+            'image_path' => 'images/modules/telescoping_tunnels.png',
             'content' => '<p><strong>Telescopic Tunnel</strong> adalah lorong berjalan berbentuk tabung persegi yang dapat memanjang dan memendek (sistem teleskopik).</p><p>Komponen di dalam Tunnel:</p><ul><li><strong>Inner & Outer Tunnel:</strong> Segmen lorong yang saling berhimpitan dan bergeser maju/mundur.</li><li><strong>Flooring & Lighting:</strong> Karpet anti-slip dan pencahayaan LED darurat untuk kenyamanan penumpang.</li><li><strong>Service Doors:</strong> Pintu darurat/akses tangga luar yang berada di sepanjang lorong.</li></ul>',
             'order' => 2,
         ]);
 
         $module1_3 = Module::create([
-            'chapter_id' => $chapter1->id,
+            'chapter_id' => $chapter->id,
             'title' => '1.3 Cabin & Control Console (Kabin Kemudi)',
+            'image_path' => 'images/modules/cabin.png',
             'content' => '<p><strong>Kabin Kontrol</strong> terletak di ujung Garbarata yang langsung menempel ke pintu pesawat (aircraft door).</p><p>Di dalam kabin ini terdapat panel kontrol utama bagi operator:</p><ul><li><strong>Joystick Kontrol:</strong> Mengatur pergerakan maju-mundur terowongan dan menaikkan/menurunkan elevasi kabin.</li><li><strong>Canopy Controller:</strong> Menurunkan penutup karet pelindung cuaca (canopy) ke atas badan pesawat.</li><li><strong>Auto-leveling Arm:</strong> Lengan sensor otomatis yang mendeteksi perubahan tinggi pintu pesawat akibat naik-turunnya beban muatan/penumpang, lalu menyesuaikan tinggi Garbarata secara otomatis.</li></ul>',
             'order' => 3,
         ]);
 
         $module1_4 = Module::create([
-            'chapter_id' => $chapter1->id,
+            'chapter_id' => $chapter->id,
             'title' => '1.4 Drive Column & Wheels (Kolom Penggerak)',
+            'image_path' => 'images/modules/wheel_boogie.png',
             'content' => '<p><strong>Drive Column (Wheels)</strong> merupakan kaki penopang utama sekaligus sistem penggerak roda mekanis Garbarata.</p><p>Sistem ini meliputi:</p><ul><li><strong>Dua Roda Besar:</strong> Digerakkan oleh motor listrik AC atau sistem hidrolik independen untuk memutar dan menggerakkan maju/mundur.</li><li><strong>Elevating System:</strong> Tiang penyangga vertikal bersumbu ulir (ball screw) atau hidrolik silinder untuk menaikkan/menurunkan seluruh tinggi terowongan.</li><li><strong>Wheel Guard:</strong> Pelindung ban dari benturan objek asing di apron bandara.</li></ul>',
             'order' => 4,
         ]);
 
+        $diagram = Diagram::create([
+            'chapter_id' => $chapter->id,
+            'title' => 'Diagram Struktur Utama Garbarata',
+            'image_path' => 'images/garbarata.png',
         // Seed Diagram for BAB 1
         $diagram1 = Diagram::create([
             'chapter_id' => $chapter1->id,
@@ -132,62 +167,70 @@ class DatabaseSeeder extends Seeder
             'image_path' => 'images/garbarata_diagram.png',
         ]);
 
-        // Seed Hotspots for BAB 1
         Hotspot::create([
-            'diagram_id' => $diagram1->id,
+            'diagram_id' => $diagram->id,
             'target_module_id' => $module1_1->id,
             'label' => 'Rotunda (Pangkal)',
-            'x_percent' => 15.5,
-            'y_percent' => 52.0,
+            'x_percent' => 13.5,
+            'y_percent' => 13.0,
         ]);
 
         Hotspot::create([
-            'diagram_id' => $diagram1->id,
+            'diagram_id' => $diagram->id,
             'target_module_id' => $module1_2->id,
             'label' => 'Telescopic Tunnel',
-            'x_percent' => 45.0,
-            'y_percent' => 48.0,
+            'x_percent' => 25.0,
+            'y_percent' => 20.0,
         ]);
 
         Hotspot::create([
-            'diagram_id' => $diagram1->id,
+            'diagram_id' => $diagram->id,
             'target_module_id' => $module1_3->id,
             'label' => 'Cabin & Control Console',
-            'x_percent' => 82.0,
-            'y_percent' => 38.0,
+            'x_percent' => 87.0,
+            'y_percent' => 45.0,
         ]);
 
         Hotspot::create([
-            'diagram_id' => $diagram1->id,
+            'diagram_id' => $diagram->id,
             'target_module_id' => $module1_4->id,
             'label' => 'Drive Column & Wheels',
-            'x_percent' => 65.0,
-            'y_percent' => 76.0,
+            'x_percent' => 72.0,
+            'y_percent' => 77.0,
         ]);
 
 
         // ==========================================
         // 5. SEED MODULES FOR BAB 2: Data Teknis
         // ==========================================
+    }
+
+    private function seedChapterTwo(Chapter $chapter): void
+    {
         Module::create([
-            'chapter_id' => $chapter2->id,
+            'chapter_id' => $chapter->id,
             'title' => '2.1 Spesifikasi Dimensi Fisik',
             'content' => '<p>Data Teknis dimensi fisik jembatan penyeberangan Garbarata:</p><div class="overflow-x-auto my-4"><table class="min-w-full divide-y divide-gray-200 border border-gray-100 text-xs"><thead><tr class="bg-gray-50 text-slate-600 font-bold"><th>Parameter</th><th class="p-2">Nilai Minimal</th><th class="p-2">Nilai Maksimal</th></tr></thead><tbody class="divide-y divide-gray-100 text-slate-600"><tr><td class="p-2">Panjang Terowongan (Retracted/Extended)</td><td class="p-2">18.5 Meter</td><td class="p-2">39.0 Meter</td></tr><tr class="bg-slate-50/50"><td class="p-2">Tinggi Kabin (Elevasi/Vertikal)</td><td class="p-2">2.1 Meter</td><td class="p-2">5.4 Meter</td></tr><tr><td class="p-2">Kecepatan Rotasi Roda</td><td class="p-2">0 deg/sec</td><td class="p-2">4.2 deg/sec</td></tr></tbody></table></div>',
             'order' => 1,
         ]);
 
         Module::create([
-            'chapter_id' => $chapter2->id,
+            'chapter_id' => $chapter->id,
             'title' => '2.2 Batas Toleransi Beban',
             'content' => '<p>Beban struktural maksimum Garbarata mencakup berat terowongan, hembusan angin, dan berat penumpang berjalan:</p><ul><li><strong>Beban Hidup Terdistribusi:</strong> Maksimum 300 kg/m² pada terowongan.</li><li><strong>Kecepatan Angin Operasional:</strong> Maksimum 60 knot (111 km/jam). Di atas itu, jembatan harus ditarik ke posisi parkir jangkar.</li></ul>',
             'order' => 2,
         ]);
+    }
 
+    private function seedChapterThree(Chapter $chapter): void
+    {
 
         // ==========================================
         // 6. SEED MODULES FOR BAB 3: Instruksi Pengoperasian
         // ==========================================
         Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '3.1 Prosedur Pre-docking (Sebelum Pesawat Masuk)',
             'chapter_id' => $chapter3->id,
             'title' => '3.1 Prosedur Pre-docking',
             'content' => '<p>Operator wajib memastikan kondisi lingkungan apron aman sebelum pesawat tiba di garis henti:</p><ol><li>Periksa tidak ada benda asing (FOD) di area sapuan roda Garbarata.</li><li>Pastikan canopy karet dalam posisi terlipat penuh ke atas.</li><li>Posisikan Garbarata pada markah parkir aman (Home Position).</li></ol>',
@@ -195,6 +238,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '3.2 Prosedur Docking (Merapat ke Pintu Pesawat)',
             'chapter_id' => $chapter3->id,
             'title' => '3.2 Prosedur Docking & Undocking',
             'content' => '<p>Langkah-langkah merapatkan jembatan setelah lampu tanda henti menyala dan mesin pesawat dimatikan:</p><ol><li>Gerakkan roda maju secara perlahan menggunakan joystick kontrol kabin.</li><li>Arahkan bumper kabin lurus menghadap pintu utama pesawat.</li><li>Turunkan canopy penutup cuaca secara perlahan hingga menutup celah badan pesawat secara rapat namun tanpa tekanan berlebih.</li><li>Aktifkan sistem sensor auto-leveling.</li></ol>',
@@ -363,20 +408,20 @@ class DatabaseSeeder extends Seeder
             'order' => 1,
         ]);
 
-        // Seed Diagram for BAB 7
-        $diagram7 = Diagram::create([
-            'chapter_id' => $chapter7->id,
+        $diagram = Diagram::create([
+            'chapter_id' => $chapter->id,
             'title' => 'Diagram Sirkuit Kelistrikan Utama',
             'image_path' => 'images/electrical_diagram.png',
         ]);
 
         // Hotspots for BAB 7
         Hotspot::create([
-            'diagram_id' => $diagram7->id,
-            'target_module_id' => $module7_1->id,
+            'diagram_id' => $diagram->id,
+            'target_module_id' => $module->id,
             'label' => 'Main Panel Breaker',
             'x_percent' => 50.0,
             'y_percent' => 50.0,
         ]);
     }
+
 }

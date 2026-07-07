@@ -1,4 +1,4 @@
-<aside class="w-64 bg-white border-r border-[#f0f0f0] flex flex-col justify-between h-screen sticky top-0 shrink-0 select-none">
+<aside x-cloak x-show="!$store.ui.sidebarCollapsed" x-transition class="w-64 bg-white border-r border-[#f0f0f0] flex flex-col justify-between h-screen sticky top-0 shrink-0 select-none">
     <!-- Top Area: Logo & Navigation -->
     <div class="py-6 px-5 space-y-7">
         <!-- Logo -->
@@ -16,8 +16,8 @@
         <nav class="space-y-1">
             @if(Auth::user()->isAdmin())
                 <!-- Admin specific links -->
-                <a 
-                    href="{{ route('dashboard') }}" 
+                <a
+                    href="{{ route('dashboard') }}"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('dashboard') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
                     <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -25,9 +25,9 @@
                     </svg>
                     <span>Dashboard</span>
                 </a>
-                
-                <a 
-                    href="{{ route('dashboard') }}#manajemen-user" 
+
+                <a
+                    href="{{ route('dashboard') }}#manajemen-user"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800"
                 >
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -39,8 +39,8 @@
 
             @if(Auth::user()->isInstruktur())
                 <!-- Instruktur specific links -->
-                <a 
-                    href="{{ route('dashboard') }}" 
+                <a
+                    href="{{ route('dashboard') }}"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('dashboard') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
                     <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -49,8 +49,8 @@
                     <span>Dashboard</span>
                 </a>
 
-                <a 
-                    href="{{ route('dashboard') }}#kelola-kursus" 
+                <a
+                    href="{{ route('dashboard') }}#kelola-kursus"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800"
                 >
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -63,8 +63,8 @@
             @if(Auth::user()->isPeserta())
                 <!-- Peserta specific links (Matches mockup design) -->
                 <!-- Dashboard Link -->
-                <a 
-                    href="{{ route('dashboard') }}" 
+                <a
+                    href="{{ route('dashboard') }}"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('dashboard') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
                     <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -74,8 +74,8 @@
                 </a>
 
                 <!-- Materi Garbarata Link -->
-                <a 
-                    href="{{ route('courses.show', 1) }}" 
+                <a
+                    href="{{ route('courses.show', 1) }}"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('courses.show') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
                     <svg class="w-5 h-5 {{ request()->routeIs('courses.show') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -85,8 +85,8 @@
                 </a>
 
                 <!-- Tugas & Kuis Link -->
-                <a 
-                    href="#" 
+                <a
+                    href="#"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-600 transition-all duration-150 cursor-not-allowed group"
                 >
                     <svg class="w-5 h-5 text-gray-300 group-hover:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -96,8 +96,8 @@
                 </a>
 
                 <!-- Sertifikat Link -->
-                <a 
-                    href="#" 
+                <a
+                    href="#"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-600 transition-all duration-150 cursor-not-allowed group"
                 >
                     <svg class="w-5 h-5 text-gray-300 group-hover:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -112,7 +112,13 @@
     <!-- Bottom Area: Profile Card & Logout -->
     <div class="p-4 border-t border-[#f0f0f0] space-y-4">
         <!-- User Profile Info (Matches mockup exactly with 'User' label in circle) -->
-        <div class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-xl transition cursor-pointer select-none" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" title="Klik untuk keluar aplikasi">
+        <button
+            type="button"
+            class="w-full flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-xl transition cursor-pointer select-none text-left"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+            onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); document.getElementById('logout-form').submit(); }"
+            title="Klik untuk keluar aplikasi"
+        >
             <!-- Profile Avatar -->
             <div class="w-10 h-10 rounded-full bg-[#0091ff] text-white flex items-center justify-center font-bold text-xs shadow-sm">
                 User
@@ -123,7 +129,7 @@
                     {{ Auth::user()->role === 'peserta' ? 'Peserta (Teknisi)' : (Auth::user()->role === 'instruktur' ? 'Instruktur' : 'Administrator') }}
                 </p>
             </div>
-        </div>
+        </button>
 
         <!-- Safe Reporting Link & Hidden Logout Form -->
         <div class="px-2">

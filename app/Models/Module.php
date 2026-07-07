@@ -15,6 +15,7 @@ class Module extends Model
         'chapter_id',
         'title',
         'content',
+        'image_path',
         'order',
     ];
 
