@@ -51,6 +51,17 @@
                     });
                 });
             },
+
+            setMechModule(moduleId) {
+                this.activeMechId = moduleId;
+                this.scrollToMechReader();
+            },
+
+            scrollToMechReader() {
+                this.$nextTick(() => {
+                    this.$refs.mechReader?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            },
             
             getActiveMech() {
                 return this.mechItems.find(item => item.id === this.activeMechId) || { title: '', content: '', image_path: null };
@@ -92,7 +103,7 @@
             prevElec() {
                 const index = this.elecItems.findIndex(item => item.id === this.activeElecId);
                 if (index > 0) {
-                    this.activeElecId = this.elecItems[index - 1].id;
+                this.activeElecId = this.elecItems[index - 1].id;
                 }
             },
             
@@ -118,9 +129,10 @@
                 </div>
 
                 <!-- ================= BAGIAN 1: KOMPONEN MEKANIKAL ================= -->
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
-                    <div class="flex items-center space-x-2.5 border-b border-gray-100 pb-3">
-                        <span class="p-1.5 rounded-lg bg-blue-600 text-white font-black text-2xs">01</span>
+                <section class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-gray-100 pb-3">
+                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
                         <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Mekanikal</h2>
                     </div>
 
@@ -132,7 +144,7 @@
                         <div class="flex flex-wrap gap-1.5">
                             <template x-for="item in mechItems" :key="item.id">
                                 <button 
-                                    @click="activeMechId = item.id"
+                                    @click="setMechModule(item.id)"
                                     class="px-3 py-1.5 rounded-lg text-2xs font-bold transition text-left"
                                     :class="activeMechId === item.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
                                 >
@@ -142,10 +154,14 @@
                         </div>
                     </div>
 
+                    <p class="text-[10px] font-semibold text-slate-400">
+                        Klik judul topik untuk membuka materi yang lebih lengkap.
+                    </p>
+
                     <!-- Interactive Diagram with Hotspots -->
                     @if($diagram)
-                        <div class="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 max-w-4xl mx-auto w-full">
-                            <div class="relative bg-white rounded-xl overflow-hidden aspect-[1755/896] w-full border border-slate-200 flex items-center justify-center shadow-sm">
+                        <section class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full">
+                            <div class="relative bg-white rounded-xl overflow-hidden aspect-[1755/896] w-full border border-gray-200 flex items-center justify-center shadow-sm">
                                 @if($diagram->image_path && file_exists(public_path($diagram->image_path)))
                                     <img src="{{ asset($diagram->image_path) }}" class="w-full h-full object-contain select-none" alt="Diagram {{ $chapter->title }}">
                                 @endif
@@ -153,7 +169,7 @@
                                 <!-- Overlay Hotspots -->
                                 @foreach($diagram->hotspots as $hotspot)
                                     <button 
-                                        @click="activeMechId = {{ $hotspot->target_module_id }}"
+                                        @click="setMechModule({{ $hotspot->target_module_id }})"
                                         class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none"
                                         style="left: {{ $hotspot->x_percent }}%; top: {{ $hotspot->y_percent }}%;"
                                     >
@@ -166,16 +182,18 @@
                                             {{ $hotspot->label }}
                                         </span>
                                     </button>
-                                  @endforeach
+                                @endforeach
                               </div>
-                          </div>
+                          </section>
                       @endif
 
+                    </div>
+
                       <!-- Mechanical Reader Card -->
-                      <div class="bg-white rounded-2xl border border-slate-100 flex flex-col justify-between min-h-[320px] w-full">
+                      <div id="chapter1-reader" x-ref="mechReader" class="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between min-h-[320px] w-full">
                           <div class="p-4 md:p-6 space-y-5">
                               <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                                  <span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                                  <span class="inline-flex h-8 items-center rounded-full border border-blue-200 bg-white px-3 text-[9px] font-bold text-blue-600 uppercase tracking-wider">
                                       Modul Mekanikal
                                   </span>
                                   <span class="text-[10px] text-gray-400 font-semibold" x-text="activeMechId === 'intro_mekanikal' ? 'Halaman Pengantar' : 'Topik ' + getActiveMech().title.split(' ')[0]"></span>
@@ -183,12 +201,6 @@
 
                               <div class="space-y-4">
                                   <h2 class="text-base font-bold text-slate-800 leading-snug" x-text="getActiveMech().title"></h2>
-
-                                  <template x-if="getActiveMech().image_path">
-                                      <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 max-w-xl mx-auto">
-                                          <img :src="'/' + getActiveMech().image_path" class="w-full max-h-64 object-contain rounded-lg select-none" :alt="getActiveMech().title">
-                                      </div>
-                                  </template>
 
                                   <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveMech().content"></div>
                               </div>
@@ -213,12 +225,12 @@
                               </button>
                           </div>
                       </div>
-                  </div>
+                </section>
 
                   <!-- ================= BAGIAN 2: KOMPONEN ELEKTRIKAL & SISTEM KONTROL ================= -->
                   <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
-                      <div class="flex items-center space-x-2.5 border-b border-gray-100 pb-3">
-                          <span class="p-1.5 rounded-lg bg-emerald-600 text-white font-black text-2xs">02</span>
+                      <div class="flex items-center space-x-3 border-b border-gray-100 pb-3">
+                          <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
                           <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Elektrikal dan Sistem Kontrol</h2>
                       </div>
 
@@ -244,7 +256,7 @@
                       <div class="bg-white rounded-2xl border border-slate-100 flex flex-col justify-between min-h-[320px] w-full">
                           <div class="p-4 md:p-6 space-y-5">
                               <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                                  <span class="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[9px] font-bold text-emerald-600 border border-emerald-100 uppercase tracking-wider">
+                                  <span class="inline-flex h-8 items-center rounded-full border border-emerald-200 bg-white px-3 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
                                       Modul Elektrikal & Kontrol
                                   </span>
                                   <span class="text-[10px] text-gray-400 font-semibold" x-text="activeElecId === 'intro_elektrikal' ? 'Halaman Pengantar' : 'Topik ' + getActiveElec().title.split(' ')[0]"></span>
@@ -286,6 +298,124 @@
 
               </div>
           </div>
+    @elseif($chapter->order == 2)
+        <!-- Custom Grouped Layout for Chapter 2: Mechanical Specs & Electrical Specs -->
+        <div class="py-6 select-none" x-data="{
+            modules: @js($modules),
+            mechItems: [],
+            elecItems: [],
+            expandedMechIds: [],
+
+            init() {
+                this.mechItems = this.modules.filter(module => module.title.startsWith('1.'));
+                this.elecItems = this.modules.filter(module => module.title.startsWith('2.'));
+            },
+
+            toggleMech(moduleId) {
+                if (this.expandedMechIds.includes(moduleId)) {
+                    this.expandedMechIds = this.expandedMechIds.filter(id => id !== moduleId);
+                    return;
+                }
+
+                this.expandedMechIds.push(moduleId);
+            },
+
+            isMechExpanded(moduleId) {
+                return this.expandedMechIds.includes(moduleId);
+            }
+        }">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+                <!-- Navigation Back & Title Bar -->
+                <div class="flex items-center justify-between">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        â† Kembali ke Silabus Kursus
+                    </a>
+
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                        Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                    </span>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-sm">
+                        {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                        Materi Bab 2 dibagi menjadi spesifikasi mekanikal dan elektrikal. Bagian mekanikal dapat dibuka dan ditutup per topik agar tabel dan gambar lebih mudah dibaca.
+                    </p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Mechanical Group -->
+                    <section class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+                        <div class="flex flex-col gap-2 border-b border-gray-100 pb-4 md:flex-row md:items-center md:justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
+                                <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Mekanikal</h2>
+                            </div>
+
+                            <span class="inline-flex w-fit rounded-full border border-blue-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-blue-600 uppercase tracking-wider">
+                                Module 1.1 - 1.4
+                            </span>
+                        </div>
+
+                        <p class="text-[10px] font-semibold text-slate-400">
+                            Klik judul module untuk melihat materi lengkap.
+                        </p>
+
+                        <div class="space-y-3">
+                            <template x-for="module in mechItems" :key="module.id">
+                                <article class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                    <button
+                                        type="button"
+                                        @click="toggleMech(module.id)"
+                                        class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
+                                    >
+                                        <span class="text-xs md:text-sm font-bold text-slate-800" x-text="module.title"></span>
+                                        <span
+                                            class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                            x-text="isMechExpanded(module.id) ? '-' : '+'"
+                                        ></span>
+                                    </button>
+
+                                    <div x-show="isMechExpanded(module.id)" class="border-t border-gray-100 bg-white">
+                                        <div class="p-4 md:p-6 space-y-4">
+                                            <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </template>
+                        </div>
+                    </section>
+
+                    <!-- Electrical Group -->
+                    <section class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-5">
+                        <div class="flex flex-col gap-2 border-b border-gray-100 pb-4 md:flex-row md:items-center md:justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
+                                <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Elektrikal</h2>
+                            </div>
+
+                            <span class="inline-flex w-fit rounded-full border border-emerald-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
+                                Module 2.1 - 2.3
+                            </span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <template x-for="module in elecItems" :key="module.id">
+                                <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
+                                    <div class="border-b border-gray-100 pb-3">
+                                        <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                    </div>
+
+                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                </article>
+                            </template>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
     @else
         <!-- Standard Layout for other chapters -->
         <div class="py-6 select-none" x-data="{
@@ -473,4 +603,3 @@
         </div>
     @endif
 </x-app-layout>
-
