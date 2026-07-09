@@ -418,31 +418,7 @@
         </div>
     @else
         <!-- Standard Layout for other chapters -->
-        <div class="py-6 select-none" x-data="{
-            activeModuleId: {{ $modules->first() ? $modules->first()->id : 'null' }},
-            modules: {{ $modules->toJson() }},
-            getActiveModule() {
-                return this.modules.find(m => m.id === this.activeModuleId) || { title: '', content: '', image_path: null };
-            },
-            nextModule() {
-                const index = this.modules.findIndex(m => m.id === this.activeModuleId);
-                if (index !== -1 && index < this.modules.length - 1) {
-                    this.activeModuleId = this.modules[index + 1].id;
-                }
-            },
-            prevModule() {
-                const index = this.modules.findIndex(m => m.id === this.activeModuleId);
-                if (index > 0) {
-                    this.activeModuleId = this.modules[index - 1].id;
-                }
-            },
-            isFirst() {
-                return this.modules.findIndex(m => m.id === this.activeModuleId) === 0;
-            },
-            isLast() {
-                return this.modules.findIndex(m => m.id === this.activeModuleId) === this.modules.length - 1;
-            }
-        }">
+        <div class="py-6 select-none" x-data="studyPage(@js($modules->values()))">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
                 <!-- Navigation Back & Title Bar -->
