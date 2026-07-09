@@ -572,7 +572,7 @@
                                 </template>
 
                                 <!-- Active Module Content body (rendered with HTML) -->
-                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveModule().content">
+                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="renderModuleContent(getActiveModule().content)">
                                     Memuat isi modul pembelajaran...
                                 </div>
                             </div>
