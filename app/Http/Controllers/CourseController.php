@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\LearningProgress;
 use App\Models\Course;
 use App\Models\Chapter;
+use App\Models\Module;
+use App\Models\ModuleProgress;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -15,10 +18,14 @@ class CourseController extends Controller
     {
         // Load chapters along with module counts
         $course->load(['chapters' => function ($query) {
-            $query->withCount('modules')->orderBy('order');
+            $query->with('modules')->withCount('modules')->orderBy('order');
         }]);
 
-        return view('courses.show', compact('course'));
+        $learningProgress = auth()->user()->isPeserta()
+            ? LearningProgress::forUser(auth()->user(), $course)
+            : null;
+
+        return view('courses.show', compact('course', 'learningProgress'));
     }
 
     /**
@@ -26,6 +33,20 @@ class CourseController extends Controller
      */
     public function showChapter(Course $course, $chapterId)
     {
+        $learningProgress = auth()->user()->isPeserta()
+            ? LearningProgress::forUser(auth()->user(), $course)
+            : null;
+
+        if ($learningProgress) {
+            $selectedProgress = LearningProgress::chapterProgress($learningProgress['chapters'], (int) $chapterId);
+
+            if (! $selectedProgress || ! $selectedProgress['is_unlocked']) {
+                return redirect()
+                    ->route('courses.show', $course)
+                    ->with('error', 'Bab ini masih terkunci. Selesaikan semua materi pada bab sebelumnya terlebih dahulu.');
+            }
+        }
+
         // Fetch the specific chapter belonging to this course
         $chapter = Chapter::with(['modules', 'diagram.hotspots'])->where('course_id', $course->id)->findOrFail($chapterId);
         
@@ -41,6 +62,35 @@ class CourseController extends Controller
             'chapters' => $chapters,
             'diagram' => $diagram,
             'modules' => $modules,
+            'learningProgress' => $learningProgress,
+        ]);
+    }
+
+    public function completeModule(Request $request, Course $course, Chapter $chapter, Module $module)
+    {
+        abort_unless(auth()->user()->isPeserta(), 403);
+        abort_unless($chapter->course_id === $course->id && $module->chapter_id === $chapter->id, 404);
+
+        $learningProgress = LearningProgress::forUser(auth()->user(), $course);
+        $chapterProgress = LearningProgress::chapterProgress($learningProgress['chapters'], $chapter->id);
+
+        abort_unless($chapterProgress && $chapterProgress['is_unlocked'], 403);
+
+        ModuleProgress::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'module_id' => $module->id,
+            ],
+            [
+                'completed_at' => now(),
+            ]
+        );
+
+        $updatedProgress = LearningProgress::forUser(auth()->user(), $course);
+
+        return response()->json([
+            'material_percent' => $updatedProgress['percent'],
+            'chapter_percent' => LearningProgress::chapterProgress($updatedProgress['chapters'], $chapter->id)['percent'] ?? 0,
         ]);
     }
 }

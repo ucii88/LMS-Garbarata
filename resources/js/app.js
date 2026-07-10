@@ -353,9 +353,31 @@ function wrapExpandableSections(parsedDocument, root, headingPrefix, summaryTone
 	}
 }
 
-Alpine.data('studyPage', (modules = []) => ({
+Alpine.data('studyPage', (modules = [], completeUrlTemplate = null) => ({
 		activeModuleId: modules[0] ? modules[0].id : null,
 		modules,
+		completeUrlTemplate,
+		csrfToken: document.querySelector('meta[name="csrf-token"]')?.content || '',
+		init() {
+			this.markModuleComplete(this.activeModuleId);
+		},
+		setActiveModule(moduleId) {
+			this.activeModuleId = moduleId;
+			this.markModuleComplete(moduleId);
+		},
+		markModuleComplete(moduleId) {
+			if (!this.completeUrlTemplate || !moduleId) {
+				return;
+			}
+
+			fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+				method: 'POST',
+				headers: {
+					'X-CSRF-TOKEN': this.csrfToken,
+					Accept: 'application/json',
+				},
+			});
+		},
 		getActiveModule() {
 			return this.modules.find((module) => module.id === this.activeModuleId) || { title: '', content: '', image_path: null };
 		},
@@ -442,13 +464,13 @@ Alpine.data('studyPage', (modules = []) => ({
 		nextModule() {
 			const index = this.modules.findIndex((module) => module.id === this.activeModuleId);
 			if (index !== -1 && index < this.modules.length - 1) {
-				this.activeModuleId = this.modules[index + 1].id;
+				this.setActiveModule(this.modules[index + 1].id);
 			}
 		},
 		prevModule() {
 			const index = this.modules.findIndex((module) => module.id === this.activeModuleId);
 			if (index > 0) {
-				this.activeModuleId = this.modules[index - 1].id;
+				this.setActiveModule(this.modules[index - 1].id);
 			}
 		},
 		isFirst() {

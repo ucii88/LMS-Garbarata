@@ -110,14 +110,12 @@
     </div>
 
     <!-- Bottom Area: Profile Card & Logout -->
-    <div class="p-4 border-t border-[#f0f0f0] space-y-4">
+    <div class="p-4 border-t border-[#f0f0f0] space-y-3">
         <!-- User Profile Info (Matches mockup exactly with 'User' label in circle) -->
         <button
             type="button"
-            class="w-full flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-xl transition cursor-pointer select-none text-left"
-            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-            onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); document.getElementById('logout-form').submit(); }"
-            title="Klik untuk keluar aplikasi"
+            class="w-full flex items-center space-x-3 p-2 rounded-xl select-none text-left"
+            title="Profil pengguna"
         >
             <!-- Profile Avatar -->
             <div class="w-10 h-10 rounded-full bg-[#0091ff] text-white flex items-center justify-center font-bold text-xs shadow-sm">
@@ -131,11 +129,15 @@
             </div>
         </button>
 
-        <!-- Safe Reporting Link & Hidden Logout Form -->
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="w-full rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-left text-xs font-bold text-rose-600 transition hover:bg-rose-100 hover:text-rose-700">
+                Logout
+            </button>
+        </form>
+
+        <!-- Safe Reporting Link -->
         <div class="px-2">
-            <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
-                @csrf
-            </form>
             <a href="#" class="block text-[10px] text-gray-400 hover:underline transition">
                 Laporkan konten tidak aman
             </a>

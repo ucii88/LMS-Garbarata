@@ -36,7 +36,7 @@
         ];
     @endphp
 
-    <div class="space-y-8 select-none" x-data="{ showModal: false }">
+    <div class="space-y-8 select-none" x-data="{ showModal: {{ $errors->any() ? 'true' : 'false' }}, selectedUserProgress: null, userProgress: @js($adminUserProgress ?? []) }">
         <!-- Flash Messages -->
         @if (session('success'))
             <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-xs font-semibold text-emerald-800 shadow-sm flex items-center space-x-2">
@@ -161,7 +161,15 @@
                                 <tbody class="divide-y divide-[#f0f0f0] bg-white text-slate-700">
                                     @foreach ($items as $item)
                                         <tr class="transition hover:bg-slate-50/50">
-                                            <td class="px-5 py-3.5 font-bold text-slate-800">{{ $item->name }}</td>
+                                            <td class="px-5 py-3.5 font-bold text-slate-800">
+                                                @if($item->role === 'peserta')
+                                                    <button type="button" @click="selectedUserProgress = userProgress[{{ $item->id }}]" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">
+                                                        {{ $item->name }}
+                                                    </button>
+                                                @else
+                                                    {{ $item->name }}
+                                                @endif
+                                            </td>
                                             <td class="px-5 py-3.5 text-slate-500">{{ $item->email }}</td>
                                             <td class="px-5 py-3.5">
                                                 @php
@@ -314,13 +322,56 @@
 
         <!-- Admin Add User Modal -->
         @if ($isAdmin)
+            <div x-show="selectedUserProgress" class="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true" style="display: none;">
+                <div class="flex min-h-screen items-center justify-center px-4 py-10">
+                    <div class="fixed inset-0 bg-slate-900/60" @click="selectedUserProgress = null"></div>
+                    <div class="relative z-10 w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-2xl">
+                        <div class="flex items-start justify-between gap-4 border-b border-slate-100 px-6 py-5">
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">Detail Progress Peserta</h3>
+                                <p class="mt-1 text-[10px] text-slate-400" x-text="selectedUserProgress ? selectedUserProgress.name + ' - ' + selectedUserProgress.email : ''"></p>
+                            </div>
+                            <button type="button" @click="selectedUserProgress = null" class="rounded-lg px-2 py-1 text-xs font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+                                Tutup
+                            </button>
+                        </div>
+
+                        <div class="max-h-[70vh] space-y-5 overflow-y-auto px-6 py-5">
+                            <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+                                <p class="text-xs font-bold text-emerald-700">Progress materi</p>
+                                <p class="mt-1 text-2xl font-extrabold text-emerald-700" x-text="selectedUserProgress ? selectedUserProgress.material_percent + '%' : '0%'"></p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <p class="text-xs font-bold text-slate-800">Progress per BAB</p>
+                                <template x-for="chapter in (selectedUserProgress ? selectedUserProgress.chapters : [])" :key="chapter.order">
+                                    <div class="rounded-xl border border-slate-100 bg-white p-3">
+                                        <div class="flex items-center justify-between gap-3">
+                                            <p class="text-xs font-bold text-slate-700" x-text="'BAB ' + chapter.order"></p>
+                                            <span class="rounded-full px-2.5 py-0.5 text-[10px] font-bold" :class="chapter.is_complete ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'" x-text="chapter.percent + '%'"></span>
+                                        </div>
+                                        <template x-if="chapter.missing_modules.length">
+                                            <p class="mt-2 text-[10px] font-semibold text-amber-600" x-text="'Belum lengkap: ' + chapter.missing_modules.join(', ')"></p>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="rounded-xl border border-slate-100 bg-slate-50 p-3">
+                                <p class="text-[10px] font-semibold text-slate-500">Progress latihan dan quiz akan ditambahkan terpisah saat fiturnya sudah tersedia.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
                 <div class="flex min-h-screen items-center justify-center px-4 py-10 text-center sm:block sm:p-0">
-                    <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 transition-opacity" @click="showModal = false"></div>
+                    <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-0 bg-slate-900/60 transition-opacity" @click="showModal = false"></div>
 
                     <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
-                    <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block w-full max-w-md align-middle overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-2xl transition-all">
+                    <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative z-10 inline-block w-full max-w-md align-middle overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-2xl transition-all">
                         <div class="border-b border-slate-100 px-6 py-5">
                             <h3 class="text-sm font-bold text-slate-900" id="modal-title">Tambah Pengguna Baru</h3>
                             <p class="text-[10px] text-slate-400 mt-1">Buat akun admin, instruktur, atau peserta baru.</p>
@@ -330,27 +381,39 @@
                             @csrf
 
                             <div class="space-y-1">
-                                <label for="name" class="block font-bold text-slate-700">Nama Lengkap</label>
-                                <input type="text" name="name" id="name" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <label for="name" class="block font-bold text-slate-700">Nama Lengkap <span class="font-medium text-slate-400">(opsional)</span></label>
+                                <input type="text" name="name" id="name" value="{{ old('name') }}" class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                @error('name')
+                                    <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="space-y-1">
                                 <label for="email" class="block font-bold text-slate-700">Alamat Email</label>
-                                <input type="email" name="email" id="email" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <input type="email" name="email" id="email" value="{{ old('email') }}" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                @error('email')
+                                    <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="space-y-1">
                                 <label for="password" class="block font-bold text-slate-700">Password</label>
                                 <input type="password" name="password" id="password" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                @error('password')
+                                    <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="space-y-1">
                                 <label for="role" class="block font-bold text-slate-700">Peran</label>
                                 <select name="role" id="role" required class="block w-full rounded-lg border-slate-200 text-xs shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="peserta">Peserta</option>
-                                    <option value="instruktur">Instruktur</option>
-                                    <option value="admin">Admin</option>
+                                    <option value="peserta" @selected(old('role') === 'peserta')>Peserta</option>
+                                    <option value="instruktur" @selected(old('role') === 'instruktur')>Instruktur</option>
+                                    <option value="admin" @selected(old('role') === 'admin')>Admin</option>
                                 </select>
+                                @error('role')
+                                    <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
+                                @enderror
                             </div>
                         </form>
 

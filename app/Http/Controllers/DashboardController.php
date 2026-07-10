@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\LearningProgress;
 use App\Models\Course;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class DashboardController extends Controller
         $headline = 'Ringkasan aktivitas belajar';
         $description = 'Pantau aktivitas utama sesuai peran Anda dalam satu tampilan yang konsisten.';
         $primaryAction = null;
+        $adminUserProgress = [];
 
         if ($isAdmin) {
             $stats = [
@@ -41,6 +43,27 @@ class DashboardController extends Controller
             ];
 
             $items = User::orderBy('id', 'desc')->limit(6)->get();
+            $adminUserProgress = $items
+                ->where('role', 'peserta')
+                ->mapWithKeys(function (User $participant) {
+                    $progress = LearningProgress::forUser($participant);
+
+                    return [
+                        $participant->id => [
+                            'name' => $participant->name,
+                            'email' => $participant->email,
+                            'material_percent' => $progress['percent'],
+                            'chapters' => $progress['chapters']->map(fn (array $chapter) => [
+                                'order' => $chapter['order'],
+                                'title' => $chapter['title'],
+                                'percent' => $chapter['percent'],
+                                'is_complete' => $chapter['is_complete'],
+                                'missing_modules' => $chapter['missing_modules']->map(fn ($module) => $module->title)->values(),
+                            ])->values(),
+                            'notes' => $progress['notes']->values(),
+                        ],
+                    ];
+                });
             $badgeLabel = 'Admin Control Center';
             $headline = 'Selamat datang, Administrator';
             $description = 'Kendalikan pengguna, status kursus, dan struktur materi dari dashboard yang konsisten dan bersih.';
@@ -67,7 +90,7 @@ class DashboardController extends Controller
             $stats = [
                 ['label' => 'Materi Aktif', 'value' => Course::where('is_published', true)->count(), 'tone' => 'blue'],
                 ['label' => 'Modul Belajar', 'value' => Course::where('is_published', true)->withCount('modules')->get()->sum('modules_count'), 'tone' => 'amber'],
-                ['label' => 'Progress', 'value' => 'Baru', 'tone' => 'emerald'],
+                ['label' => 'Progress Materi', 'value' => LearningProgress::forUser($user)['percent'].'%', 'tone' => 'emerald'],
             ];
 
             $cards = [
@@ -83,6 +106,6 @@ class DashboardController extends Controller
             $primaryAction = ['label' => 'Lanjutkan Belajar', 'href' => '#materi-kursus'];
         }
 
-        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'headline', 'description', 'primaryAction'));
+        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress'));
     }
 }

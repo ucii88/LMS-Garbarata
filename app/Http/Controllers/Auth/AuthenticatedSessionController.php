@@ -42,6 +42,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        $redirectTo = $request->input('redirect_to', '/');
+
+        return redirect(str_starts_with($redirectTo, '/') ? $redirectTo : '/');
     }
 }
