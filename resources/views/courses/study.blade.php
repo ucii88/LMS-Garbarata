@@ -1,128 +1,128 @@
 <x-app-layout>
     @if($chapter->order == 1)
-        <!-- Custom Dual Layout for Chapter 1: Mekanikal & Elektrikal -->
-        <div class="py-6 select-none" x-data="{
-            modules: {{ $modules->toJson() }},
-            
-            // Mechanical State
-            activeMechId: 'intro_mekanikal',
-            mechItems: [],
-            
-            // Electrical State
-            activeElecId: 'intro_elektrikal',
-            elecItems: [],
-            
-            init() {
-                // Initialize mechanical items
-                this.mechItems.push({
-                    id: 'intro_mekanikal',
-                    title: 'Deskripsi Komponen Mekanikal',
-                    button_title: 'Pengantar',
-                    content: `<p class='mt-2'>Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.</p><p class='mt-4'>Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.</p>`,
-                    image_path: null
-                });
-                
-                this.modules.filter(m => m.title.startsWith('1.')).forEach(m => {
-                    this.mechItems.push({
-                        id: m.id,
-                        title: m.title,
-                        button_title: m.title,
-                        content: m.content,
-                        image_path: m.image_path
-                    });
-                });
-                
-                // Initialize electrical items
-                this.elecItems.push({
-                    id: 'intro_elektrikal',
-                    title: 'Deskripsi Komponen Elektrikal dan Sistem Kontrol',
-                    button_title: 'Pengantar',
-                    content: `<p class='mt-2'>Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.</p>`,
-                    image_path: null
-                });
-                
-                this.modules.filter(m => m.title.startsWith('2.')).forEach(m => {
-                    this.elecItems.push({
-                        id: m.id,
-                        title: m.title,
-                        button_title: m.title,
-                        content: m.content,
-                        image_path: m.image_path
-                    });
-                });
-            },
+        <script>
+            window.chapterOneStudy = function (modules) {
+                return {
+                    modules,
+                    activeMechId: 'intro_mekanikal',
+                    mechItems: [],
+                    activeElecId: 'intro_elektrikal',
+                    elecItems: [],
 
-            setMechModule(moduleId) {
-                this.activeMechId = moduleId;
-                this.scrollToMechReader();
-            },
+                    init() {
+                        this.mechItems = [
+                            {
+                                id: 'intro_mekanikal',
+                                title: 'Deskripsi Komponen Mekanikal',
+                                button_title: 'Pengantar',
+                                content: `<p class='mt-2'>Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.</p><p class='mt-4'>Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.</p>`,
+                                image_path: null,
+                            },
+                            ...this.modules
+                                .filter((module) => module.title.startsWith('1.'))
+                                .map((module) => ({
+                                    id: module.id,
+                                    title: module.title,
+                                    button_title: module.title,
+                                    content: module.content,
+                                    image_path: module.image_path,
+                                })),
+                        ];
 
-            scrollToMechReader() {
-                this.$nextTick(() => {
-                    this.$refs.mechReader?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            },
-            
-            getActiveMech() {
-                return this.mechItems.find(item => item.id === this.activeMechId) || { title: '', content: '', image_path: null };
-            },
-            
-            getActiveElec() {
-                return this.elecItems.find(item => item.id === this.activeElecId) || { title: '', content: '', image_path: null };
-            },
-            
-            nextMech() {
-                const index = this.mechItems.findIndex(item => item.id === this.activeMechId);
-                if (index !== -1 && index < this.mechItems.length - 1) {
-                    this.activeMechId = this.mechItems[index + 1].id;
-                }
-            },
-            
-            prevMech() {
-                const index = this.mechItems.findIndex(item => item.id === this.activeMechId);
-                if (index > 0) {
-                    this.activeMechId = this.mechItems[index - 1].id;
-                }
-            },
-            
-            isMechFirst() {
-                return this.mechItems.findIndex(item => item.id === this.activeMechId) === 0;
-            },
-            
-            isMechLast() {
-                return this.mechItems.findIndex(item => item.id === this.activeMechId) === this.mechItems.length - 1;
-            },
-            
-            nextElec() {
-                const index = this.elecItems.findIndex(item => item.id === this.activeElecId);
-                if (index !== -1 && index < this.elecItems.length - 1) {
-                    this.activeElecId = this.elecItems[index + 1].id;
-                }
-            },
-            
-            prevElec() {
-                const index = this.elecItems.findIndex(item => item.id === this.activeElecId);
-                if (index > 0) {
-                this.activeElecId = this.elecItems[index - 1].id;
-                }
-            },
-            
-            isElecFirst() {
-                return this.elecItems.findIndex(item => item.id === this.activeElecId) === 0;
-            },
-            
-            isElecLast() {
-                return this.elecItems.findIndex(item => item.id === this.activeElecId) === this.elecItems.length - 1;
-            }
-        }">
+                        this.elecItems = [
+                            {
+                                id: 'intro_elektrikal',
+                                title: 'Deskripsi Komponen Elektrikal dan Sistem Kontrol',
+                                button_title: 'Pengantar',
+                                content: `<p class='mt-2'>Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.</p>`,
+                                image_path: null,
+                            },
+                            ...this.modules
+                                .filter((module) => module.title.startsWith('2.'))
+                                .map((module) => ({
+                                    id: module.id,
+                                    title: module.title,
+                                    button_title: module.title,
+                                    content: module.content,
+                                    image_path: module.image_path,
+                                })),
+                        ];
+                    },
+
+                    setMechModule(moduleId) {
+                        this.activeMechId = moduleId;
+                        this.scrollToMechReader();
+                    },
+
+                    scrollToMechReader() {
+                        this.$nextTick(() => {
+                            this.$refs.mechReader?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        });
+                    },
+
+                    getActiveMech() {
+                        return this.mechItems.find((item) => item.id === this.activeMechId) || { title: '', content: '', image_path: null };
+                    },
+
+                    getActiveElec() {
+                        return this.elecItems.find((item) => item.id === this.activeElecId) || { title: '', content: '', image_path: null };
+                    },
+
+                    nextMech() {
+                        const index = this.mechItems.findIndex((item) => item.id === this.activeMechId);
+                        if (index !== -1 && index < this.mechItems.length - 1) {
+                            this.activeMechId = this.mechItems[index + 1].id;
+                        }
+                    },
+
+                    prevMech() {
+                        const index = this.mechItems.findIndex((item) => item.id === this.activeMechId);
+                        if (index > 0) {
+                            this.activeMechId = this.mechItems[index - 1].id;
+                        }
+                    },
+
+                    isMechFirst() {
+                        return this.mechItems.findIndex((item) => item.id === this.activeMechId) === 0;
+                    },
+
+                    isMechLast() {
+                        return this.mechItems.findIndex((item) => item.id === this.activeMechId) === this.mechItems.length - 1;
+                    },
+
+                    nextElec() {
+                        const index = this.elecItems.findIndex((item) => item.id === this.activeElecId);
+                        if (index !== -1 && index < this.elecItems.length - 1) {
+                            this.activeElecId = this.elecItems[index + 1].id;
+                        }
+                    },
+
+                    prevElec() {
+                        const index = this.elecItems.findIndex((item) => item.id === this.activeElecId);
+                        if (index > 0) {
+                            this.activeElecId = this.elecItems[index - 1].id;
+                        }
+                    },
+
+                    isElecFirst() {
+                        return this.elecItems.findIndex((item) => item.id === this.activeElecId) === 0;
+                    },
+
+                    isElecLast() {
+                        return this.elecItems.findIndex((item) => item.id === this.activeElecId) === this.elecItems.length - 1;
+                    },
+                };
+            };
+        </script>
+
+        <div class="py-6 select-none" x-data="chapterOneStudy(@js($modules->values()))">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-10">
-                
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                        &larr; Kembali ke Silabus Kursus
                     </a>
-                    
+
                     <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
                         Bab {{ $chapter->order }} dari {{ $chapters->count() }}
                     </span>
@@ -143,7 +143,7 @@
                         </div>
                         <div class="flex flex-wrap gap-1.5">
                             <template x-for="item in mechItems" :key="item.id">
-                                <button 
+                                <button
                                     @click="setMechModule(item.id)"
                                     class="px-3 py-1.5 rounded-lg text-2xs font-bold transition text-left"
                                     :class="activeMechId === item.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
@@ -168,7 +168,7 @@
                                 
                                 <!-- Overlay Hotspots -->
                                 @foreach($diagram->hotspots as $hotspot)
-                                    <button 
+                                    <button
                                         @click="setMechModule({{ $hotspot->target_module_id }})"
                                         class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none"
                                         style="left: {{ $hotspot->x_percent }}%; top: {{ $hotspot->y_percent }}%;"
@@ -208,17 +208,17 @@
 
                           <!-- Footer Navigation Inside Card -->
                           <div class="border-t border-slate-100 p-4 bg-slate-50/50 flex items-center justify-between rounded-b-2xl">
-                              <button 
-                                  @click="prevMech()" 
-                                  :disabled="isMechFirst()" 
+                              <button
+                                  @click="prevMech()"
+                                  :disabled="isMechFirst()"
                                   class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                               >
                                   ← Sebelumnya
                               </button>
                               
-                              <button 
-                                  @click="nextMech()" 
-                                  :disabled="isMechLast()" 
+                              <button
+                                  @click="nextMech()"
+                                  :disabled="isMechLast()"
                                   class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                               >
                                   Selanjutnya →
@@ -241,7 +241,7 @@
                           </div>
                           <div class="flex flex-wrap gap-1.5">
                               <template x-for="item in elecItems" :key="item.id">
-                                  <button 
+                                  <button
                                       @click="activeElecId = item.id"
                                       class="px-3 py-1.5 rounded-lg text-2xs font-bold transition text-left"
                                       :class="activeElecId === item.id ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
@@ -277,17 +277,17 @@
 
                           <!-- Footer Navigation Inside Card -->
                           <div class="border-t border-slate-100 p-4 bg-slate-50/50 flex items-center justify-between rounded-b-2xl">
-                              <button 
-                                  @click="prevElec()" 
-                                  :disabled="isElecFirst()" 
+                              <button
+                                  @click="prevElec()"
+                                  :disabled="isElecFirst()"
                                   class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                               >
                                   ← Sebelumnya
                               </button>
                               
-                              <button 
-                                  @click="nextElec()" 
-                                  :disabled="isElecLast()" 
+                              <button
+                                  @click="nextElec()"
+                                  :disabled="isElecLast()"
                                   class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                               >
                                   Selanjutnya →
@@ -298,6 +298,228 @@
 
               </div>
           </div>
+    @elseif($chapter->order == 3)
+        <!-- Custom Grouped Layout for Chapter 3: Operation Details & Procedures -->
+        <div class="py-6 select-none" x-data="{
+            modules: @js($modules),
+            detailItems: [],
+            manualItems: [],
+            autoItems: [],
+            procedureItems: [],
+            expandedSectionIds: [],
+
+            init() {
+                this.detailItems = this.modules.filter(module => module.title.startsWith('1.'));
+                this.manualItems = this.modules.filter(module => module.title.startsWith('2.'));
+                this.autoItems = this.modules.filter(module => module.title.startsWith('3.'));
+                this.procedureItems = this.modules.filter(module => module.title.startsWith('4.'));
+            },
+
+            toggleSection(sectionId) {
+                if (this.expandedSectionIds.includes(sectionId)) {
+                    this.expandedSectionIds = this.expandedSectionIds.filter(id => id !== sectionId);
+                    return;
+                }
+
+                this.expandedSectionIds.push(sectionId);
+            },
+
+            isSectionExpanded(sectionId) {
+                return this.expandedSectionIds.includes(sectionId);
+            }
+        }">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+                <!-- Navigation Back & Title Bar -->
+                <div class="flex items-center justify-between">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        â† Kembali ke Silabus Kursus
+                    </a>
+
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                        Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                    </span>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-sm">
+                        {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                        Materi Bab 3 dibagi menjadi detail pengoperasian, mode operasi manual, mode auto, dan prosedur pengoperasian. Setiap bagian dapat dibuka dan ditutup agar materi lebih mudah dibaca.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Detail Operation Group -->
+                    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <button
+                            type="button"
+                            @click="toggleSection('detail')"
+                            class="w-full flex flex-col gap-3 bg-white p-6 text-left transition hover:bg-slate-50 md:flex-row md:items-center md:justify-between"
+                        >
+                            <div class="flex items-center space-x-3">
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
+                                <div>
+                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Detail Pengoperasian</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex w-fit rounded-full border border-blue-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-blue-600 uppercase tracking-wider">
+                                    Module 1.1
+                                </span>
+                                <span
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    x-text="isSectionExpanded('detail') ? '-' : '+'"
+                                ></span>
+                            </div>
+                        </button>
+
+                        <div x-show="isSectionExpanded('detail')" class="border-t border-gray-100 bg-white">
+                            <div class="p-4 md:p-6 space-y-4">
+                                <template x-for="module in detailItems" :key="module.id">
+                                    <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
+                                        <div class="border-b border-gray-100 pb-3">
+                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                        </div>
+
+                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                    </article>
+                                </template>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Manual Operation Group -->
+                    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <button
+                            type="button"
+                            @click="toggleSection('manual')"
+                            class="w-full flex flex-col gap-3 bg-white p-6 text-left transition hover:bg-slate-50 md:flex-row md:items-center md:justify-between"
+                        >
+                            <div class="flex items-center space-x-3">
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
+                                <div>
+                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Mode Operasi Manual</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex w-fit rounded-full border border-emerald-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
+                                    Module 2.1 - 2.4
+                                </span>
+                                <span
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    x-text="isSectionExpanded('manual') ? '-' : '+'"
+                                ></span>
+                            </div>
+                        </button>
+
+                        <div x-show="isSectionExpanded('manual')" class="border-t border-gray-100 bg-white">
+                            <div class="p-4 md:p-6 space-y-4">
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Dengan memutar keyswitch ke mode manual akan mengaktifkan seluruh komponen  penggerak Garbarata
+                                </p>
+
+                                <template x-for="module in manualItems" :key="module.id">
+                                    <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
+                                        <div class="border-b border-gray-100 pb-3">
+                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                        </div>
+
+                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                    </article>
+                                </template>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Auto Mode Group -->
+                    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <button
+                            type="button"
+                            @click="toggleSection('auto')"
+                            class="w-full flex flex-col gap-3 bg-white p-6 text-left transition hover:bg-slate-50 md:flex-row md:items-center md:justify-between"
+                        >
+                            <div class="flex items-center space-x-3">
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-amber-200 bg-white text-[10px] font-black text-amber-600">03</span>
+                                <div>
+                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Mode Auto (Autolevel)</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex w-fit rounded-full border border-amber-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-amber-600 uppercase tracking-wider">
+                                    Module 3
+                                </span>
+                                <span
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    x-text="isSectionExpanded('auto') ? '-' : '+'"
+                                ></span>
+                            </div>
+                        </button>
+
+                        <div x-show="isSectionExpanded('auto')" class="border-t border-gray-100 bg-white">
+                            <div class="p-4 md:p-6 space-y-4">
+                                <template x-for="module in autoItems" :key="module.id">
+                                    <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
+                                        <div class="border-b border-gray-100 pb-3">
+                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                        </div>
+
+                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                    </article>
+                                </template>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Operation Procedure Group -->
+                    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                        <button
+                            type="button"
+                            @click="toggleSection('procedure')"
+                            class="w-full flex flex-col gap-3 bg-white p-6 text-left transition hover:bg-slate-50 md:flex-row md:items-center md:justify-between"
+                        >
+                            <div class="flex items-center space-x-3">
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-rose-200 bg-white text-[10px] font-black text-rose-600">04</span>
+                                <div>
+                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Prosedur Pengoperasian</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex w-fit rounded-full border border-rose-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-rose-600 uppercase tracking-wider">
+                                    Module 4.1 - 4.6
+                                </span>
+                                <span
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    x-text="isSectionExpanded('procedure') ? '-' : '+'"
+                                ></span>
+                            </div>
+                        </button>
+
+                        <div x-show="isSectionExpanded('procedure')" class="border-t border-gray-100 bg-white">
+                            <div class="p-4 md:p-6 space-y-4">
+                                <template x-for="module in procedureItems" :key="module.id">
+                                    <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
+                                        <div class="border-b border-gray-100 pb-3">
+                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                        </div>
+
+                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                    </article>
+                                </template>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
     @elseif($chapter->order == 2)
         <!-- Custom Grouped Layout for Chapter 2: Mechanical Specs & Electrical Specs -->
         <div class="py-6 select-none" x-data="{
@@ -625,7 +847,7 @@
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="module in modules" :key="module.id">
-                                <button 
+                                <button
                                     @click="activeModuleId = module.id"
                                     class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
                                     :class="activeModuleId === module.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
@@ -725,17 +947,17 @@
 
                         <!-- Footer Navigation inside Card -->
                         <div class="border-t border-gray-100 p-4 bg-gray-50/50 flex items-center justify-between rounded-b-2xl">
-                            <button 
-                                @click="prevModule()" 
-                                :disabled="isFirst()" 
+                            <button
+                                @click="prevModule()"
+                                :disabled="isFirst()"
                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 ← Sebelumnya
                             </button>
                             
-                            <button 
-                                @click="nextModule()" 
-                                :disabled="isLast()" 
+                            <button
+                                @click="nextModule()"
+                                :disabled="isLast()"
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 Selanjutnya →
