@@ -18,25 +18,26 @@ class Chapter7Seeder extends Seeder
             return;
         }
 
-        $module7_1 = Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => '7.1 Sirkuit Tenaga (Power Circuit)',
-            'content' => '<p>Sistem suplai daya utama Garbarata menggunakan tegangan AC 3-Phase 380V/50Hz dari generator gedung terminal.</p><p>Komponen kelistrikan utama:</p><ul><li><strong>Main Breaker (MCCB):</strong> Pemutus sirkuit utama di panel panel distribusi.</li><li><strong>Inverter Motor Roda:</strong> Mengatur frekuensi motor listrik penggerak roda agar pergerakan halus.</li><li><strong>Inverter Elevasi:</strong> Mengontrol motor pengangkat terowongan.</li></ul>',
-            'order' => 1,
-        ]);
+        // Hapus modul lama jika ada
+        Module::where('chapter_id', $chapter->id)->delete();
 
-        $diagram = Diagram::create([
-            'chapter_id' => $chapter->id,
-            'title' => 'Diagram Sirkuit Kelistrikan Utama',
-            'image_path' => 'images/electrical_diagram.png',
-        ]);
+        // Hapus diagram & hotspot lama agar bersih
+        $diagrams = Diagram::where('chapter_id', $chapter->id)->get();
+        foreach ($diagrams as $diagram) {
+            Hotspot::where('diagram_id', $diagram->id)->delete();
+            $diagram->delete();
+        }
 
-        Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'target_module_id' => $module7_1->id,
-            'label' => 'Main Panel Breaker',
-            'x_percent' => 50.0,
-            'y_percent' => 50.0,
-        ]);
+        // Mendaftarkan 14 lembar gambar dari bab7.1 sampai bab7.14
+        for ($i = 1; $i <= 14; $i++) {
+            Module::create([
+                'chapter_id' => $chapter->id,
+                'title' => "7.$i Lembar Gambar $i",
+                'content' => "<p>Lampiran Gambar Elektrikal Lembar $i (As-Built Diagram Garbarata).</p>",
+                'image_path' => "images/modules/Bab7/bab7.$i.png",
+                'order' => $i,
+            ]);
+        }
     }
 }
+

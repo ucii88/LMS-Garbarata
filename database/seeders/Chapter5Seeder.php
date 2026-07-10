@@ -593,11 +593,11 @@ class Chapter5Seeder extends Seeder
             'order' => 1,
         ]);
 
-        // 5.2. Electrical parts and others
+        // 5.2 Electrical parts and others
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '5.2. Electrical parts and others',
-            'content' => '<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 max-w-2xl mx-auto my-8 space-y-6">' .
+            'title' => '5.2 Electrical Parts and Others',
+            'content' => '<div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 max-w-xl mt-4 space-y-6">' .
                 '    <div class="flex items-start gap-4">' .
                 '        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">' .
                 '            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' .
@@ -727,7 +727,7 @@ class Chapter5Seeder extends Seeder
 
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '5.3. Special Tools',
+            'title' => '5.3 Special Tools',
             'content' => $toolsContent,
             'order' => 3,
         ]);

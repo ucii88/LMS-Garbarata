@@ -353,8 +353,7 @@ function wrapExpandableSections(parsedDocument, root, headingPrefix, summaryTone
 	}
 }
 
-document.addEventListener('alpine:init', () => {
-	Alpine.data('studyPage', (modules = []) => ({
+Alpine.data('studyPage', (modules = []) => ({
 		activeModuleId: modules[0] ? modules[0].id : null,
 		modules,
 		getActiveModule() {
@@ -459,7 +458,6 @@ document.addEventListener('alpine:init', () => {
 			return this.modules.findIndex((module) => module.id === this.activeModuleId) === this.modules.length - 1;
 		},
 	}));
-});
 
 Alpine.store('ui', {
 	sidebarCollapsed: window.localStorage.getItem('sidebar-collapsed') === '1',
