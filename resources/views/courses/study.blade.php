@@ -1,211 +1,132 @@
 <x-app-layout>
     @if($chapter->order == 1)
         <!-- Custom Dual Layout for Chapter 1: Mekanikal & Elektrikal -->
-        <div class="py-6 select-none" x-data="{
-            modules: {{ $modules->toJson() }},
-            
-            // Mechanical State
-            activeMechId: 'intro_mekanikal',
-            mechItems: [],
-            
-            // Electrical State
-            activeElecId: 'intro_elektrikal',
-            elecItems: [],
-            
-            init() {
-                // Initialize mechanical items
-                this.mechItems.push({
-                    id: 'intro_mekanikal',
-                    title: 'Deskripsi Komponen Mekanikal',
-                    button_title: 'Pengantar',
-                    content: `<p class='mt-2'>Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.</p><p class='mt-4'>Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.</p>`,
-                    image_path: null
-                });
-    <div class="py-6 select-none" x-data="studyPage(@js($modules->values()))">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <script>
+            window.chapterOneStudy = function (modules) {
+                return {
+                    modules,
+                    activeMechId: 'intro_mekanikal',
+                    mechItems: [],
+                    activeElecId: 'intro_elektrikal',
+                    elecItems: [],
 
-            <!-- Navigation Back & Title Bar -->
-            <div class="flex items-center justify-between">
-                <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                    ← Kembali ke Silabus Kursus
-                </a>
+                    init() {
+                        this.mechItems = [
+                            {
+                                id: 'intro_mekanikal',
+                                title: 'Deskripsi Komponen Mekanikal',
+                                button_title: 'Pengantar',
+                                content: `<p class='mt-2'>Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.</p><p class='mt-4'>Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.</p>`,
+                                image_path: null,
+                            },
+                            ...this.modules
+                                .filter((module) => module.title.startsWith('1.'))
+                                .map((module) => ({
+                                    id: module.id,
+                                    title: module.title,
+                                    button_title: module.title,
+                                    content: module.content,
+                                    image_path: module.image_path,
+                                })),
+                        ];
 
-                <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                    Bab {{ $chapter->order }} dari {{ $chapters->count() }}
-                </span>
-            </div>
+                        this.elecItems = [
+                            {
+                                id: 'intro_elektrikal',
+                                title: 'Deskripsi Komponen Elektrikal dan Sistem Kontrol',
+                                button_title: 'Pengantar',
+                                content: `<p class='mt-2'>Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.</p>`,
+                                image_path: null,
+                            },
+                            ...this.modules
+                                .filter((module) => module.title.startsWith('2.'))
+                                .map((module) => ({
+                                    id: module.id,
+                                    title: module.title,
+                                    button_title: module.title,
+                                    content: module.content,
+                                    image_path: module.image_path,
+                                })),
+                        ];
+                    },
 
-            <!-- Chapter Header Description Card -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 class="font-bold text-gray-800 text-sm">
-                    {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
-                </h3>
-                <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
-                    @if($diagram)
-                        Materi pembelajaran interaktif dilengkapi visualisasi skematis. <strong>Klik pada titik-titik biru bernomor (hotspots)</strong> pada gambar atau pilih daftar sub-bab di bawah untuk membaca detail spesifikasi.
-                    @else
-                        Materi modul pembelajaran tertulis. Gunakan tombol pilihan topik sub-bab di bawah untuk berpindah antar materi.
-                    @endif
-                </p>
-            </div>
+                    setMechModule(moduleId) {
+                        this.activeMechId = moduleId;
+                        this.scrollToMechReader();
+                    },
 
-            <!-- Main study room layout (Stacked, clean, and full width) -->
-            <div class="space-y-6">
-                
-                this.modules.filter(m => m.title.startsWith('1.')).forEach(m => {
-                    this.mechItems.push({
-                        id: m.id,
-                        title: m.title,
-                        button_title: m.title,
-                        content: m.content,
-                        image_path: m.image_path
-                    });
-                });
-                
-                // Initialize electrical items
-                this.elecItems.push({
-                    id: 'intro_elektrikal',
-                    title: 'Deskripsi Komponen Elektrikal dan Sistem Kontrol',
-                    button_title: 'Pengantar',
-                    content: `<p class='mt-2'>Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.</p>`,
-                    image_path: null
-                });
-                
-                this.modules.filter(m => m.title.startsWith('2.')).forEach(m => {
-                    this.elecItems.push({
-                        id: m.id,
-                        title: m.title,
-                        button_title: m.title,
-                        content: m.content,
-                        image_path: m.image_path
-                    });
-                });
-            },
+                    scrollToMechReader() {
+                        this.$nextTick(() => {
+                            this.$refs.mechReader?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        });
+                    },
 
-            setMechModule(moduleId) {
-                this.activeMechId = moduleId;
-                this.scrollToMechReader();
-            },
+                    getActiveMech() {
+                        return this.mechItems.find((item) => item.id === this.activeMechId) || { title: '', content: '', image_path: null };
+                    },
 
-            scrollToMechReader() {
-                this.$nextTick(() => {
-                    this.$refs.mechReader?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-            },
-            
-            getActiveMech() {
-                return this.mechItems.find(item => item.id === this.activeMechId) || { title: '', content: '', image_path: null };
-            },
-            
-            getActiveElec() {
-                return this.elecItems.find(item => item.id === this.activeElecId) || { title: '', content: '', image_path: null };
-            },
-            
-            nextMech() {
-                const index = this.mechItems.findIndex(item => item.id === this.activeMechId);
-                if (index !== -1 && index < this.mechItems.length - 1) {
-                    this.activeMechId = this.mechItems[index + 1].id;
-                }
-            },
-            
-            prevMech() {
-                const index = this.mechItems.findIndex(item => item.id === this.activeMechId);
-                if (index > 0) {
-                    this.activeMechId = this.mechItems[index - 1].id;
-                }
-            },
-            
-            isMechFirst() {
-                return this.mechItems.findIndex(item => item.id === this.activeMechId) === 0;
-            },
-            
-            isMechLast() {
-                return this.mechItems.findIndex(item => item.id === this.activeMechId) === this.mechItems.length - 1;
-            },
-            
-            nextElec() {
-                const index = this.elecItems.findIndex(item => item.id === this.activeElecId);
-                if (index !== -1 && index < this.elecItems.length - 1) {
-                    this.activeElecId = this.elecItems[index + 1].id;
-                }
-            },
-            
-            prevElec() {
-                const index = this.elecItems.findIndex(item => item.id === this.activeElecId);
-                if (index > 0) {
-                this.activeElecId = this.elecItems[index - 1].id;
-                }
-            },
-            
-            isElecFirst() {
-                return this.elecItems.findIndex(item => item.id === this.activeElecId) === 0;
-            },
-            
-            isElecLast() {
-                return this.elecItems.findIndex(item => item.id === this.activeElecId) === this.elecItems.length - 1;
-            }
-        }">
+                    getActiveElec() {
+                        return this.elecItems.find((item) => item.id === this.activeElecId) || { title: '', content: '', image_path: null };
+                    },
+
+                    nextMech() {
+                        const index = this.mechItems.findIndex((item) => item.id === this.activeMechId);
+                        if (index !== -1 && index < this.mechItems.length - 1) {
+                            this.activeMechId = this.mechItems[index + 1].id;
+                        }
+                    },
+
+                    prevMech() {
+                        const index = this.mechItems.findIndex((item) => item.id === this.activeMechId);
+                        if (index > 0) {
+                            this.activeMechId = this.mechItems[index - 1].id;
+                        }
+                    },
+
+                    isMechFirst() {
+                        return this.mechItems.findIndex((item) => item.id === this.activeMechId) === 0;
+                    },
+
+                    isMechLast() {
+                        return this.mechItems.findIndex((item) => item.id === this.activeMechId) === this.mechItems.length - 1;
+                    },
+
+                    nextElec() {
+                        const index = this.elecItems.findIndex((item) => item.id === this.activeElecId);
+                        if (index !== -1 && index < this.elecItems.length - 1) {
+                            this.activeElecId = this.elecItems[index + 1].id;
+                        }
+                    },
+
+                    prevElec() {
+                        const index = this.elecItems.findIndex((item) => item.id === this.activeElecId);
+                        if (index > 0) {
+                            this.activeElecId = this.elecItems[index - 1].id;
+                        }
+                    },
+
+                    isElecFirst() {
+                        return this.elecItems.findIndex((item) => item.id === this.activeElecId) === 0;
+                    },
+
+                    isElecLast() {
+                        return this.elecItems.findIndex((item) => item.id === this.activeElecId) === this.elecItems.length - 1;
+                    },
+                };
+            };
+        </script>
+
+        <div class="py-6 select-none" x-data="chapterOneStudy(@js($modules->values()))">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-10">
-                
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                        &larr; Kembali ke Silabus Kursus
                     </a>
-                    
+
                     <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
                         Bab {{ $chapter->order }} dari {{ $chapters->count() }}
                     </span>
-                    <!-- Article Content Area -->
-                    <div class="p-6 md:p-8 space-y-6">
-                        <!-- Topic Badge & Nav Bar -->
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-                            <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
-                                Materi Pembelajaran
-                            </span>
-                            
-                            <span class="text-[10px] text-gray-400 font-semibold">
-                                Mode Belajar Mandiri (Lebar Penuh)
-                            </span>
-                        </div>
-
-                        <!-- Title and HTML Content -->
-                        <div class="space-y-4">
-                            <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="getActiveModule().title">
-                                Memuat materi...
-                            </h2>
-
-                            <!-- Active Module Content body (rendered with HTML) -->
-                            <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="renderModuleContent(getActiveModule().content)">
-                                Memuat isi modul pembelajaran...
-                            </div>
-
-                            <template x-if="getActiveModule().image_path">
-                                <div id="torque-diagram" class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-sm my-3 max-w-2xl mx-auto">
-                                    <img :src="'/' + getActiveModule().image_path" class="w-full max-h-72 object-contain rounded-lg select-none" :alt="getActiveModule().title">
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <!-- Footer Navigation inside Card -->
-                    <div class="border-t border-gray-100 p-4 bg-gray-50/50 flex items-center justify-between rounded-b-2xl">
-                        <button 
-                            @click="prevModule()" 
-                            :disabled="isFirst()" 
-                            class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-                        >
-                            ← Sebelumnya
-                        </button>
-                        
-                        <button 
-                            @click="nextModule()" 
-                            :disabled="isLast()" 
-                            class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-                        >
-                            Selanjutnya →
-                        </button>
-                    </div>
                 </div>
 
                 <!-- ================= BAGIAN 1: KOMPONEN MEKANIKAL ================= -->
