@@ -198,8 +198,8 @@
                 @if ($isInstruktur)
                     <section id="kelola-kursus" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="border-b border-[#f0f0f0] pb-5">
-                            <h2 class="text-base font-bold text-slate-800">Daftar Kursus Aktif</h2>
-                            <p class="text-xs text-slate-400 mt-1">Kelola materi, modul, dan diagram interaktif pada satu tempat.</p>
+                            <h2 class="text-base font-bold text-slate-800">Kelola Materi</h2>
+                            <p class="text-xs text-slate-400 mt-1">Tambah, edit, dan hapus modul materi pada setiap bab kursus.</p>
                         </div>
 
                         <div class="mt-5 grid gap-4 sm:grid-cols-2">
@@ -219,8 +219,8 @@
 
                                     <div class="flex items-center justify-between border-t border-gray-200/60 pt-3">
                                         <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Diagram interaktif</span>
-                                        <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center justify-center rounded-lg bg-slate-900 hover:bg-slate-800 px-3.5 py-1.5 text-2xs font-bold text-white transition shadow-sm">
-                                            Buka
+                                        <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center gap-1 justify-center rounded-lg bg-amber-500 hover:bg-amber-600 px-4 py-2 text-2xs font-bold text-white transition shadow-sm">
+                                            Kelola Materi →
                                         </a>
                                     </div>
                                 </article>

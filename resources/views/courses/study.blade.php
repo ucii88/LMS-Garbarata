@@ -123,9 +123,20 @@
                         &larr; Kembali ke Silabus Kursus
                     </a>
 
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                        Bab {{ $chapter->order }} dari {{ $chapters->count() }}
-                    </span>
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
                 </div>
 
                 <!-- ================= BAGIAN 1: KOMPONEN MEKANIKAL ================= -->
@@ -203,6 +214,23 @@
                                   <h2 class="text-base font-bold text-slate-800 leading-snug" x-text="getActiveMech().title"></h2>
 
                                   <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveMech().content"></div>
+
+                                  @if(auth()->user()->isInstruktur())
+                                      <template x-if="activeMechId !== 'intro_mekanikal'">
+                                          <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                              <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeMechId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                  Edit Modul Ini
+                                              </a>
+                                              <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeMechId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                  @csrf
+                                                  @method('DELETE')
+                                                  <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                      Hapus Modul
+                                                  </button>
+                                              </form>
+                                          </div>
+                                      </template>
+                                  @endif
                               </div>
                           </div>
 
@@ -272,6 +300,23 @@
                                   </template>
 
                                   <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveElec().content"></div>
+
+                                  @if(auth()->user()->isInstruktur())
+                                      <template x-if="activeElecId !== 'intro_elektrikal'">
+                                          <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                              <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeElecId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                  Edit Modul Ini
+                                              </a>
+                                              <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeElecId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                  @csrf
+                                                  @method('DELETE')
+                                                  <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                      Hapus Modul
+                                                  </button>
+                                              </form>
+                                          </div>
+                                      </template>
+                                  @endif
                               </div>
                           </div>
 
@@ -335,9 +380,20 @@
                         â† Kembali ke Silabus Kursus
                     </a>
 
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                        Bab {{ $chapter->order }} dari {{ $chapters->count() }}
-                    </span>
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -385,6 +441,21 @@
                                         </div>
 
                                         <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+
+                                        @if(auth()->user()->isInstruktur())
+                                            <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    Edit Modul
+                                                </a>
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </article>
                                 </template>
                             </div>
@@ -430,6 +501,21 @@
                                         </div>
 
                                         <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+
+                                        @if(auth()->user()->isInstruktur())
+                                            <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    Edit Modul
+                                                </a>
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </article>
                                 </template>
                             </div>
@@ -471,6 +557,21 @@
                                         </div>
 
                                         <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+
+                                        @if(auth()->user()->isInstruktur())
+                                            <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    Edit Modul
+                                                </a>
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </article>
                                 </template>
                             </div>
@@ -512,6 +613,21 @@
                                         </div>
 
                                         <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+
+                                        @if(auth()->user()->isInstruktur())
+                                            <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    Edit Modul
+                                                </a>
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </article>
                                 </template>
                             </div>
@@ -553,9 +669,20 @@
                         â† Kembali ke Silabus Kursus
                     </a>
 
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                        Bab {{ $chapter->order }} dari {{ $chapters->count() }}
-                    </span>
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -603,6 +730,21 @@
                                     <div x-show="isMechExpanded(module.id)" class="border-t border-gray-100 bg-white">
                                         <div class="p-4 md:p-6 space-y-4">
                                             <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+
+                                            @if(auth()->user()->isInstruktur())
+                                                <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
+                                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                        Edit Modul
+                                                    </a>
+                                                    <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                            Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </article>
@@ -631,11 +773,642 @@
                                     </div>
 
                                     <div class="text-xs text-slate-600 leading-relaxed space-y-3 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+
+                                    @if(auth()->user()->isInstruktur())
+                                        <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                Edit Modul
+                                            </a>
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
                                 </article>
                             </template>
                         </div>
                     </section>
                 </div>
+            </div>
+        </div>
+    @elseif($chapter->order == 4)
+        <!-- Custom Layout for Chapter 4 with Accordions for 4.6 -->
+        <div class="py-6 select-none" x-data="{
+            modules: @js($modules->values()),
+            activeTab: '4.1',
+            expandedModuleId: null,
+
+            getTabModules(tab) {
+                return this.modules.filter(m => m.title.startsWith(tab + '.'));
+            },
+            getSingleModule(tab) {
+                return this.modules.find(m => m.title.startsWith(tab)) || { title: '', content: '' };
+            },
+            toggleModule(id) {
+                this.expandedModuleId = this.expandedModuleId === id ? null : id;
+            }
+        }">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+                <!-- Navigation Back & Title Bar -->
+                <div class="flex items-center justify-between">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        ← Kembali ke Silabus Kursus
+                    </a>
+
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Chapter Header Description Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-sm">
+                        {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                        Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih sub-bab dan membaca detail spesifikasi.
+                    </p>
+                </div>
+
+                <!-- Main Study Room Content -->
+                <div class="space-y-6">
+                    
+                    <!-- 1. Top horizontal Sub-Chapter Navigation Bar -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="tab in ['4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7']">
+                                <button
+                                    @click="activeTab = tab; expandedModuleId = null"
+                                    class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
+                                    :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
+                                >
+                                    <span x-text="tab === '4.6' ? '4.6 Checklist Inspeksi' : (tab === '4.7' ? '4.7 Troubleshooting' : getSingleModule(tab).title)"></span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- 2. Content Display Area -->
+                    <div>
+                        <!-- If Active Tab is 4.6 (Checklist) -> Show Accordions -->
+                        <template x-if="activeTab === '4.6'">
+                            <div class="space-y-4">
+                                <!-- 4.6.1 Pemeriksaan Harian untuk Operator -->
+                                <template x-if="getSingleModule('4.6.1').id">
+                                    <div class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                        <button
+                                            type="button"
+                                            @click="toggleModule('4.6.1')"
+                                            class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
+                                        >
+                                            <span class="text-xs font-bold text-slate-800" x-text="getSingleModule('4.6.1').title"></span>
+                                            <span
+                                                class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                                x-text="expandedModuleId === '4.6.1' ? '-' : '+'"
+                                            ></span>
+                                        </button>
+                                        <div x-show="expandedModuleId === '4.6.1'" class="border-t border-gray-100 bg-white">
+                                            <div class="p-4 md:p-6 space-y-4">
+                                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.1').content"></div>
+                                                
+                                                <!-- Action Buttons for Instructor inside Accordion -->
+                                                @if(auth()->user()->isInstruktur())
+                                                    <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                            Edit Modul Ini
+                                                        </a>
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                Hapus Modul
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- 4.6.2 Pelumasan -->
+                                <template x-if="getSingleModule('4.6.2').id">
+                                    <div class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                        <button
+                                            type="button"
+                                            @click="toggleModule('4.6.2')"
+                                            class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
+                                        >
+                                            <span class="text-xs font-bold text-slate-800" x-text="getSingleModule('4.6.2').title"></span>
+                                            <span
+                                                class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                                x-text="expandedModuleId === '4.6.2' ? '-' : '+'"
+                                            ></span>
+                                        </button>
+                                        <div x-show="expandedModuleId === '4.6.2'" class="border-t border-gray-100 bg-white">
+                                            <div class="p-4 md:p-6 space-y-4">
+                                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.2').content"></div>
+                                                
+                                                <!-- Action Buttons for Instructor inside Accordion -->
+                                                @if(auth()->user()->isInstruktur())
+                                                    <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                            Edit Modul Ini
+                                                        </a>
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                Hapus Modul
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- 4.6.3 Inspeksi Bulanan (Parent Accordion) -->
+                                <div class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                    <button
+                                        type="button"
+                                        @click="toggleModule('4.6.3')"
+                                        class="w-full flex items-center justify-between gap-4 bg-slate-50 px-4 py-3.5 text-left transition hover:bg-slate-100"
+                                    >
+                                        <span class="text-xs font-bold text-slate-800">4.6.3 Inspeksi Bulanan</span>
+                                        <span
+                                            class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                            x-text="expandedModuleId === '4.6.3' ? '-' : '+'"
+                                        ></span>
+                                    </button>
+                                    <div x-show="expandedModuleId === '4.6.3'" class="border-t border-gray-100 bg-white p-4 space-y-3">
+                                        <p class="text-[10px] text-slate-400 font-semibold mb-2">Pilih bagian tabel di bawah untuk melihat detail atau mengedit/menghapusnya:</p>
+                                        <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.3.'))" :key="subModule.id">
+                                            <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden my-2.5">
+                                                <summary class="flex items-center justify-between gap-3 cursor-pointer select-none px-4 py-2.5 bg-slate-50 hover:bg-slate-100 transition-colors duration-150 list-none">
+                                                    <span class="font-bold text-slate-800 text-[10px] uppercase tracking-wide" x-text="subModule.title"></span>
+                                                    <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                                </summary>
+                                                <div class="border-t border-slate-100 bg-white p-4 space-y-4">
+                                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                                    
+                                                    <!-- Action Buttons for Instructor inside Accordion -->
+                                                    @if(auth()->user()->isInstruktur())
+                                                        <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                Edit Tabel Ini
+                                                            </a>
+                                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                    Hapus Tabel
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </details>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- 4.6.4 Inspeksi Quartal (Parent Accordion) -->
+                                <div class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                    <button
+                                        type="button"
+                                        @click="toggleModule('4.6.4')"
+                                        class="w-full flex items-center justify-between gap-4 bg-slate-50 px-4 py-3.5 text-left transition hover:bg-slate-100"
+                                    >
+                                        <span class="text-xs font-bold text-slate-800">4.6.4 Inspeksi Quartal</span>
+                                        <span
+                                            class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                            x-text="expandedModuleId === '4.6.4' ? '-' : '+'"
+                                        ></span>
+                                    </button>
+                                    <div x-show="expandedModuleId === '4.6.4'" class="border-t border-gray-100 bg-white p-4 space-y-3">
+                                        <p class="text-[10px] text-slate-400 font-semibold mb-2">Pilih bagian tabel di bawah untuk melihat detail atau mengedit/menghapusnya:</p>
+                                        <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.4.'))" :key="subModule.id">
+                                            <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden my-2.5">
+                                                <summary class="flex items-center justify-between gap-3 cursor-pointer select-none px-4 py-2.5 bg-slate-50 hover:bg-slate-100 transition-colors duration-150 list-none">
+                                                    <span class="font-bold text-slate-800 text-[10px] uppercase tracking-wide" x-text="subModule.title"></span>
+                                                    <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                                </summary>
+                                                <div class="border-t border-slate-100 bg-white p-4 space-y-4">
+                                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                                    
+                                                    <!-- Action Buttons for Instructor inside Accordion -->
+                                                    @if(auth()->user()->isInstruktur())
+                                                        <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                Edit Tabel Ini
+                                                            </a>
+                                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                    Hapus Tabel
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </details>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- If Active Tab is 4.7 (Troubleshooting) -> Show Intro + Accordions -->
+                        <template x-if="activeTab === '4.7'">
+                            <div class="space-y-4">
+                                <!-- Introduction Card -->
+                                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-6 md:p-8 space-y-4">
+                                    <h3 class="text-base font-bold text-slate-800" x-text="getSingleModule('4.7').title"></h3>
+                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.7').content"></div>
+                                    
+                                    <!-- Action Buttons for Instructor inside Intro Card -->
+                                    @if(auth()->user()->isInstruktur())
+                                        <template x-if="getSingleModule('4.7').id">
+                                            <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.7').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                    Edit Deskripsi Pengantar
+                                                </a>
+                                            </div>
+                                        </template>
+                                    @endif
+                                </div>
+
+                                <!-- Accordion List of TROUBLE tables -->
+                                <div class="space-y-3">
+                                    <template x-for="subModule in modules.filter(m => m.title.startsWith('4.7.'))" :key="subModule.id">
+                                        <div class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                            <button
+                                                type="button"
+                                                @click="toggleModule(subModule.id)"
+                                                class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
+                                            >
+                                                <span class="text-xs font-bold text-slate-800" x-text="subModule.title"></span>
+                                                <span
+                                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                                    x-text="expandedModuleId === subModule.id ? '-' : '+'"
+                                                ></span>
+                                            </button>
+
+                                            <div x-show="expandedModuleId === subModule.id" class="border-t border-gray-100 bg-white">
+                                                <div class="p-4 md:p-6 space-y-4">
+                                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                                    
+                                                    <!-- Action Buttons for Instructor inside Accordion -->
+                                                    @if(auth()->user()->isInstruktur())
+                                                        <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                Edit Tabel Trouble Ini
+                                                            </a>
+                                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel trouble ini?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                    Hapus Tabel Trouble
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- If Active Tab is not 4.6 and not 4.7 -> Show Intro + Sub-accordions -->
+                        <template x-if="activeTab !== '4.6' && activeTab !== '4.7'">
+                            <div class="space-y-4">
+                                <!-- Introduction Card -->
+                                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-6 md:p-8 space-y-4">
+                                    <h3 class="text-base font-bold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
+                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
+                                    
+                                    <!-- Action Buttons for Instructor inside Intro Card -->
+                                    @if(auth()->user()->isInstruktur())
+                                        <template x-if="getSingleModule(activeTab).id">
+                                            <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                    Edit Deskripsi Pengantar
+                                                </a>
+                                            </div>
+                                        </template>
+                                    @endif
+                                </div>
+
+                                <!-- Accordion List of Sub-modules (like 4.1.1, 4.1.2) -->
+                                <template x-if="modules.filter(m => m.title.startsWith(activeTab + '.')).length > 0">
+                                    <div class="space-y-3">
+                                        <template x-for="subModule in modules.filter(m => m.title.startsWith(activeTab + '.'))" :key="subModule.id">
+                                            <div class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                                <button
+                                                    type="button"
+                                                    @click="toggleModule(subModule.id)"
+                                                    class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
+                                                >
+                                                    <span class="text-xs font-bold text-slate-800" x-text="subModule.title"></span>
+                                                    <span
+                                                        class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                                        x-text="expandedModuleId === subModule.id ? '-' : '+'"
+                                                    ></span>
+                                                </button>
+
+                                                <div x-show="expandedModuleId === subModule.id" class="border-t border-gray-100 bg-white">
+                                                    <div class="p-4 md:p-6 space-y-4">
+                                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                                        
+                                                        <!-- Action Buttons for Instructor inside Accordion -->
+                                                        @if(auth()->user()->isInstruktur())
+                                                            <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                    Edit Modul Ini
+                                                                </a>
+                                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                        Hapus Modul
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @elseif($chapter->order == 5)
+        <!-- Custom Layout for Chapter 5 with Accordions for 5.1 -->
+        <div class="py-6 select-none" x-data="{
+            modules: @js($modules->values()),
+            activeTab: '5.1',
+            expandedModuleId: null,
+
+            getTabModules(tab) {
+                return this.modules.filter(m => m.title.startsWith(tab + '.'));
+            },
+            getSingleModule(tab) {
+                return this.modules.find(m => m.title.startsWith(tab)) || { title: '', content: '' };
+            },
+            toggleModule(id) {
+                this.expandedModuleId = this.expandedModuleId === id ? null : id;
+            }
+        }">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+                <!-- Navigation Back & Title Bar -->
+                <div class="flex items-center justify-between">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        ← Kembali ke Silabus Kursus
+                    </a>
+
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Chapter Header Description Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-sm">
+                        {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                        Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih sub-bab dan membaca detail spesifikasi.
+                    </p>
+                </div>
+
+                <!-- Main Study Room Content -->
+                <div class="space-y-6">
+                    
+                    <!-- 1. Top horizontal Sub-Chapter Navigation Bar -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="tab in ['5.1', '5.2', '5.3']">
+                                <button
+                                    @click="activeTab = tab; expandedModuleId = null"
+                                    class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
+                                    :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
+                                >
+                                    <span x-text="tab === '5.1' ? '5.1 Daftar Komponen' : (tab === '5.2' ? '5.2 Electrical Parts' : '5.3 Special Tools')"></span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- 2. Content Display Area -->
+                    <div>
+                        <!-- If Active Tab is 5.1 (Daftar Komponen) -> Show Accordions -->
+                        <template x-if="activeTab === '5.1'">
+                            <div class="space-y-3">
+                                <template x-for="module in getTabModules('5.1')" :key="module.id">
+                                    <div class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                        <button
+                                            type="button"
+                                            @click="toggleModule(module.id)"
+                                            class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
+                                        >
+                                            <span class="text-xs font-bold text-slate-800" x-text="module.title"></span>
+                                            <span
+                                                class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                                x-text="expandedModuleId === module.id ? '-' : '+'"
+                                            ></span>
+                                        </button>
+
+                                        <div x-show="expandedModuleId === module.id" class="border-t border-gray-100 bg-white">
+                                            <div class="p-4 md:p-6 space-y-4">
+                                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                                
+                                                <!-- Action Buttons for Instructor inside Accordion -->
+                                                @if(auth()->user()->isInstruktur())
+                                                    <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                            Edit Modul Ini
+                                                        </a>
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                                Hapus Modul
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <!-- If Active Tab is not 5.1 -> Show Single Module Card -->
+                        <template x-if="activeTab !== '5.1'">
+                            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                                <div class="p-6 md:p-8 space-y-6">
+                                    <h3 class="text-base font-bold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
+                                    
+                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
+                                    
+                                    <!-- Action Buttons for Instructor -->
+                                    @if(auth()->user()->isInstruktur())
+                                        <template x-if="getSingleModule(activeTab).id">
+                                            <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                    Edit Modul Ini
+                                                </a>
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                        Hapus Modul
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </template>
+                                    @endif
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @elseif($chapter->order == 6)
+        <!-- Custom Layout for Chapter 6 showing all catalogs as accordions directly -->
+        <div class="py-6 select-none" x-data="{
+            modules: @js($modules->values()),
+            expandedModuleId: null,
+
+            toggleModule(id) {
+                this.expandedModuleId = this.expandedModuleId === id ? null : id;
+            }
+        }">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+                <!-- Navigation Back & Title Bar -->
+                <div class="flex items-center justify-between">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        ← Kembali ke Silabus Kursus
+                    </a>
+
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Chapter Header Description Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-sm">
+                        {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                        Halaman ini berisi katalog suku cadang dan komponen Garbarata dalam format PDF. Klik pada masing-masing judul katalog di bawah ini untuk membuka dokumen PDF terkait.
+                    </p>
+                </div>
+
+                <!-- List of Catalogs Accordions directly -->
+                <div class="space-y-3">
+                    <template x-for="(module, index) in modules" :key="module.id">
+                        <div class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                            <button
+                                type="button"
+                                @click="toggleModule(module.id)"
+                                class="w-full flex items-center justify-between gap-3 cursor-pointer select-none px-5 py-4 bg-gradient-to-r from-slate-50 to-white hover:from-blue-50 hover:to-white transition-colors duration-200"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <span class="flex-shrink-0 w-7 h-7 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center shadow-sm" x-text="index + 1"></span>
+                                    <span class="font-semibold text-slate-800 text-sm text-left" x-text="module.title"></span>
+                                </div>
+                                <svg class="w-4 h-4 text-slate-400 transition-transform duration-300 flex-shrink-0" :class="expandedModuleId === module.id ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="expandedModuleId === module.id" class="border-t border-slate-100">
+                                <div class="px-5 py-4 bg-slate-50/50 space-y-4">
+                                    <div class="text-xs text-slate-600 leading-relaxed max-w-none prose prose-slate prose-sm animate-fade-in" x-html="module.content"></div>
+                                    
+                                    <!-- Action Buttons for Instructor inside Accordion -->
+                                    @if(auth()->user()->isInstruktur())
+                                        <div class="flex items-center gap-2 pt-4 border-t border-slate-200">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                Edit Katalog Ini
+                                            </a>
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus katalog ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                    Hapus Katalog
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
             </div>
         </div>
     @elseif($chapter->order == 7)
@@ -690,9 +1463,20 @@
                         ← Kembali ke Silabus Kursus
                     </a>
 
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                        Bab {{ $chapter->order }} dari {{ $chapters->count() }}
-                    </span>
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Chapter Header Description Card -->
@@ -783,6 +1567,23 @@
                             <div class="bg-white p-4" x-show="getActiveModule().content">
                                 <div class="text-slate-600 text-xs leading-relaxed max-w-none prose prose-slate prose-sm" x-html="getActiveModule().content"></div>
                             </div>
+
+                            @if(auth()->user()->isInstruktur())
+                                <template x-if="activeModuleId">
+                                    <div class="bg-slate-50 border-t border-gray-100 p-4 flex gap-2 rounded-b-2xl">
+                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                            Edit Lembar Gambar
+                                        </a>
+                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lembar gambar ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                Hapus Lembar Gambar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </template>
+                            @endif
                         </div>
 
                         <!-- Footer Navigation -->
@@ -818,9 +1619,20 @@
                         ← Kembali ke Silabus Kursus
                     </a>
 
-                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                        Bab {{ $chapter->order }} dari {{ $chapters->count() }}
-                    </span>
+                    <div class="flex items-center gap-2">
+                        @if(auth()->user()->isInstruktur())
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                                </svg>
+                                Tambah Modul Baru
+                            </a>
+                        @endif
+
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
+                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Chapter Header Description Card -->
@@ -942,6 +1754,23 @@
                                 <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="renderModuleContent(getActiveModule().content)">
                                     Memuat isi modul pembelajaran...
                                 </div>
+
+                                @if(auth()->user()->isInstruktur())
+                                    <template x-if="activeModuleId">
+                                        <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                Edit Modul Ini
+                                            </a>
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                    Hapus Modul
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </template>
+                                @endif
                             </div>
                         </div>
 
