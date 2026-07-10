@@ -82,9 +82,31 @@ class DashboardController extends Controller
             ];
 
             $items = Course::withCount('modules')->orderBy('id', 'desc')->limit(6)->get();
+            
+            $participants = User::where('role', 'peserta')->orderBy('id', 'desc')->get();
+            $adminUserProgress = $participants->mapWithKeys(function (User $participant) {
+                $progress = LearningProgress::forUser($participant);
+
+                return [
+                    $participant->id => [
+                        'name' => $participant->name,
+                        'email' => $participant->email,
+                        'material_percent' => $progress['percent'],
+                        'chapters' => $progress['chapters']->map(fn (array $chapter) => [
+                            'order' => $chapter['order'],
+                            'title' => $chapter['title'],
+                            'percent' => $chapter['percent'],
+                            'is_complete' => $chapter['is_complete'],
+                            'missing_modules' => $chapter['missing_modules']->map(fn ($module) => $module->title)->values(),
+                        ])->values(),
+                        'notes' => $progress['notes']->values(),
+                    ],
+                ];
+            });
+
             $badgeLabel = 'Instructor Workspace';
             $headline = 'Selamat datang, Instruktur';
-            $description = 'Kelola materi Garbarata dengan tampilan yang sama, sementara kontennya menyesuaikan kebutuhan pengajar.';
+            $description = 'Kelola materi Garbarata dan pantau progress belajar seluruh peserta.';
             $primaryAction = ['label' => 'Buka Daftar Kursus', 'href' => '#daftar-kursus'];
         } elseif ($isPeserta) {
             $stats = [
@@ -106,6 +128,6 @@ class DashboardController extends Controller
             $primaryAction = ['label' => 'Lanjutkan Belajar', 'href' => '#materi-kursus'];
         }
 
-        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress'));
+        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress', 'participants'));
     }
 }
