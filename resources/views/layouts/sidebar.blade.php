@@ -110,15 +110,12 @@
     </div>
 
     <!-- Bottom Area: Profile Card & Logout -->
-    <div class="p-4 border-t border-[#f0f0f0] space-y-4" x-data="{ openLogoutMenu: false }" @click.outside="openLogoutMenu = false">
+    <div class="p-4 border-t border-[#f0f0f0] space-y-3">
         <!-- User Profile Info (Matches mockup exactly with 'User' label in circle) -->
         <button
             type="button"
-            class="w-full flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-xl transition cursor-pointer select-none text-left"
-            @click="openLogoutMenu = !openLogoutMenu"
-            :aria-expanded="openLogoutMenu.toString()"
-            aria-controls="sidebar-logout-menu"
-            title="Buka menu akun"
+            class="w-full flex items-center space-x-3 p-2 rounded-xl select-none text-left"
+            title="Profil pengguna"
         >
             <!-- Profile Avatar -->
             <div class="w-10 h-10 rounded-full bg-[#0091ff] text-white flex items-center justify-center font-bold text-xs shadow-sm">
@@ -130,25 +127,14 @@
                     {{ Auth::user()->role === 'peserta' ? 'Peserta (Teknisi)' : (Auth::user()->role === 'instruktur' ? 'Instruktur' : 'Administrator') }}
                 </p>
             </div>
-            <svg class="w-4 h-4 text-gray-400 transition" :class="{ 'rotate-180': openLogoutMenu }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-            </svg>
         </button>
 
-        <div
-            x-cloak
-            x-show="openLogoutMenu"
-            x-transition
-            id="sidebar-logout-menu"
-            class="rounded-xl border border-[#f0f0f0] bg-white p-2 shadow-sm"
-        >
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-xs font-bold text-rose-600 transition hover:bg-rose-50 hover:text-rose-700">
-                    Logout
-                </button>
-            </form>
-        </div>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="w-full rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-left text-xs font-bold text-rose-600 transition hover:bg-rose-100 hover:text-rose-700">
+                Logout
+            </button>
+        </form>
 
         <!-- Safe Reporting Link -->
         <div class="px-2">

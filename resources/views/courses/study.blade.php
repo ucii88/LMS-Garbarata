@@ -5,6 +5,8 @@
             window.chapterOneStudy = function (modules) {
                 return {
                     modules,
+                    completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+                    csrfToken: @js(csrf_token()),
                     activeMechId: 'intro_mekanikal',
                     mechItems: [],
                     activeElecId: 'intro_elektrikal',
@@ -52,7 +54,27 @@
 
                     setMechModule(moduleId) {
                         this.activeMechId = moduleId;
+                        this.markModuleComplete(moduleId);
                         this.scrollToMechReader();
+                    },
+
+                    setElecModule(moduleId) {
+                        this.activeElecId = moduleId;
+                        this.markModuleComplete(moduleId);
+                    },
+
+                    markModuleComplete(moduleId) {
+                        if (!Number.isInteger(Number(moduleId))) {
+                            return;
+                        }
+
+                        fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': this.csrfToken,
+                                'Accept': 'application/json',
+                            },
+                        });
                     },
 
                     scrollToMechReader() {
@@ -72,7 +94,7 @@
                     nextMech() {
                         const index = this.mechItems.findIndex((item) => item.id === this.activeMechId);
                         if (index !== -1 && index < this.mechItems.length - 1) {
-                            this.activeMechId = this.mechItems[index + 1].id;
+                            this.setMechModule(this.mechItems[index + 1].id);
                         }
                     },
 
@@ -94,7 +116,7 @@
                     nextElec() {
                         const index = this.elecItems.findIndex((item) => item.id === this.activeElecId);
                         if (index !== -1 && index < this.elecItems.length - 1) {
-                            this.activeElecId = this.elecItems[index + 1].id;
+                            this.setElecModule(this.elecItems[index + 1].id);
                         }
                     },
 
@@ -243,7 +265,7 @@
                           <div class="flex flex-wrap gap-1.5">
                               <template x-for="item in elecItems" :key="item.id">
                                   <button
-                                      @click="activeElecId = item.id"
+                                      @click="setElecModule(item.id)"
                                       class="px-3 py-1.5 rounded-lg text-2xs font-bold transition text-left"
                                       :class="activeElecId === item.id ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
                                   >
@@ -303,6 +325,8 @@
         <!-- Custom Grouped Layout for Chapter 3: Operation Details & Procedures -->
         <div class="py-6 select-none" x-data="{
             modules: @js($modules),
+            completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+            csrfToken: @js(csrf_token()),
             detailItems: [],
             manualItems: [],
             autoItems: [],
@@ -317,6 +341,8 @@
             },
 
             toggleSection(sectionId) {
+                this.markSectionComplete(sectionId);
+
                 if (this.expandedSectionIds.includes(sectionId)) {
                     this.expandedSectionIds = this.expandedSectionIds.filter(id => id !== sectionId);
                     return;
@@ -327,6 +353,27 @@
 
             isSectionExpanded(sectionId) {
                 return this.expandedSectionIds.includes(sectionId);
+            },
+
+            markSectionComplete(sectionId) {
+                const sectionMap = {
+                    detail: this.detailItems,
+                    manual: this.manualItems,
+                    auto: this.autoItems,
+                    procedure: this.procedureItems,
+                };
+
+                (sectionMap[sectionId] || []).forEach(module => this.markModuleComplete(module.id));
+            },
+
+            markModuleComplete(moduleId) {
+                fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
+                    },
+                });
             }
         }">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -525,6 +572,8 @@
         <!-- Custom Grouped Layout for Chapter 2: Mechanical Specs & Electrical Specs -->
         <div class="py-6 select-none" x-data="{
             modules: @js($modules),
+            completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+            csrfToken: @js(csrf_token()),
             mechItems: [],
             elecItems: [],
             expandedMechIds: [],
@@ -535,6 +584,8 @@
             },
 
             toggleMech(moduleId) {
+                this.markModuleComplete(moduleId);
+
                 if (this.expandedMechIds.includes(moduleId)) {
                     this.expandedMechIds = this.expandedMechIds.filter(id => id !== moduleId);
                     return;
@@ -545,6 +596,16 @@
 
             isMechExpanded(moduleId) {
                 return this.expandedMechIds.includes(moduleId);
+            },
+
+            markModuleComplete(moduleId) {
+                fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
+                    },
+                });
             }
         }">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -626,7 +687,7 @@
 
                         <div class="space-y-4">
                             <template x-for="module in elecItems" :key="module.id">
-                                <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
+                                <article @click="markModuleComplete(module.id)" class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm cursor-pointer hover:border-emerald-200">
                                     <div class="border-b border-gray-100 pb-3">
                                         <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                     </div>
@@ -644,13 +705,35 @@
         <div class="py-6 select-none" x-data="{
             activeModuleId: {{ $modules->first() ? $modules->first()->id : 'null' }},
             modules: {{ $modules->toJson() }},
+            completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+            csrfToken: @js(csrf_token()),
+            init() {
+                this.markModuleComplete(this.activeModuleId);
+            },
+            setActiveModule(moduleId) {
+                this.activeModuleId = moduleId;
+                this.markModuleComplete(moduleId);
+            },
+            markModuleComplete(moduleId) {
+                if (!moduleId) {
+                    return;
+                }
+
+                fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
+                    },
+                });
+            },
             getActiveModule() {
                 return this.modules.find(m => m.id === this.activeModuleId) || { title: '', content: '', image_path: null };
             },
             nextModule() {
                 const index = this.modules.findIndex(m => m.id === this.activeModuleId);
                 if (index !== -1 && index < this.modules.length - 1) {
-                    this.activeModuleId = this.modules[index + 1].id;
+                    this.setActiveModule(this.modules[index + 1].id);
                 }
             },
             prevModule() {
@@ -704,7 +787,7 @@
                         <div class="flex flex-wrap gap-2">
                             <template x-for="module in modules" :key="module.id">
                                 <button
-                                    @click="activeModuleId = module.id"
+                                    @click="setActiveModule(module.id)"
                                     class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
                                     :class="activeModuleId === module.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >

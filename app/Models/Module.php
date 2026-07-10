@@ -34,4 +34,9 @@ class Module extends Model
     {
         return $this->hasMany(Hotspot::class, 'target_module_id');
     }
+
+    public function progress(): HasMany
+    {
+        return $this->hasMany(ModuleProgress::class);
+    }
 }

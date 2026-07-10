@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     // Course interactive viewer
     Route::get('/courses/{course}', [App\Http\Controllers\CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'showChapter'])->name('courses.chapters.show');
+    Route::post('/courses/{course}/chapters/{chapter}/modules/{module}/complete', [App\Http\Controllers\CourseController::class, 'completeModule'])->name('courses.modules.complete');
 
     // Role simulation switcher
     Route::post('/simulasi-role', function (Illuminate\Http\Request $request) {
