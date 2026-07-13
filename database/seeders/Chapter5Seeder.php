@@ -20,10 +20,8 @@ class Chapter5Seeder extends Seeder
         Module::where('chapter_id', $chapter->id)->delete();
 
         // Build HTML content for 5.1 Daftar Komponen
-        $content = '';
-
         // 5.1.1 Rotunda Assembly
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2">5.1.1. Rotunda Assembly</h4>' .
+        $c_5_1_1 = '<h4 class="font-bold text-slate-800 text-xs mb-2">5.1.1. Rotunda Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Rotunda Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1085:1450 image)
@@ -86,8 +84,9 @@ class Chapter5Seeder extends Seeder
             '}' .
             '</script>';
 
-        // 5.1.2 Tunnel Roller
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.2. Tunnel Roller</h4>' .
+        
+// 5.1.2 Tunnel Roller
+        $c_5_1_2 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.2. Tunnel Roller</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) lokasi pemasangan roller dan detail rakitan komponen untuk Tunnel Roller. <strong>Klik pada tombol lingkaran biru transparan di gambar peta lokasi</strong> untuk melihat detail rakitan pada lembar referensi yang sesuai, serta menyorot part number pada tabel di bawah.</p>' .
             
             // Main Location Map Container (Aspect ratio matched to 1181:1332)
@@ -190,8 +189,9 @@ class Chapter5Seeder extends Seeder
             '<tr id="roller-row-21" class="transition duration-300"><td class="p-2.5 text-center font-bold">21</td><td class="p-2.5 font-mono">2BT102CM</td><td class="p-2.5">Tunnel Carpet</td></tr>' .
             '</tbody></table></div>';
 
-        // 5.1.3 Cable carriage device
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.3. Cable carriage device</h4>' .
+        
+// 5.1.3 Cable carriage device
+        $c_5_1_3 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.3. Cable carriage device</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Cable carriage device. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1068:1473 image)
@@ -210,8 +210,9 @@ class Chapter5Seeder extends Seeder
             '<tr id="cable-row-1" class="transition duration-300"><td class="p-2.5 text-center font-bold">1</td><td class="p-2.5 font-mono">OCS100CM</td><td class="p-2.5">Scissor Cable Assembly</td></tr>' .
             '</tbody></table></div>';
 
-        // 5.1.4 Vertical lift column
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.4. Vertical lift column</h4>' .
+        
+// 5.1.4 Vertical lift column
+        $c_5_1_4 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.4. Vertical lift column</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Vertical lift column. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1440:2560 image)
@@ -251,8 +252,9 @@ class Chapter5Seeder extends Seeder
             '</tbody></table></div>' .
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part lihat di daftar komponen elektrikal.</p>';
 
-        // 5.1.5 Wheel Bogie Assembly
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.5. Wheel Bogie Assembly</h4>' .
+        
+// 5.1.5 Wheel Bogie Assembly
+        $c_5_1_5 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.5. Wheel Bogie Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Wheel Bogie Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 864:1217 image)
@@ -307,8 +309,9 @@ class Chapter5Seeder extends Seeder
             '</tbody></table></div>' .
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part harap lihat di daftar komponen elektrikal.</p>';
 
-        // 5.1.6 Landing Stair
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.6. Landing Stair</h4>' .
+        
+// 5.1.6 Landing Stair
+        $c_5_1_6 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.6. Landing Stair</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Landing Stair. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1664:2536 image)
@@ -345,8 +348,9 @@ class Chapter5Seeder extends Seeder
             '<tr id="stair-row-10" class="transition duration-300"><td class="p-2.5 text-center font-bold">10</td><td class="p-2.5 font-mono">OST006CM</td><td class="p-2.5">Step Plate</td></tr>' .
             '</tbody></table></div>';
 
-        // 5.1.7 Cabin Rotation
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.7. Cabin Rotation</h4>' .
+        
+// 5.1.7 Cabin Rotation
+        $c_5_1_7 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.7. Cabin Rotation</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Cabin Rotation. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1824:2328 image)
@@ -372,8 +376,9 @@ class Chapter5Seeder extends Seeder
             '</tbody></table></div>' .
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part harap lihat di daftar komponen elektrikal.</p>';
 
-        // 5.1.8 Cabin Curtain Assembly
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.8. Cabin Curtain Assembly</h4>' .
+        
+// 5.1.8 Cabin Curtain Assembly
+        $c_5_1_8 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.8. Cabin Curtain Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Cabin Curtain Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1536:2304 image)
@@ -415,8 +420,9 @@ class Chapter5Seeder extends Seeder
             '<tr id="curtain-row-11" class="transition duration-300"><td class="p-2.5 text-center font-bold">11</td><td class="p-2.5 font-mono">OCB017CM</td><td class="p-2.5">Plate Curtain Cabin</td></tr>' .
             '</tbody></table></div>';
 
-        // 5.1.9 Auto Leveler Assembly
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.9. Auto Leveler Assembly</h4>' .
+        
+// 5.1.9 Auto Leveler Assembly
+        $c_5_1_9 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.9. Auto Leveler Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Auto Leveler Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 2318:1824 image)
@@ -438,8 +444,9 @@ class Chapter5Seeder extends Seeder
             '</tbody></table></div>' .
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part harap lihat di daftar komponen elektrikal.</p>';
 
-        // 5.1.10 Aircraft/Canopy Closure
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.10. Aircraft/Canopy Closure</h4>' .
+        
+// 5.1.10 Aircraft/Canopy Closure
+        $c_5_1_10 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.10. Aircraft/Canopy Closure</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Aircraft/Canopy Closure. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1632:2176 image)
@@ -471,8 +478,9 @@ class Chapter5Seeder extends Seeder
             '</tbody></table></div>' .
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part harap lihat di daftar komponen elektrikal.</p>';
 
-        // 5.1.11 Swing Door and Window Assembly
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.11. Swing Door and Window Assembly</h4>' .
+        
+// 5.1.11 Swing Door and Window Assembly
+        $c_5_1_11 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.11. Swing Door and Window Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Swing Door and Window Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1632:2176 image)
@@ -506,8 +514,9 @@ class Chapter5Seeder extends Seeder
             '</tbody></table></div>' .
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part harap lihat di daftar komponen elektrikal.</p>';
 
-        // 5.1.12. Rubber Weathering
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.12. Rubber Weathering</h4>' .
+        
+// 5.1.12. Rubber Weathering
+        $c_5_1_12 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.12. Rubber Weathering</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Rubber Weathering. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 1632:2176 image)
@@ -551,8 +560,9 @@ class Chapter5Seeder extends Seeder
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part harap lihat di daftar komponen elektrikal.</p>' .
             '<p class="text-[10px] text-red-500 font-semibold mt-1">CATATAN: Harap cantumkan tipe dari garbarata dan tunnel untuk setiap pemesanan weathering</p>';
 
-        // 5.1.13. Wire Rope Equalizer
-        $content .= '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.13. Wire Rope Equalizer</h4>' .
+        
+// 5.1.13. Wire Rope Equalizer
+        $c_5_1_13 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.13. Wire Rope Equalizer</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Wire Rope Equalizer. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
             // Interactive Diagram Container (Aspect ratio matched to 2176:1632 image)
@@ -585,12 +595,97 @@ class Chapter5Seeder extends Seeder
             '</tbody></table></div>' .
             '<p class="text-[10px] text-slate-400 mt-1 italic">Catatan: * Kode part harap lihat di daftar komponen elektrikal.</p>';
 
-        // Save module 5.1
+        
+
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '5.1 Daftar Komponen',
-            'content' => $content,
+            'title' => '5.1.1 Rotunda Assembly',
+            'content' => $c_5_1_1,
             'order' => 1,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.2 Tunnel Roller',
+            'content' => $c_5_1_2,
+            'order' => 2,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.3 Cable carriage device',
+            'content' => $c_5_1_3,
+            'order' => 3,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.4 Vertical lift column',
+            'content' => $c_5_1_4,
+            'order' => 4,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.5 Wheel Bogie Assembly',
+            'content' => $c_5_1_5,
+            'order' => 5,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.6 Landing Stair',
+            'content' => $c_5_1_6,
+            'order' => 6,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.7 Cabin Rotation',
+            'content' => $c_5_1_7,
+            'order' => 7,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.8 Cabin Curtain Assembly',
+            'content' => $c_5_1_8,
+            'order' => 8,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.9 Auto Leveler Assembly',
+            'content' => $c_5_1_9,
+            'order' => 9,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.10 Aircraft/Canopy Closure',
+            'content' => $c_5_1_10,
+            'order' => 10,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.11 Swing Door and Window Assembly',
+            'content' => $c_5_1_11,
+            'order' => 11,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.12 Rubber Weathering',
+            'content' => $c_5_1_12,
+            'order' => 12,
+        ]);
+
+        Module::create([
+            'chapter_id' => $chapter->id,
+            'title' => '5.1.13 Wire Rope Equalizer',
+            'content' => $c_5_1_13,
+            'order' => 13,
         ]);
 
         // 5.2 Electrical parts and others
@@ -618,7 +713,7 @@ class Chapter5Seeder extends Seeder
                 '        </div>' .
                 '    </div>' .
                 '</div>',
-            'order' => 2,
+            'order' => 14,
         ]);
 
         // 5.3. Special Tools
@@ -729,7 +824,7 @@ class Chapter5Seeder extends Seeder
             'chapter_id' => $chapter->id,
             'title' => '5.3 Special Tools',
             'content' => $toolsContent,
-            'order' => 3,
+            'order' => 15,
         ]);
     }
 }

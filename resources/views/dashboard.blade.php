@@ -206,11 +206,11 @@
                 @if ($isInstruktur)
                     <section id="kelola-kursus" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="border-b border-[#f0f0f0] pb-5">
-                            <h2 class="text-base font-bold text-slate-800">Daftar Kursus Aktif</h2>
-                            <p class="text-xs text-slate-400 mt-1">Kelola materi, modul, dan diagram interaktif pada satu tempat.</p>
+                            <h2 class="text-base font-bold text-slate-800">Kelola Materi</h2>
+                            <p class="text-xs text-slate-400 mt-1">Tambah, edit, dan hapus modul materi pada setiap bab kursus.</p>
                         </div>
 
-                        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                        <div class="mt-5 grid gap-4">
                             @forelse ($items as $course)
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/50 p-5 space-y-4 hover:border-gray-300 transition duration-150">
                                     <div class="flex items-center justify-between">
@@ -227,8 +227,8 @@
 
                                     <div class="flex items-center justify-between border-t border-gray-200/60 pt-3">
                                         <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Diagram interaktif</span>
-                                        <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center justify-center rounded-lg bg-slate-900 hover:bg-slate-800 px-3.5 py-1.5 text-2xs font-bold text-white transition shadow-sm">
-                                            Buka
+                                        <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center gap-1 justify-center rounded-lg bg-amber-500 hover:bg-amber-600 px-4 py-2 text-2xs font-bold text-white transition shadow-sm">
+                                            Kelola Materi →
                                         </a>
                                     </div>
                                 </article>
@@ -237,6 +237,59 @@
                                     Belum ada kursus yang tersedia.
                                 </div>
                             @endforelse
+                        </div>
+                    </section>
+
+                    <section id="progress-peserta" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm mt-6">
+                        <div class="border-b border-[#f0f0f0] pb-5">
+                            <h2 class="text-base font-bold text-slate-800">Progress Belajar Peserta</h2>
+                            <p class="text-xs text-slate-400 mt-1">Pantau perkembangan peserta dalam menyelesaikan modul dan bab pembelajaran.</p>
+                        </div>
+
+                        <div class="mt-5 overflow-hidden rounded-xl border border-[#f0f0f0]">
+                            <table class="min-w-full divide-y divide-[#f0f0f0] text-left text-xs">
+                                <thead class="bg-gray-50">
+                                    <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                                        <th class="px-5 py-3">Nama Peserta</th>
+                                        <th class="px-5 py-3">Email</th>
+                                        <th class="px-5 py-3">Progress Keseluruhan</th>
+                                        <th class="px-5 py-3 text-right">Detail</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#f0f0f0] bg-white text-slate-700">
+                                    @forelse ($participants as $participant)
+                                        @php
+                                            $prog = $adminUserProgress[$participant->id] ?? null;
+                                            $percent = $prog ? $prog['material_percent'] : 0;
+                                        @endphp
+                                        <tr class="transition hover:bg-slate-50/50">
+                                            <td class="px-5 py-3.5 font-bold text-slate-800">
+                                                <button type="button" @click="selectedUserProgress = userProgress[{{ $participant->id }}]" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">
+                                                    {{ $participant->name }}
+                                                </button>
+                                            </td>
+                                            <td class="px-5 py-3.5 text-slate-500">{{ $participant->email }}</td>
+                                            <td class="px-5 py-3.5">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="h-2 w-full max-w-[120px] rounded-full bg-slate-100 overflow-hidden">
+                                                        <div class="h-full rounded-full bg-emerald-500" style="width: {{ $percent }}%"></div>
+                                                    </div>
+                                                    <span class="text-[10px] font-bold text-slate-600">{{ $percent }}%</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-5 py-3.5 text-right">
+                                                <button type="button" @click="selectedUserProgress = userProgress[{{ $participant->id }}]" class="inline-flex items-center gap-1 rounded border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold text-slate-600 transition hover:bg-slate-50">
+                                                    Lihat Detail
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="px-5 py-8 text-center text-xs text-slate-400">Belum ada peserta yang terdaftar.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
                     </section>
                 @endif
@@ -320,8 +373,8 @@
             </div>
         </div>
 
-        <!-- Admin Add User Modal -->
-        @if ($isAdmin)
+        <!-- Progress Detail Modal -->
+        @if ($isAdmin || $isInstruktur)
             <div x-show="selectedUserProgress" class="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true" style="display: none;">
                 <div class="flex min-h-screen items-center justify-center px-4 py-10">
                     <div class="fixed inset-0 bg-slate-900/60" @click="selectedUserProgress = null"></div>
@@ -365,6 +418,10 @@
                 </div>
             </div>
 
+        @endif
+
+        <!-- Admin Add User Modal -->
+        @if ($isAdmin)
             <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
                 <div class="flex min-h-screen items-center justify-center px-4 py-10 text-center sm:block sm:p-0">
                     <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-0 bg-slate-900/60 transition-opacity" @click="showModal = false"></div>
