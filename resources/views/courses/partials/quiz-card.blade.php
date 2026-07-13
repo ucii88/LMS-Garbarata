@@ -73,6 +73,18 @@
                     {{ $chapterQuiz->time_limit ? $chapterQuiz->time_limit . ' mnt' : 'Tanpa timer' }} ·
                     Lulus: {{ $chapterQuiz->passing_score }}%
                 </p>
+                @if($chapterQuiz->start_time || $chapterQuiz->end_time)
+                    <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+                        <span>📅</span>
+                        @if($chapterQuiz->availability_status === 'upcoming')
+                            <span class="text-amber-600 font-semibold">Dibuka: {{ $chapterQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
+                        @elseif($chapterQuiz->availability_status === 'closed')
+                            <span class="text-red-500 font-semibold">Sudah Ditutup (Selesai: {{ $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
+                        @else
+                            <span class="text-emerald-600 font-semibold">S/d: {{ $chapterQuiz->end_time ? $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : 'Seterusnya' }}</span>
+                        @endif
+                    </p>
+                @endif
             </div>
 
             {{-- CTA Button --}}
@@ -83,6 +95,14 @@
                            class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 rounded-xl transition">
                             Lihat Hasil
                         </a>
+                    @elseif($chapterQuiz->availability_status === 'upcoming')
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                            Belum Dibuka
+                        </span>
+                    @elseif($chapterQuiz->availability_status === 'closed')
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                            Sudah Ditutup
+                        </span>
                     @elseif($chapterQuiz->canAttempt(auth()->id()))
                         <a href="{{ route('quiz.start', [$course, $chapterQuiz]) }}"
                            class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
@@ -165,15 +185,35 @@
                     {{ $finalQuiz->time_limit ? $finalQuiz->time_limit . ' mnt' : 'Tanpa timer' }} ·
                     Lulus: {{ $finalQuiz->passing_score }}%
                 </p>
+                @if($finalQuiz->start_time || $finalQuiz->end_time)
+                    <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+                        <span>📅</span>
+                        @if($finalQuiz->availability_status === 'upcoming')
+                            <span class="text-amber-600 font-semibold">Dibuka: {{ $finalQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
+                        @elseif($finalQuiz->availability_status === 'closed')
+                            <span class="text-red-500 font-semibold">Sudah Ditutup (Selesai: {{ $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
+                        @else
+                            <span class="text-emerald-600 font-semibold">S/d: {{ $finalQuiz->end_time ? $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : 'Seterusnya' }}</span>
+                        @endif
+                    </p>
+                @endif
             </div>
 
             <div class="shrink-0">
                 @if(auth()->user()->isPeserta())
                     @if($finalQuizAttempt?->is_passed)
                         <a href="{{ route('quiz.result', [$course, $finalQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-amber-700 bg-amber-100 hover:bg-emerald-200 rounded-xl transition">
                             Lihat Hasil
                         </a>
+                    @elseif($finalQuiz->availability_status === 'upcoming')
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                            Belum Dibuka
+                        </span>
+                    @elseif($finalQuiz->availability_status === 'closed')
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                            Sudah Ditutup
+                        </span>
                     @elseif($finalQuiz->canAttempt(auth()->id()))
                         <a href="{{ route('quiz.start', [$course, $finalQuiz]) }}"
                            class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl transition">

@@ -171,12 +171,9 @@
             </div>
         </button>
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="w-full rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-left text-xs font-bold text-rose-600 transition hover:bg-rose-100 hover:text-rose-700">
-                Logout
-            </button>
-        </form>
+        <button type="button" onclick="openLogoutModal(event)" class="w-full rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-left text-xs font-bold text-rose-600 transition hover:bg-rose-100 hover:text-rose-700">
+            Logout
+        </button>
 
         <!-- Safe Reporting Link -->
         <div class="px-2">

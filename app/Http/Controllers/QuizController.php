@@ -9,6 +9,7 @@ use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class QuizController extends Controller
 {
@@ -65,6 +66,8 @@ class QuizController extends Controller
             'shuffle_questions' => 'nullable|boolean',
             'shuffle_options'   => 'nullable|boolean',
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
+            'start_time'        => 'nullable|date',
+            'end_time'          => 'nullable|date|after:start_time',
             'is_active'         => 'nullable|boolean',
         ]);
 
@@ -76,6 +79,13 @@ class QuizController extends Controller
         if ($isPractice && empty($validated['chapter_id'])) {
             return back()->withErrors(['chapter_id' => 'Latihan harus ditempatkan pada sebuah chapter.'])->withInput();
         }
+
+        $startTime = !$isPractice && $request->filled('start_time')
+            ? \Carbon\Carbon::parse($request->start_time, 'Asia/Jakarta')->timezone('UTC')
+            : null;
+        $endTime = !$isPractice && $request->filled('end_time')
+            ? \Carbon\Carbon::parse($request->end_time, 'Asia/Jakarta')->timezone('UTC')
+            : null;
 
         $maxOrder = $course->quizzes()->max('order') ?? 0;
 
@@ -91,6 +101,8 @@ class QuizController extends Controller
             'shuffle_questions' => $request->boolean('shuffle_questions'),
             'shuffle_options'   => $request->boolean('shuffle_options'),
             'review_policy'     => $validated['review_policy'],
+            'start_time'        => $startTime,
+            'end_time'          => $endTime,
             'is_active'         => $request->boolean('is_active', true),
             'order'             => $maxOrder + 1,
         ]);
@@ -144,6 +156,8 @@ class QuizController extends Controller
             'shuffle_questions' => 'nullable|boolean',
             'shuffle_options'   => 'nullable|boolean',
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
+            'start_time'        => 'nullable|date',
+            'end_time'          => 'nullable|date|after:start_time',
             'is_active'         => 'nullable|boolean',
         ]);
 
@@ -155,6 +169,13 @@ class QuizController extends Controller
             return back()->withErrors(['chapter_id' => 'Latihan harus ditempatkan pada sebuah chapter.'])->withInput();
         }
 
+        $startTime = !$isPractice && $request->filled('start_time')
+            ? \Carbon\Carbon::parse($request->start_time, 'Asia/Jakarta')->timezone('UTC')
+            : null;
+        $endTime = !$isPractice && $request->filled('end_time')
+            ? \Carbon\Carbon::parse($request->end_time, 'Asia/Jakarta')->timezone('UTC')
+            : null;
+
         $quiz->update([
             'chapter_id'        => $validated['chapter_id'] ?? null,
             'title'             => $validated['title'],
@@ -165,6 +186,8 @@ class QuizController extends Controller
             'shuffle_questions' => $request->boolean('shuffle_questions'),
             'shuffle_options'   => $request->boolean('shuffle_options'),
             'review_policy'     => $validated['review_policy'],
+            'start_time'        => $startTime,
+            'end_time'          => $endTime,
             'is_active'         => $request->boolean('is_active', true),
         ]);
 
@@ -254,5 +277,71 @@ class QuizController extends Controller
         }
 
         return back()->with('success', 'Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan kuis ini kembali dan sertifikat sebelumnya telah dicabut.');
+    }
+
+    /**
+     * Ekspor hasil percobaan kuis ke file CSV.
+     */
+    public function exportAttempts(Course $course, Quiz $quiz)
+    {
+        abort_if($quiz->course_id !== $course->id, 403);
+
+        $attempts = QuizAttempt::where('quiz_id', $quiz->id)
+                               ->with('user')
+                               ->orderBy('started_at', 'desc')
+                               ->get();
+
+        $filename = 'Rekap_Nilai_' . Str::slug($quiz->title) . '_' . date('Y-m-d_H-i-s') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $callback = function () use ($attempts) {
+            $file = fopen('php://output', 'w');
+            
+            // Add UTF-8 BOM to make it open correctly in Microsoft Excel
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Header kolom
+            fputcsv($file, [
+                'Nama Peserta',
+                'Email',
+                'Percobaan Ke-',
+                'Waktu Mulai',
+                'Waktu Selesai',
+                'Durasi (Menit)',
+                'Skor / Nilai (%)',
+                'Passing Score (%)',
+                'Status Kelulusan'
+            ]);
+
+            foreach ($attempts as $attempt) {
+                $duration = '-';
+                if ($attempt->submitted_at && !is_null($attempt->time_spent)) {
+                    $duration = round($attempt->time_spent / 60, 1);
+                }
+
+                fputcsv($file, [
+                    $attempt->user->name,
+                    $attempt->user->email,
+                    $attempt->attempt_number,
+                    $attempt->started_at->timezone('Asia/Jakarta')->format('Y-m-d H:i:s'),
+                    $attempt->submitted_at ? $attempt->submitted_at->timezone('Asia/Jakarta')->format('Y-m-d H:i:s') : 'Belum Selesai',
+                    $duration,
+                    $attempt->submitted_at ? number_format($attempt->score, 0) : '-',
+                    $attempt->quiz->passing_score,
+                    $attempt->submitted_at ? ($attempt->is_passed ? 'LULUS' : 'GAGAL') : 'BERJALAN'
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

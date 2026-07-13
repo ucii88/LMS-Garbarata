@@ -12,6 +12,11 @@
 </script>
 @endunless
 
+{{-- Connection Alert Banner --}}
+<div id="connection-banner" class="hidden fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-xs font-bold transition-all duration-300">
+    <span id="connection-banner-text"></span>
+</div>
+
 <div class="max-w-4xl mx-auto">
     <form id="quiz-form" action="{{ route($quiz->isPractice() ? 'practice.submit' : 'quiz.submit', [$course, $quiz]) }}" method="POST">
         @csrf
@@ -317,7 +322,51 @@ function handleFocusLoss() {
 function closeCheatModal() {
     document.getElementById('cheat-modal').classList.add('hidden');
 }
-const SAVE_URL = "{{ route($quiz->isPractice() ? 'practice.save-answer' : 'quiz.save-answer', [$course, $quiz]) }}";
+
+// Detektor Koneksi Internet
+window.addEventListener('online', function() {
+    showConnectionStatus(true);
+});
+
+window.addEventListener('offline', function() {
+    showConnectionStatus(false);
+});
+
+function showConnectionStatus(isOnline) {
+    const banner = document.getElementById('connection-banner');
+    const text = document.getElementById('connection-banner-text');
+    const submitBtns = document.querySelectorAll('button[onclick="confirmSubmit()"], button[type="submit"]');
+    
+    if (isOnline) {
+        text.textContent = '✓ Koneksi Terhubung Kembali! Menyelaraskan jawaban...';
+        banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-xs font-bold bg-emerald-600 text-white shadow-md transition-all duration-300';
+        
+        // Aktifkan kembali tombol submit
+        submitBtns.forEach(btn => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+        });
+        
+        // Sembunyikan banner setelah 2.5 detik
+        setTimeout(() => {
+            if (navigator.onLine) {
+                banner.classList.add('hidden');
+            }
+        }, 2500);
+    } else {
+        text.textContent = '⚠️ Koneksi Internet Terputus! Harap jangan menutup halaman kuis ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.';
+        banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-xs font-bold bg-red-600 text-white shadow-md animate-pulse transition-all duration-300';
+        
+        // Nonaktifkan tombol submit
+        submitBtns.forEach(btn => {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+        });
+    }
+}
+const SAVE_URL = "{{ route('quiz.save-answer', [$course, $quiz]) }}";
 const CSRF = "{{ csrf_token() }}";
 const flagged = new Set();
 const answered = new Set();

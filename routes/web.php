@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/courses/{course}/quizzes/{quiz}/questions/sync', [QuizController::class, 'syncQuestions'])->name('quizzes.questions.sync');
         // Hasil & Reset Percobaan Peserta
         Route::get('/courses/{course}/quizzes/{quiz}/attempts', [QuizController::class, 'attempts'])->name('quizzes.attempts');
+        Route::get('/courses/{course}/quizzes/{quiz}/attempts/export', [QuizController::class, 'exportAttempts'])->name('quizzes.attempts.export');
         Route::delete('/courses/{course}/quizzes/{quiz}/attempts/{attempt}', [QuizController::class, 'destroyAttempt'])->name('quizzes.attempts.destroy');
 
         // Manajemen latihan per chapter (menggunakan bank soal yang sama)

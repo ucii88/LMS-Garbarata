@@ -59,6 +59,16 @@ class QuizAttemptController extends Controller
         abort_if(!$quiz->is_active, 404);
         $this->ensureCorrectActivityRoute($quiz);
 
+        if (!$quiz->isPractice() && $quiz->availability_status === 'upcoming') {
+            return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
+                             ->withErrors(['msg' => 'Kuis belum dibuka. Silakan tunggu hingga jadwal yang ditentukan.']);
+        }
+
+        if (!$quiz->isPractice() && $quiz->availability_status === 'closed') {
+            return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
+                             ->withErrors(['msg' => 'Kuis sudah ditutup dan tidak dapat dikerjakan lagi.']);
+        }
+
         $user = Auth::user();
 
         if (!$quiz->canAttempt($user->id)) {
