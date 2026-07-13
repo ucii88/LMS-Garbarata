@@ -28,6 +28,7 @@ class DashboardController extends Controller
         $description = 'Pantau aktivitas utama sesuai peran Anda dalam satu tampilan yang konsisten.';
         $primaryAction = null;
         $adminUserProgress = [];
+        $participants = collect();
 
         if ($isAdmin) {
             $stats = [
@@ -126,6 +127,7 @@ class DashboardController extends Controller
             $headline = 'Selamat datang, Peserta';
             $description = 'Ikuti materi Garbarata dalam alur yang rapi, modern, dan sama untuk semua peran.';
             $primaryAction = ['label' => 'Lanjutkan Belajar', 'href' => '#materi-kursus'];
+            
         }
 
         return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress', 'participants'));
