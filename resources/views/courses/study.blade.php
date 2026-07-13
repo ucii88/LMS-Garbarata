@@ -365,6 +365,8 @@
 
               </div>
           </div>
+
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 3)
         <!-- Custom Grouped Layout for Chapter 3: Operation Details & Procedures -->
         <div class="py-6 select-none" x-data="{
@@ -683,6 +685,8 @@
                 </div>
             </div>
         </div>
+
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 2)
         <!-- Custom Grouped Layout for Chapter 2: Mechanical Specs & Electrical Specs -->
         <div class="py-6 select-none" x-data="{
@@ -856,6 +860,8 @@
                 </div>
             </div>
         </div>
+
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 4)
         <!-- Custom Layout for Chapter 4 with Accordions for 4.6 -->
         <div class="py-6 select-none" x-data="{
@@ -863,11 +869,26 @@
             activeTab: '4.1',
             expandedModuleId: null,
 
+            get tabs() {
+                const uniqueTabs = new Set();
+                this.modules.forEach(m => {
+                    const match = m.title.match(/^(4\.\d+)/);
+                    if (match) uniqueTabs.add(match[1]);
+                });
+                return Array.from(uniqueTabs).sort((a, b) => parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]));
+            },
+            init() {
+                if (!this.tabs.includes(this.activeTab) && this.tabs.length > 0) {
+                    this.activeTab = this.tabs[0];
+                }
+            },
             getTabModules(tab) {
                 return this.modules.filter(m => m.title.startsWith(tab + '.'));
             },
             getSingleModule(tab) {
-                return this.modules.find(m => m.title.startsWith(tab)) || { title: '', content: '' };
+                let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' '));
+                if (!m) m = this.modules.find(m => m.title.startsWith(tab));
+                return m || { title: tab, content: '' };
             },
             toggleModule(id) {
                 this.expandedModuleId = this.expandedModuleId === id ? null : id;
@@ -916,7 +937,7 @@
                             <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <template x-for="tab in ['4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7']">
+                            <template x-for="tab in tabs" :key="tab">
                                 <button
                                     @click="activeTab = tab; expandedModuleId = null"
                                     class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
@@ -1233,6 +1254,8 @@
                 </div>
             </div>
         </div>
+
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 5)
         <!-- Custom Layout for Chapter 5 with Accordions for 5.1 -->
         <div class="py-6 select-none" x-data="{
@@ -1240,11 +1263,26 @@
             activeTab: '5.1',
             expandedModuleId: null,
 
+            get tabs() {
+                const uniqueTabs = new Set();
+                this.modules.forEach(m => {
+                    const match = m.title.match(/^(5\.\d+)/);
+                    if (match) uniqueTabs.add(match[1]);
+                });
+                return Array.from(uniqueTabs).sort((a, b) => parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]));
+            },
+            init() {
+                if (!this.tabs.includes(this.activeTab) && this.tabs.length > 0) {
+                    this.activeTab = this.tabs[0];
+                }
+            },
             getTabModules(tab) {
                 return this.modules.filter(m => m.title.startsWith(tab + '.'));
             },
             getSingleModule(tab) {
-                return this.modules.find(m => m.title.startsWith(tab)) || { title: '', content: '' };
+                let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' '));
+                if (!m) m = this.modules.find(m => m.title.startsWith(tab));
+                return m || { title: tab, content: '' };
             },
             toggleModule(id) {
                 this.expandedModuleId = this.expandedModuleId === id ? null : id;
@@ -1293,13 +1331,13 @@
                             <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <template x-for="tab in ['5.1', '5.2', '5.3']">
+                            <template x-for="tab in tabs" :key="tab">
                                 <button
                                     @click="activeTab = tab; expandedModuleId = null"
                                     class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
                                     :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
-                                    <span x-text="tab === '5.1' ? '5.1 Daftar Komponen' : (tab === '5.2' ? '5.2 Electrical Parts' : '5.3 Special Tools')"></span>
+                                    <span x-text="getSingleModule(tab).title"></span>
                                 </button>
                             </template>
                         </div>
@@ -1383,6 +1421,8 @@
                 </div>
             </div>
         </div>
+
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 6)
         <!-- Custom Layout for Chapter 6 showing all catalogs as accordions directly -->
         <div class="py-6 select-none" x-data="{
@@ -1472,6 +1512,8 @@
 
             </div>
         </div>
+
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 7)
         <!-- Custom Blueprint/Electrical Diagram Layout for Chapter 7 -->
         <div class="py-6 select-none" x-data="{
@@ -1883,5 +1925,7 @@
                 </div>
             </div>
         </div>
+
+        @include('courses.partials.quiz-card')
     @endif
 </x-app-layout>

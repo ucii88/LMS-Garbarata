@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Course extends Model
 {
@@ -32,8 +33,32 @@ class Course extends Model
     /**
      * Get all of the modules for the course.
      */
-    public function modules(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    public function modules(): HasManyThrough
     {
         return $this->hasManyThrough(Module::class, Chapter::class);
+    }
+
+    /**
+     * Get all quizzes for the course (chapter quizzes + final quiz).
+     */
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class)->orderBy('order');
+    }
+
+    /**
+     * Get all certificates issued for this course.
+     */
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    /**
+     * Get all questions (bank soal) across all chapters in this course.
+     */
+    public function questions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Question::class, Chapter::class);
     }
 }

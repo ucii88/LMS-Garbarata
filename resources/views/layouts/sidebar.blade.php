@@ -58,6 +58,17 @@
                     </svg>
                     <span>Kelola Materi</span>
                 </a>
+
+                {{-- Tambah Kelola Quiz di sidebar instruktur --}}
+                <a
+                    href="{{ route('quizzes.index', 1) }}"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('quizzes.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
+                >
+                    <svg class="w-5 h-5 {{ request()->routeIs('quizzes.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                    <span>Kelola Quiz</span>
+                </a>
             @endif
 
             @if(Auth::user()->isPeserta())
@@ -76,35 +87,51 @@
                 <!-- Materi Garbarata Link -->
                 <a
                     href="{{ route('courses.show', 1) }}"
-                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('courses.show') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('courses.show') || request()->routeIs('courses.chapters.show') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
-                    <svg class="w-5 h-5 {{ request()->routeIs('courses.show') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 {{ request()->routeIs('courses.show') || request()->routeIs('courses.chapters.show') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                     </svg>
                     <span>Materi Garbarata</span>
                 </a>
 
-                <!-- Tugas & Kuis Link -->
+                <!-- Tugas & Kuis Link (diarahkan ke halaman silabus karena kuis ada di akhir chapter) -->
                 <a
-                    href="#"
-                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-600 transition-all duration-150 cursor-not-allowed group"
+                    href="{{ route('courses.show', 1) }}#kuis-section"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('quizzes.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
-                    <svg class="w-5 h-5 text-gray-300 group-hover:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
                     <span>Tugas & Kuis</span>
                 </a>
 
                 <!-- Sertifikat Link -->
-                <a
-                    href="#"
-                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-600 transition-all duration-150 cursor-not-allowed group"
-                >
-                    <svg class="w-5 h-5 text-gray-300 group-hover:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-                    </svg>
-                    <span>Sertifikat</span>
-                </a>
+                @php
+                    $userCert = \App\Models\Certificate::where('user_id', Auth::id())->where('course_id', 1)->first();
+                @endphp
+                @if($userCert)
+                    <a
+                        href="{{ route('certificate.show', $userCert->id) }}"
+                        class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800"
+                    >
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                        <span>Sertifikat</span>
+                    </a>
+                @else
+                    <a
+                        href="#"
+                        onclick="alert('Sertifikat belum tersedia. Silakan selesaikan semua kuis dengan nilai kelulusan terlebih dahulu!')"
+                        class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-500"
+                    >
+                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                        <span>Sertifikat</span>
+                    </a>
+                @endif
             @endif
         </nav>
     </div>

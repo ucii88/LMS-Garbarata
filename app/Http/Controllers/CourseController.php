@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\LearningProgress;
+use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\Chapter;
 use App\Models\Module;
 use App\Models\ModuleProgress;
+use App\Models\Quiz;
+use App\Models\QuizAttempt;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -56,13 +59,47 @@ class CourseController extends Controller
         $diagram = $chapter->diagram;
         $modules = $chapter->modules;
 
+        // Quiz untuk chapter ini (jika ada)
+        $chapterQuiz = Quiz::where('course_id', $course->id)
+                           ->where('chapter_id', $chapter->id)
+                           ->where('is_active', true)
+                           ->withCount('questions')
+                           ->first();
+
+        // Final Quiz (jika ada dan semua chapter sudah selesai)
+        $finalQuiz = Quiz::where('course_id', $course->id)
+                         ->whereNull('chapter_id')
+                         ->where('is_active', true)
+                         ->withCount('questions')
+                         ->first();
+
+        // Status attempt user untuk quiz ini
+        $userId = auth()->id();
+        $chapterQuizAttempt = $chapterQuiz
+            ? $chapterQuiz->bestAttemptFor($userId)
+            : null;
+
+        $finalQuizAttempt = $finalQuiz
+            ? $finalQuiz->bestAttemptFor($userId)
+            : null;
+
+        // Sertifikat user untuk course ini
+        $certificate = Certificate::where('user_id', $userId)
+                                  ->where('course_id', $course->id)
+                                  ->first();
+
         return view('courses.study', [
-            'course' => $course,
-            'chapter' => $chapter,
-            'chapters' => $chapters,
-            'diagram' => $diagram,
-            'modules' => $modules,
-            'learningProgress' => $learningProgress,
+            'course'             => $course,
+            'chapter'            => $chapter,
+            'chapters'           => $chapters,
+            'diagram'            => $diagram,
+            'modules'            => $modules,
+            'learningProgress'   => $learningProgress,
+            'chapterQuiz'        => $chapterQuiz,
+            'finalQuiz'          => $finalQuiz,
+            'chapterQuizAttempt' => $chapterQuizAttempt,
+            'finalQuizAttempt'   => $finalQuizAttempt,
+            'certificate'        => $certificate,
         ]);
     }
 

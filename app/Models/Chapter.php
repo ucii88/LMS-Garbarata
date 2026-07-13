@@ -38,4 +38,20 @@ class Chapter extends Model
     {
         return $this->hasOne(Diagram::class);
     }
+
+    /**
+     * Get the quizzes assigned to this chapter.
+     */
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class)->orderBy('order');
+    }
+
+    /**
+     * Get the questions in the bank for this chapter.
+     */
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class)->orderBy('order');
+    }
 }

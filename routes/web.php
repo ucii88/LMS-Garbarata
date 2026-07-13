@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuizAttemptController;
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -64,6 +68,36 @@ Route::middleware('auth')->group(function () {
         Route::get('/courses/{course}/chapters/{chapter}/modules/{module}/edit', [App\Http\Controllers\ModuleController::class, 'edit'])->name('modules.edit');
         Route::put('/courses/{course}/chapters/{chapter}/modules/{module}', [App\Http\Controllers\ModuleController::class, 'update'])->name('modules.update');
         Route::delete('/courses/{course}/chapters/{chapter}/modules/{module}', [App\Http\Controllers\ModuleController::class, 'destroy'])->name('modules.destroy');
+
+        // Bank Soal — dikelola per chapter
+        Route::get('/courses/{course}/chapters/{chapter}/questions', [QuestionController::class, 'index'])->name('questions.index');
+        Route::post('/courses/{course}/chapters/{chapter}/questions', [QuestionController::class, 'store'])->name('questions.store');
+        Route::put('/courses/{course}/chapters/{chapter}/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
+        Route::delete('/courses/{course}/chapters/{chapter}/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+
+        // Manajemen Quiz
+        Route::get('/courses/{course}/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+        Route::get('/courses/{course}/quizzes/create', [QuizController::class, 'create'])->name('quizzes.create');
+        Route::post('/courses/{course}/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
+        Route::get('/courses/{course}/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
+        Route::put('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
+        Route::delete('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
+        // Pilih soal dari bank untuk kuis
+        Route::post('/courses/{course}/quizzes/{quiz}/questions/sync', [QuizController::class, 'syncQuestions'])->name('quizzes.questions.sync');
+        // Hasil & Reset Percobaan Peserta
+        Route::get('/courses/{course}/quizzes/{quiz}/attempts', [QuizController::class, 'attempts'])->name('quizzes.attempts');
+        Route::delete('/courses/{course}/quizzes/{quiz}/attempts/{attempt}', [QuizController::class, 'destroyAttempt'])->name('quizzes.attempts.destroy');
+    });
+
+    // Quiz attempt & sertifikat (Peserta)
+    Route::middleware('role:peserta')->group(function () {
+        Route::get('/courses/{course}/quizzes/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');
+        Route::post('/courses/{course}/quizzes/{quiz}/begin', [QuizAttemptController::class, 'begin'])->name('quiz.begin');
+        Route::get('/courses/{course}/quizzes/{quiz}/attempt', [QuizAttemptController::class, 'attempt'])->name('quiz.attempt');
+        Route::post('/courses/{course}/quizzes/{quiz}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
+        Route::get('/courses/{course}/quizzes/{quiz}/result', [QuizAttemptController::class, 'result'])->name('quiz.result');
+        Route::post('/courses/{course}/quizzes/{quiz}/save-answer', [QuizAttemptController::class, 'saveAnswer'])->name('quiz.save-answer');
+        Route::get('/certificates/{certificate}', [CertificateController::class, 'show'])->name('certificate.show');
     });
 });
 

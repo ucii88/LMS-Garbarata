@@ -79,12 +79,20 @@
                                     @endif
                                 </div>
 
-                                <div class="shrink-0 flex items-center justify-end border-t sm:border-t-0 border-[#f0f0f0] pt-3 sm:pt-0">
+                                <div class="shrink-0 flex items-center justify-end gap-2 border-t sm:border-t-0 border-[#f0f0f0] pt-3 sm:pt-0">
                                     @if($isLocked)
                                         <span class="inline-flex items-center justify-center rounded-lg bg-slate-200 px-4 py-2 text-xs font-bold text-slate-500">
                                             Terkunci
                                         </span>
                                     @else
+                                        {{-- Tombol Bank Soal untuk instruktur --}}
+                                        @if(auth()->user()->isInstruktur())
+                                            <a href="{{ route('questions.index', [$course->id, $chapter->id]) }}"
+                                               class="inline-flex items-center justify-center rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 text-xs font-bold text-indigo-700 transition"
+                                               title="Kelola bank soal chapter ini">
+                                                Bank Soal
+                                            </a>
+                                        @endif
                                         <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-xs font-bold text-white transition shadow-sm">
                                             Buka Bab
                                         </a>
@@ -123,6 +131,34 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- Panel Instruktur: Manajemen Quiz --}}
+                    @if(auth()->user()->isInstruktur())
+                    <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 overflow-hidden">
+                        <div class="p-6 border-b border-indigo-50">
+                            <h3 class="text-sm font-bold text-slate-800">Manajemen Quiz</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                Kelola bank soal, chapter quiz, dan final quiz untuk course ini.
+                            </p>
+                        </div>
+                        <div class="p-6 space-y-2">
+                            <a href="{{ route('quizzes.index', $course) }}"
+                               class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                Lihat Semua Quiz
+                            </a>
+                            <a href="{{ route('quizzes.create', $course) }}"
+                               class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold rounded-xl transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Buat Quiz Baru
+                            </a>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
