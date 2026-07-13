@@ -60,14 +60,14 @@ class CourseController extends Controller
         $modules = $chapter->modules;
 
         // Quiz untuk chapter ini (jika ada)
-        $chapterQuiz = Quiz::where('course_id', $course->id)
+        $chapterQuiz = Quiz::where('course_id', $course->id)->where('activity_type', 'quiz')
                            ->where('chapter_id', $chapter->id)
                            ->where('is_active', true)
                            ->withCount('questions')
                            ->first();
 
         // Final Quiz (jika ada dan semua chapter sudah selesai)
-        $finalQuiz = Quiz::where('course_id', $course->id)
+        $finalQuiz = Quiz::where('course_id', $course->id)->where('activity_type', 'quiz')
                          ->whereNull('chapter_id')
                          ->where('is_active', true)
                          ->withCount('questions')
@@ -82,6 +82,11 @@ class CourseController extends Controller
         $finalQuizAttempt = $finalQuiz
             ? $finalQuiz->bestAttemptFor($userId)
             : null;
+
+        $practices = Quiz::where('course_id', $course->id)->where('chapter_id', $chapter->id)
+            ->where('activity_type', 'practice')->where('is_active', true)->withCount('questions')->orderBy('order')->get();
+        $practiceAttempts = QuizAttempt::where('user_id', $userId)->whereIn('quiz_id', $practices->pluck('id'))
+            ->whereNotNull('submitted_at')->orderByDesc('submitted_at')->get()->unique('quiz_id')->keyBy('quiz_id');
 
         // Sertifikat user untuk course ini
         $certificate = Certificate::where('user_id', $userId)
@@ -100,7 +105,20 @@ class CourseController extends Controller
             'chapterQuizAttempt' => $chapterQuizAttempt,
             'finalQuizAttempt'   => $finalQuizAttempt,
             'certificate'        => $certificate,
+            'practices'          => $practices,
+            'practiceAttempts'   => $practiceAttempts,
         ]);
+    }
+
+    /** Semua aktivitas latihan dan quiz peserta, termasuk yang belum dikerjakan. */
+    public function activities(Course $course)
+    {
+        abort_unless(auth()->user()->isPeserta(), 403);
+        $activities = $course->quizzes()->with('chapter')->where('is_active', true)
+            ->withCount('questions')->orderBy('activity_type')->orderBy('chapter_id')->orderBy('order')->get();
+        $lastAttempts = QuizAttempt::where('user_id', auth()->id())->whereIn('quiz_id', $activities->pluck('id'))
+            ->whereNotNull('submitted_at')->orderByDesc('submitted_at')->get()->unique('quiz_id')->keyBy('quiz_id');
+        return view('courses.activities', compact('course', 'activities', 'lastAttempts'));
     }
 
     public function completeModule(Request $request, Course $course, Chapter $chapter, Module $module)

@@ -198,22 +198,3 @@
     </div>
 </div>
 @endif
-
-{{-- ========== SERTIFIKAT (jika sudah punya) ========== --}}
-@if($certificate)
-<div class="mt-4 px-4 sm:px-0">
-    <div class="rounded-2xl bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 px-5 py-4 flex items-center gap-4">
-        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs shrink-0">
-            CERT
-        </div>
-        <div class="flex-1">
-            <p class="text-xs font-bold text-amber-700">Sertifikat Tersedia!</p>
-            <p class="text-xs text-amber-600">Kode: {{ $certificate->certificate_code }}</p>
-        </div>
-        <a href="{{ route('certificate.show', $certificate) }}"
-           class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl transition shrink-0">
-            Lihat Sertifikat
-        </a>
-    </div>
-</div>
-@endif

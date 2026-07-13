@@ -12,18 +12,30 @@ use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
+    private function isPracticeRequest(): bool
+    {
+        return request()->routeIs('practices.*');
+    }
+
+    private function activityRoute(string $name, Course $course, Quiz $quiz = null): string
+    {
+        $prefix = ($quiz?->isPractice() ?? $this->isPracticeRequest()) ? 'practices.' : 'quizzes.';
+        return route($prefix . $name, $quiz ? [$course, $quiz] : $course);
+    }
     /**
      * Daftar semua quiz dalam course.
      */
     public function index(Course $course)
     {
+        $isPractice = $this->isPracticeRequest();
         $quizzes = $course->quizzes()
+                          ->where('activity_type', $isPractice ? 'practice' : 'quiz')
                           ->with('chapter')
                           ->withCount('questions')
                           ->orderBy('order')
                           ->get();
 
-        return view('quizzes.index', compact('course', 'quizzes'));
+        return view('quizzes.index', compact('course', 'quizzes', 'isPractice'));
     }
 
     /**
@@ -31,9 +43,10 @@ class QuizController extends Controller
      */
     public function create(Course $course)
     {
+        $isPractice = $this->isPracticeRequest();
         $chapters = $course->chapters()->orderBy('order')->get();
 
-        return view('quizzes.create', compact('course', 'chapters'));
+        return view('quizzes.create', compact('course', 'chapters', 'isPractice'));
     }
 
     /**
@@ -41,13 +54,14 @@ class QuizController extends Controller
      */
     public function store(Request $request, Course $course)
     {
+        $isPractice = $this->isPracticeRequest();
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
             'description'       => 'nullable|string',
             'chapter_id'        => 'nullable|exists:chapters,id',
             'time_limit'        => 'nullable|integer|min:1|max:300',
-            'passing_score'     => 'required|integer|min:1|max:100',
-            'max_attempts'      => 'required|integer|min:1|max:10',
+            'passing_score'     => $isPractice ? 'nullable' : 'required|integer|min:1|max:100',
+            'max_attempts'      => $isPractice ? 'nullable|integer|min:1|max:100' : 'required|integer|min:1|max:10',
             'shuffle_questions' => 'nullable|boolean',
             'shuffle_options'   => 'nullable|boolean',
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
@@ -59,17 +73,21 @@ class QuizController extends Controller
             $chapter = Chapter::findOrFail($validated['chapter_id']);
             abort_if($chapter->course_id !== $course->id, 403);
         }
+        if ($isPractice && empty($validated['chapter_id'])) {
+            return back()->withErrors(['chapter_id' => 'Latihan harus ditempatkan pada sebuah chapter.'])->withInput();
+        }
 
         $maxOrder = $course->quizzes()->max('order') ?? 0;
 
         Quiz::create([
             'course_id'         => $course->id,
             'chapter_id'        => $validated['chapter_id'] ?? null,
+            'activity_type'     => $isPractice ? 'practice' : 'quiz',
             'title'             => $validated['title'],
             'description'       => $validated['description'] ?? null,
-            'time_limit'        => $validated['time_limit'] ?? null,
-            'passing_score'     => $validated['passing_score'],
-            'max_attempts'      => $validated['max_attempts'],
+            'time_limit'        => $isPractice ? null : ($validated['time_limit'] ?? null),
+            'passing_score'     => $isPractice ? 0 : $validated['passing_score'],
+            'max_attempts'      => $validated['max_attempts'] ?? null,
             'shuffle_questions' => $request->boolean('shuffle_questions'),
             'shuffle_options'   => $request->boolean('shuffle_options'),
             'review_policy'     => $validated['review_policy'],
@@ -77,8 +95,8 @@ class QuizController extends Controller
             'order'             => $maxOrder + 1,
         ]);
 
-        return redirect()->route('quizzes.index', $course)
-                         ->with('success', 'Quiz berhasil dibuat. Sekarang tambahkan soal dari bank soal.');
+        return redirect($this->activityRoute('index', $course))
+                         ->with('success', ($isPractice ? 'Latihan' : 'Quiz') . ' berhasil dibuat. Sekarang tambahkan soal dari bank soal.');
     }
 
     /**
@@ -87,6 +105,8 @@ class QuizController extends Controller
     public function edit(Course $course, Quiz $quiz)
     {
         abort_if($quiz->course_id !== $course->id, 403);
+        abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
+        $isPractice = $quiz->isPractice();
 
         $chapters = $course->chapters()->orderBy('order')->get();
 
@@ -101,7 +121,7 @@ class QuizController extends Controller
         $selectedQuestionIds = $quiz->questions()->pluck('questions.id')->toArray();
 
         return view('quizzes.edit', compact(
-            'course', 'quiz', 'chapters', 'availableQuestions', 'selectedQuestionIds'
+            'course', 'quiz', 'chapters', 'availableQuestions', 'selectedQuestionIds', 'isPractice'
         ));
     }
 
@@ -111,14 +131,16 @@ class QuizController extends Controller
     public function update(Request $request, Course $course, Quiz $quiz)
     {
         abort_if($quiz->course_id !== $course->id, 403);
+        abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
+        $isPractice = $quiz->isPractice();
 
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
             'description'       => 'nullable|string',
             'chapter_id'        => 'nullable|exists:chapters,id',
             'time_limit'        => 'nullable|integer|min:1|max:300',
-            'passing_score'     => 'required|integer|min:1|max:100',
-            'max_attempts'      => 'required|integer|min:1|max:10',
+            'passing_score'     => $isPractice ? 'nullable' : 'required|integer|min:1|max:100',
+            'max_attempts'      => $isPractice ? 'nullable|integer|min:1|max:100' : 'required|integer|min:1|max:10',
             'shuffle_questions' => 'nullable|boolean',
             'shuffle_options'   => 'nullable|boolean',
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
@@ -129,21 +151,24 @@ class QuizController extends Controller
             $chapter = Chapter::findOrFail($validated['chapter_id']);
             abort_if($chapter->course_id !== $course->id, 403);
         }
+        if ($isPractice && empty($validated['chapter_id'])) {
+            return back()->withErrors(['chapter_id' => 'Latihan harus ditempatkan pada sebuah chapter.'])->withInput();
+        }
 
         $quiz->update([
             'chapter_id'        => $validated['chapter_id'] ?? null,
             'title'             => $validated['title'],
             'description'       => $validated['description'] ?? null,
-            'time_limit'        => $validated['time_limit'] ?? null,
-            'passing_score'     => $validated['passing_score'],
-            'max_attempts'      => $validated['max_attempts'],
+            'time_limit'        => $isPractice ? null : ($validated['time_limit'] ?? null),
+            'passing_score'     => $isPractice ? 0 : $validated['passing_score'],
+            'max_attempts'      => $validated['max_attempts'] ?? null,
             'shuffle_questions' => $request->boolean('shuffle_questions'),
             'shuffle_options'   => $request->boolean('shuffle_options'),
             'review_policy'     => $validated['review_policy'],
             'is_active'         => $request->boolean('is_active', true),
         ]);
 
-        return redirect()->route('quizzes.edit', [$course, $quiz])
+        return redirect($this->activityRoute('edit', $course, $quiz))
                          ->with('success', 'Quiz berhasil diperbarui.');
     }
 
@@ -153,6 +178,7 @@ class QuizController extends Controller
     public function syncQuestions(Request $request, Course $course, Quiz $quiz)
     {
         abort_if($quiz->course_id !== $course->id, 403);
+        abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
 
         $validated = $request->validate([
             'question_ids'   => 'nullable|array',
@@ -190,8 +216,8 @@ class QuizController extends Controller
 
         $quiz->delete();
 
-        return redirect()->route('quizzes.index', $course)
-                         ->with('success', 'Quiz berhasil dihapus.');
+        return redirect($this->activityRoute('index', $course, $quiz))
+                         ->with('success', ($quiz->isPractice() ? 'Latihan' : 'Quiz') . ' berhasil dihapus.');
     }
 
     /**
@@ -200,13 +226,15 @@ class QuizController extends Controller
     public function attempts(Course $course, Quiz $quiz)
     {
         abort_if($quiz->course_id !== $course->id, 403);
+        abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
+        $isPractice = $quiz->isPractice();
 
         $attempts = QuizAttempt::where('quiz_id', $quiz->id)
                                ->with('user')
                                ->latest()
                                ->get();
 
-        return view('quizzes.attempts', compact('course', 'quiz', 'attempts'));
+        return view('quizzes.attempts', compact('course', 'quiz', 'attempts', 'isPractice'));
     }
 
     /**
@@ -221,9 +249,9 @@ class QuizController extends Controller
         $attempt->delete();
 
         // Cabut/hapus sertifikat jika attempt di-reset (karena syarat kelulusan seluruh kuis menjadi tidak terpenuhi lagi)
-        Certificate::where('user_id', $userId)
-                   ->where('course_id', $course->id)
-                   ->delete();
+        if (!$quiz->isPractice()) {
+            Certificate::where('user_id', $userId)->where('course_id', $course->id)->delete();
+        }
 
         return back()->with('success', 'Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan kuis ini kembali dan sertifikat sebelumnya telah dicabut.');
     }

@@ -158,6 +158,16 @@
                             </a>
                         </div>
                     </div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-violet-100 overflow-hidden mt-4">
+                        <div class="p-6 border-b border-violet-50">
+                            <h3 class="text-sm font-bold text-slate-800">Manajemen Latihan</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Kelola latihan tiap chapter menggunakan bank soal yang sama.</p>
+                        </div>
+                        <div class="p-6 space-y-2">
+                            <a href="{{ route('practices.index', $course) }}" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl transition">Lihat Semua Latihan</a>
+                            <a href="{{ route('practices.create', $course) }}" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-violet-50 border border-violet-200 text-violet-700 text-xs font-bold rounded-xl transition">+ Buat Latihan Baru</a>
+                        </div>
+                    </div>
                     @endif
                 </div>
             </div>

@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses/{course}', [App\Http\Controllers\CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'showChapter'])->name('courses.chapters.show');
     Route::post('/courses/{course}/chapters/{chapter}/modules/{module}/complete', [App\Http\Controllers\CourseController::class, 'completeModule'])->name('courses.modules.complete');
+    Route::get('/courses/{course}/activities', [App\Http\Controllers\CourseController::class, 'activities'])->name('courses.activities');
 
     // Role simulation switcher
     Route::post('/simulasi-role', function (Illuminate\Http\Request $request) {
@@ -87,6 +88,17 @@ Route::middleware('auth')->group(function () {
         // Hasil & Reset Percobaan Peserta
         Route::get('/courses/{course}/quizzes/{quiz}/attempts', [QuizController::class, 'attempts'])->name('quizzes.attempts');
         Route::delete('/courses/{course}/quizzes/{quiz}/attempts/{attempt}', [QuizController::class, 'destroyAttempt'])->name('quizzes.attempts.destroy');
+
+        // Manajemen latihan per chapter (menggunakan bank soal yang sama)
+        Route::get('/courses/{course}/practices', [QuizController::class, 'index'])->name('practices.index');
+        Route::get('/courses/{course}/practices/create', [QuizController::class, 'create'])->name('practices.create');
+        Route::post('/courses/{course}/practices', [QuizController::class, 'store'])->name('practices.store');
+        Route::get('/courses/{course}/practices/{quiz}/edit', [QuizController::class, 'edit'])->name('practices.edit');
+        Route::put('/courses/{course}/practices/{quiz}', [QuizController::class, 'update'])->name('practices.update');
+        Route::delete('/courses/{course}/practices/{quiz}', [QuizController::class, 'destroy'])->name('practices.destroy');
+        Route::post('/courses/{course}/practices/{quiz}/questions/sync', [QuizController::class, 'syncQuestions'])->name('practices.questions.sync');
+        Route::get('/courses/{course}/practices/{quiz}/attempts', [QuizController::class, 'attempts'])->name('practices.attempts');
+        Route::delete('/courses/{course}/practices/{quiz}/attempts/{attempt}', [QuizController::class, 'destroyAttempt'])->name('practices.attempts.destroy');
     });
 
     // Quiz attempt & sertifikat (Peserta)
@@ -97,6 +109,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/courses/{course}/quizzes/{quiz}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
         Route::get('/courses/{course}/quizzes/{quiz}/result', [QuizAttemptController::class, 'result'])->name('quiz.result');
         Route::post('/courses/{course}/quizzes/{quiz}/save-answer', [QuizAttemptController::class, 'saveAnswer'])->name('quiz.save-answer');
+        Route::get('/courses/{course}/practices/{quiz}/start', [QuizAttemptController::class, 'start'])->name('practice.start');
+        Route::post('/courses/{course}/practices/{quiz}/begin', [QuizAttemptController::class, 'begin'])->name('practice.begin');
+        Route::get('/courses/{course}/practices/{quiz}/attempt', [QuizAttemptController::class, 'attempt'])->name('practice.attempt');
+        Route::post('/courses/{course}/practices/{quiz}/submit', [QuizAttemptController::class, 'submit'])->name('practice.submit');
+        Route::get('/courses/{course}/practices/{quiz}/result', [QuizAttemptController::class, 'result'])->name('practice.result');
+        Route::post('/courses/{course}/practices/{quiz}/save-answer', [QuizAttemptController::class, 'saveAnswer'])->name('practice.save-answer');
         Route::get('/certificates/{certificate}', [CertificateController::class, 'show'])->name('certificate.show');
     });
 });

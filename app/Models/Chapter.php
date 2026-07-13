@@ -47,6 +47,11 @@ class Chapter extends Model
         return $this->hasMany(Quiz::class)->orderBy('order');
     }
 
+    public function practices(): HasMany
+    {
+        return $this->hasMany(Quiz::class)->where('activity_type', 'practice')->orderBy('order');
+    }
+
     /**
      * Get the questions in the bank for this chapter.
      */

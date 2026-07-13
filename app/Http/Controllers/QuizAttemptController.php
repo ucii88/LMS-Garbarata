@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\DB;
 
 class QuizAttemptController extends Controller
 {
+    private function routeName(Quiz $quiz, string $action): string
+    {
+        return ($quiz->isPractice() ? 'practice.' : 'quiz.') . $action;
+    }
+
+    private function ensureCorrectActivityRoute(Quiz $quiz): void
+    {
+        abort_if($quiz->isPractice() !== request()->routeIs('practice.*'), 404);
+    }
     /**
      * Halaman info sebelum mulai quiz.
      */
@@ -20,6 +29,7 @@ class QuizAttemptController extends Controller
     {
         abort_if($quiz->course_id !== $course->id, 403);
         abort_if(!$quiz->is_active, 404);
+        $this->ensureCorrectActivityRoute($quiz);
 
         $user = Auth::user();
         $attemptCount = $quiz->attemptCountFor($user->id);
@@ -47,11 +57,12 @@ class QuizAttemptController extends Controller
     {
         abort_if($quiz->course_id !== $course->id, 403);
         abort_if(!$quiz->is_active, 404);
+        $this->ensureCorrectActivityRoute($quiz);
 
         $user = Auth::user();
 
         if (!$quiz->canAttempt($user->id)) {
-            return redirect()->route('quiz.start', [$course, $quiz])
+            return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
                              ->withErrors(['msg' => 'Kamu sudah mencapai batas percobaan untuk quiz ini.']);
         }
 
@@ -70,7 +81,7 @@ class QuizAttemptController extends Controller
             'started_at'     => now(),
         ]);
 
-        return redirect()->route('quiz.attempt', [$course, $quiz]);
+        return redirect()->route($this->routeName($quiz, 'attempt'), [$course, $quiz]);
     }
 
     /**
@@ -79,6 +90,7 @@ class QuizAttemptController extends Controller
     public function attempt(Course $course, Quiz $quiz)
     {
         abort_if($quiz->course_id !== $course->id, 403);
+        $this->ensureCorrectActivityRoute($quiz);
 
         $user = Auth::user();
 
@@ -121,6 +133,8 @@ class QuizAttemptController extends Controller
      */
     public function saveAnswer(Request $request, Course $course, Quiz $quiz)
     {
+        abort_if($quiz->course_id !== $course->id, 403);
+        $this->ensureCorrectActivityRoute($quiz);
         $user = Auth::user();
 
         $attempt = QuizAttempt::where('user_id', $user->id)
@@ -155,6 +169,8 @@ class QuizAttemptController extends Controller
      */
     public function submit(Request $request, Course $course, Quiz $quiz)
     {
+        abort_if($quiz->course_id !== $course->id, 403);
+        $this->ensureCorrectActivityRoute($quiz);
         $user = Auth::user();
 
         $attempt = QuizAttempt::where('user_id', $user->id)
@@ -283,7 +299,7 @@ class QuizAttemptController extends Controller
                 ? round(($earnedPoints / $totalPoints) * 100, 2)
                 : 0;
 
-            $isPassed = $score >= $quiz->passing_score;
+            $isPassed = !$quiz->isPractice() && $score >= $quiz->passing_score;
 
             $attempt->update([
                 'submitted_at' => now(),
@@ -293,10 +309,15 @@ class QuizAttemptController extends Controller
             ]);
 
             // Coba terbitkan sertifikat jika semua quiz lulus
-            if ($isPassed) {
+            if ($isPassed && !$quiz->isPractice()) {
                 Certificate::tryIssue($user->id, $course->id);
             }
         });
+
+        if ($quiz->isPractice()) {
+            return redirect()->route('courses.activities', $course)
+                ->with('success', 'Latihan selesai. Nilai terakhir kamu: ' . number_format($attempt->fresh()->score, 0) . '%.');
+        }
 
         return redirect()->route('quiz.result', [$course, $quiz]);
     }
@@ -306,6 +327,8 @@ class QuizAttemptController extends Controller
      */
     public function result(Course $course, Quiz $quiz)
     {
+        abort_if($quiz->course_id !== $course->id, 403);
+        $this->ensureCorrectActivityRoute($quiz);
         $user = Auth::user();
 
         // Ambil attempt terakhir yang sudah di-submit
@@ -316,9 +339,8 @@ class QuizAttemptController extends Controller
                                ->latest('submitted_at')
                                ->firstOrFail();
 
-        $certificate = Certificate::where('user_id', $user->id)
-                                   ->where('course_id', $course->id)
-                                   ->first();
+        $certificate = $quiz->isPractice() ? null : Certificate::where('user_id', $user->id)
+            ->where('course_id', $course->id)->first();
 
         return view('quiz-attempt.result', compact('course', 'quiz', 'attempt', 'certificate'));
     }

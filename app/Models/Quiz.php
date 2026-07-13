@@ -12,6 +12,7 @@ class Quiz extends Model
     protected $fillable = [
         'course_id',
         'chapter_id',
+        'activity_type',
         'title',
         'description',
         'time_limit',
@@ -59,7 +60,12 @@ class Quiz extends Model
      */
     public function isFinalQuiz(): bool
     {
-        return is_null($this->chapter_id);
+        return !$this->isPractice() && is_null($this->chapter_id);
+    }
+
+    public function isPractice(): bool
+    {
+        return $this->activity_type === 'practice';
     }
 
     /**
@@ -89,7 +95,7 @@ class Quiz extends Model
      */
     public function canAttempt(int $userId): bool
     {
-        return $this->attemptCountFor($userId) < $this->max_attempts;
+        return is_null($this->max_attempts) || $this->attemptCountFor($userId) < $this->max_attempts;
     }
 
     /**

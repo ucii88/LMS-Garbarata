@@ -367,6 +367,7 @@
           </div>
 
         @include('courses.partials.quiz-card')
+        @include('courses.partials.practice-cards')
     @elseif($chapter->order == 3)
         <!-- Custom Grouped Layout for Chapter 3: Operation Details & Procedures -->
         <div class="py-6 select-none" x-data="{

@@ -5,22 +5,22 @@
 
     {{-- Result Hero Card --}}
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="h-2 {{ $attempt->is_passed ? 'bg-gradient-to-r from-emerald-400 to-teal-500' : 'bg-gradient-to-r from-red-400 to-rose-500' }}"></div>
+        <div class="h-2 {{ $quiz->isPractice() || $attempt->is_passed ? 'bg-gradient-to-r from-emerald-400 to-teal-500' : 'bg-gradient-to-r from-red-400 to-rose-500' }}"></div>
 
         <div class="p-6 md:p-8 text-center">
-            <h1 class="text-2xl font-bold {{ $attempt->is_passed ? 'text-emerald-700' : 'text-red-600' }}">
-                {{ $attempt->is_passed ? 'Selamat, Kamu Lulus!' : 'Belum Lulus' }}
+            <h1 class="text-2xl font-bold {{ $quiz->isPractice() || $attempt->is_passed ? 'text-emerald-700' : 'text-red-600' }}">
+                {{ $quiz->isPractice() ? 'Latihan Selesai!' : ($attempt->is_passed ? 'Selamat, Kamu Lulus!' : 'Belum Lulus') }}
             </h1>
             <p class="text-slate-500 text-sm mt-1">{{ $quiz->title }}</p>
 
             {{-- Skor Besar --}}
             <div class="my-6">
-                <div class="inline-flex items-center justify-center w-28 h-28 rounded-full border-4 {{ $attempt->is_passed ? 'border-emerald-500' : 'border-red-400' }} bg-white shadow-sm">
-                    <span class="text-3xl font-bold {{ $attempt->is_passed ? 'text-emerald-600' : 'text-red-500' }}">
+                <div class="inline-flex items-center justify-center w-28 h-28 rounded-full border-4 {{ $quiz->isPractice() || $attempt->is_passed ? 'border-emerald-500' : 'border-red-400' }} bg-white shadow-sm">
+                    <span class="text-3xl font-bold {{ $quiz->isPractice() || $attempt->is_passed ? 'text-emerald-600' : 'text-red-500' }}">
                         {{ number_format($attempt->score, 0) }}
                     </span>
                 </div>
-                <p class="text-xs text-slate-400 mt-2">dari 100 poin · Nilai lulus: {{ $quiz->passing_score }}</p>
+                <p class="text-xs text-slate-400 mt-2">dari 100 poin{{ $quiz->isPractice() ? ' · Hasil latihan tersimpan' : ' · Nilai lulus: ' . $quiz->passing_score }}</p>
             </div>
             
             {{-- Stats --}}
@@ -71,8 +71,8 @@
            class="flex-1 text-center py-2.5 text-sm font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
             ← Kembali ke Materi
         </a>
-        @if(!$attempt->is_passed && $quiz->canAttempt(auth()->id()))
-            <a href="{{ route('quiz.start', [$course, $quiz]) }}"
+        @if(($quiz->isPractice() || !$attempt->is_passed) && $quiz->canAttempt(auth()->id()))
+            <a href="{{ route($quiz->isPractice() ? 'practice.start' : 'quiz.start', [$course, $quiz]) }}"
                class="flex-1 text-center py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
                 Coba Lagi
             </a>

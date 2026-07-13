@@ -1,8 +1,8 @@
 @section('topbar_title', $quiz->title . ' — Sedang Dikerjakan')
 
 <x-app-layout>
-{{-- Prevent leaving page accidentally --}}
-<script>
+{{-- Quiz meminta konfirmasi keluar; latihan boleh ditinggalkan dan dilanjutkan. --}}
+@unless($quiz->isPractice())<script>
     window.isSubmittingQuiz = false;
     window.addEventListener('beforeunload', function(e) {
         if (window.isSubmittingQuiz) return;
@@ -10,9 +10,10 @@
         e.returnValue = '';
     });
 </script>
+@endunless
 
 <div class="max-w-4xl mx-auto">
-    <form id="quiz-form" action="{{ route('quiz.submit', [$course, $quiz]) }}" method="POST">
+    <form id="quiz-form" action="{{ route($quiz->isPractice() ? 'practice.submit' : 'quiz.submit', [$course, $quiz]) }}" method="POST">
         @csrf
 
         {{-- Sticky Header: Timer + Progress --}}
@@ -35,7 +36,7 @@
 
             <button type="button" onclick="confirmSubmit()"
                     class="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                Submit Quiz
+                Submit {{ $quiz->isPractice() ? 'Latihan' : 'Quiz' }}
             </button>
         </div>
 
@@ -316,7 +317,7 @@ function handleFocusLoss() {
 function closeCheatModal() {
     document.getElementById('cheat-modal').classList.add('hidden');
 }
-const SAVE_URL = "{{ route('quiz.save-answer', [$course, $quiz]) }}";
+const SAVE_URL = "{{ route($quiz->isPractice() ? 'practice.save-answer' : 'quiz.save-answer', [$course, $quiz]) }}";
 const CSRF = "{{ csrf_token() }}";
 const flagged = new Set();
 const answered = new Set();
