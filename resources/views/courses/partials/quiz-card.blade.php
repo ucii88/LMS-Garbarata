@@ -14,6 +14,9 @@
 {{-- ========== CHAPTER QUIZ CARD ========== --}}
 @if($chapterQuiz)
 <div class="mt-8 px-4 sm:px-0">
+    <p class="text-xs font-bold text-blue-700 uppercase tracking-wider">Quiz Chapter</p>
+</div>
+<div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border-2 overflow-hidden
         @if($chapterQuizAttempt?->is_passed)
             border-emerald-300 bg-emerald-50
@@ -122,7 +125,7 @@
 @endif
 
 {{-- ========== FINAL QUIZ CARD (ditampilkan di semua chapter) ========== --}}
-@if($finalQuiz)
+@if(false && $finalQuiz)
 <div class="mt-4 px-4 sm:px-0">
     <div class="rounded-2xl border-2 overflow-hidden
         @if($finalQuizAttempt?->is_passed)

@@ -2,7 +2,8 @@
     <!-- Top Area: Logo & Navigation -->
     <div class="py-6 px-5 space-y-7">
         <!-- Logo -->
-        <div class="flex items-center space-x-2.5 px-2">
+        <div class="flex items-center justify-between px-2">
+            <div class="flex items-center space-x-2.5">
             <!-- Stylized colorful logo from screenshot -->
             <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#0091ff] to-[#40a9ff] flex items-center justify-center text-white shadow-sm font-black text-sm tracking-tighter">
                 <svg class="w-4.5 h-4.5 text-white transform -rotate-12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -10,6 +11,10 @@
                 </svg>
             </div>
             <span class="text-base font-extrabold text-slate-800 tracking-tight">Garbarata</span>
+            </div>
+            <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Tutup sidebar">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
         </div>
 
         <!-- Menu Navigation -->
@@ -180,4 +185,9 @@
             </a>
         </div>
     </div>
+</aside>
+<aside x-cloak x-show="$store.ui.sidebarCollapsed" class="w-14 bg-white border-r border-[#f0f0f0] h-screen sticky top-0 shrink-0 flex justify-center pt-6">
+    <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Buka sidebar">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
 </aside>

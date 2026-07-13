@@ -46,7 +46,7 @@ class CourseController extends Controller
             if (! $selectedProgress || ! $selectedProgress['is_unlocked']) {
                 return redirect()
                     ->route('courses.show', $course)
-                    ->with('error', 'Bab ini masih terkunci. Selesaikan semua materi pada bab sebelumnya terlebih dahulu.');
+                    ->with('error', 'Bab ini masih terkunci. Selesaikan materi dan Quiz Chapter pada bab sebelumnya terlebih dahulu.');
             }
         }
 
