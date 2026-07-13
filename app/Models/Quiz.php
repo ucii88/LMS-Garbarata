@@ -20,6 +20,8 @@ class Quiz extends Model
         'shuffle_questions',
         'shuffle_options',
         'review_policy',
+        'start_time',
+        'end_time',
         'is_active',
         'order',
     ];
@@ -29,6 +31,8 @@ class Quiz extends Model
         'shuffle_options'   => 'boolean',
         'is_active'         => 'boolean',
         'chapter_id'        => 'integer',
+        'start_time'        => 'datetime',
+        'end_time'          => 'datetime',
     ];
 
     public function course(): BelongsTo
@@ -106,5 +110,20 @@ class Quiz extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Dapatkan status ketersediaan waktu kuis berdasarkan jadwal.
+     */
+    public function getAvailabilityStatusAttribute(): string
+    {
+        $now = now();
+        if ($this->start_time && $now->lt($this->start_time)) {
+            return 'upcoming';
+        }
+        if ($this->end_time && $now->gt($this->end_time)) {
+            return 'closed';
+        }
+        return 'open';
     }
 }

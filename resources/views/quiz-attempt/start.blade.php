@@ -3,6 +3,13 @@
 <x-app-layout>
 <div class="max-w-2xl mx-auto space-y-6">
 
+    {{-- Error Messages --}}
+    @if($errors->any())
+        <div class="bg-red-50 border border-red-200 text-red-700 text-xs font-semibold px-4 py-3 rounded-xl shadow-sm">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
     {{-- Header Card --}}
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         {{-- Banner --}}
@@ -49,6 +56,19 @@
                 </div>
             </div>
 
+            {{-- Jadwal Akses Kuis --}}
+            @if($quiz->start_time || $quiz->end_time)
+                <div class="mt-4 p-4 rounded-xl border bg-slate-50 border-slate-200 text-xs space-y-1.5">
+                    <p class="font-bold text-slate-700">📅 Jadwal Akses Kuis:</p>
+                    @if($quiz->start_time)
+                        <p class="text-slate-600">Dibuka: <span class="font-semibold text-slate-800">{{ $quiz->start_time->timezone('Asia/Jakarta')->format('d M Y H:i') }} WIB</span></p>
+                    @endif
+                    @if($quiz->end_time)
+                        <p class="text-slate-600">Ditutup: <span class="font-semibold text-slate-800">{{ $quiz->end_time->timezone('Asia/Jakarta')->format('d M Y H:i') }} WIB</span></p>
+                    @endif
+                </div>
+            @endif
+
             {{-- Hasil Terbaik (jika pernah coba) --}}
             @if($bestAttempt)
                 <div class="mt-4 p-4 rounded-xl border {{ $bestAttempt->is_passed ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200' }}">
@@ -82,7 +102,15 @@
                     ← Kembali
                 </a>
 
-                @if($ongoingAttempt)
+                @if($quiz->availability_status === 'upcoming')
+                    <div class="flex-1 text-center py-2.5 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        🔒 Kuis Belum Dibuka
+                    </div>
+                @elseif($quiz->availability_status === 'closed')
+                    <div class="flex-1 text-center py-2.5 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        🔒 Kuis Sudah Ditutup
+                    </div>
+                @elseif($ongoingAttempt)
                     {{-- Lanjutkan attempt yang belum selesai --}}
                     <a href="{{ route('quiz.attempt', [$course, $quiz]) }}"
                        class="flex-1 text-center py-2.5 text-sm font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl transition">

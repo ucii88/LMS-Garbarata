@@ -83,6 +83,22 @@
                 <p class="text-2xs text-slate-400 mt-1">Mengontrol apa saja yang dapat dilihat oleh peserta setelah mengirimkan (submit) kuis.</p>
             </div>
 
+            {{-- Jadwal Kuis --}}
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Dibuka Pada <span class="text-slate-400">(opsional)</span></label>
+                    <input type="datetime-local" name="start_time" value="{{ old('start_time') }}"
+                           class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <p class="text-2xs text-slate-400 mt-1">Kosongkan jika kuis bisa diakses kapan saja.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Ditutup Pada <span class="text-slate-400">(opsional)</span></label>
+                    <input type="datetime-local" name="end_time" value="{{ old('end_time') }}"
+                           class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <p class="text-2xs text-slate-400 mt-1">Batas akhir pengerjaan kuis oleh peserta.</p>
+                </div>
+            </div>
+
             {{-- Konfigurasi --}}
             <div class="grid grid-cols-2 gap-4">
                 <div>

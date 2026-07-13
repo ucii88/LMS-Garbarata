@@ -48,6 +48,16 @@ class QuizAttemptController extends Controller
         abort_if($quiz->course_id !== $course->id, 403);
         abort_if(!$quiz->is_active, 404);
 
+        if ($quiz->availability_status === 'upcoming') {
+            return redirect()->route('quiz.start', [$course, $quiz])
+                             ->withErrors(['msg' => 'Kuis belum dibuka. Silakan tunggu hingga jadwal yang ditentukan.']);
+        }
+
+        if ($quiz->availability_status === 'closed') {
+            return redirect()->route('quiz.start', [$course, $quiz])
+                             ->withErrors(['msg' => 'Kuis sudah ditutup dan tidak dapat dikerjakan lagi.']);
+        }
+
         $user = Auth::user();
 
         if (!$quiz->canAttempt($user->id)) {

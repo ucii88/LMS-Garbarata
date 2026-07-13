@@ -4,16 +4,24 @@
 <div class="max-w-6xl mx-auto space-y-6">
 
     {{-- Header --}}
-    <div>
-        <a href="{{ route('quizzes.index', $course) }}"
-           class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-blue-600 transition mb-2">
-            ← Kembali ke Manajemen Quiz
-        </a>
-        <h1 class="text-xl font-bold text-slate-800">Hasil Kuis Peserta</h1>
-        <p class="text-xs text-slate-500 mt-0.5">
-            Quiz: <span class="font-semibold text-blue-600">{{ $quiz->title }}</span> · 
-            Passing Score: <span class="font-semibold">{{ $quiz->passing_score }}%</span>
-        </p>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <a href="{{ route('quizzes.index', $course) }}"
+               class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-blue-600 transition mb-2">
+                ← Kembali ke Manajemen Quiz
+            </a>
+            <h1 class="text-xl font-bold text-slate-800">Hasil Kuis Peserta</h1>
+            <p class="text-xs text-slate-500 mt-0.5">
+                Quiz: <span class="font-semibold text-blue-600">{{ $quiz->title }}</span> · 
+                Passing Score: <span class="font-semibold">{{ $quiz->passing_score }}%</span>
+            </p>
+        </div>
+        @if($attempts->isNotEmpty())
+            <a href="{{ route('quizzes.attempts.export', [$course, $quiz]) }}"
+               class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
+                📥 Ekspor Rekap Nilai (CSV)
+            </a>
+        @endif
     </div>
 
     {{-- Flash Message --}}

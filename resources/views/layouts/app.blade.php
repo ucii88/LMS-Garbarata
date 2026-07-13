@@ -39,5 +39,60 @@
                 </main>
             </div>
         </div>
+
+        {{-- Global Logout Confirmation Modal --}}
+        <div id="logout-confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-slate-100">
+                <div class="text-center mb-5">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 text-rose-600 text-2xl font-bold mb-3">
+                        🚪
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">Yakin ingin keluar?</h3>
+                    <p class="text-xs text-slate-500 mt-1">Anda akan keluar dari sesi masuk LMS-Garbarata saat ini.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeLogoutModal()"
+                            class="flex-1 py-2.5 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                        Batal
+                    </button>
+                    <button type="button" onclick="submitLogoutForm()"
+                            class="flex-1 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition">
+                        Ya, Keluar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Global Logout Form --}}
+        <form id="global-logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+            @csrf
+        </form>
+
+        <script>
+            function openLogoutModal(event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                document.getElementById('logout-confirm-modal').classList.remove('hidden');
+            }
+
+            function closeLogoutModal() {
+                document.getElementById('logout-confirm-modal').classList.add('hidden');
+            }
+
+            // Close modal when clicking outside the dialog card
+            document.getElementById('logout-confirm-modal').addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeLogoutModal();
+                }
+            });
+
+            function submitLogoutForm() {
+                const form = document.getElementById('global-logout-form');
+                if (form) {
+                    form.submit();
+                }
+            }
+        </script>
     </body>
 </html>

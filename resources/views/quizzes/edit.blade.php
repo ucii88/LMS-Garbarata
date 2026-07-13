@@ -88,6 +88,22 @@
                     <p class="text-2xs text-slate-400 mt-1">Mengontrol apa saja yang dapat dilihat oleh peserta setelah mengirimkan (submit) kuis.</p>
                 </div>
 
+                {{-- Jadwal Kuis --}}
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Dibuka Pada</label>
+                        <input type="datetime-local" name="start_time"
+                               value="{{ old('start_time', $quiz->start_time ? $quiz->start_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}"
+                               class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Ditutup Pada</label>
+                        <input type="datetime-local" name="end_time"
+                               value="{{ old('end_time', $quiz->end_time ? $quiz->end_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}"
+                               class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Timer (menit)</label>
@@ -205,7 +221,7 @@
 
                 <button type="submit"
                         class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl transition">
-                    💾 Simpan Pilihan Soal
+                     Simpan Pilihan Soal
                 </button>
             </form>
         </div>
