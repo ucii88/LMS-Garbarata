@@ -133,18 +133,19 @@
                                    oninput="autoSaveText({{ $question->id }}, this.value)">
 
                         @elseif($question->type === 'matching')
-                            <div class="space-y-3">
+                            <div class="space-y-4">
                                 @php
                                     $savedMatch = isset($savedAnswers[$question->id]) ? ($savedAnswers[$question->id]->order_answer ?? []) : [];
                                     $rightItems = $question->options->pluck('match_label')->filter()->unique()->shuffle();
                                 @endphp
                                 @foreach($question->options as $option)
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 bg-slate-50/50 rounded-xl border border-slate-100">
-                                        <span class="text-sm font-semibold text-slate-700 sm:w-1/2">{{ $option->option_text }}</span>
-                                        <span class="text-slate-400 hidden sm:inline">→</span>
+                                    <div class="flex flex-col gap-2 p-3 bg-slate-50/50 rounded-xl border border-slate-100 shadow-sm">
+                                        <div class="text-xs font-bold text-slate-700 bg-slate-100/80 px-2.5 py-1.5 rounded-lg border border-slate-200/50">
+                                            {{ $option->option_text }}
+                                        </div>
                                         <select name="answers[{{ $question->id }}][{{ $option->id }}]" required
                                                 onchange="autoSaveText({{ $question->id }}, 'select')"
-                                                class="flex-1 border-2 border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                                class="w-full border-2 border-slate-200 rounded-lg px-3 py-2.5 text-xs bg-white focus:ring-2 focus:ring-blue-500 outline-none">
                                             <option value="">-- Pilih Pasangan --</option>
                                             @foreach($rightItems as $itemText)
                                                 <option value="{{ $itemText }}"
@@ -158,17 +159,17 @@
                             </div>
 
                         @elseif($question->type === 'ordering')
-                            <div class="space-y-3">
+                            <div class="space-y-4">
                                 @php
                                     $savedOrder = isset($savedAnswers[$question->id]) ? ($savedAnswers[$question->id]->order_answer ?? []) : [];
                                     $optionsShuffled = $question->options->shuffle();
                                 @endphp
                                 @for($stepNum = 1; $stepNum <= $question->options->count(); $stepNum++)
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-xs font-bold text-slate-500 w-24">Langkah {{ $stepNum }}:</span>
+                                    <div class="flex flex-col gap-2 p-3 bg-slate-50/50 rounded-xl border border-slate-100 shadow-sm">
+                                        <span class="text-xs font-bold text-slate-500">Langkah {{ $stepNum }}:</span>
                                         <select name="answers[{{ $question->id }}][]" required
                                                 onchange="autoSaveText({{ $question->id }}, 'select')"
-                                                class="flex-1 border-2 border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                                class="w-full border-2 border-slate-200 rounded-lg px-3 py-2.5 text-xs bg-white focus:ring-2 focus:ring-blue-500 outline-none">
                                             <option value="">-- Pilih Langkah Ke-{{ $stepNum }} --</option>
                                             @foreach($optionsShuffled as $opt)
                                                 <option value="{{ $opt->id }}"

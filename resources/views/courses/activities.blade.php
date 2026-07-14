@@ -19,10 +19,23 @@
             ['title' => 'Final Quiz', 'description' => 'Ujian akhir course hanya tersedia di halaman ini.', 'items' => $finalQuizActivities, 'theme' => 'amber'],
         ] as $section)
             <section class="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden">
-                <div class="px-5 py-4 border-b border-slate-100 {{ $section['theme'] === 'violet' ? 'bg-violet-50' : ($section['theme'] === 'amber' ? 'bg-amber-50' : 'bg-blue-50') }}">
-                    <h2 class="text-sm font-bold {{ $section['theme'] === 'violet' ? 'text-violet-700' : ($section['theme'] === 'amber' ? 'text-amber-700' : 'text-blue-700') }}">{{ $section['title'] }}</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">{{ $section['description'] }}</p>
-                </div>
+                @if($section['theme'] === 'violet')
+                    <div class="px-5 py-4 border-b border-slate-100 bg-violet-50">
+                        <h2 class="text-sm font-bold text-violet-700">{{ $section['title'] }}</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ $section['description'] }}</p>
+                    </div>
+                @elseif($section['theme'] === 'amber')
+                    <div class="px-5 py-4 border-b border-slate-100 bg-amber-50">
+                        <h2 class="text-sm font-bold text-amber-700">{{ $section['title'] }}</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ $section['description'] }}</p>
+                    </div>
+                @else
+                    <div class="px-5 py-4 border-b border-slate-100 bg-blue-50">
+                        <h2 class="text-sm font-bold text-blue-700">{{ $section['title'] }}</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">{{ $section['description'] }}</p>
+                    </div>
+                @endif
+
                 <div class="p-4 space-y-3">
                     @forelse ($section['items'] as $activity)
                         @php $attempt = $lastAttempts->get($activity->id); @endphp
@@ -32,9 +45,19 @@
                                 <h3 class="font-semibold text-slate-800 mt-1">{{ $activity->title }}</h3>
                                 <p class="text-xs text-slate-500 mt-1">{{ $activity->questions_count }} soal · @if($attempt) Nilai terakhir: <b>{{ number_format($attempt->score, 0) }}%</b> @else Belum dikerjakan @endif</p>
                             </div>
-                            <a href="{{ route($activity->isPractice() ? 'practice.start' : 'quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl {{ $section['theme'] === 'violet' ? 'bg-violet-600' : ($section['theme'] === 'amber' ? 'bg-amber-500' : 'bg-blue-600') }}">
-                                {{ $attempt && $activity->isPractice() ? 'Latihan Lagi' : 'Mulai' }}
-                            </a>
+                            @if($activity->isPractice())
+                                <a href="{{ route('practice.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-violet-600 hover:bg-violet-700 transition">
+                                    {{ $attempt ? 'Latihan Lagi' : 'Mulai' }}
+                                </a>
+                            @elseif($activity->isFinalQuiz())
+                                <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-amber-500 hover:bg-amber-600 transition">
+                                    Mulai
+                                </a>
+                            @else
+                                <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-blue-600 hover:bg-blue-700 transition">
+                                    Mulai
+                                </a>
+                            @endif
                         </div>
                     @empty
                         <div class="py-4 text-center text-xs text-slate-400">Belum ada {{ strtolower($section['title']) }} aktif.</div>
