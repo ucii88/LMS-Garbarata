@@ -53,7 +53,7 @@
                                 @switch($question->type)
                                     @case('multiple_choice') bg-indigo-100 text-indigo-700 @break
                                     @case('true_false') bg-green-100 text-green-700 @break
-                                    @case('fill_blank') bg-amber-100 text-amber-700 @break
+                                    @case('essay') bg-orange-100 text-orange-700 @break
                                     @case('matching') bg-purple-100 text-purple-700 @break
                                     @case('ordering') bg-rose-100 text-rose-700 @break
                                 @endswitch">
@@ -139,7 +139,7 @@
                         class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                     <option value="multiple_choice">Pilihan Ganda</option>
                     <option value="true_false">Benar / Salah</option>
-                    <option value="fill_blank">Isian Singkat</option>
+                    <option value="essay">Esai</option>
                     <option value="matching">Menjodohkan</option>
                     <option value="ordering">Urutan Langkah</option>
                 </select>
@@ -241,8 +241,8 @@ function renderOptionsUI(type) {
         addOptionBtn(container, 'multiple_choice');
     } else if (type === 'true_false') {
         container.appendChild(buildTrueFalseOptions());
-    } else if (type === 'fill_blank') {
-        container.appendChild(buildFillBlankOption());
+    } else if (type === 'essay') {
+        container.appendChild(buildEssayInfo());
     } else if (type === 'matching') {
         container.appendChild(buildMatchingOptions(3));
         addOptionBtn(container, 'matching');
@@ -324,6 +324,20 @@ function buildFillBlankOption() {
         <input type="text" name="options[0][text]" required placeholder="Ketik jawaban yang benar (case-insensitive)"
                class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
         <p class="text-xs text-slate-400 mt-1">Jawaban dicocokkan secara case-insensitive.</p>
+    `;
+    return wrap;
+}
+
+function buildEssayInfo() {
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `
+        <div class="flex items-start gap-3 p-4 bg-orange-50 border border-orange-200 rounded-xl">
+            <span class="text-2xl">✍️</span>
+            <div>
+                <p class="text-sm font-semibold text-orange-800">Soal Esai — Dinilai Manual</p>
+                <p class="text-xs text-orange-700 mt-1">Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.</p>
+            </div>
+        </div>
     `;
     return wrap;
 }
@@ -545,8 +559,10 @@ function openEditModal(id) {
         const isTrueCorrect = question.options[0].is_correct;
         document.querySelector(`input[name="correct_tf"][value="${isTrueCorrect ? '0' : '1'}"]`).checked = true;
         setTFCorrect(isTrueCorrect ? 0 : 1);
-    } else if (question.type === 'fill_blank') {
-        document.querySelector('[name="options[0][text]"]').value = question.options[0].option_text;
+    } else if (question.type === 'essay') {
+        // Soal esai tidak punya opsi, tampilkan info saja
+        const wrap = document.getElementById('options-container');
+        // buildEssayInfo() already rendered by renderOptionsUI
     } else if (question.type === 'matching') {
         const wrap = document.getElementById('matching-options');
         wrap.innerHTML = '';

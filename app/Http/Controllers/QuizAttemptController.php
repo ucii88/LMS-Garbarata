@@ -201,6 +201,7 @@ class QuizAttemptController extends Controller
         DB::transaction(function () use ($request, $quiz, $attempt, $user, $course) {
             $questions     = $quiz->questions()->with('options', 'correctOptions')->get();
             $totalPoints = 0;
+            $hasEssay    = false;
             foreach ($questions as $question) {
                 if ($question->type === 'matching' || $question->type === 'ordering') {
                     $totalPoints += $question->options->count() * $question->points;
@@ -239,17 +240,12 @@ class QuizAttemptController extends Controller
                         $answerData['selected_option_id'] = $optionId;
                         break;
 
-                    case 'fill_blank':
-                        $text = trim(strtolower($rawAnswer ?? ''));
-                        $correctAnswersString = $question->correctOptions->first()?->option_text ?? '';
-                        // Memisahkan alternatif jawaban yang dipisahkan koma
-                        $allowedAnswers = array_map(function($ans) {
-                            return trim(strtolower($ans));
-                        }, explode(',', $correctAnswersString));
-
-                        $isCorrect = !empty($text) && in_array($text, $allowedAnswers, true);
-                        $pointsEarned = $isCorrect ? $question->points : 0;
-                        $answerData['text_answer'] = $rawAnswer;
+                    case 'essay':
+                        // Esai dinilai manual oleh instruktur — simpan jawaban saja
+                        $answerData['text_answer'] = $rawAnswer ?? null;
+                        $answerData['is_correct']  = null; // belum bisa ditentukan
+                        $answerData['points_earned'] = 0;
+                        $hasEssay = true;
                         break;
 
                     case 'matching':
@@ -304,22 +300,27 @@ class QuizAttemptController extends Controller
                 );
             }
 
-            // Hitung skor 0-100
+            // Hitung skor sementara (hanya dari soal non-esai)
+            // Soal esai akan ditambahkan setelah instruktur menilai
+            $gradingStatus = $hasEssay ? 'pending_essay' : 'auto';
+
             $score = $totalPoints > 0
                 ? round(($earnedPoints / $totalPoints) * 100, 2)
                 : 0;
 
-            $isPassed = !$quiz->isPractice() && $score >= $quiz->passing_score;
+            // Jika ada esai, skor belum final (akan dihitung ulang setelah grading)
+            $isPassed = !$hasEssay && !$quiz->isPractice() && $score >= $quiz->passing_score;
 
             $attempt->update([
-                'submitted_at' => now(),
-                'score'        => $score,
-                'is_passed'    => $isPassed,
-                'time_spent'   => $timeSpent,
+                'submitted_at'   => now(),
+                'score'          => $score,
+                'is_passed'      => $isPassed,
+                'grading_status' => $gradingStatus,
+                'time_spent'     => $timeSpent,
             ]);
 
-            // Coba terbitkan sertifikat jika semua quiz lulus
-            if ($isPassed && !$quiz->isPractice()) {
+            // Coba terbitkan sertifikat hanya jika tidak ada esai yang pending
+            if ($isPassed && !$hasEssay && !$quiz->isPractice()) {
                 Certificate::tryIssue($user->id, $course->id);
             }
         });
@@ -345,7 +346,7 @@ class QuizAttemptController extends Controller
         $attempt = QuizAttempt::where('user_id', $user->id)
                                ->where('quiz_id', $quiz->id)
                                ->whereNotNull('submitted_at')
-                               ->with(['answers.question.options', 'answers.selectedOption'])
+                               ->with(['answers.question.options', 'answers.selectedOption', 'answers.gradedBy'])
                                ->latest('submitted_at')
                                ->firstOrFail();
 

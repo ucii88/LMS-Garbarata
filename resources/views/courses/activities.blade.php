@@ -33,20 +33,43 @@
                             <div>
                                 <p class="text-xs text-slate-400">{{ $activity->chapter?->title ?? 'Ujian akhir course' }}</p>
                                 <h3 class="font-semibold text-slate-800 mt-1">{{ $activity->title }}</h3>
-                                <p class="text-xs text-slate-500 mt-1">{{ $activity->questions_count }} soal · @if($attempt) Nilai terakhir: <b>{{ number_format($attempt->score, 0) }}%</b> @else Belum dikerjakan @endif</p>
+                                 <p class="text-xs text-slate-500 mt-1">
+                                    {{ $activity->questions_count }} soal ·
+                                    @if($attempt)
+                                        @if($attempt->grading_status === 'pending_essay')
+                                            <span class="text-orange-600 font-semibold">Menunggu penilaian</span>
+                                        @else
+                                            Nilai terakhir: <b>{{ number_format($attempt->score, 0) }}%</b>
+                                        @endif
+                                    @else
+                                        Belum dikerjakan
+                                    @endif
+                                </p>
                             </div>
                             @if($activity->isPractice())
                                 <a href="{{ route('practice.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-violet-600 hover:bg-violet-700 transition">
                                     {{ $attempt ? 'Latihan Lagi' : 'Mulai' }}
                                 </a>
                             @elseif($activity->isFinalQuiz())
-                                <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-amber-500 hover:bg-amber-600 transition">
-                                    Mulai
-                                </a>
+                                @if($attempt)
+                                    <a href="{{ route('quiz.result', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-amber-500 hover:bg-amber-600 transition">
+                                        Lihat Hasil
+                                    </a>
+                                @else
+                                    <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-amber-500 hover:bg-amber-600 transition">
+                                        Mulai
+                                    </a>
+                                @endif
                             @else
-                                <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-blue-600 hover:bg-blue-700 transition">
-                                    Mulai
-                                </a>
+                                @if($attempt)
+                                    <a href="{{ route('quiz.result', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-blue-600 hover:bg-blue-700 transition">
+                                        Lihat Hasil
+                                    </a>
+                                @else
+                                    <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-xs font-bold text-white rounded-xl bg-blue-600 hover:bg-blue-700 transition">
+                                        Mulai
+                                    </a>
+                                @endif
                             @endif
                         </div>
                     @empty

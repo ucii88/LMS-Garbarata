@@ -67,10 +67,18 @@ class Question extends Model
         return match($this->type) {
             'multiple_choice' => 'Pilihan Ganda',
             'true_false'      => 'Benar / Salah',
-            'fill_blank'      => 'Isian Singkat',
+            'essay'           => 'Esai',
             'matching'        => 'Menjodohkan',
             'ordering'        => 'Urutan Langkah',
             default           => $this->type,
         };
+    }
+
+    /**
+     * Apakah soal ini bertipe esai (dinilai manual).
+     */
+    public function isEssay(): bool
+    {
+        return $this->type === 'essay';
     }
 }

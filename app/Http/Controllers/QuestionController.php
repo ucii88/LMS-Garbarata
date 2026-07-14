@@ -34,13 +34,13 @@ class QuestionController extends Controller
         $validated = $request->validate([
             'question_text'         => 'required|string',
             'question_image'        => 'nullable|image|max:2048',
-            'type'                  => 'required|in:multiple_choice,true_false,fill_blank,matching,ordering',
+            'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
             'points'                => 'required|integer|min:1',
             'explanation'           => 'nullable|string',
             'topic_tag'             => 'nullable|string|max:100',
-            // Pilihan jawaban
-            'options'               => 'required|array|min:1',
-            'options.*.text'        => 'required|string',
+            // Pilihan jawaban (tidak diperlukan untuk tipe essay)
+            'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
+            'options.*.text'        => 'required_unless:type,essay|string',
             'options.*.image'       => 'nullable|image|max:2048',
             'options.*.is_correct'  => 'nullable|boolean',
             'options.*.match_label' => 'nullable|string|max:255',
@@ -67,21 +67,23 @@ class QuestionController extends Controller
                 'order'          => $maxOrder + 1,
             ]);
 
-            // Simpan pilihan jawaban
-            foreach ($validated['options'] as $i => $opt) {
-                $optImagePath = null;
-                if ($request->hasFile("options.{$i}.image")) {
-                    $optImagePath = $request->file("options.{$i}.image")->store('question-options', 'public');
-                }
+            // Simpan pilihan jawaban (tidak untuk tipe essay)
+            if ($validated['type'] !== 'essay') {
+                foreach ($validated['options'] ?? [] as $i => $opt) {
+                    $optImagePath = null;
+                    if ($request->hasFile("options.{$i}.image")) {
+                        $optImagePath = $request->file("options.{$i}.image")->store('question-options', 'public');
+                    }
 
-                QuestionOption::create([
-                    'question_id' => $question->id,
-                    'option_text' => $opt['text'],
-                    'option_image' => $optImagePath,
-                    'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
-                    'match_label' => $opt['match_label'] ?? null,
-                    'order'       => $i,
-                ]);
+                    QuestionOption::create([
+                        'question_id' => $question->id,
+                        'option_text' => $opt['text'],
+                        'option_image' => $optImagePath,
+                        'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
+                        'match_label' => $opt['match_label'] ?? null,
+                        'order'       => $i,
+                    ]);
+                }
             }
         });
 
@@ -96,13 +98,14 @@ class QuestionController extends Controller
         $validated = $request->validate([
             'question_text'         => 'required|string',
             'question_image'        => 'nullable|image|max:2048',
-            'type'                  => 'required|in:multiple_choice,true_false,fill_blank,matching,ordering',
+            'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
             'points'                => 'required|integer|min:1',
             'explanation'           => 'nullable|string',
             'topic_tag'             => 'nullable|string|max:100',
-            'options'               => 'required|array|min:1',
+            // Pilihan jawaban (tidak diperlukan untuk tipe essay)
+            'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
             'options.*.id'          => 'nullable|integer|exists:question_options,id',
-            'options.*.text'        => 'required|string',
+            'options.*.text'        => 'required_unless:type,essay|string',
             'options.*.image'       => 'nullable|image|max:2048',
             'options.*.is_correct'  => 'nullable|boolean',
             'options.*.match_label' => 'nullable|string|max:255',
@@ -131,23 +134,25 @@ class QuestionController extends Controller
                 'question_image' => $question->question_image,
             ]);
 
-            // Hapus opsi lama, buat ulang
+            // Hapus opsi lama, buat ulang (tidak untuk tipe essay)
             $question->options()->delete();
 
-            foreach ($validated['options'] as $i => $opt) {
-                $optImagePath = null;
-                if ($request->hasFile("options.{$i}.image")) {
-                    $optImagePath = $request->file("options.{$i}.image")->store('question-options', 'public');
-                }
+            if ($validated['type'] !== 'essay') {
+                foreach ($validated['options'] ?? [] as $i => $opt) {
+                    $optImagePath = null;
+                    if ($request->hasFile("options.{$i}.image")) {
+                        $optImagePath = $request->file("options.{$i}.image")->store('question-options', 'public');
+                    }
 
-                QuestionOption::create([
-                    'question_id' => $question->id,
-                    'option_text' => $opt['text'],
-                    'option_image' => $optImagePath,
-                    'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
-                    'match_label' => $opt['match_label'] ?? null,
-                    'order'       => $i,
-                ]);
+                    QuestionOption::create([
+                        'question_id' => $question->id,
+                        'option_text' => $opt['text'],
+                        'option_image' => $optImagePath,
+                        'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
+                        'match_label' => $opt['match_label'] ?? null,
+                        'order'       => $i,
+                    ]);
+                }
             }
         });
 

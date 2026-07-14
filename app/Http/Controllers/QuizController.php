@@ -6,6 +6,7 @@ use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\QuizAnswer;
 use App\Models\QuizAttempt;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
@@ -287,7 +288,10 @@ class QuizController extends Controller
                                ->latest()
                                ->get();
 
-        return view('quizzes.attempts', compact('course', 'quiz', 'attempts', 'isPractice'));
+        // Hitung jumlah attempt yang butuh penilaian esai (untuk badge instruktur)
+        $pendingEssayCount = $attempts->where('grading_status', 'pending_essay')->count();
+
+        return view('quizzes.attempts', compact('course', 'quiz', 'attempts', 'isPractice', 'pendingEssayCount'));
     }
 
     /**
@@ -310,7 +314,84 @@ class QuizController extends Controller
     }
 
     /**
+     * Halaman penilaian esai per attempt (untuk instruktur).
+     */
+    public function gradeEssay(Course $course, Quiz $quiz, QuizAttempt $attempt)
+    {
+        abort_if($quiz->course_id !== $course->id, 403);
+        abort_if($attempt->quiz_id !== $quiz->id, 403);
+
+        // Load jawaban esai beserta soalnya
+        $essayAnswers = $attempt->answers()
+            ->with('question')
+            ->whereHas('question', fn ($q) => $q->where('type', 'essay'))
+            ->get();
+
+        abort_if($essayAnswers->isEmpty(), 404);
+
+        $isPractice = $quiz->isPractice();
+
+        return view('quizzes.grade-essay', compact(
+            'course', 'quiz', 'attempt', 'essayAnswers', 'isPractice'
+        ));
+    }
+
+    /**
+     * Simpan penilaian esai dari instruktur.
+     */
+    public function submitGrading(Request $request, Course $course, Quiz $quiz, QuizAttempt $attempt)
+    {
+        abort_if($quiz->course_id !== $course->id, 403);
+        abort_if($attempt->quiz_id !== $quiz->id, 403);
+
+        $validated = $request->validate([
+            'grades'          => 'required|array',
+            'grades.*.answer_id' => 'required|integer|exists:quiz_answers,id',
+            'grades.*.points' => 'required|numeric|min:0',
+            'grades.*.feedback' => 'nullable|string|max:1000',
+        ]);
+
+        $instructorId = auth()->id();
+
+        foreach ($validated['grades'] as $grade) {
+            $answer = QuizAnswer::with('question')->findOrFail($grade['answer_id']);
+
+            // Pastikan answer ini milik attempt ini
+            abort_if($answer->attempt_id !== $attempt->id, 403);
+
+            // Validasi: poin tidak boleh melebihi max poin soal
+            $maxPoints = $answer->question->points;
+            $pointsGiven = min((float) $grade['points'], $maxPoints);
+
+            $answer->update([
+                'points_earned'   => $pointsGiven,
+                'is_correct'      => $pointsGiven >= $maxPoints,
+                'essay_feedback'  => $grade['feedback'] ?? null,
+                'essay_graded_at' => now(),
+                'essay_graded_by' => $instructorId,
+            ]);
+        }
+
+        // Cek apakah semua soal esai sudah dinilai
+        $ungradedCount = $attempt->answers()
+            ->whereHas('question', fn ($q) => $q->where('type', 'essay'))
+            ->whereNull('essay_graded_at')
+            ->count();
+
+        if ($ungradedCount === 0) {
+            // Semua esai sudah dinilai — hitung ulang skor final
+            $attempt->recalculateScore();
+        }
+
+        $redirectRoute = $quiz->isPractice() ? 'practices.attempts' : 'quizzes.attempts';
+
+        return redirect()->route($redirectRoute, [$course, $quiz])
+            ->with('success', 'Penilaian esai berhasil disimpan.' . ($ungradedCount === 0 ? ' Nilai peserta sudah diperbarui.' : ''));
+    }
+
+    /**
      * Ekspor hasil percobaan quiz ke file CSV.
+
      */
     public function exportAttempts(Course $course, Quiz $quiz)
     {

@@ -16,6 +16,7 @@ class QuizAttempt extends Model
         'submitted_at',
         'score',
         'is_passed',
+        'grading_status',
         'time_spent',
     ];
 
@@ -59,4 +60,60 @@ class QuizAttempt extends Model
     {
         return !is_null($this->submitted_at);
     }
+
+    /**
+     * Apakah masih ada soal esai yang belum dinilai.
+     */
+    public function isPendingEssay(): bool
+    {
+        return $this->grading_status === 'pending_essay';
+    }
+
+    /**
+     * Apakah semua soal esai sudah dinilai (nilai sudah final).
+     */
+    public function isFullyGraded(): bool
+    {
+        return in_array($this->grading_status, ['auto', 'graded']);
+    }
+
+    /**
+     * Hitung ulang skor setelah semua soal esai dinilai.
+     * Dipanggil oleh QuizController::submitGrading().
+     */
+    public function recalculateScore(): void
+    {
+        $quiz      = $this->quiz()->with('questions.options')->first();
+        $answers   = $this->answers()->with('question.options')->get();
+
+        $totalPoints  = 0;
+        $earnedPoints = 0;
+
+        foreach ($quiz->questions as $question) {
+            if ($question->type === 'matching' || $question->type === 'ordering') {
+                $totalPoints += $question->options->count() * $question->points;
+            } else {
+                $totalPoints += $question->points;
+            }
+        }
+
+        foreach ($answers as $answer) {
+            $earnedPoints += (float) $answer->points_earned;
+        }
+
+        $score    = $totalPoints > 0 ? round(($earnedPoints / $totalPoints) * 100, 2) : 0;
+        $isPassed = !$quiz->isPractice() && $score >= $quiz->passing_score;
+
+        $this->update([
+            'score'          => $score,
+            'is_passed'      => $isPassed,
+            'grading_status' => 'graded',
+        ]);
+
+        // Terbitkan sertifikat jika sudah lulus
+        if ($isPassed && !$quiz->isPractice()) {
+            Certificate::tryIssue($this->user_id, $quiz->course_id);
+        }
+    }
 }
+

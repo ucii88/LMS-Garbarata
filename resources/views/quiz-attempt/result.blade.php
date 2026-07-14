@@ -5,29 +5,44 @@
 
     {{-- Result Hero Card --}}
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="h-2 {{ $quiz->isPractice() || $attempt->is_passed ? 'bg-gradient-to-r from-emerald-400 to-teal-500' : 'bg-gradient-to-r from-red-400 to-rose-500' }}"></div>
+        <div class="h-2 {{ $attempt->isPendingEssay() ? 'bg-gradient-to-r from-orange-300 to-amber-400' : ($quiz->isPractice() || $attempt->is_passed ? 'bg-gradient-to-r from-emerald-400 to-teal-500' : 'bg-gradient-to-r from-red-400 to-rose-500') }}"></div>
 
         <div class="p-6 md:p-8 text-center">
-            <h1 class="text-2xl font-bold {{ $quiz->isPractice() || $attempt->is_passed ? 'text-emerald-700' : 'text-red-600' }}">
-                {{ $quiz->isPractice() ? 'Latihan Selesai!' : ($attempt->is_passed ? 'Selamat, Kamu Lulus!' : 'Belum Lulus') }}
+            <h1 class="text-2xl font-bold {{ $attempt->isPendingEssay() ? 'text-orange-600' : ($quiz->isPractice() || $attempt->is_passed ? 'text-emerald-700' : 'text-red-600') }}">
+                @if($attempt->isPendingEssay())
+                    Menunggu Penilaian
+                @elseif($quiz->isPractice())
+                    Latihan Selesai
+                @elseif($attempt->is_passed)
+                    Selamat, Kamu Lulus!
+                @else
+                    Belum Lulus
+                @endif
             </h1>
             <p class="text-slate-500 text-sm mt-1">{{ $quiz->title }}</p>
 
             {{-- Skor Besar --}}
             <div class="my-6">
-                <div class="inline-flex items-center justify-center w-28 h-28 rounded-full border-4 {{ $quiz->isPractice() || $attempt->is_passed ? 'border-emerald-500' : 'border-red-400' }} bg-white shadow-sm">
-                    <span class="text-3xl font-bold {{ $quiz->isPractice() || $attempt->is_passed ? 'text-emerald-600' : 'text-red-500' }}">
-                        {{ number_format($attempt->score, 0) }}
-                    </span>
-                </div>
-                <p class="text-xs text-slate-400 mt-2">dari 100 poin{{ $quiz->isPractice() ? ' · Hasil latihan tersimpan' : ' · Nilai lulus: ' . $quiz->passing_score }}</p>
+                @if($attempt->isPendingEssay())
+                    <div class="inline-flex flex-col items-center justify-center w-28 h-28 rounded-full border-4 border-orange-400 bg-white shadow-sm">
+                        <span class="text-xs font-bold text-orange-600">Menunggu</span>
+                    </div>
+                @else
+                    <div class="inline-flex items-center justify-center w-28 h-28 rounded-full border-4 {{ $quiz->isPractice() || $attempt->is_passed ? 'border-emerald-500' : 'border-red-400' }} bg-white shadow-sm">
+                        <span class="text-3xl font-bold {{ $quiz->isPractice() || $attempt->is_passed ? 'text-emerald-600' : 'text-red-500' }}">
+                            {{ number_format($attempt->score, 0) }}
+                        </span>
+                    </div>
+                @endif
+                <p class="text-xs text-slate-400 mt-2">{{ $attempt->isPendingEssay() ? 'Nilai akan keluar setelah instruktur menilai esai' : ('dari 100 poin' . ($quiz->isPractice() ? ' · Hasil latihan tersimpan' : ' · Nilai lulus: ' . $quiz->passing_score)) }}</p>
             </div>
             
             {{-- Stats --}}
+            @if(!$attempt->isPendingEssay())
             <div class="grid grid-cols-3 gap-4 max-w-xs mx-auto">
                 @php
                     $correctCount   = $attempt->answers->where('is_correct', true)->count();
-                    $incorrectCount = $attempt->answers->where('is_correct', false)->count();
+                    $incorrectCount = $attempt->answers->where('is_correct', false)->whereNotNull('is_correct')->count();
                     $totalCount     = $attempt->answers->count();
                 @endphp
                 <div class="text-center">
@@ -43,8 +58,19 @@
                     <div class="text-xs text-slate-500">Waktu</div>
                 </div>
             </div>
+            @else
+            <div class="text-center text-sm text-slate-500">Durasi: {{ $attempt->getDurationLabel() }}</div>
+            @endif
         </div>
     </div>
+
+    {{-- Banner Pending Essay --}}
+    @if($attempt->isPendingEssay())
+        <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5">
+            <h3 class="font-bold text-orange-800">Menunggu Penilaian Instruktur</h3>
+            <p class="text-xs text-orange-700 mt-1">Jawaban esai kamu sedang menunggu untuk dinilai oleh instruktur. Nilai akhir kamu akan keluar setelah semua soal esai selesai dinilai. Kamu bisa cek kembali halaman ini nanti.</p>
+        </div>
+    @endif
 
     {{-- Sertifikat (jika ada) --}}
     @if($certificate)
@@ -129,11 +155,28 @@
                             <span class="text-slate-700 font-medium">
                                 {{ $answer->selectedOption?->option_text ?? 'Tidak dijawab' }}
                             </span>
-                        @elseif($question->type === 'fill_blank')
-                            <span class="text-xs font-semibold text-slate-500">Jawabanmu: </span>
-                            <span class="text-slate-700 font-medium">
+                        @elseif($question->type === 'essay')
+                            <span class="text-xs font-semibold text-slate-500 block mb-1">Jawabanmu:</span>
+                            <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-700 text-xs leading-relaxed whitespace-pre-wrap">
                                 {{ $answer->text_answer ?? 'Tidak dijawab' }}
-                            </span>
+                            </div>
+                            {{-- Nilai & Feedback instruktur --}}
+                            @if($answer->essay_graded_at)
+                                <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-blue-700">Penilaian Instruktur</span>
+                                        <span class="text-xs font-bold text-blue-800">+{{ number_format($answer->points_earned, 0) }} / {{ $answer->question->points }} poin</span>
+                                    </div>
+                                    @if($answer->essay_feedback)
+                                        <p class="text-xs text-blue-700 mt-1">{{ $answer->essay_feedback }}</p>
+                                    @endif
+                                    <p class="text-[10px] text-blue-400 mt-1">Dinilai oleh {{ $answer->gradedBy?->name }}</p>
+                                </div>
+                            @else
+                                <div class="mt-2 text-xs text-orange-600 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
+                                    ⏳ Belum dinilai oleh instruktur
+                                </div>
+                            @endif
                         @elseif($question->type === 'matching')
                             <span class="text-xs font-semibold text-slate-500 block mb-1">Jawabanmu (Mencocokkan):</span>
                             <div class="space-y-1 pl-3 border-l-2 border-slate-200 text-xs">
@@ -180,10 +223,10 @@
             @foreach($attempt->answers->sortBy('question_id') as $i => $answer)
             @php $question = $answer->question; @endphp
             <div class="bg-white border rounded-2xl shadow-sm overflow-hidden
-                {{ $answer->is_correct ? 'border-emerald-200' : 'border-red-200' }}">
-                <div class="flex items-center gap-2 px-5 py-3 {{ $answer->is_correct ? 'bg-emerald-50' : 'bg-red-50' }}">
-                    <span class="text-sm font-bold {{ $answer->is_correct ? 'text-emerald-700' : 'text-red-600' }}">
-                        [{{ $answer->is_correct ? 'Benar' : 'Salah' }}] Soal {{ $i + 1 }}
+                {{ $answer->is_correct === null ? 'border-orange-200' : ($answer->is_correct ? 'border-emerald-200' : 'border-red-200') }}">
+                <div class="flex items-center gap-2 px-5 py-3 {{ $answer->is_correct === null ? 'bg-orange-50' : ($answer->is_correct ? 'bg-emerald-50' : 'bg-red-50') }}">
+                    <span class="text-sm font-bold {{ $answer->is_correct === null ? 'text-orange-600' : ($answer->is_correct ? 'text-emerald-700' : 'text-red-600') }}">
+                        [{{ $answer->is_correct === null ? 'Menunggu Penilaian' : ($answer->is_correct ? 'Benar' : 'Salah') }}] Soal {{ $i + 1 }}
                     </span>
                     <span class="text-xs text-slate-500">·</span>
                     <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/60
@@ -219,11 +262,27 @@
                             <span class="{{ $answer->is_correct ? 'text-emerald-700 font-semibold' : 'text-red-500 line-through' }}">
                                 {{ $answer->selectedOption?->option_text ?? 'Tidak dijawab' }}
                             </span>
-                        @elseif($question->type === 'fill_blank')
-                            <span class="text-xs font-semibold text-slate-500">Jawabanmu: </span>
-                            <span class="{{ $answer->is_correct ? 'text-emerald-700 font-semibold' : 'text-red-500 line-through' }}">
+                        @elseif($question->type === 'essay')
+                            <span class="text-xs font-semibold text-slate-500 block mb-1">Jawabanmu:</span>
+                            <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-700 text-xs leading-relaxed whitespace-pre-wrap">
                                 {{ $answer->text_answer ?? 'Tidak dijawab' }}
-                            </span>
+                            </div>
+                            @if($answer->essay_graded_at)
+                                <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-blue-700">Penilaian Instruktur</span>
+                                        <span class="text-xs font-bold text-blue-800">+{{ number_format($answer->points_earned, 0) }} / {{ $answer->question->points }} poin</span>
+                                    </div>
+                                    @if($answer->essay_feedback)
+                                        <p class="text-xs text-blue-700 mt-1">{{ $answer->essay_feedback }}</p>
+                                    @endif
+                                    <p class="text-[10px] text-blue-400 mt-1">Dinilai oleh {{ $answer->gradedBy?->name }}</p>
+                                </div>
+                            @else
+                                <div class="mt-2 text-xs text-orange-600 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
+                                    ⏳ Belum dinilai oleh instruktur
+                                </div>
+                            @endif
                         @elseif($question->type === 'matching')
                             <span class="text-xs font-semibold text-slate-500 block mb-1">Jawabanmu (Mencocokkan):</span>
                             <div class="space-y-1 pl-3 border-l-2 border-slate-200 text-xs">
@@ -275,7 +334,7 @@
                     </div>
 
                     {{-- Jawaban benar (jika salah) --}}
-                    @if(!$answer->is_correct && in_array($question->type, ['multiple_choice', 'true_false', 'fill_blank']))
+                    @if(!$answer->is_correct && in_array($question->type, ['multiple_choice', 'true_false']))
                         <div class="text-sm">
                             <span class="text-xs font-semibold text-slate-500">Jawaban benar: </span>
                             <span class="text-emerald-700 font-semibold">

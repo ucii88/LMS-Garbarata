@@ -15,12 +15,16 @@ class QuizAnswer extends Model
         'order_answer',
         'is_correct',
         'points_earned',
+        'essay_feedback',
+        'essay_graded_at',
+        'essay_graded_by',
     ];
 
     protected $casts = [
-        'is_correct'   => 'boolean',
-        'order_answer' => 'array',
-        'points_earned' => 'decimal:2',
+        'is_correct'       => 'boolean',
+        'order_answer'     => 'array',
+        'points_earned'    => 'decimal:2',
+        'essay_graded_at'  => 'datetime',
     ];
 
     public function attempt(): BelongsTo
@@ -37,4 +41,10 @@ class QuizAnswer extends Model
     {
         return $this->belongsTo(QuestionOption::class, 'selected_option_id');
     }
+
+    public function gradedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'essay_graded_by');
+    }
 }
+

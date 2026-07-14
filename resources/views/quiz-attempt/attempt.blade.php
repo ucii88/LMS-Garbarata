@@ -64,7 +64,7 @@
                                 @switch($question->type)
                                     @case('multiple_choice') bg-indigo-100 text-indigo-700 @break
                                     @case('true_false') bg-green-100 text-green-700 @break
-                                    @case('fill_blank') bg-amber-100 text-amber-700 @break
+                                    @case('essay') bg-orange-100 text-orange-700 @break
                                     @case('matching') bg-purple-100 text-purple-700 @break
                                     @case('ordering') bg-rose-100 text-rose-700 @break
                                 @endswitch">
@@ -125,12 +125,19 @@
                                 </label>
                             @endforeach
 
-                        @elseif($question->type === 'fill_blank')
-                            <input type="text" name="answers[{{ $question->id }}]"
-                                   value="{{ $savedAnswers[$question->id]->text_answer ?? '' }}"
-                                   placeholder="Ketik jawaban kamu di sini..."
-                                   class="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                                   oninput="autoSaveText({{ $question->id }}, this.value)">
+                        @elseif($question->type === 'essay')
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-xs text-orange-700 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
+                                    <span>✍️</span>
+                                    <span>Tulis jawaban esai kamu di bawah ini. Jawaban akan dinilai oleh instruktur.</span>
+                                </div>
+                                <textarea name="answers[{{ $question->id }}]"
+                                          rows="8"
+                                          placeholder="Tuliskan jawaban kamu di sini..."
+                                          class="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none resize-y"
+                                          oninput="autoSaveText({{ $question->id }}, this.value)">{{ $savedAnswers[$question->id]->text_answer ?? '' }}</textarea>
+                                <div class="text-right text-xs text-slate-400" id="essay-charcount-{{ $question->id }}"></div>
+                            </div>
 
                         @elseif($question->type === 'matching')
                             <div class="space-y-4">

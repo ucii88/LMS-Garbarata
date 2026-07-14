@@ -92,6 +92,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/courses/{course}/quizzes/{quiz}/attempts', [QuizController::class, 'attempts'])->name('quizzes.attempts');
         Route::get('/courses/{course}/quizzes/{quiz}/attempts/export', [QuizController::class, 'exportAttempts'])->name('quizzes.attempts.export');
         Route::delete('/courses/{course}/quizzes/{quiz}/attempts/{attempt}', [QuizController::class, 'destroyAttempt'])->name('quizzes.attempts.destroy');
+        // Penilaian Esai
+        Route::get('/courses/{course}/quizzes/{quiz}/attempts/{attempt}/grade', [QuizController::class, 'gradeEssay'])->name('quizzes.attempts.grade');
+        Route::post('/courses/{course}/quizzes/{quiz}/attempts/{attempt}/grade', [QuizController::class, 'submitGrading'])->name('quizzes.attempts.grade.submit');
 
         // Manajemen latihan per chapter (menggunakan bank soal yang sama)
         Route::get('/courses/{course}/practices', [QuizController::class, 'index'])->name('practices.index');
@@ -104,6 +107,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/courses/{course}/practices/{quiz}/questions/sync', [QuizController::class, 'syncQuestions'])->name('practices.questions.sync');
         Route::get('/courses/{course}/practices/{quiz}/attempts', [QuizController::class, 'attempts'])->name('practices.attempts');
         Route::delete('/courses/{course}/practices/{quiz}/attempts/{attempt}', [QuizController::class, 'destroyAttempt'])->name('practices.attempts.destroy');
+        // Penilaian Esai Latihan
+        Route::get('/courses/{course}/practices/{quiz}/attempts/{attempt}/grade', [QuizController::class, 'gradeEssay'])->name('practices.attempts.grade');
+        Route::post('/courses/{course}/practices/{quiz}/attempts/{attempt}/grade', [QuizController::class, 'submitGrading'])->name('practices.attempts.grade.submit');
     });
 
     // Quiz attempt & sertifikat (Peserta)
