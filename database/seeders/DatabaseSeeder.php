@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
             Chapter2Seeder::class,
             Chapter3Seeder::class,
             Chapter4Seeder::class,
+            Chapter4QuestionSeeder::class,
             Chapter5Seeder::class,
+            Chapter5QuestionSeeder::class,
             Chapter6Seeder::class,
             Chapter7Seeder::class,
         ]);

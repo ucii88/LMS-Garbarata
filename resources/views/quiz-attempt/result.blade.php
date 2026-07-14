@@ -163,10 +163,7 @@
                             {{-- Nilai & Feedback instruktur --}}
                             @if($answer->essay_graded_at)
                                 <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs font-bold text-blue-700">Penilaian Instruktur</span>
-                                        <span class="text-xs font-bold text-blue-800">+{{ number_format($answer->points_earned, 0) }} / {{ $answer->question->points }} poin</span>
-                                    </div>
+                                    <span class="text-xs font-bold text-blue-700 block mb-1">Penilaian Instruktur</span>
                                     @if($answer->essay_feedback)
                                         <p class="text-xs text-blue-700 mt-1">{{ $answer->essay_feedback }}</p>
                                     @endif
@@ -174,7 +171,7 @@
                                 </div>
                             @else
                                 <div class="mt-2 text-xs text-orange-600 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
-                                    ⏳ Belum dinilai oleh instruktur
+                                    Belum dinilai oleh instruktur
                                 </div>
                             @endif
                         @elseif($question->type === 'matching')
@@ -269,10 +266,7 @@
                             </div>
                             @if($answer->essay_graded_at)
                                 <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs font-bold text-blue-700">Penilaian Instruktur</span>
-                                        <span class="text-xs font-bold text-blue-800">+{{ number_format($answer->points_earned, 0) }} / {{ $answer->question->points }} poin</span>
-                                    </div>
+                                    <span class="text-xs font-bold text-blue-700 block mb-1">Penilaian Instruktur</span>
                                     @if($answer->essay_feedback)
                                         <p class="text-xs text-blue-700 mt-1">{{ $answer->essay_feedback }}</p>
                                     @endif
@@ -280,7 +274,7 @@
                                 </div>
                             @else
                                 <div class="mt-2 text-xs text-orange-600 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
-                                    ⏳ Belum dinilai oleh instruktur
+                                    Belum dinilai oleh instruktur
                                 </div>
                             @endif
                         @elseif($question->type === 'matching')
