@@ -60,7 +60,7 @@ class Quiz extends Model
     }
 
     /**
-     * Quiz tanpa chapter_id adalah Final Quiz (ujian akhir course).
+     * Quiz tanpa chapter_id adalah Ujian (ujian akhir course).
      */
     public function isFinalQuiz(): bool
     {
@@ -74,8 +74,8 @@ class Quiz extends Model
 
     /**
      * Soal dari bank yang boleh dipilih untuk quiz ini.
-     * - Chapter Quiz  → soal dari chapter yang sama
-     * - Final Quiz    → soal dari semua chapter dalam course
+     * - Quiz  → soal dari chapter yang sama
+     * - Ujian    → soal dari semua chapter dalam course
      */
     public function getAvailableBankQuery()
     {
@@ -119,7 +119,7 @@ class Quiz extends Model
     }
 
     /**
-     * Dapatkan status ketersediaan waktu kuis berdasarkan jadwal.
+     * Dapatkan status ketersediaan waktu quiz berdasarkan jadwal.
      */
     public function getAvailabilityStatusAttribute(): string
     {

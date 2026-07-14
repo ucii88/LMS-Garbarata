@@ -85,7 +85,7 @@
 
         @if($quiz->review_policy === 'hide_all')
             <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center text-slate-500 italic text-xs">
-                Detail review jawaban untuk kuis ini dinonaktifkan oleh instruktur.
+                Detail review jawaban untuk quiz ini dinonaktifkan oleh instruktur.
             </div>
         @elseif($quiz->review_policy === 'points_only')
             @foreach($attempt->answers->sortBy('question_id') as $i => $answer)

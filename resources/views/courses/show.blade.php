@@ -138,7 +138,7 @@
                         <div class="p-6 border-b border-indigo-50">
                             <h3 class="text-sm font-bold text-slate-800">Manajemen Quiz</h3>
                             <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                                Kelola bank soal, chapter quiz, dan final quiz untuk course ini.
+                                Kelola Bank Soal, Quiz, dan Ujian untuk course ini.
                             </p>
                         </div>
                         <div class="p-6 space-y-2">

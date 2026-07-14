@@ -11,7 +11,7 @@
     - $certificate: Certificate|null
 --}}
 
-{{-- ========== CHAPTER QUIZ CARD ========== --}}
+{{-- ========== QUIZ CARD ========== --}}
 @if($chapterQuiz)
 <div class="mt-8 px-4 sm:px-0">
     <p class="text-xs font-bold text-blue-700 uppercase tracking-wider">Quiz Chapter</p>
@@ -144,7 +144,7 @@
 </div>
 @endif
 
-{{-- ========== FINAL QUIZ CARD (ditampilkan di semua chapter) ========== --}}
+{{-- ========== UJIAN CARD (ditampilkan di semua chapter) ========== --}}
 @if(false && $finalQuiz)
 <div class="mt-4 px-4 sm:px-0">
     <div class="rounded-2xl border-2 overflow-hidden
@@ -164,7 +164,7 @@
 
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Final Quiz</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Ujian</span>
                     @if($finalQuizAttempt?->is_passed)
                         <span class="text-xs px-2 py-0.5 bg-amber-500 text-white rounded-full font-semibold">
                             Lulus · {{ number_format($finalQuizAttempt->score, 0) }}%
@@ -217,7 +217,7 @@
                     @elseif($finalQuiz->canAttempt(auth()->id()))
                         <a href="{{ route('quiz.start', [$course, $finalQuiz]) }}"
                            class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl transition">
-                            Mulai Final Quiz
+                            Mulai Ujian
                         </a>
                     @else
                         <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">

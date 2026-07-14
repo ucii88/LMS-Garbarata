@@ -36,7 +36,7 @@
         ];
     @endphp
 
-    <div class="space-y-8 select-none" x-data="{ showModal: {{ $errors->any() ? 'true' : 'false' }}, selectedUserProgress: null, userProgress: @js($adminUserProgress ?? []) }">
+    <div class="space-y-8 select-none" x-data="{ showModal: {{ $errors->any() ? 'true' : 'false' }}, selectedUserProgress: null, userProgress: @js($adminUserProgress ?? []), participantTab: 'materi' }">
         <!-- Flash Messages -->
         @if (session('success'))
             <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-xs font-semibold text-emerald-800 shadow-sm flex items-center space-x-2">
@@ -114,19 +114,10 @@
         @if ($isPeserta)
             <!-- Tabs Menu matching Mockup -->
             <div class="border-b border-[#f0f0f0]">
-                <nav class="-mb-px flex space-x-8">
-                    <a href="#" class="border-b-2 border-blue-500 py-3 px-1 text-sm font-semibold text-blue-600 transition flex items-center space-x-2">
-                        <span>Materi Belajar</span>
-                        <span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-2xs font-semibold text-blue-600 border border-blue-100">Aktif</span>
-                    </a>
-                    <a href="#" class="border-b-2 border-transparent py-3 px-1 text-sm font-semibold text-gray-400 hover:text-gray-600 transition flex items-center space-x-2 cursor-not-allowed">
-                        <span>Kuis & Ujian</span>
-                        <span class="rounded-full bg-gray-50 px-2.5 py-0.5 text-2xs font-semibold text-gray-400 border border-gray-100">Segera Hadir</span>
-                    </a>
-                    <a href="#" class="border-b-2 border-transparent py-3 px-1 text-sm font-semibold text-gray-400 hover:text-gray-600 transition flex items-center space-x-2 cursor-not-allowed">
-                        <span>Latihan Mandiri</span>
-                        <span class="rounded-full bg-gray-50 px-2.5 py-0.5 text-2xs font-semibold text-gray-400 border border-gray-100">Segera Hadir</span>
-                    </a>
+                <nav class="-mb-px flex gap-6 sm:gap-8" aria-label="Menu pembelajaran">
+                    <button type="button" @click="participantTab = 'materi'" :class="participantTab === 'materi' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-sm font-semibold transition">Materi Belajar</button>
+                    <button type="button" @click="participantTab = 'quiz'" :class="participantTab === 'quiz' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-sm font-semibold transition">Quiz & Ujian</button>
+                    <button type="button" @click="participantTab = 'latihan'" :class="participantTab === 'latihan' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-sm font-semibold transition">Latihan Mandiri</button>
                 </nav>
             </div>
         @endif
@@ -296,28 +287,22 @@
 
                 <!-- 3. DASHBOARD STUDENT: COURSE CATALOG -->
                 @if ($isPeserta)
-                    <section id="materi-kursus" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
+                    <section id="materi-kursus" x-show="participantTab === 'materi'" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="border-b border-[#f0f0f0] pb-5">
                             <h2 class="text-base font-bold text-slate-800">Materi Kursus Tersedia</h2>
-                            <p class="text-xs text-slate-400 mt-1">Pilih materi untuk membuka diagram dan membaca modul pembelajaran.</p>
+                            <p class="text-xs text-slate-400 mt-1">Pilih materi untuk membaca modul pembelajaran.</p>
                         </div>
 
                         <div class="mt-5 space-y-4">
                             @forelse ($items as $course)
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 hover:bg-slate-50/80 transition duration-150">
                                     <div class="space-y-1.5 max-w-xl">
-                                        <div class="flex items-center space-x-2">
-                                            <span class="inline-flex rounded-full bg-blue-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-blue-600 border border-blue-100">
-                                                Aktif
-                                            </span>
-                                            <span class="text-2xs font-bold text-slate-400">{{ $course->modules_count ?? 0 }} modul</span>
-                                        </div>
+                                        <span class="text-2xs font-bold text-slate-400">{{ $course->modules_count ?? 0 }} modul</span>
                                         <h3 class="text-sm font-bold text-slate-800 leading-snug">{{ $course->title }}</h3>
                                         <p class="text-2xs text-slate-500 leading-relaxed">{{ $course->description }}</p>
                                     </div>
 
-                                    <div class="shrink-0 flex items-center space-x-4 border-t md:border-t-0 border-[#f0f0f0] pt-3 md:pt-0">
-                                        <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Interaktif Diagram</span>
+                                    <div class="shrink-0 flex items-center border-t md:border-t-0 border-[#f0f0f0] pt-3 md:pt-0">
                                         <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-xs font-bold text-white transition shadow-sm">
                                             Mulai Belajar →
                                         </a>
@@ -327,6 +312,52 @@
                                 <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-xs text-slate-400">
                                     Belum ada materi kursus yang dipublikasikan.
                                 </div>
+                            @endforelse
+                        </div>
+                    </section>
+
+                    <section id="quiz-ujian" x-cloak x-show="participantTab === 'quiz'" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
+                        <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <h2 class="text-base font-bold text-slate-800">Quiz & Ujian</h2>
+                                <p class="text-xs text-slate-400 mt-1">Kerjakan quiz chapter dan ujian akhir dari kursus yang tersedia.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 space-y-3">
+                            @forelse ($participantQuizzes as $quiz)
+                                <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider {{ $quiz->isFinalQuiz() ? 'text-amber-600' : 'text-blue-600' }}">{{ $quiz->isFinalQuiz() ? 'Ujian Akhir' : 'Quiz Chapter' }} · {{ $quiz->course->title }}</p>
+                                        <h3 class="mt-1 text-sm font-bold text-slate-800">{{ $quiz->title }}</h3>
+                                        <p class="mt-1 text-2xs text-slate-500">{{ $quiz->questions_count }} soal{{ $quiz->chapter ? ' · ' . $quiz->chapter->title : '' }}</p>
+                                    </div>
+                                    <a href="{{ route('quiz.start', [$quiz->course, $quiz]) }}" class="shrink-0 inline-flex items-center justify-center rounded-lg {{ $quiz->isFinalQuiz() ? 'bg-amber-500 hover:bg-amber-600' : 'bg-blue-600 hover:bg-blue-700' }} px-4 py-2 text-xs font-bold text-white transition">Mulai →</a>
+                                </article>
+                            @empty
+                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-xs text-slate-400">Belum ada quiz atau ujian yang tersedia.</div>
+                            @endforelse
+                        </div>
+                    </section>
+
+                    <section id="latihan-mandiri" x-cloak x-show="participantTab === 'latihan'" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
+                        <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <h2 class="text-base font-bold text-slate-800">Latihan Mandiri</h2>
+                                <p class="text-xs text-slate-400 mt-1">Semua latihan dari kursus yang tersedia untuk mengasah pemahaman Anda.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 space-y-3">
+                            @forelse ($participantPractices as $practice)
+                                <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-violet-600">Latihan · {{ $practice->course->title }}</p>
+                                        <h3 class="mt-1 text-sm font-bold text-slate-800">{{ $practice->title }}</h3>
+                                        <p class="mt-1 text-2xs text-slate-500">{{ $practice->questions_count }} soal{{ $practice->chapter ? ' · ' . $practice->chapter->title : '' }}</p>
+                                    </div>
+                                    <a href="{{ route('practice.start', [$practice->course, $practice]) }}" class="shrink-0 inline-flex items-center justify-center rounded-lg bg-violet-600 hover:bg-violet-700 px-4 py-2 text-xs font-bold text-white transition">Mulai Latihan →</a>
+                                </article>
+                            @empty
+                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-xs text-slate-400">Belum ada latihan yang tersedia.</div>
                             @endforelse
                         </div>
                     </section>
@@ -357,7 +388,7 @@
 
                                 <div class="pt-1">
                                     @if (!($card['disabled'] ?? false))
-                                        <a href="{{ $card['href'] }}" class="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-700 transition">
+                                        <a href="{{ $card['href'] }}" class="inline-flex items-center text-xs font-bold transition {{ $isPeserta ? 'rounded-lg px-3 py-2 text-white shadow-sm ' . $tone['button'] : 'text-blue-600 hover:text-blue-700' }}">
                                             {{ $card['action'] }} <span class="ml-1">→</span>
                                         </a>
                                     @else
@@ -391,7 +422,7 @@
 
                         <div class="max-h-[70vh] space-y-5 overflow-y-auto px-6 py-5">
                             <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-                                <p class="text-xs font-bold text-emerald-700">Progress materi</p>
+                                <p class="text-xs font-bold text-emerald-700">Progress materi keseluruhan</p>
                                 <p class="mt-1 text-2xl font-extrabold text-emerald-700" x-text="selectedUserProgress ? selectedUserProgress.material_percent + '%' : '0%'"></p>
                             </div>
 
@@ -400,18 +431,51 @@
                                 <template x-for="chapter in (selectedUserProgress ? selectedUserProgress.chapters : [])" :key="chapter.order">
                                     <div class="rounded-xl border border-slate-100 bg-white p-3">
                                         <div class="flex items-center justify-between gap-3">
-                                            <p class="text-xs font-bold text-slate-700" x-text="'BAB ' + chapter.order"></p>
+                                            <p class="text-xs font-bold text-slate-700" x-text="'BAB ' + chapter.order + (chapter.title ? ' · ' + chapter.title : '')"></p>
                                             <span class="rounded-full px-2.5 py-0.5 text-[10px] font-bold" :class="chapter.is_complete ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'" x-text="chapter.percent + '%'"></span>
                                         </div>
                                         <template x-if="chapter.missing_modules.length">
-                                            <p class="mt-2 text-[10px] font-semibold text-amber-600" x-text="'Belum lengkap: ' + chapter.missing_modules.join(', ')"></p>
+                                            <div class="mt-2 border-t border-amber-100 pt-2">
+                                                <p class="text-[10px] font-semibold text-amber-700" x-text="chapter.missing_modules.length + ' materi belum selesai'"></p>
+                                                <div class="mt-1.5 flex flex-wrap gap-1.5">
+                                                    <template x-for="module in chapter.missing_modules.slice(0, 5)" :key="module">
+                                                        <span class="rounded-md bg-amber-50 px-2 py-1 text-[9px] font-medium leading-tight text-amber-700" x-text="module"></span>
+                                                    </template>
+                                                    <template x-if="chapter.missing_modules.length > 5">
+                                                        <span class="rounded-md bg-slate-100 px-2 py-1 text-[9px] font-bold text-slate-500" x-text="'+' + (chapter.missing_modules.length - 5) + ' lainnya'"></span>
+                                                    </template>
+                                                </div>
+                                            </div>
                                         </template>
                                     </div>
                                 </template>
                             </div>
 
-                            <div class="rounded-xl border border-slate-100 bg-slate-50 p-3">
-                                <p class="text-[10px] font-semibold text-slate-500">Progress latihan dan quiz akan ditambahkan terpisah saat fiturnya sudah tersedia.</p>
+                            <div class="space-y-3">
+                                <p class="text-xs font-bold text-slate-800">Aktivitas Evaluasi</p>
+                                <template x-for="section in [
+                                    { key: 'quizzes', title: 'Quiz', tone: 'blue' },
+                                    { key: 'exams', title: 'Ujian', tone: 'amber' },
+                                    { key: 'practices', title: 'Latihan', tone: 'violet' }
+                                ]" :key="section.key">
+                                    <div class="rounded-xl border border-slate-100 bg-white p-3">
+                                        <p class="text-[11px] font-bold" :class="section.tone === 'blue' ? 'text-blue-700' : (section.tone === 'amber' ? 'text-amber-700' : 'text-violet-700')" x-text="section.title"></p>
+                                        <div class="mt-2 space-y-2">
+                                            <template x-for="activity in (selectedUserProgress ? selectedUserProgress[section.key] : [])" :key="activity.id">
+                                                <div class="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2">
+                                                    <div class="min-w-0">
+                                                        <p class="truncate text-[10px] font-semibold text-slate-700" x-text="activity.title"></p>
+                                                        <p class="truncate text-[9px] text-slate-400" x-text="activity.course + (activity.chapter ? ' · ' + activity.chapter : '')"></p>
+                                                    </div>
+                                                    <span class="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold" :class="activity.is_completed ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-200 text-slate-500'" x-text="activity.is_completed ? 'Selesai · ' + activity.score + '%' : 'Belum dikerjakan'"></span>
+                                                </div>
+                                            </template>
+                                            <template x-if="selectedUserProgress && !selectedUserProgress[section.key].length">
+                                                <p class="py-1 text-[10px] text-slate-400">Belum ada aktivitas tersedia.</p>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>

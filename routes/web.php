@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'showChapter'])->name('courses.chapters.show');
     Route::post('/courses/{course}/chapters/{chapter}/modules/{module}/complete', [App\Http\Controllers\CourseController::class, 'completeModule'])->name('courses.modules.complete');
     Route::get('/courses/{course}/activities', [App\Http\Controllers\CourseController::class, 'activities'])->name('courses.activities');
+    Route::get('/courses/{course}/quiz-ujian', [App\Http\Controllers\CourseController::class, 'quizActivities'])->name('courses.quizzes');
+    Route::get('/courses/{course}/latihan', [App\Http\Controllers\CourseController::class, 'practiceActivities'])->name('courses.practices');
 
     // Role simulation switcher
     Route::post('/simulasi-role', function (Illuminate\Http\Request $request) {
@@ -83,7 +85,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/courses/{course}/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
         Route::put('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
         Route::delete('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
-        // Pilih soal dari bank untuk kuis
+        // Pilih soal dari bank untuk quiz
         Route::post('/courses/{course}/quizzes/{quiz}/questions/sync', [QuizController::class, 'syncQuestions'])->name('quizzes.questions.sync');
         // Hasil & Reset Percobaan Peserta
         Route::get('/courses/{course}/quizzes/{quiz}/attempts', [QuizController::class, 'attempts'])->name('quizzes.attempts');

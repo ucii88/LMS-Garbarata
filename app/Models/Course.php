@@ -39,7 +39,7 @@ class Course extends Model
     }
 
     /**
-     * Get all quizzes for the course (chapter quizzes + final quiz).
+     * Get all quizzes for the course (quizzes + ujian).
      */
     public function quizzes(): HasMany
     {

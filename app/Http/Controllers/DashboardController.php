@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\LearningProgress;
 use App\Models\Course;
+use App\Models\Quiz;
+use App\Models\QuizAttempt;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +31,8 @@ class DashboardController extends Controller
         $primaryAction = null;
         $adminUserProgress = [];
         $participants = collect();
+        $participantQuizzes = collect();
+        $participantPractices = collect();
 
         if ($isAdmin) {
             $stats = [
@@ -46,25 +50,7 @@ class DashboardController extends Controller
             $items = User::orderBy('id', 'desc')->limit(6)->get();
             $adminUserProgress = $items
                 ->where('role', 'peserta')
-                ->mapWithKeys(function (User $participant) {
-                    $progress = LearningProgress::forUser($participant);
-
-                    return [
-                        $participant->id => [
-                            'name' => $participant->name,
-                            'email' => $participant->email,
-                            'material_percent' => $progress['percent'],
-                            'chapters' => $progress['chapters']->map(fn (array $chapter) => [
-                                'order' => $chapter['order'],
-                                'title' => $chapter['title'],
-                                'percent' => $chapter['percent'],
-                                'is_complete' => $chapter['is_complete'],
-                                'missing_modules' => $chapter['missing_modules']->map(fn ($module) => $module->title)->values(),
-                            ])->values(),
-                            'notes' => $progress['notes']->values(),
-                        ],
-                    ];
-                });
+                ->mapWithKeys(fn (User $participant) => [$participant->id => $this->participantProgress($participant)]);
             $badgeLabel = 'Admin Control Center';
             $headline = 'Selamat datang, Administrator';
             $description = 'Kendalikan pengguna, status kursus, dan struktur materi dari dashboard yang konsisten dan bersih.';
@@ -85,25 +71,7 @@ class DashboardController extends Controller
             $items = Course::withCount('modules')->orderBy('id', 'desc')->limit(6)->get();
             
             $participants = User::where('role', 'peserta')->orderBy('id', 'desc')->get();
-            $adminUserProgress = $participants->mapWithKeys(function (User $participant) {
-                $progress = LearningProgress::forUser($participant);
-
-                return [
-                    $participant->id => [
-                        'name' => $participant->name,
-                        'email' => $participant->email,
-                        'material_percent' => $progress['percent'],
-                        'chapters' => $progress['chapters']->map(fn (array $chapter) => [
-                            'order' => $chapter['order'],
-                            'title' => $chapter['title'],
-                            'percent' => $chapter['percent'],
-                            'is_complete' => $chapter['is_complete'],
-                            'missing_modules' => $chapter['missing_modules']->map(fn ($module) => $module->title)->values(),
-                        ])->values(),
-                        'notes' => $progress['notes']->values(),
-                    ],
-                ];
-            });
+            $adminUserProgress = $participants->mapWithKeys(fn (User $participant) => [$participant->id => $this->participantProgress($participant)]);
 
             $badgeLabel = 'Instructor Workspace';
             $headline = 'Selamat datang, Instruktur';
@@ -116,13 +84,21 @@ class DashboardController extends Controller
                 ['label' => 'Progress Materi', 'value' => LearningProgress::forUser($user)['percent'].'%', 'tone' => 'emerald'],
             ];
 
+            $items = Course::where('is_published', true)->withCount('modules')->orderBy('id', 'desc')->limit(6)->get();
+            $primaryCourse = $items->first();
             $cards = [
-                ['title' => 'Materi Garbarata', 'description' => 'Masuk ke kursus interaktif untuk mempelajari komponen utama.', 'meta' => 'Belajar sekarang', 'action' => 'Mulai Belajar', 'href' => '#materi-kursus', 'tone' => 'blue'],
-                ['title' => 'Diagram Interaktif', 'description' => 'Klik hotspot untuk membuka penjelasan setiap komponen.', 'meta' => 'Visual guide', 'action' => 'Buka Diagram', 'href' => '#materi-kursus', 'tone' => 'slate'],
-                ['title' => 'Kuis & Latihan', 'description' => 'Fitur penilaian dan latihan mandiri akan menyusul.', 'meta' => 'Coming soon', 'action' => 'Segera Hadir', 'href' => '#', 'tone' => 'amber', 'disabled' => true],
+                ['title' => 'Materi Garbarata', 'description' => 'Masuk ke kursus interaktif untuk mempelajari komponen utama.', 'meta' => 'Belajar sekarang', 'action' => 'Mulai Belajar', 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#materi-kursus', 'tone' => 'blue'],
+                ['title' => 'Quiz & Ujian', 'description' => 'Kerjakan quiz chapter dan ujian akhir yang tersedia.', 'meta' => 'Evaluasi', 'action' => 'Lihat Quiz & Ujian', 'href' => $primaryCourse ? route('courses.quizzes', $primaryCourse) : '#quiz-ujian', 'tone' => 'amber'],
+                ['title' => 'Latihan Mandiri', 'description' => 'Asah pemahaman lewat seluruh latihan yang tersedia.', 'meta' => 'Latihan', 'action' => 'Lihat Latihan', 'href' => $primaryCourse ? route('courses.practices', $primaryCourse) : '#latihan-mandiri', 'tone' => 'slate'],
             ];
-
-            $items = Course::where('is_published', true)->orderBy('id', 'desc')->limit(6)->get();
+            $activities = Quiz::with(['course', 'chapter'])->withCount('questions')
+                ->whereIn('course_id', $items->pluck('id'))
+                ->where('is_active', true)
+                ->orderBy('course_id')
+                ->orderBy('order')
+                ->get();
+            $participantQuizzes = $activities->filter(fn (Quiz $activity) => ! $activity->isPractice())->values();
+            $participantPractices = $activities->filter(fn (Quiz $activity) => $activity->isPractice())->values();
             $badgeLabel = 'Learner Portal';
             $headline = 'Selamat datang, Peserta';
             $description = 'Ikuti materi Garbarata dalam alur yang rapi, modern, dan sama untuk semua peran.';
@@ -130,6 +106,50 @@ class DashboardController extends Controller
             
         }
 
-        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress', 'participants'));
+        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress', 'participants', 'participantQuizzes', 'participantPractices'));
+    }
+
+    private function participantProgress(User $participant): array
+    {
+        $progress = LearningProgress::forUser($participant);
+        $activities = Quiz::query()
+            ->with(['course', 'chapter'])
+            ->where('is_active', true)
+            ->orderBy('course_id')
+            ->orderBy('chapter_id')
+            ->orderBy('order')
+            ->get();
+        $attempts = QuizAttempt::query()
+            ->where('user_id', $participant->id)
+            ->whereIn('quiz_id', $activities->pluck('id'))
+            ->whereNotNull('submitted_at')
+            ->orderByDesc('submitted_at')
+            ->get()
+            ->unique('quiz_id')
+            ->keyBy('quiz_id');
+        $activityData = fn (Quiz $activity) => [
+            'id' => $activity->id,
+            'title' => $activity->title,
+            'course' => $activity->course?->title,
+            'chapter' => $activity->chapter?->title,
+            'is_completed' => $attempts->has($activity->id),
+            'score' => $attempts->has($activity->id) ? round((float) $attempts[$activity->id]->score, 1) : null,
+        ];
+
+        return [
+            'name' => $participant->name,
+            'email' => $participant->email,
+            'material_percent' => $progress['percent'],
+            'chapters' => $progress['chapters']->map(fn (array $chapter) => [
+                'order' => $chapter['order'],
+                'title' => $chapter['title'],
+                'percent' => $chapter['percent'],
+                'is_complete' => $chapter['is_complete'],
+                'missing_modules' => $chapter['missing_modules']->map(fn ($module) => $module->title)->values(),
+            ])->values(),
+            'quizzes' => $activities->filter(fn (Quiz $activity) => ! $activity->isPractice() && ! $activity->isFinalQuiz())->map($activityData)->values(),
+            'exams' => $activities->filter(fn (Quiz $activity) => ! $activity->isPractice() && $activity->isFinalQuiz())->map($activityData)->values(),
+            'practices' => $activities->filter(fn (Quiz $activity) => $activity->isPractice())->map($activityData)->values(),
+        ];
     }
 }

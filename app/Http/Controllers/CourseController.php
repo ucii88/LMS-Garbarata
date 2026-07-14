@@ -66,7 +66,7 @@ class CourseController extends Controller
                            ->withCount('questions')
                            ->first();
 
-        // Final Quiz (jika ada dan semua chapter sudah selesai)
+        // Ujian (jika ada dan semua chapter sudah selesai)
         $finalQuiz = Quiz::where('course_id', $course->id)->where('activity_type', 'quiz')
                          ->whereNull('chapter_id')
                          ->where('is_active', true)
@@ -110,15 +110,44 @@ class CourseController extends Controller
         ]);
     }
 
-    /** Semua aktivitas latihan dan quiz peserta, termasuk yang belum dikerjakan. */
+    /** Halaman Quiz Chapter dan Ujian peserta. */
+    public function quizActivities(Course $course)
+    {
+        return $this->activityPage($course, false);
+    }
+
+    /** Halaman seluruh latihan mandiri peserta. */
+    public function practiceActivities(Course $course)
+    {
+        return $this->activityPage($course, true);
+    }
+
+    /** Rute lama tetap mengarah ke halaman Quiz & Ujian. */
     public function activities(Course $course)
     {
+        return redirect()->route('courses.quizzes', $course);
+    }
+
+    private function activityPage(Course $course, bool $isPractice)
+    {
         abort_unless(auth()->user()->isPeserta(), 403);
+
         $activities = $course->quizzes()->with('chapter')->where('is_active', true)
-            ->withCount('questions')->orderBy('activity_type')->orderBy('chapter_id')->orderBy('order')->get();
+            ->where('activity_type', $isPractice ? 'practice' : 'quiz')
+            ->withCount('questions')->orderBy('chapter_id')->orderBy('order')->get();
         $lastAttempts = QuizAttempt::where('user_id', auth()->id())->whereIn('quiz_id', $activities->pluck('id'))
             ->whereNotNull('submitted_at')->orderByDesc('submitted_at')->get()->unique('quiz_id')->keyBy('quiz_id');
-        return view('courses.activities', compact('course', 'activities', 'lastAttempts'));
+
+        $sections = $isPractice
+            ? [['title' => 'Latihan Mandiri', 'description' => 'Kerjakan latihan mandiri untuk menguji pemahaman Anda.', 'items' => $activities, 'theme' => 'violet']]
+            : [
+                ['title' => 'Quiz Chapter', 'description' => 'Quiz evaluasi pada masing-masing chapter.', 'items' => $activities->filter(fn (Quiz $activity) => ! $activity->isFinalQuiz()), 'theme' => 'blue'],
+                ['title' => 'Ujian', 'description' => 'Ujian akhir course tersedia di halaman ini.', 'items' => $activities->filter(fn (Quiz $activity) => $activity->isFinalQuiz()), 'theme' => 'amber'],
+            ];
+
+        $pageTitle = $isPractice ? 'Latihan' : 'Quiz & Ujian';
+
+        return view('courses.activities', compact('course', 'lastAttempts', 'sections', 'pageTitle'));
     }
 
     public function completeModule(Request $request, Course $course, Chapter $chapter, Module $module)

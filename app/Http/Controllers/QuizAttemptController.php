@@ -61,12 +61,12 @@ class QuizAttemptController extends Controller
 
         if (!$quiz->isPractice() && $quiz->availability_status === 'upcoming') {
             return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
-                             ->withErrors(['msg' => 'Kuis belum dibuka. Silakan tunggu hingga jadwal yang ditentukan.']);
+                             ->withErrors(['msg' => 'Quiz belum dibuka. Silakan tunggu hingga jadwal yang ditentukan.']);
         }
 
         if (!$quiz->isPractice() && $quiz->availability_status === 'closed') {
             return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
-                             ->withErrors(['msg' => 'Kuis sudah ditutup dan tidak dapat dikerjakan lagi.']);
+                             ->withErrors(['msg' => 'Quiz sudah ditutup dan tidak dapat dikerjakan lagi.']);
         }
 
         $user = Auth::user();
@@ -325,7 +325,7 @@ class QuizAttemptController extends Controller
         });
 
         if ($quiz->isPractice()) {
-            return redirect()->route('courses.activities', $course)
+            return redirect()->route('courses.practices', $course)
                 ->with('success', 'Latihan selesai. Nilai terakhir kamu: ' . number_format($attempt->fresh()->score, 0) . '%.');
         }
 

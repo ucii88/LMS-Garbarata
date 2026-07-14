@@ -448,7 +448,7 @@ function addOptionBtn(container, type) {
     container.appendChild(btn);
 }
 
-// Data kuis untuk keperluan Edit Modal
+// Data quiz untuk keperluan Edit Modal
 const questionsData = @js($questions->keyBy('id'));
 
 function openAddModal() {

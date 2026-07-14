@@ -271,16 +271,16 @@ class QuizController extends Controller
         $userId = $attempt->user_id;
         $attempt->delete();
 
-        // Cabut/hapus sertifikat jika attempt di-reset (karena syarat kelulusan seluruh kuis menjadi tidak terpenuhi lagi)
+        // Cabut/hapus sertifikat jika attempt di-reset (karena syarat kelulusan seluruh quiz menjadi tidak terpenuhi lagi)
         if (!$quiz->isPractice()) {
             Certificate::where('user_id', $userId)->where('course_id', $course->id)->delete();
         }
 
-        return back()->with('success', 'Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan kuis ini kembali dan sertifikat sebelumnya telah dicabut.');
+        return back()->with('success', 'Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan quiz ini kembali dan sertifikat sebelumnya telah dicabut.');
     }
 
     /**
-     * Ekspor hasil percobaan kuis ke file CSV.
+     * Ekspor hasil percobaan quiz ke file CSV.
      */
     public function exportAttempts(Course $course, Quiz $quiz)
     {

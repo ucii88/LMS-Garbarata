@@ -278,12 +278,12 @@
                 ⚠
             </div>
             <h3 class="text-sm font-bold text-red-600">Peringatan Keamanan!</h3>
-            <p class="text-xs text-slate-700 font-semibold">Anda terdeteksi meninggalkan halaman kuis.</p>
+            <p class="text-xs text-slate-700 font-semibold">Anda terdeteksi meninggalkan halaman quiz.</p>
             <p class="text-2xs text-slate-500 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100" id="cheat-warning-msg"></p>
         </div>
         <button type="button" onclick="closeCheatModal()"
                 class="w-full py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition">
-            Saya Mengerti & Lanjutkan Kuis
+            Saya Mengerti & Lanjutkan Quiz
         </button>
     </div>
 </div>
@@ -309,11 +309,11 @@ function handleFocusLoss() {
     
     if (focusLossCount >= MAX_FOCUS_LOSS) {
         window.isSubmittingQuiz = true;
-        alert('Kuis Anda otomatis dikirim karena melanggar aturan fokus halaman kuis sebanyak 3 kali.');
+        alert('Quiz Anda otomatis dikirim karena melanggar aturan fokus halaman quiz sebanyak 3 kali.');
         document.getElementById('quiz-form').submit();
     } else {
         const remaining = MAX_FOCUS_LOSS - focusLossCount;
-        const msg = `Peringatan ${focusLossCount}/${MAX_FOCUS_LOSS}: Harap tetap fokus pada halaman kuis. Jika Anda meninggalkan halaman ini sebanyak ${remaining} kali lagi, jawaban Anda akan otomatis dikirim secara paksa!`;
+        const msg = `Peringatan ${focusLossCount}/${MAX_FOCUS_LOSS}: Harap tetap fokus pada halaman quiz. Jika Anda meninggalkan halaman ini sebanyak ${remaining} kali lagi, jawaban Anda akan otomatis dikirim secara paksa!`;
         
         document.getElementById('cheat-warning-msg').textContent = msg;
         document.getElementById('cheat-modal').classList.remove('hidden');
@@ -356,7 +356,7 @@ function showConnectionStatus(isOnline) {
             }
         }, 2500);
     } else {
-        text.textContent = '⚠️ Koneksi Internet Terputus! Harap jangan menutup halaman kuis ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.';
+        text.textContent = '⚠️ Koneksi Internet Terputus! Harap jangan menutup halaman quiz ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.';
         banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-xs font-bold bg-red-600 text-white shadow-md animate-pulse transition-all duration-300';
         
         // Nonaktifkan tombol submit
@@ -442,23 +442,23 @@ function jumpTo(num) {
     const nextCard = document.getElementById('q-card-' + num);
     if (!nextCard) return;
 
-    // Sembunyikan card kuis aktif saat ini
+    // Sembunyikan card quiz aktif saat ini
     const currentCard = document.getElementById('q-card-' + currentActiveQ);
     if (currentCard) {
         currentCard.classList.add('hidden');
     }
 
-    // Tampilkan card kuis target baru
+    // Tampilkan card quiz target baru
     nextCard.classList.remove('hidden');
     currentActiveQ = num;
 
-    // Update nomor soal aktif di bagian atas kuis (Soal X / Y)
+    // Update nomor soal aktif di bagian atas quiz (Soal X / Y)
     const curQLbl = document.getElementById('current-q');
     if (curQLbl) {
         curQLbl.textContent = num;
     }
 
-    // Scroll kembali ke atas halaman kuis secara halus agar peserta fokus ke atas soal baru
+    // Scroll kembali ke atas halaman quiz secara halus agar peserta fokus ke atas soal baru
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
