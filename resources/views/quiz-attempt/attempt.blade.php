@@ -151,7 +151,7 @@
                                             {{ $option->option_text }}
                                         </div>
                                         <select name="answers[{{ $question->id }}][{{ $option->id }}]" required
-                                                onchange="autoSaveText({{ $question->id }}, 'select')"
+                                                onchange="autoSaveMatching({{ $question->id }})"
                                                 class="w-full border-2 border-slate-200 rounded-lg px-3 py-2.5 text-xs bg-white focus:ring-2 focus:ring-blue-500 outline-none">
                                             <option value="">-- Pilih Pasangan --</option>
                                             @foreach($rightItems as $itemText)
@@ -175,7 +175,7 @@
                                     <div class="flex flex-col gap-2 p-3 bg-slate-50/50 rounded-xl border border-slate-100 shadow-sm">
                                         <span class="text-xs font-bold text-slate-500">Langkah {{ $stepNum }}:</span>
                                         <select name="answers[{{ $question->id }}][]" required
-                                                onchange="autoSaveText({{ $question->id }}, 'select')"
+                                                onchange="autoSaveOrdering({{ $question->id }})"
                                                 class="w-full border-2 border-slate-200 rounded-lg px-3 py-2.5 text-xs bg-white focus:ring-2 focus:ring-blue-500 outline-none">
                                             <option value="">-- Pilih Langkah Ke-{{ $stepNum }} --</option>
                                             @foreach($optionsShuffled as $opt)
@@ -374,7 +374,7 @@ function showConnectionStatus(isOnline) {
         });
     }
 }
-const SAVE_URL = "{{ route('quiz.save-answer', [$course, $quiz]) }}";
+const SAVE_URL = "{{ route($quiz->isPractice() ? 'practice.save-answer' : 'quiz.save-answer', [$course, $quiz]) }}";
 const CSRF = "{{ csrf_token() }}";
 const flagged = new Set();
 const answered = new Set();
@@ -389,8 +389,69 @@ function autoSave(questionId, value, type) {
     markAnswered(questionId);
 }
 
+const debounceTimers = {};
 function autoSaveText(questionId, value) {
     markAnswered(questionId);
+    clearTimeout(debounceTimers[questionId]);
+    debounceTimers[questionId] = setTimeout(() => {
+        const body = { 
+            question_id: questionId, 
+            text_answer: value,
+            _token: CSRF 
+        };
+        fetch(SAVE_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF }, 
+            body: JSON.stringify(body) 
+        });
+    }, 1000);
+}
+
+function autoSaveMatching(questionId) {
+    markAnswered(questionId);
+    const selects = document.querySelectorAll(`select[name^="answers[${questionId}]"]`);
+    const orderAnswer = {};
+    selects.forEach(select => {
+        const matches = select.name.match(/answers\[\d+\]\[(\d+)\]/);
+        if (matches && matches[1]) {
+            orderAnswer[matches[1]] = select.value;
+        }
+    });
+
+    const body = {
+        question_id: questionId,
+        order_answer: orderAnswer,
+        _token: CSRF
+    };
+
+    fetch(SAVE_URL, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF }, 
+        body: JSON.stringify(body) 
+    });
+}
+
+function autoSaveOrdering(questionId) {
+    markAnswered(questionId);
+    const selects = document.querySelectorAll(`select[name="answers[${questionId}][]"]`);
+    const orderAnswer = [];
+    selects.forEach(select => {
+        if (select.value) {
+            orderAnswer.push(parseInt(select.value));
+        }
+    });
+
+    const body = {
+        question_id: questionId,
+        order_answer: orderAnswer,
+        _token: CSRF
+    };
+
+    fetch(SAVE_URL, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF }, 
+        body: JSON.stringify(body) 
+    });
 }
 
 function markAnswered(questionId) {
@@ -409,8 +470,9 @@ function updateNavColors() {
 
         const hasRadio = card.querySelector('input[type=radio]:checked');
         const hasText = Array.from(card.querySelectorAll('input[type=text]')).some(i => i.value.trim() !== '');
+        const hasTextarea = Array.from(card.querySelectorAll('textarea')).some(t => t.value.trim() !== '');
         const hasSelect = Array.from(card.querySelectorAll('select')).some(s => s.value !== '');
-        const isAnswered = hasRadio || hasText || hasSelect;
+        const isAnswered = hasRadio || hasText || hasTextarea || hasSelect;
 
         if (isFlagged) {
             // RAGU-RAGU / BENDERA -> ORANYE SOLID (Warna Oranye)
@@ -476,8 +538,9 @@ function confirmSubmit() {
     document.querySelectorAll('.question-card').forEach(card => {
         const hasRadio = card.querySelector('input[type=radio]:checked');
         const hasText = Array.from(card.querySelectorAll('input[type=text]')).some(i => i.value.trim() !== '');
+        const hasTextarea = Array.from(card.querySelectorAll('textarea')).some(t => t.value.trim() !== '');
         const hasSelect = Array.from(card.querySelectorAll('select')).some(s => s.value !== '');
-        if (hasRadio || hasText || hasSelect) {
+        if (hasRadio || hasText || hasTextarea || hasSelect) {
             answeredCount++;
         }
     });

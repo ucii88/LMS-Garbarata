@@ -162,7 +162,12 @@ class QuestionController extends Controller
             ->where('is_active', true)
             ->get()
             ->each(function (Quiz $quiz) {
-                if ($quiz->questions()->sum('points') !== 100) {
+                $totalPoints = $quiz->questions()->withCount('options')->get()->sum(function ($q) {
+                    return ($q->type === 'matching' || $q->type === 'ordering') 
+                        ? $q->points * $q->options_count 
+                        : $q->points;
+                });
+                if ($totalPoints !== 100) {
                     $quiz->update(['is_active' => false]);
                 }
             });

@@ -103,10 +103,70 @@ class DashboardController extends Controller
             $headline = 'Selamat datang, Peserta';
             $description = 'Ikuti materi Garbarata dalam alur yang rapi, modern, dan sama untuk semua peran.';
             $primaryAction = ['label' => 'Lanjutkan Belajar', 'href' => '#materi-kursus'];
-            
         }
 
-        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress', 'participants', 'participantQuizzes', 'participantPractices'));
+        // Generate current week days (Monday - Sunday)
+        $today = \Carbon\Carbon::today();
+        $startOfWeek = $today->copy()->startOfWeek();
+        $weekDays = [];
+        for ($i = 0; $i < 7; $i++) {
+            $day = $startOfWeek->copy()->addDays($i);
+            $weekDays[] = [
+                'day_name' => match($day->dayOfWeek) {
+                    \Carbon\Carbon::MONDAY => 'S',
+                    \Carbon\Carbon::TUESDAY => 'S',
+                    \Carbon\Carbon::WEDNESDAY => 'R',
+                    \Carbon\Carbon::THURSDAY => 'K',
+                    \Carbon\Carbon::FRIDAY => 'J',
+                    \Carbon\Carbon::SATURDAY => 'S',
+                    \Carbon\Carbon::SUNDAY => 'M',
+                },
+                'date' => $day->day,
+                'is_today' => $day->isToday(),
+                'full_date' => $day->toDateString()
+            ];
+        }
+
+        // Generate events based on role (Quiz/Exam schedules only)
+        $scheduleEvents = [];
+
+        // Add dynamic quizzes/exams with schedule
+        $timedQuizzes = Quiz::where(function ($query) {
+                $query->whereNotNull('start_time')->orWhereNotNull('end_time');
+            })
+            ->where('is_active', true)
+            ->with('course')
+            ->get();
+
+        foreach ($timedQuizzes as $q) {
+            if ($q->start_time) {
+                $start = \Carbon\Carbon::parse($q->start_time)->timezone('Asia/Jakarta');
+                $scheduleEvents[] = [
+                    'day_num' => $start->day,
+                    'month_name' => strtoupper($start->translatedFormat('M')),
+                    'title' => ($q->isFinalQuiz() ? 'Ujian Akhir: ' : 'Quiz: ') . $q->title . ' (Dibuka)',
+                    'time_or_loc' => $start->format('H:i') . ' WIB · Online LMS',
+                    'icon' => 'lock-open'
+                ];
+            }
+            if ($q->end_time) {
+                $end = \Carbon\Carbon::parse($q->end_time)->timezone('Asia/Jakarta');
+                $scheduleEvents[] = [
+                    'day_num' => $end->day,
+                    'month_name' => strtoupper($end->translatedFormat('M')),
+                    'title' => ($q->isFinalQuiz() ? 'Ujian Akhir: ' : 'Quiz: ') . $q->title . ' (Batas Akhir)',
+                    'time_or_loc' => $end->format('H:i') . ' WIB · Online LMS',
+                    'icon' => 'lock'
+                ];
+            }
+        }
+
+        // Sort events chronologically by day_num
+        usort($scheduleEvents, function ($a, $b) {
+            return $a['day_num'] <=> $b['day_num'];
+        });
+
+        return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress', 'participants', 'participantQuizzes', 'participantPractices', 'weekDays', 'scheduleEvents'));
     }
 
     private function participantProgress(User $participant): array

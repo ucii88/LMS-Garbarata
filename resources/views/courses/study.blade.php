@@ -869,6 +869,8 @@
             modules: @js($modules->values()),
             activeTab: '4.1',
             expandedModuleId: null,
+            completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+            csrfToken: @js(csrf_token()),
 
             get tabs() {
                 const uniqueTabs = new Set();
@@ -882,6 +884,10 @@
                 if (!this.tabs.includes(this.activeTab) && this.tabs.length > 0) {
                     this.activeTab = this.tabs[0];
                 }
+                const initialModule = this.getSingleModule(this.activeTab);
+                if (initialModule && initialModule.id) {
+                    this.markModuleComplete(initialModule.id);
+                }
             },
             getTabModules(tab) {
                 return this.modules.filter(m => m.title.startsWith(tab + '.'));
@@ -893,6 +899,24 @@
             },
             toggleModule(id) {
                 this.expandedModuleId = this.expandedModuleId === id ? null : id;
+                if (this.expandedModuleId === id) {
+                    let dbId = id;
+                    if (isNaN(id)) {
+                        const m = this.getSingleModule(id);
+                        if (m) dbId = m.id;
+                    }
+                    this.markModuleComplete(dbId);
+                }
+            },
+            markModuleComplete(moduleId) {
+                if (!Number.isInteger(Number(moduleId)) || !this.completeUrlTemplate) return;
+                fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
+                    },
+                });
             }
         }">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -940,7 +964,7 @@
                         <div class="flex flex-wrap gap-2">
                             <template x-for="tab in tabs" :key="tab">
                                 <button
-                                    @click="activeTab = tab; expandedModuleId = null"
+                                    @click="activeTab = tab; expandedModuleId = null; const m = getSingleModule(tab); if(m && m.id) markModuleComplete(m.id);"
                                     class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
                                     :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
@@ -1047,7 +1071,7 @@
                                     <div x-show="expandedModuleId === '4.6.3'" class="border-t border-gray-100 bg-white p-4 space-y-3">
                                         <p class="text-[10px] text-slate-400 font-semibold mb-2">Pilih bagian tabel di bawah untuk melihat detail atau mengedit/menghapusnya:</p>
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.3.'))" :key="subModule.id">
-                                            <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden my-2.5">
+                                            <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden my-2.5" @toggle="if($el.open) markModuleComplete(subModule.id)">
                                                 <summary class="flex items-center justify-between gap-3 cursor-pointer select-none px-4 py-2.5 bg-slate-50 hover:bg-slate-100 transition-colors duration-150 list-none">
                                                     <span class="font-bold text-slate-800 text-[10px] uppercase tracking-wide" x-text="subModule.title"></span>
                                                     <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -1092,7 +1116,7 @@
                                     <div x-show="expandedModuleId === '4.6.4'" class="border-t border-gray-100 bg-white p-4 space-y-3">
                                         <p class="text-[10px] text-slate-400 font-semibold mb-2">Pilih bagian tabel di bawah untuk melihat detail atau mengedit/menghapusnya:</p>
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.4.'))" :key="subModule.id">
-                                            <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden my-2.5">
+                                            <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden my-2.5" @toggle="if($el.open) markModuleComplete(subModule.id)">
                                                 <summary class="flex items-center justify-between gap-3 cursor-pointer select-none px-4 py-2.5 bg-slate-50 hover:bg-slate-100 transition-colors duration-150 list-none">
                                                     <span class="font-bold text-slate-800 text-[10px] uppercase tracking-wide" x-text="subModule.title"></span>
                                                     <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -1263,6 +1287,8 @@
             modules: @js($modules->values()),
             activeTab: '5.1',
             expandedModuleId: null,
+            completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+            csrfToken: @js(csrf_token()),
 
             get tabs() {
                 const uniqueTabs = new Set();
@@ -1276,6 +1302,10 @@
                 if (!this.tabs.includes(this.activeTab) && this.tabs.length > 0) {
                     this.activeTab = this.tabs[0];
                 }
+                const initialModule = this.getSingleModule(this.activeTab);
+                if (initialModule && initialModule.id) {
+                    this.markModuleComplete(initialModule.id);
+                }
             },
             getTabModules(tab) {
                 return this.modules.filter(m => m.title.startsWith(tab + '.'));
@@ -1287,6 +1317,24 @@
             },
             toggleModule(id) {
                 this.expandedModuleId = this.expandedModuleId === id ? null : id;
+                if (this.expandedModuleId === id) {
+                    let dbId = id;
+                    if (isNaN(id)) {
+                        const m = this.getSingleModule(id);
+                        if (m) dbId = m.id;
+                    }
+                    this.markModuleComplete(dbId);
+                }
+            },
+            markModuleComplete(moduleId) {
+                if (!Number.isInteger(Number(moduleId)) || !this.completeUrlTemplate) return;
+                fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
+                    },
+                });
             }
         }">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -1334,7 +1382,7 @@
                         <div class="flex flex-wrap gap-2">
                             <template x-for="tab in tabs" :key="tab">
                                 <button
-                                    @click="activeTab = tab; expandedModuleId = null"
+                                    @click="activeTab = tab; expandedModuleId = null; const m = getSingleModule(tab); if(m && m.id) markModuleComplete(m.id);"
                                     class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
                                     :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
@@ -1429,9 +1477,25 @@
         <div class="py-6 select-none" x-data="{
             modules: @js($modules->values()),
             expandedModuleId: null,
+            completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+            csrfToken: @js(csrf_token()),
 
             toggleModule(id) {
                 this.expandedModuleId = this.expandedModuleId === id ? null : id;
+                if (this.expandedModuleId === id) {
+                    this.markModuleComplete(id);
+                }
+            },
+
+            markModuleComplete(moduleId) {
+                if (!moduleId) return;
+                fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
+                    },
+                });
             }
         }">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">

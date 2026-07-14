@@ -48,7 +48,7 @@ class LearningProgress
             $chapterQuizId = $activeChapterQuizIds->get($chapter->id);
             $hasChapterQuiz = ! is_null($chapterQuizId);
             $quizPassed = ! $hasChapterQuiz || $passedQuizIds->contains($chapterQuizId);
-            $isComplete = $materialComplete && $quizPassed;
+            $isComplete = $isUnlocked && $materialComplete && $quizPassed;
 
             foreach ($missingModules as $module) {
                 $notes->push("Lengkapi pembelajaran BAB {$chapter->order} untuk module {$module->title}.");

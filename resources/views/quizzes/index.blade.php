@@ -27,6 +27,12 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="bg-rose-50 border border-rose-200 text-rose-700 text-sm px-4 py-3 rounded-xl">
+            {{ session('error') }}
+        </div>
+    @endif
+
     {{-- Daftar Quiz / Latihan --}}
     @if($quizzes->isEmpty())
         <div class="bg-white border border-dashed border-slate-200 rounded-2xl p-12 text-center">
@@ -65,6 +71,14 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
+                    <form action="{{ route($isPractice ? 'practices.publish' : 'quizzes.publish', [$course, $quiz]) }}" method="POST" class="inline-flex">
+                        @csrf @method('PATCH')
+                        <input type="hidden" name="is_active" value="0">
+                        <label class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold {{ $quiz->is_active ? 'text-emerald-700 border border-emerald-200 bg-emerald-50' : 'text-slate-500 border border-slate-200 hover:bg-slate-50' }} rounded-xl cursor-pointer transition select-none">
+                            <input type="checkbox" name="is_active" value="1" @checked($quiz->is_active) onchange="this.form.submit()" class="rounded text-blue-600 focus:ring-blue-500 border-slate-300">
+                            <span>Publish {{ $isPractice ? 'Latihan' : ($quiz->isFinalQuiz() ? 'Ujian' : 'Quiz') }}</span>
+                        </label>
+                    </form>
                     <a href="{{ route($isPractice ? 'practices.attempts' : 'quizzes.attempts', [$course, $quiz]) }}"
                        class="px-3 py-2 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded-xl transition">
                          Hasil Peserta

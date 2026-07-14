@@ -364,42 +364,101 @@
                 @endif
             </div>
 
-            <!-- Right Side: Cards Grid / Coming Soon Cards (span 4) -->
+            <!-- Right Side: Jadwal Mendatang Calendar (span 4) -->
             <div class="lg:col-span-4 space-y-6">
                 <div class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm space-y-5">
-                    <h2 class="text-sm font-bold text-slate-800">Aktivitas Lanjutan</h2>
-                    
-                    <div class="space-y-3.5">
-                        @foreach ($cards as $card)
-                            @php
-                                $tone = $toneMap[$card['tone']] ?? $toneMap['slate'];
-                            @endphp
-                            <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/50 p-4 space-y-3 hover:border-gray-200 transition duration-150">
-                                <div class="flex items-center justify-between">
-                                    <span class="inline-flex rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider {{ $tone['badge'] }}">
-                                        {{ $card['meta'] }}
-                                    </span>
-                                </div>
+                    <!-- Title Area -->
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-slate-800">Jadwal Mendatang</h2>
+                        <button class="text-slate-400 hover:text-slate-600 transition text-lg" aria-label="Opsi">
+                            •••
+                        </button>
+                    </div>
 
-                                <div class="space-y-1">
-                                    <h3 class="text-xs font-bold text-slate-800 leading-snug">{{ $card['title'] }}</h3>
-                                    <p class="text-[10px] text-slate-500 leading-relaxed">{{ $card['description'] }}</p>
+                    <!-- Weekly Header Row -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;" class="border-b border-slate-100 pb-4 select-none">
+                        @foreach ($weekDays as $day)
+                            <div style="display: flex; flex-direction: column; align-items: center; flex: 1;" class="text-center">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase mb-1">{{ $day['day_name'] }}</span>
+                                <div style="display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem;" class="rounded-lg text-xs font-bold transition
+                                    {{ $day['is_today'] 
+                                        ? 'border-2 border-blue-600 text-blue-600 bg-blue-50/30' 
+                                        : 'text-slate-600 hover:bg-slate-50' }}">
+                                    {{ $day['date'] }}
                                 </div>
-
-                                <div class="pt-1">
-                                    @if (!($card['disabled'] ?? false))
-                                        <a href="{{ $card['href'] }}" class="inline-flex items-center text-xs font-bold transition {{ ($isPeserta || ($card['button'] ?? false)) ? 'rounded-lg px-3 py-2 text-white shadow-sm ' . $tone['button'] : 'text-blue-600 hover:text-blue-700' }}">
-                                            {{ $card['action'] }} <span class="ml-1">→</span>
-                                        </a>
-                                    @else
-                                        <span class="inline-flex items-center text-xs font-bold text-gray-400 cursor-not-allowed">
-                                            {{ $card['action'] }}
-                                        </span>
-                                    @endif
-                                </div>
-                            </article>
+                            </div>
                         @endforeach
                     </div>
+
+                    <!-- Events List -->
+                    <div class="space-y-3.5">
+                        @forelse ($scheduleEvents as $event)
+                            @php
+                                $borderColor = 'border-l-blue-600';
+                                if (in_array($event['icon'], ['shield', 'database', 'users'])) {
+                                    $borderColor = 'border-l-slate-400';
+                                } elseif (in_array($event['icon'], ['check-square', 'lock'])) {
+                                    $borderColor = 'border-l-amber-500';
+                                }
+                            @endphp
+                            <article class="rounded-xl border border-l-4 {{ $borderColor }} border-slate-200 bg-slate-50/50 p-4 flex gap-4 hover:border-gray-300 transition duration-150">
+                                <!-- Left side Date Badge -->
+                                <div class="flex flex-col items-center justify-center shrink-0 w-12 text-center border-r border-slate-200/60 pr-4">
+                                    <span class="text-[9px] font-bold text-blue-800 tracking-wider">{{ $event['month_name'] }}</span>
+                                    <span class="text-base font-extrabold text-slate-800 mt-0.5">{{ $event['day_num'] }}</span>
+                                </div>
+
+                                <!-- Right side Event Details -->
+                                <div class="flex-1 space-y-1 min-w-0">
+                                    <h3 class="text-xs font-bold text-slate-800 leading-snug truncate">{{ $event['title'] }}</h3>
+                                    <div class="flex items-center gap-1.5 text-[10px] text-slate-500">
+                                        @switch($event['icon'] ?? '')
+                                            @case('shield')
+                                                🛡️
+                                                @break
+                                            @case('database')
+                                                🗄️
+                                                @break
+                                            @case('users')
+                                                👥
+                                                @break
+                                            @case('check-square')
+                                                📝
+                                                @break
+                                            @case('video')
+                                                📹
+                                                @break
+                                            @case('book')
+                                                📚
+                                                @break
+                                            @case('chat')
+                                                💬
+                                                @break
+                                            @case('lock')
+                                                🔒
+                                                @break
+                                            @case('lock-open')
+                                                🔓
+                                                @break
+                                            @default
+                                                ⏱️
+                                        @endswitch
+                                        <span class="truncate">{{ $event['time_or_loc'] }}</span>
+                                    </div>
+                                </div>
+                            </article>
+                        @empty
+                            <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-xs text-slate-400 select-none">
+                                Tidak ada jadwal mendatang untuk minggu ini.
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <!-- Bottom Action Button -->
+                    <button type="button" onclick="alert('Fitur kalender lengkap akan segera hadir!')"
+                            class="w-full py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl transition border border-slate-200/50 shadow-2xs">
+                        Lihat Kalender Lengkap
+                    </button>
                 </div>
             </div>
         </div>

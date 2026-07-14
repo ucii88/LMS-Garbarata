@@ -146,7 +146,13 @@ class QuizController extends Controller
         abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
         $isPractice = $quiz->isPractice();
 
-        if ($quiz->questions()->sum('points') !== 100) {
+        $totalPoints = $quiz->questions()->withCount('options')->get()->sum(function ($q) {
+            return ($q->type === 'matching' || $q->type === 'ordering') 
+                ? $q->points * $q->options_count 
+                : $q->points;
+        });
+
+        if ($totalPoints !== 100) {
             return back()->withErrors(['question_ids' => 'Konfigurasi hanya dapat disimpan setelah total poin soal tepat 100/100.']);
         }
 
@@ -204,7 +210,11 @@ class QuizController extends Controller
         abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
 
         $published = $request->boolean('is_active');
-        $totalPoints = $quiz->questions()->sum('points');
+        $totalPoints = $quiz->questions()->withCount('options')->get()->sum(function ($q) {
+            return ($q->type === 'matching' || $q->type === 'ordering') 
+                ? $q->points * $q->options_count 
+                : $q->points;
+        });
 
         if ($published && $totalPoints !== 100) {
             return back()->with('error', "Aktivitas belum dapat dipublikasikan. Total poin soal harus tepat 100/100; saat ini {$totalPoints}/100.");
@@ -238,14 +248,19 @@ class QuizController extends Controller
         // Validasi: soal harus dari bank yang diizinkan
         $allowedQuestions = $quiz->getAvailableBankQuery()
             ->whereIn('id', $questionIds)
-            ->get(['id', 'points']);
+            ->withCount('options')
+            ->get(['id', 'type', 'points']);
         $allowedIds = $allowedQuestions->pluck('id')->all();
         $invalidIds = array_diff($questionIds, $allowedIds);
         if (!empty($invalidIds)) {
             return back()->withErrors(['question_ids' => 'Beberapa soal tidak valid untuk quiz ini.']);
         }
 
-        $totalPoints = $allowedQuestions->sum('points');
+        $totalPoints = $allowedQuestions->sum(function ($q) {
+            return ($q->type === 'matching' || $q->type === 'ordering') 
+                ? $q->points * $q->options_count 
+                : $q->points;
+        });
         if ($totalPoints !== 100) {
             return back()->withErrors(['question_ids' => "Total poin soal harus tepat 100/100. Total pilihan saat ini: {$totalPoints} poin."]);
         }

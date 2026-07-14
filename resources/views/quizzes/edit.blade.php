@@ -54,10 +54,17 @@
                     <div class="max-h-96 space-y-2 overflow-y-auto pr-1">
                         @forelse($availableQuestions as $question)
                             <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
-                                <input class="question-checkbox mt-0.5" type="checkbox" name="question_ids[]" value="{{ $question->id }}" data-points="{{ $question->points }}" @checked(in_array($question->id, $selectedQuestionIds))>
+                                <input class="question-checkbox mt-0.5" type="checkbox" name="question_ids[]" value="{{ $question->id }}" data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}" @checked(in_array($question->id, $selectedQuestionIds))>
                                 <div class="min-w-0 flex-1">
                                     <p class="text-xs font-semibold leading-relaxed text-slate-800">{{ $question->question_text }}</p>
-                                    <p class="mt-1 text-[10px] text-slate-400">{{ $question->type_label }} · {{ $question->points }} poin</p>
+                                    <p class="mt-1 text-[10px] text-slate-400">
+                                        {{ $question->type_label }} · 
+                                        @if($question->type === 'matching' || $question->type === 'ordering')
+                                            {{ $question->points * $question->options->count() }} poin ({{ $question->options->count() }} x {{ $question->points }} poin)
+                                        @else
+                                            {{ $question->points }} poin
+                                        @endif
+                                    </p>
                                 </div>
                                 <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route($isPractice ? 'practices.edit' : 'quizzes.edit', [$course, $quiz])) }}" class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50" onclick="event.stopPropagation()">Lihat detail</a>
                             </label>
