@@ -54,7 +54,7 @@ class DashboardController extends Controller
             $badgeLabel = 'Admin Control Center';
             $headline = 'Selamat datang, Administrator';
             $description = 'Kendalikan pengguna, status kursus, dan struktur materi dari dashboard yang konsisten dan bersih.';
-            $primaryAction = ['label' => 'Buka Manajemen Pengguna', 'href' => '#manajemen-user'];
+            $primaryAction = ['label' => 'Buka Manajemen Pengguna', 'href' => route('admin.users.index')];
         } elseif ($isInstruktur) {
             $stats = [
                 ['label' => 'Total Kursus', 'value' => Course::count(), 'tone' => 'blue'],
@@ -76,7 +76,7 @@ class DashboardController extends Controller
             $badgeLabel = 'Instructor Workspace';
             $headline = 'Selamat datang, Instruktur';
             $description = 'Kelola materi Garbarata dan pantau progress belajar seluruh peserta.';
-            $primaryAction = ['label' => 'Buka Daftar Kursus', 'href' => '#daftar-kursus'];
+            $primaryAction = ['label' => 'Kelola Materi', 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#kelola-kursus'];
         } elseif ($isPeserta) {
             $stats = [
                 ['label' => 'Materi Aktif', 'value' => Course::where('is_published', true)->count(), 'tone' => 'blue'],
@@ -102,7 +102,19 @@ class DashboardController extends Controller
             $badgeLabel = 'Learner Portal';
             $headline = 'Selamat datang, Peserta';
             $description = 'Ikuti materi Garbarata dalam alur yang rapi, modern, dan sama untuk semua peran.';
-            $primaryAction = ['label' => 'Lanjutkan Belajar', 'href' => '#materi-kursus'];
+            // Cari modul progress terakhir (updated_at terbaru), ambil chapter & course-nya
+            $lastProgress = \App\Models\ModuleProgress::where('user_id', $user->id)
+                ->with(['module.chapter.course'])
+                ->orderByDesc('updated_at')
+                ->first();
+            $lastUrl = '#materi-kursus';
+            if ($lastProgress && $lastProgress->module && $lastProgress->module->chapter && $lastProgress->module->chapter->course) {
+                $lastChapter = $lastProgress->module->chapter;
+                $lastUrl = route('courses.chapters.show', [$lastChapter->course_id, $lastChapter->id]);
+            } elseif ($primaryCourse) {
+                $lastUrl = route('courses.show', $primaryCourse);
+            }
+            $primaryAction = ['label' => 'Lanjutkan Belajar', 'href' => $lastUrl];
         }
 
         // Generate current week days (Monday - Sunday)

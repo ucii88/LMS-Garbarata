@@ -32,10 +32,10 @@
                 </a>
 
                 <a
-                    href="{{ route('dashboard') }}#manajemen-user"
-                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800"
+                    href="{{ route('admin.users.index') }}"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('admin.users.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 {{ request()->routeIs('admin.users.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                     </svg>
                     <span>Kelola Pengguna</span>
@@ -175,7 +175,7 @@
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-bold text-gray-800 truncate leading-tight">{{ Auth::user()->name }}</p>
                 <p class="text-xs text-gray-400 truncate mt-0.5">
-                    {{ Auth::user()->role === 'peserta' ? 'Peserta (Teknisi)' : (Auth::user()->role === 'instruktur' ? 'Instruktur' : 'Administrator') }}
+                    {{ Auth::user()->role === 'peserta' ? 'Peserta' : (Auth::user()->role === 'instruktur' ? 'Instruktur' : 'Administrator') }}
                 </p>
             </div>
         </button>
