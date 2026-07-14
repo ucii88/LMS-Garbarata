@@ -158,6 +158,7 @@
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Gambar Soal <span class="text-slate-400">(opsional)</span></label>
                 <input type="file" name="question_image" accept="image/*"
                        class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+                <p class="mt-1 text-[10px] text-slate-400">Ukuran gambar maksimal 5MB.</p>
                 <div id="current-image-preview" class="hidden mt-2 p-2 border border-slate-100 rounded-xl bg-slate-50/50 flex items-center justify-between gap-3">
                     <img src="" id="current-image-img" class="max-h-20 max-w-[120px] rounded-lg object-contain border bg-white">
                     <label class="flex items-center gap-1.5 text-xs text-red-600 font-bold cursor-pointer shrink-0 select-none">
@@ -599,5 +600,17 @@ if (questionFromQuery && questionsData[questionFromQuery]) {
 @if($errors->any())
     document.getElementById('modal-add-question').classList.remove('hidden');
 @endif
+
+// Validasi ukuran gambar di sisi client
+document.querySelector('input[name="question_image"]').addEventListener('change', function() {
+    if (this.files && this.files[0]) {
+        const file = this.files[0];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            alert('File gambar terlalu besar! Maksimal ukuran file adalah 5MB.\nFile yang Anda pilih berukuran ' + (file.size / (1024 * 1024)).toFixed(2) + 'MB.\n\nSilakan kompres gambar atau pilih gambar lain.');
+            this.value = ''; // Reset file input
+        }
+    }
+});
 </script>
 </x-app-layout>

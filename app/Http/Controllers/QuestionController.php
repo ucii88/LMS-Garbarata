@@ -33,7 +33,7 @@ class QuestionController extends Controller
     {
         $validated = $request->validate([
             'question_text'         => 'required|string',
-            'question_image'        => 'nullable|image|max:2048',
+            'question_image'        => 'nullable|image|max:5120',
             'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
             'points'                => 'required|integer|min:1',
             'explanation'           => 'nullable|string',
@@ -41,7 +41,7 @@ class QuestionController extends Controller
             // Pilihan jawaban (tidak diperlukan untuk tipe essay)
             'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
             'options.*.text'        => 'required_unless:type,essay|string',
-            'options.*.image'       => 'nullable|image|max:2048',
+            'options.*.image'       => 'nullable|image|max:5120',
             'options.*.is_correct'  => 'nullable|boolean',
             'options.*.match_label' => 'nullable|string|max:255',
         ]);
@@ -97,7 +97,7 @@ class QuestionController extends Controller
     {
         $validated = $request->validate([
             'question_text'         => 'required|string',
-            'question_image'        => 'nullable|image|max:2048',
+            'question_image'        => 'nullable|image|max:5120',
             'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
             'points'                => 'required|integer|min:1',
             'explanation'           => 'nullable|string',
@@ -106,7 +106,7 @@ class QuestionController extends Controller
             'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
             'options.*.id'          => 'nullable|integer|exists:question_options,id',
             'options.*.text'        => 'required_unless:type,essay|string',
-            'options.*.image'       => 'nullable|image|max:2048',
+            'options.*.image'       => 'nullable|image|max:5120',
             'options.*.is_correct'  => 'nullable|boolean',
             'options.*.match_label' => 'nullable|string|max:255',
         ]);
