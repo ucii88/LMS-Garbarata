@@ -84,6 +84,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/courses/{course}/quizzes', [QuizController::class, 'store'])->name('quizzes.store');
         Route::get('/courses/{course}/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('quizzes.edit');
         Route::put('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
+        Route::patch('/courses/{course}/quizzes/{quiz}/publish', [QuizController::class, 'publish'])->name('quizzes.publish');
         Route::delete('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('quizzes.destroy');
         // Pilih soal dari bank untuk quiz
         Route::post('/courses/{course}/quizzes/{quiz}/questions/sync', [QuizController::class, 'syncQuestions'])->name('quizzes.questions.sync');
@@ -98,6 +99,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/courses/{course}/practices', [QuizController::class, 'store'])->name('practices.store');
         Route::get('/courses/{course}/practices/{quiz}/edit', [QuizController::class, 'edit'])->name('practices.edit');
         Route::put('/courses/{course}/practices/{quiz}', [QuizController::class, 'update'])->name('practices.update');
+        Route::patch('/courses/{course}/practices/{quiz}/publish', [QuizController::class, 'publish'])->name('practices.publish');
         Route::delete('/courses/{course}/practices/{quiz}', [QuizController::class, 'destroy'])->name('practices.destroy');
         Route::post('/courses/{course}/practices/{quiz}/questions/sync', [QuizController::class, 'syncQuestions'])->name('practices.questions.sync');
         Route::get('/courses/{course}/practices/{quiz}/attempts', [QuizController::class, 'attempts'])->name('practices.attempts');

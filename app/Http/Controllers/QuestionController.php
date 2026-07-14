@@ -6,6 +6,7 @@ use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Question;
 use App\Models\QuestionOption;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -149,6 +150,22 @@ class QuestionController extends Controller
                 ]);
             }
         });
+
+        // Perubahan poin dapat membuat aktivitas yang sudah dipublikasikan tidak lagi berjumlah 100.
+        // Aktivitas tersebut otomatis kembali menjadi draft sampai instruktur mempublikasikannya lagi.
+        Quiz::whereHas('questions', fn ($query) => $query->where('questions.id', $question->id))
+            ->where('is_active', true)
+            ->get()
+            ->each(function (Quiz $quiz) {
+                if ($quiz->questions()->sum('points') !== 100) {
+                    $quiz->update(['is_active' => false]);
+                }
+            });
+
+        $returnTo = $request->input('return_to');
+        if ($returnTo && str_starts_with($returnTo, url('/courses/' . $course->id))) {
+            return redirect()->to($returnTo)->with('success', 'Soal berhasil diperbarui.');
+        }
 
         return back()->with('success', 'Soal berhasil diperbarui.');
     }

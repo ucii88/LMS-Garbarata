@@ -388,7 +388,7 @@
 
                                 <div class="pt-1">
                                     @if (!($card['disabled'] ?? false))
-                                        <a href="{{ $card['href'] }}" class="inline-flex items-center text-xs font-bold transition {{ $isPeserta ? 'rounded-lg px-3 py-2 text-white shadow-sm ' . $tone['button'] : 'text-blue-600 hover:text-blue-700' }}">
+                                        <a href="{{ $card['href'] }}" class="inline-flex items-center text-xs font-bold transition {{ ($isPeserta || ($card['button'] ?? false)) ? 'rounded-lg px-3 py-2 text-white shadow-sm ' . $tone['button'] : 'text-blue-600 hover:text-blue-700' }}">
                                             {{ $card['action'] }} <span class="ml-1">→</span>
                                         </a>
                                     @else

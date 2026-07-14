@@ -68,7 +68,6 @@ class QuizController extends Controller
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
             'start_time'        => 'nullable|date',
             'end_time'          => 'nullable|date|after:start_time',
-            'is_active'         => 'nullable|boolean',
         ]);
 
         // Pastikan chapter_id milik course ini
@@ -89,7 +88,7 @@ class QuizController extends Controller
 
         $maxOrder = $course->quizzes()->max('order') ?? 0;
 
-        Quiz::create([
+        $quiz = Quiz::create([
             'course_id'         => $course->id,
             'chapter_id'        => $validated['chapter_id'] ?? null,
             'activity_type'     => $isPractice ? 'practice' : 'quiz',
@@ -103,12 +102,12 @@ class QuizController extends Controller
             'review_policy'     => $validated['review_policy'],
             'start_time'        => $startTime,
             'end_time'          => $endTime,
-            'is_active'         => $request->boolean('is_active', true),
+            'is_active'         => false,
             'order'             => $maxOrder + 1,
         ]);
 
-        return redirect($this->activityRoute('index', $course))
-                         ->with('success', ($isPractice ? 'Latihan' : 'Quiz') . ' berhasil dibuat. Sekarang tambahkan soal dari bank soal.');
+        return redirect($this->activityRoute('edit', $course, $quiz))
+                         ->with('success', ($isPractice ? 'Latihan' : 'Quiz') . ' dibuat. Pilih soal dengan total tepat 100 poin untuk menyelesaikannya.');
     }
 
     /**
@@ -146,6 +145,10 @@ class QuizController extends Controller
         abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
         $isPractice = $quiz->isPractice();
 
+        if ($quiz->questions()->sum('points') !== 100) {
+            return back()->withErrors(['question_ids' => 'Konfigurasi hanya dapat disimpan setelah total poin soal tepat 100/100.']);
+        }
+
         $validated = $request->validate([
             'title'             => 'required|string|max:255',
             'description'       => 'nullable|string',
@@ -158,7 +161,6 @@ class QuizController extends Controller
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
             'start_time'        => 'nullable|date',
             'end_time'          => 'nullable|date|after:start_time',
-            'is_active'         => 'nullable|boolean',
         ]);
 
         if (!empty($validated['chapter_id'])) {
@@ -188,11 +190,29 @@ class QuizController extends Controller
             'review_policy'     => $validated['review_policy'],
             'start_time'        => $startTime,
             'end_time'          => $endTime,
-            'is_active'         => $request->boolean('is_active', true),
         ]);
 
         return redirect($this->activityRoute('edit', $course, $quiz))
                          ->with('success', 'Quiz berhasil diperbarui.');
+    }
+
+    /** Publikasikan atau simpan kembali aktivitas sebagai draft. */
+    public function publish(Request $request, Course $course, Quiz $quiz)
+    {
+        abort_if($quiz->course_id !== $course->id, 403);
+        abort_if($quiz->isPractice() !== $this->isPracticeRequest(), 404);
+
+        $published = $request->boolean('is_active');
+        $totalPoints = $quiz->questions()->sum('points');
+
+        if ($published && $totalPoints !== 100) {
+            return back()->with('error', "Aktivitas belum dapat dipublikasikan. Total poin soal harus tepat 100/100; saat ini {$totalPoints}/100.");
+        }
+
+        $quiz->update(['is_active' => $published]);
+        $label = $quiz->isPractice() ? 'Latihan' : ($quiz->isFinalQuiz() ? 'Ujian' : 'Quiz');
+
+        return back()->with('success', $published ? "{$label} berhasil dipublikasikan." : "{$label} dikembalikan menjadi draft.");
     }
 
     /**
@@ -210,13 +230,23 @@ class QuizController extends Controller
 
         $questionIds = $validated['question_ids'] ?? [];
 
+        if (empty($questionIds)) {
+            return back()->withErrors(['question_ids' => 'Pilih minimal satu soal dengan total tepat 100 poin.']);
+        }
+
         // Validasi: soal harus dari bank yang diizinkan
-        if (!empty($questionIds)) {
-            $allowedIds = $quiz->getAvailableBankQuery()->pluck('id')->toArray();
-            $invalidIds = array_diff($questionIds, $allowedIds);
-            if (!empty($invalidIds)) {
-                return back()->withErrors(['question_ids' => 'Beberapa soal tidak valid untuk quiz ini.']);
-            }
+        $allowedQuestions = $quiz->getAvailableBankQuery()
+            ->whereIn('id', $questionIds)
+            ->get(['id', 'points']);
+        $allowedIds = $allowedQuestions->pluck('id')->all();
+        $invalidIds = array_diff($questionIds, $allowedIds);
+        if (!empty($invalidIds)) {
+            return back()->withErrors(['question_ids' => 'Beberapa soal tidak valid untuk quiz ini.']);
+        }
+
+        $totalPoints = $allowedQuestions->sum('points');
+        if ($totalPoints !== 100) {
+            return back()->withErrors(['question_ids' => "Total poin soal harus tepat 100/100. Total pilihan saat ini: {$totalPoints} poin."]);
         }
 
         // Sync dengan urutan

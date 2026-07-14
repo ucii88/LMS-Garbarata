@@ -124,12 +124,13 @@
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between p-6 border-b border-slate-100">
             <h2 class="text-base font-bold text-slate-800">Tambah Soal ke Bank Soal</h2>
-            <button onclick="document.getElementById('modal-add-question').classList.add('hidden')"
+            <button onclick="closeQuestionModal()"
                     class="text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
         </div>
         <form action="{{ route('questions.store', [$course, $chapter]) }}" method="POST"
               enctype="multipart/form-data" class="p-6 space-y-5" id="form-add-question">
             @csrf
+            <input type="hidden" name="return_to" value="{{ request('return_to') }}">
 
             {{-- Tipe Soal --}}
             <div>
@@ -200,7 +201,7 @@
             @endif
 
             <div class="flex justify-end gap-3 pt-2">
-                <button type="button" onclick="document.getElementById('modal-add-question').classList.add('hidden')"
+                <button type="button" onclick="closeQuestionModal()"
                         class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition">
                     Batal
                 </button>
@@ -214,6 +215,17 @@
 </div>
 
 <script>
+const returnToActivityEditor = new URLSearchParams(window.location.search).get('return_to');
+
+function closeQuestionModal() {
+    if (returnToActivityEditor) {
+        window.location.href = returnToActivityEditor;
+        return;
+    }
+
+    document.getElementById('modal-add-question').classList.add('hidden');
+}
+
 // Render UI pilihan jawaban berdasarkan tipe soal
 function renderOptionsUI(type) {
     const container = document.getElementById('options-container');
@@ -560,6 +572,12 @@ function openEditModal(id) {
 
 // Init on load
 renderOptionsUI('multiple_choice');
+
+// Buka detail soal langsung ketika diakses dari halaman Quiz/Ujian/Latihan.
+const questionFromQuery = new URLSearchParams(window.location.search).get('question');
+if (questionFromQuery && questionsData[questionFromQuery]) {
+    openEditModal(questionFromQuery);
+}
 
 // Re-open modal if validation errors
 @if($errors->any())

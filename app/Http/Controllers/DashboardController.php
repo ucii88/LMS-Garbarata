@@ -62,13 +62,13 @@ class DashboardController extends Controller
                 ['label' => 'Modul Tersedia', 'value' => Course::withCount('modules')->get()->sum('modules_count'), 'tone' => 'amber'],
             ];
 
-            $cards = [
-                ['title' => 'Kelola Materi', 'description' => 'Atur course, modul, dan isi pembelajaran interaktif.', 'meta' => 'Workspace pengajar', 'action' => 'Buka Materi', 'href' => '#daftar-kursus', 'tone' => 'blue'],
-                ['title' => 'Diagram Interaktif', 'description' => 'Pantau diagram dan hotspot pembelajaran pada materi.', 'meta' => 'Visual learning', 'action' => 'Lihat Diagram', 'href' => '#daftar-kursus', 'tone' => 'slate'],
-                ['title' => 'Evaluasi', 'description' => 'Ruang untuk kuis, latihan, dan evaluasi peserta.', 'meta' => 'Coming soon', 'action' => 'Segera Hadir', 'href' => '#', 'tone' => 'amber', 'disabled' => true],
-            ];
-
             $items = Course::withCount('modules')->orderBy('id', 'desc')->limit(6)->get();
+            $primaryCourse = $items->first();
+            $cards = [
+                ['title' => 'Kelola Materi', 'description' => 'Atur course, modul, dan isi pembelajaran.', 'meta' => 'Materi', 'action' => 'Kelola Materi', 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#kelola-kursus', 'tone' => 'blue', 'button' => true],
+                ['title' => 'Kelola Quiz & Ujian', 'description' => 'Atur quiz chapter dan ujian akhir course.', 'meta' => 'Evaluasi', 'action' => 'Kelola Quiz & Ujian', 'href' => $primaryCourse ? route('quizzes.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'amber', 'button' => true],
+                ['title' => 'Kelola Latihan', 'description' => 'Atur latihan mandiri untuk setiap chapter.', 'meta' => 'Latihan', 'action' => 'Kelola Latihan', 'href' => $primaryCourse ? route('practices.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'slate', 'button' => true],
+            ];
             
             $participants = User::where('role', 'peserta')->orderBy('id', 'desc')->get();
             $adminUserProgress = $participants->mapWithKeys(fn (User $participant) => [$participant->id => $this->participantProgress($participant)]);
