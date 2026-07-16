@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -138,12 +139,14 @@ class AdminUserController extends Controller
             ->title()
             ->toString();
 
-        User::create([
+        $newUser = User::create([
             'name'     => $name,
             'email'    => $validated['email'],
             'password' => $validated['password'],
             'role'     => $validated['role'],
         ]);
+
+        Notification::notifyUserCreated($newUser);
 
         return redirect()
             ->route('admin.users.index')

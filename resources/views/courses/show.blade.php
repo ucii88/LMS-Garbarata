@@ -104,6 +104,7 @@
                 </div>
 
                 <div class="lg:col-span-4 space-y-6">
+                    @if(!auth()->user()->isInstruktur())
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-100">
                             <h3 class="text-sm font-bold text-slate-800">Petunjuk Belajar</h3>
@@ -131,6 +132,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
 
                     {{-- Panel Instruktur: Manajemen Quiz --}}
                     @if(auth()->user()->isInstruktur())

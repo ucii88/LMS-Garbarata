@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificate;
 use App\Models\Course;
+use App\Models\Notification;
 use App\Models\Quiz;
 use App\Models\QuizAnswer;
 use App\Models\QuizAttempt;
@@ -323,6 +324,10 @@ class QuizAttemptController extends Controller
             if ($isPassed && !$hasEssay && !$quiz->isPractice()) {
                 Certificate::tryIssue($user->id, $course->id);
             }
+
+            // Kirim notifikasi ke instruktur
+            $quiz->load(['course', 'chapter']);
+            Notification::notifySubmission($attempt, $quiz, $user);
         });
 
         if ($quiz->isPractice()) {

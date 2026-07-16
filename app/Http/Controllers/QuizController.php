@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chapter;
 use App\Models\Course;
+use App\Models\Notification;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\QuizAnswer;
@@ -222,6 +223,12 @@ class QuizController extends Controller
 
         $quiz->update(['is_active' => $published]);
         $label = $quiz->isPractice() ? 'Latihan' : ($quiz->isFinalQuiz() ? 'Ujian' : 'Quiz');
+
+        // Kirim notifikasi ke semua peserta saat dipublish
+        if ($published) {
+            $quiz->load(['course', 'chapter']);
+            Notification::notifyQuizPublished($quiz);
+        }
 
         return back()->with('success', $published ? "{$label} berhasil dipublikasikan." : "{$label} dikembalikan menjadi draft.");
     }
