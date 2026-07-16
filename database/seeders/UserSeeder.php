@@ -18,14 +18,14 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Capt. Hermawan (Instruktur)',
+            'name' => 'Capt. Hermawan',
             'email' => 'instruktur@lms.com',
             'password' => Hash::make('password'),
             'role' => 'instruktur',
         ]);
 
         User::create([
-            'name' => 'Budi Santoso (Peserta)',
+            'name' => 'Budi Santoso',
             'email' => 'peserta@lms.com',
             'password' => Hash::make('password'),
             'role' => 'peserta',

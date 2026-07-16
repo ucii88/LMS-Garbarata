@@ -177,4 +177,25 @@ class CourseController extends Controller
             'chapter_percent' => LearningProgress::chapterProgress($updatedProgress['chapters'], $chapter->id)['percent'] ?? 0,
         ]);
     }
+
+    public function updateHotspots(Request $request, Course $course, Chapter $chapter)
+    {
+        abort_unless(auth()->user()->isInstruktur(), 403);
+        
+        $request->validate([
+            'hotspots' => 'required|array',
+            'hotspots.*.id' => 'required|exists:hotspots,id',
+            'hotspots.*.x' => 'required|numeric',
+            'hotspots.*.y' => 'required|numeric',
+        ]);
+
+        foreach ($request->hotspots as $hotspotData) {
+            \App\Models\Hotspot::where('id', $hotspotData['id'])->update([
+                'x_percent' => $hotspotData['x'],
+                'y_percent' => $hotspotData['y']
+            ]);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
 }

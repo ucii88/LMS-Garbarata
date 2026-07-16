@@ -9,10 +9,16 @@
            class="text-xs font-bold text-slate-500 hover:text-blue-600 transition">
             ← Kembali ke Course
         </a>
-        <button onclick="window.print()"
-                class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl transition">
-            🖨 Cetak Sertifikat
-        </button>
+        <div class="flex items-center gap-3">
+            <button onclick="window.print()"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl transition">
+                🖨 Cetak
+            </button>
+            <a href="{{ request()->url() }}?download=1"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl transition">
+                📄 Unduh PDF
+            </a>
+        </div>
     </div>
 
     {{-- Sertifikat --}}

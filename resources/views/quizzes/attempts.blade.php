@@ -38,7 +38,7 @@
             <div class="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-base shrink-0">✍️</div>
             <div class="flex-1">
                 <p class="text-sm font-bold text-orange-800">{{ $pendingEssayCount }} percobaan menunggu penilaian esai</p>
-                <p class="text-xs text-orange-700 mt-0.5">Klik tombol "Nilai Esai" di bawah untuk mulai menilai jawaban peserta.</p>
+                <p class="text-xs text-orange-700 mt-0.5">Klik tombol "Nilai Jawaban" di bawah untuk mulai menilai jawaban peserta.</p>
             </div>
         </div>
     @endif
@@ -113,12 +113,12 @@
                                 @if($attempt->submitted_at && $attempt->isPendingEssay())
                                     <a href="{{ route($isPractice ? 'practices.attempts.grade' : 'quizzes.attempts.grade', [$course, $quiz, $attempt]) }}"
                                        class="px-3 py-1.5 bg-orange-500 text-white text-xs font-bold rounded-lg hover:bg-orange-600 transition inline-flex items-center gap-1">
-                                         Nilai Esai
+                                         Nilai Jawaban
                                     </a>
-                                @elseif($attempt->submitted_at && $attempt->grading_status === 'graded')
+                                @elseif($attempt->submitted_at)
                                     <a href="{{ route($isPractice ? 'practices.attempts.grade' : 'quizzes.attempts.grade', [$course, $quiz, $attempt]) }}"
                                        class="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg hover:bg-slate-200 transition inline-flex items-center gap-1">
-                                         Lihat Esai
+                                         Lihat Jawaban
                                     </a>
                                 @endif
 

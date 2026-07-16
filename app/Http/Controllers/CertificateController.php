@@ -17,6 +17,12 @@ class CertificateController extends Controller
 
         $certificate->load('user', 'course');
 
+        if (request()->has('download')) {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('certificates.pdf', compact('certificate'))
+                ->setPaper('a4', 'landscape');
+            return $pdf->download('Sertifikat-' . $certificate->course->title . '.pdf');
+        }
+
         return view('certificates.show', compact('certificate'));
     }
 }

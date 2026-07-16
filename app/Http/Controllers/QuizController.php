@@ -343,18 +343,27 @@ class QuizController extends Controller
         abort_if($quiz->course_id !== $course->id, 403);
         abort_if($attempt->quiz_id !== $quiz->id, 403);
 
-        // Load jawaban esai beserta soalnya
-        $essayAnswers = $attempt->answers()
-            ->with('question')
-            ->whereHas('question', fn ($q) => $q->where('type', 'essay'))
+        // Load semua jawaban peserta beserta soalnya
+        $allAnswers = $attempt->answers()
+            ->with('question.options')
             ->get();
 
-        abort_if($essayAnswers->isEmpty(), 404);
+        $essayAnswers = $allAnswers->filter(function ($answer) {
+            return $answer->question->type === 'essay';
+        })->sortBy(function ($answer) {
+            return $answer->question->order ?? 0;
+        });
+
+        $otherAnswers = $allAnswers->filter(function ($answer) {
+            return $answer->question->type !== 'essay';
+        })->sortBy(function ($answer) {
+            return $answer->question->order ?? 0;
+        });
 
         $isPractice = $quiz->isPractice();
 
         return view('quizzes.grade-essay', compact(
-            'course', 'quiz', 'attempt', 'essayAnswers', 'isPractice'
+            'course', 'quiz', 'attempt', 'essayAnswers', 'otherAnswers', 'isPractice'
         ));
     }
 

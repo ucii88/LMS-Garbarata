@@ -1,9 +1,8 @@
 @section('topbar_title', 'Sunting Modul')
 
 <x-app-layout>
-    <!-- Quill Rich Text Editor CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <!-- TinyMCE Editor CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
 
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Back Button & Breadcrumbs -->
@@ -64,29 +63,11 @@
 
                 <!-- Rich Text Editor for Content -->
                 <div class="flex flex-col">
-                    <div class="flex items-center justify-between mb-2">
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Isi Materi Pembelajaran</label>
-                        <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                            <button type="button" id="btn-visual-mode" class="px-2.5 py-1 rounded-md text-[10px] font-bold transition duration-150">
-                                Visual (Quill)
-                            </button>
-                            <button type="button" id="btn-html-mode" class="px-2.5 py-1 rounded-md text-[10px] font-bold transition duration-150">
-                                Kode HTML
-                            </button>
-                        </div>
-                    </div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Isi Materi Pembelajaran</label>
                     
-                    <input type="hidden" name="content" id="content-input" value="{{ old('content', $module->content) }}">
-                    
-                    <!-- Visual Editor Wrapper -->
-                    <div id="editor-wrapper" class="rounded-xl border border-gray-200 overflow-hidden">
-                        <div id="quill-editor" class="h-80 bg-white text-slate-800 text-xs"></div>
-                    </div>
-
-                    <!-- Raw HTML Editor Wrapper (Hidden by default) -->
-                    <div id="html-editor-wrapper" class="hidden">
-                        <textarea id="html-textarea" class="w-full h-80 text-xs font-mono p-4 border border-gray-200 rounded-xl bg-slate-900 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" placeholder="Tulis kode HTML di sini..."></textarea>
-                        <p class="text-[10px] text-amber-600 font-semibold mt-1">⚠️ Peringatan: Gunakan mode HTML ini untuk mengedit tabel atau kode accordion (details/summary). Menulis langsung di mode Visual dapat merusak struktur tabel.</p>
+                    <!-- TinyMCE Editor -->
+                    <div class="rounded-xl border border-gray-200 overflow-hidden bg-white">
+                        <textarea id="tinymce-editor" name="content" class="w-full h-80">{{ old('content', $module->content) }}</textarea>
                     </div>
 
                     @error('content')
@@ -109,99 +90,27 @@
         </div>
     </div>
 
-    <!-- Quill Editor Setup -->
+    <!-- TinyMCE Editor Setup -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const quill = new Quill('#quill-editor', {
-                theme: 'snow',
-                placeholder: 'Tulis isi materi di sini...',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['link', 'clean']
-                    ]
-                }
-            });
-
-            // Set initial content and determine mode
-            const contentInput = document.getElementById('content-input');
-            const initialContent = contentInput.value;
-
-            const btnVisual = document.getElementById('btn-visual-mode');
-            const btnHtml = document.getElementById('btn-html-mode');
-            const visualWrapper = document.getElementById('editor-wrapper');
-            const htmlWrapper = document.getElementById('html-editor-wrapper');
-            const htmlTextarea = document.getElementById('html-textarea');
-
-            // Detect if the content contains custom HTML structures like tables or details
-            const hasHTMLBlocks = initialContent.includes('<table') || initialContent.includes('<details') || initialContent.includes('<summary');
-            let currentMode = hasHTMLBlocks ? 'html' : 'visual';
-
-            function updateTabStyles() {
-                if (currentMode === 'visual') {
-                    btnVisual.className = 'px-2.5 py-1 rounded-md text-[10px] font-bold transition duration-150 bg-white text-blue-600 shadow-2xs border border-slate-200/50';
-                    btnHtml.className = 'px-2.5 py-1 rounded-md text-[10px] font-bold transition duration-150 text-slate-500 hover:text-slate-800 hover:bg-slate-50/50';
-                } else {
-                    btnHtml.className = 'px-2.5 py-1 rounded-md text-[10px] font-bold transition duration-150 bg-white text-blue-600 shadow-2xs border border-slate-200/50';
-                    btnVisual.className = 'px-2.5 py-1 rounded-md text-[10px] font-bold transition duration-150 text-slate-500 hover:text-slate-800 hover:bg-slate-50/50';
-                }
-            }
-
-            if (currentMode === 'html') {
-                htmlTextarea.value = initialContent;
-                visualWrapper.classList.add('hidden');
-                htmlWrapper.classList.remove('hidden');
-            } else {
-                if (initialContent) {
-                    quill.root.innerHTML = initialContent;
-                }
-            }
-            updateTabStyles();
-
-            // Click Visual Tab
-            btnVisual.addEventListener('click', function() {
-                if (currentMode === 'html') {
-                    const textContent = htmlTextarea.value;
-                    if (textContent.includes('<table') || textContent.includes('<details') || textContent.includes('<summary')) {
-                        if (!confirm('Peringatan: Modul ini berisi tabel atau layout kustom. Beralih ke Mode Visual dapat merusak/menghilangkan struktur tabel tersebut. Apakah Anda yakin ingin melanjutkan?')) {
-                            return; // Cancel transition
-                        }
-                    }
-
-                    // Sync HTML to Quill
-                    quill.root.innerHTML = textContent;
-
-                    // Switch view
-                    htmlWrapper.classList.add('hidden');
-                    visualWrapper.classList.remove('hidden');
-                    currentMode = 'visual';
-                    updateTabStyles();
-                }
-            });
-
-            // Click HTML Tab
-            btnHtml.addEventListener('click', function() {
-                if (currentMode === 'visual') {
-                    // Sync Quill to HTML
-                    htmlTextarea.value = quill.root.innerHTML;
-
-                    // Switch view
-                    visualWrapper.classList.add('hidden');
-                    htmlWrapper.classList.remove('hidden');
-                    currentMode = 'html';
-                    updateTabStyles();
-                }
-            });
-
-            // Sync editor content with hidden input field before submit
-            const form = document.getElementById('module-form');
-            form.addEventListener('submit', function () {
-                if (currentMode === 'html') {
-                    contentInput.value = htmlTextarea.value;
-                } else {
-                    contentInput.value = quill.root.innerHTML;
+            tinymce.init({
+                selector: '#tinymce-editor',
+                height: 400,
+                menubar: false,
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                    'bold italic underline strikethrough | alignleft aligncenter ' +
+                    'alignright alignjustify | table bullist numlist outdent indent | ' +
+                    'removeformat | code | help',
+                content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+                setup: function (editor) {
+                    editor.on('change', function () {
+                        editor.save(); // auto save to textarea
+                    });
                 }
             });
         });

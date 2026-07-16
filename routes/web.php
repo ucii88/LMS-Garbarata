@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses/{course}', [App\Http\Controllers\CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'showChapter'])->name('courses.chapters.show');
     Route::post('/courses/{course}/chapters/{chapter}/modules/{module}/complete', [App\Http\Controllers\CourseController::class, 'completeModule'])->name('courses.modules.complete');
+    Route::put('/courses/{course}/chapters/{chapter}/diagram/hotspots', [App\Http\Controllers\CourseController::class, 'updateHotspots'])->name('courses.diagram.hotspots.update');
     Route::get('/courses/{course}/activities', [App\Http\Controllers\CourseController::class, 'activities'])->name('courses.activities');
     Route::get('/courses/{course}/quiz-ujian', [App\Http\Controllers\CourseController::class, 'quizActivities'])->name('courses.quizzes');
     Route::get('/courses/{course}/latihan', [App\Http\Controllers\CourseController::class, 'practiceActivities'])->name('courses.practices');
