@@ -54,12 +54,13 @@
                     setMechModule(moduleId) {
                         this.activeMechId = moduleId;
                         this.markModuleComplete(moduleId);
-                        this.scrollToMechReader();
+                        this.scrollToModule('mech-module-' + moduleId);
                     },
 
                     setElecModule(moduleId) {
                         this.activeElecId = moduleId;
                         this.markModuleComplete(moduleId);
+                        this.scrollToModule('elec-module-' + moduleId);
                     },
 
                     markModuleComplete(moduleId) {
@@ -76,63 +77,16 @@
                         });
                     },
 
-                    scrollToMechReader() {
+                    scrollToModule(elementId) {
                         this.$nextTick(() => {
-                            this.$refs.mechReader?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            const el = document.getElementById(elementId);
+                            if (el) {
+                                // Scroll element header minus topbar height
+                                const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
+                                window.scrollTo({ top: y, behavior: 'smooth' });
+                            }
                         });
-                    },
-
-                    getActiveMech() {
-                        return this.mechItems.find((item) => item.id === this.activeMechId) || { title: '', content: '', image_path: null };
-                    },
-
-                    getActiveElec() {
-                        return this.elecItems.find((item) => item.id === this.activeElecId) || { title: '', content: '', image_path: null };
-                    },
-
-                    nextMech() {
-                        const index = this.mechItems.findIndex((item) => item.id === this.activeMechId);
-                        if (index !== -1 && index < this.mechItems.length - 1) {
-                            this.setMechModule(this.mechItems[index + 1].id);
-                        }
-                    },
-
-                    prevMech() {
-                        const index = this.mechItems.findIndex((item) => item.id === this.activeMechId);
-                        if (index > 0) {
-                            this.activeMechId = this.mechItems[index - 1].id;
-                        }
-                    },
-
-                    isMechFirst() {
-                        return this.mechItems.findIndex((item) => item.id === this.activeMechId) === 0;
-                    },
-
-                    isMechLast() {
-                        return this.mechItems.findIndex((item) => item.id === this.activeMechId) === this.mechItems.length - 1;
-                    },
-
-                    nextElec() {
-                        const index = this.elecItems.findIndex((item) => item.id === this.activeElecId);
-                        if (index !== -1 && index < this.elecItems.length - 1) {
-                            this.setElecModule(this.elecItems[index + 1].id);
-                        }
-                    },
-
-                    prevElec() {
-                        const index = this.elecItems.findIndex((item) => item.id === this.activeElecId);
-                        if (index > 0) {
-                            this.activeElecId = this.elecItems[index - 1].id;
-                        }
-                    },
-
-                    isElecFirst() {
-                        return this.elecItems.findIndex((item) => item.id === this.activeElecId) === 0;
-                    },
-
-                    isElecLast() {
-                        return this.elecItems.findIndex((item) => item.id === this.activeElecId) === this.elecItems.length - 1;
-                    },
+                    }
                 };
             };
         </script>
@@ -224,55 +178,45 @@
 
                       <!-- Mechanical Reader Card -->
                       <div id="chapter1-reader" x-ref="mechReader" class="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between min-h-[320px] w-full">
-                          <div class="p-4 md:p-6 space-y-5">
+                          <div class="p-4 md:p-6 space-y-8">
                               <div class="flex items-center justify-between border-b border-gray-100 pb-3">
                                   <span class="inline-flex h-8 items-center rounded-full border border-blue-200 bg-white px-3 text-[9px] font-bold text-blue-600 uppercase tracking-wider">
                                       Modul Mekanikal
                                   </span>
-                                  <span class="text-[10px] text-gray-400 font-semibold" x-text="activeMechId === 'intro_mekanikal' ? 'Halaman Pengantar' : 'Topik ' + getActiveMech().title.split(' ')[0]"></span>
                               </div>
 
-                              <div class="space-y-4">
-                                  <h2 class="text-base font-bold text-slate-800 leading-snug" x-text="getActiveMech().title"></h2>
+                              <div class="space-y-12">
+                                  <template x-for="item in mechItems" :key="item.id">
+                                      <div :id="'mech-module-' + item.id" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_mekanikal' ? 'border-t border-gray-100' : ''">
+                                          <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
 
-                                  <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveMech().content"></div>
+                                          <template x-if="item.image_path">
+                                              <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 max-w-xl mx-auto">
+                                                  <img :src="'/' + item.image_path" class="w-full max-h-64 object-contain rounded-lg select-none" :alt="item.title">
+                                              </div>
+                                          </template>
 
-                                  @if(auth()->user()->isInstruktur())
-                                      <template x-if="activeMechId !== 'intro_mekanikal'">
-                                          <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                              <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeMechId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                  Edit Modul Ini
-                                              </a>
-                                              <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeMechId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
-                                                  @csrf
-                                                  @method('DELETE')
-                                                  <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                      Hapus Modul
-                                                  </button>
-                                              </form>
-                                          </div>
-                                      </template>
-                                  @endif
+                                          <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
+
+                                          @if(auth()->user()->isInstruktur())
+                                              <template x-if="item.id !== 'intro_mekanikal'">
+                                                  <div class="flex items-center gap-2 pt-4 border-t border-slate-100 mt-4">
+                                                      <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                          Edit Modul
+                                                      </a>
+                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                          @csrf
+                                                          @method('DELETE')
+                                                          <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                              Hapus
+                                                          </button>
+                                                      </form>
+                                                  </div>
+                                              </template>
+                                          @endif
+                                      </div>
+                                  </template>
                               </div>
-                          </div>
-
-                          <!-- Footer Navigation Inside Card -->
-                          <div class="border-t border-slate-100 p-4 bg-slate-50/50 flex items-center justify-between rounded-b-2xl">
-                              <button
-                                  @click="prevMech()"
-                                  :disabled="isMechFirst()"
-                                  class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-                              >
-                                  ← Sebelumnya
-                              </button>
-                              
-                              <button
-                                  @click="nextMech()"
-                                  :disabled="isMechLast()"
-                                  class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-                              >
-                                  Selanjutnya →
-                              </button>
                           </div>
                       </div>
                 </section>
@@ -304,61 +248,45 @@
 
                       <!-- Electrical Reader Card (Kotak Teks Baru) -->
                       <div class="bg-white rounded-2xl border border-slate-100 flex flex-col justify-between min-h-[320px] w-full">
-                          <div class="p-4 md:p-6 space-y-5">
+                          <div class="p-4 md:p-6 space-y-8">
                               <div class="flex items-center justify-between border-b border-gray-100 pb-3">
                                   <span class="inline-flex h-8 items-center rounded-full border border-emerald-200 bg-white px-3 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
                                       Modul Elektrikal & Kontrol
                                   </span>
-                                  <span class="text-[10px] text-gray-400 font-semibold" x-text="activeElecId === 'intro_elektrikal' ? 'Halaman Pengantar' : 'Topik ' + getActiveElec().title.split(' ')[0]"></span>
                               </div>
 
-                              <div class="space-y-4">
-                                  <h2 class="text-base font-bold text-slate-800 leading-snug" x-text="getActiveElec().title"></h2>
+                              <div class="space-y-12">
+                                  <template x-for="item in elecItems" :key="item.id">
+                                      <div :id="'elec-module-' + item.id" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_elektrikal' ? 'border-t border-gray-100' : ''">
+                                          <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
 
-                                  <template x-if="getActiveElec().image_path">
-                                      <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 max-w-xl mx-auto">
-                                          <img :src="'/' + getActiveElec().image_path" class="w-full max-h-64 object-contain rounded-lg select-none" :alt="getActiveElec().title">
+                                          <template x-if="item.image_path">
+                                              <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 max-w-xl mx-auto">
+                                                  <img :src="'/' + item.image_path" class="w-full max-h-64 object-contain rounded-lg select-none" :alt="item.title">
+                                              </div>
+                                          </template>
+
+                                          <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
+
+                                          @if(auth()->user()->isInstruktur())
+                                              <template x-if="item.id !== 'intro_elektrikal'">
+                                                  <div class="flex items-center gap-2 pt-4 border-t border-slate-100 mt-4">
+                                                      <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                          Edit Modul
+                                                      </a>
+                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                          @csrf
+                                                          @method('DELETE')
+                                                          <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                              Hapus
+                                                          </button>
+                                                      </form>
+                                                  </div>
+                                              </template>
+                                          @endif
                                       </div>
                                   </template>
-
-                                  <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getActiveElec().content"></div>
-
-                                  @if(auth()->user()->isInstruktur())
-                                      <template x-if="activeElecId !== 'intro_elektrikal'">
-                                          <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                              <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeElecId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                  Edit Modul Ini
-                                              </a>
-                                              <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeElecId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
-                                                  @csrf
-                                                  @method('DELETE')
-                                                  <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                      Hapus Modul
-                                                  </button>
-                                              </form>
-                                          </div>
-                                      </template>
-                                  @endif
                               </div>
-                          </div>
-
-                          <!-- Footer Navigation Inside Card -->
-                          <div class="border-t border-slate-100 p-4 bg-slate-50/50 flex items-center justify-between rounded-b-2xl">
-                              <button
-                                  @click="prevElec()"
-                                  :disabled="isElecFirst()"
-                                  class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-                              >
-                                  ← Sebelumnya
-                              </button>
-                              
-                              <button
-                                  @click="nextElec()"
-                                  :disabled="isElecLast()"
-                                  class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-                              >
-                                  Selanjutnya →
-                              </button>
                           </div>
                       </div>
                   </div>
