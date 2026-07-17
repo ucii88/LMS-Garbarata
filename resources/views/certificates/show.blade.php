@@ -1,9 +1,9 @@
 @section('topbar_title', 'Sertifikat — ' . $certificate->course->title)
 
 <x-app-layout>
-<div class="max-w-3xl mx-auto space-y-6">
+<div class="max-w-4xl mx-auto space-y-6">
 
-    {{-- Print Button --}}
+    {{-- Action Buttons --}}
     <div class="flex justify-between items-center">
         <a href="{{ route('courses.chapters.show', [$certificate->course, $certificate->course->chapters->first()]) }}"
            class="text-sm font-bold text-slate-500 hover:text-blue-600 transition">
@@ -11,77 +11,135 @@
         </a>
         <div class="flex items-center gap-3">
             <button onclick="window.print()"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-base font-semibold rounded-xl transition">
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl transition">
                 🖨 Cetak
             </button>
             <a href="{{ request()->url() }}?download=1"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-base font-semibold rounded-xl transition">
+               class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl transition">
                 📄 Unduh PDF
             </a>
         </div>
     </div>
 
-    {{-- Sertifikat --}}
-    <div id="certificate-card"
-         class="bg-white rounded-3xl shadow-2xl border-8 border-double border-amber-300 overflow-hidden print:shadow-none print:rounded-none print:border-0">
+    {{-- Certificate Card — matches PDF design exactly --}}
+    <div id="certificate-card" style="
+        position: relative;
+        background: #fffdf5;
+        overflow: hidden;
+        aspect-ratio: 297 / 210;
+        width: 100%;
+        font-family: 'Georgia', 'DejaVu Serif', serif;
+        color: #1e293b;
+    ">
+        {{-- Orange banners top & bottom --}}
+        <div style="position:absolute;top:0;left:0;right:0;height:3.8%;background:#d97706;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:3.8%;background:#d97706;"></div>
 
-        {{-- Top Banner --}}
-        <div class="h-3 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400"></div>
+        {{-- Gold stripes --}}
+        <div style="position:absolute;top:3.1%;left:0;right:0;height:0.7%;background:#fbbf24;"></div>
+        <div style="position:absolute;bottom:3.1%;left:0;right:0;height:0.7%;background:#fbbf24;"></div>
 
-        <div class="px-10 py-10 text-center space-y-5">
-            {{-- Logo / Icon --}}
-            <div class="flex justify-center mb-2">
-                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
-                    <span class="text-4xl">🏆</span>
+        {{-- Outer dark-gold border --}}
+        <div style="position:absolute;top:5.2%;left:3.4%;right:3.4%;bottom:5.2%;border:2.5px solid #b45309;"></div>
+
+        {{-- Inner light-gold border --}}
+        <div style="position:absolute;top:6.7%;left:4.4%;right:4.4%;bottom:6.7%;border:1px solid #fcd34d;"></div>
+
+        {{-- Corner brackets --}}
+        {{-- TL --}}
+        <div style="position:absolute;top:3.8%;left:2.4%;width:4%;height:6%;border-top:3.5px solid #92400e;border-left:3.5px solid #92400e;"></div>
+        {{-- TR --}}
+        <div style="position:absolute;top:3.8%;right:2.4%;width:4%;height:6%;border-top:3.5px solid #92400e;border-right:3.5px solid #92400e;"></div>
+        {{-- BL --}}
+        <div style="position:absolute;bottom:3.8%;left:2.4%;width:4%;height:6%;border-bottom:3.5px solid #92400e;border-left:3.5px solid #92400e;"></div>
+        {{-- BR --}}
+        <div style="position:absolute;bottom:3.8%;right:2.4%;width:4%;height:6%;border-bottom:3.5px solid #92400e;border-right:3.5px solid #92400e;"></div>
+
+        {{-- Content --}}
+        <div style="
+            position:absolute;top:4.8%;left:5%;right:5%;bottom:4.8%;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+            text-align:center;padding:1% 8%;gap:0;
+        ">
+            {{-- Org Name --}}
+            <div style="font-family:'Arial',sans-serif;font-size:1.05vw;color:#b45309;letter-spacing:0.35em;text-transform:uppercase;margin-bottom:0.3%;font-weight:600;">
+                Garbarata Training Center
+            </div>
+
+            {{-- Title --}}
+            <div style="font-family:'Arial',sans-serif;font-size:1.5vw;font-weight:bold;letter-spacing:0.4em;color:#92400e;text-transform:uppercase;margin-bottom:1%;">
+                Sertifikat Kelulusan
+            </div>
+
+            {{-- Stars --}}
+            <div style="font-size:2vw;color:#d97706;letter-spacing:0.4em;margin-bottom:1%;">
+                &#9733; &#9733; &#9733;
+            </div>
+
+            {{-- Given label --}}
+            <div style="font-family:'Arial',sans-serif;font-size:0.9vw;color:#64748b;margin-bottom:0.6%;">
+                Diberikan kepada:
+            </div>
+
+            {{-- Recipient name --}}
+            <div style="font-size:3.5vw;font-weight:bold;color:#1e293b;line-height:1.1;margin-bottom:0.8%;">
+                {{ $certificate->user->name }}
+            </div>
+
+            {{-- Divider --}}
+            <div style="width:20%;height:2px;background:#d97706;margin:0 auto 1.2%;"></div>
+
+            {{-- Completion text --}}
+            <div style="font-family:'Arial',sans-serif;font-size:0.9vw;color:#475569;margin-bottom:0.5%;">
+                Telah berhasil menyelesaikan dan lulus semua evaluasi dalam kursus:
+            </div>
+
+            {{-- Course name --}}
+            <div style="font-size:1.5vw;font-weight:bold;color:#1e293b;margin-bottom:0.5%;">
+                {{ $certificate->course->title }}
+            </div>
+
+            {{-- Score --}}
+            <div style="font-family:'Arial',sans-serif;font-size:0.9vw;color:#475569;margin-bottom:1.8%;">
+                dengan nilai rata-rata
+                <span style="font-weight:bold;color:#059669;font-size:1.1vw;">{{ number_format($certificate->total_score, 1) }}</span>
+                dari 100
+            </div>
+
+            {{-- Meta: date & code --}}
+            <div style="display:flex;width:55%;margin:0 auto 1.5%;gap:0;">
+                <div style="flex:1;text-align:center;padding:0 2%;border-right:1px solid #e2e8f0;">
+                    <div style="font-family:'Arial',sans-serif;font-size:0.7vw;color:#94a3b8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3%;">
+                        Tanggal Diterbitkan
+                    </div>
+                    <div style="font-family:'Arial',sans-serif;font-size:0.95vw;font-weight:bold;color:#334155;">
+                        {{ $certificate->issued_at->locale('id')->translatedFormat('d F Y') }}
+                    </div>
+                </div>
+                <div style="flex:1;text-align:center;padding:0 2%;">
+                    <div style="font-family:'Arial',sans-serif;font-size:0.7vw;color:#94a3b8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3%;">
+                        Kode Verifikasi
+                    </div>
+                    <div style="font-family:'Courier New',monospace;font-size:0.9vw;font-weight:bold;color:#334155;letter-spacing:0.15em;">
+                        {{ $certificate->certificate_code }}
+                    </div>
                 </div>
             </div>
 
-            <div>
-                <p class="text-sm font-bold tracking-[0.25em] text-amber-600 uppercase">Sertifikat Kelulusan</p>
-                <p class="text-sm text-slate-400 mt-1">Diberikan kepada:</p>
-            </div>
-
-            <h1 class="text-4xl font-bold text-slate-800 font-serif">{{ $certificate->user->name }}</h1>
-
-            <div class="w-24 h-0.5 bg-amber-300 mx-auto"></div>
-
-            <div class="space-y-2">
-                <p class="text-base text-slate-600">
-                    Telah berhasil menyelesaikan dan lulus semua evaluasi dalam course:
-                </p>
-                <h2 class="text-xl font-bold text-slate-800">{{ $certificate->course->title }}</h2>
-                <p class="text-base text-slate-500">
-                    dengan nilai rata-rata <span class="font-bold text-emerald-600">{{ number_format($certificate->total_score, 1) }}</span> dari 100
-                </p>
-            </div>
-
-            <div class="flex justify-center gap-8 pt-4">
-                <div class="text-center">
-                    <p class="text-sm text-slate-400">Tanggal Diterbitkan</p>
-                    <p class="text-base font-semibold text-slate-700">{{ $certificate->issued_at->format('d F Y') }}</p>
+            {{-- Signatures --}}
+            <div style="display:flex;width:65%;margin:0 auto;gap:0;">
+                <div style="flex:1;text-align:center;padding:0 4%;">
+                    <div style="height:3vw;"></div>
+                    <div style="border-bottom:1.5px solid #cbd5e1;width:70%;margin:0 auto 0.4%;"></div>
+                    <div style="font-family:'Arial',sans-serif;font-size:0.75vw;color:#64748b;">Instruktur</div>
                 </div>
-                <div class="w-px bg-slate-200"></div>
-                <div class="text-center">
-                    <p class="text-sm text-slate-400">Kode Verifikasi</p>
-                    <p class="text-base font-bold text-slate-700 tracking-wider font-mono">{{ $certificate->certificate_code }}</p>
-                </div>
-            </div>
-
-            {{-- Tanda tangan area --}}
-            <div class="flex justify-around pt-8 pb-2">
-                <div class="text-center">
-                    <div class="w-32 border-b-2 border-slate-300 mb-1"></div>
-                    <p class="text-sm text-slate-500">Instruktur</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-32 border-b-2 border-slate-300 mb-1"></div>
-                    <p class="text-sm text-slate-500">Garbarata Training Center</p>
+                <div style="flex:1;text-align:center;padding:0 4%;">
+                    <div style="height:3vw;"></div>
+                    <div style="border-bottom:1.5px solid #cbd5e1;width:70%;margin:0 auto 0.4%;"></div>
+                    <div style="font-family:'Arial',sans-serif;font-size:0.75vw;color:#64748b;">Garbarata Training Center</div>
                 </div>
             </div>
         </div>
-
-        {{-- Bottom banner --}}
-        <div class="h-3 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400"></div>
     </div>
 
     <p class="text-center text-sm text-slate-400">
@@ -92,13 +150,16 @@
 
 <style>
 @media print {
-    body * { visibility: hidden; }
-    #certificate-card, #certificate-card * { visibility: visible; }
+    /* Hide everything except the certificate */
+    body > * { display: none !important; }
     #certificate-card {
+        display: block !important;
         position: fixed;
         top: 0; left: 0;
-        width: 100%;
-        border: none !important;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        aspect-ratio: auto;
     }
 }
 </style>
