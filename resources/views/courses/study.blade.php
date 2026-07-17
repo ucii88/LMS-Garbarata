@@ -758,6 +758,11 @@
             init() {
                 this.mechItems = this.modules.filter(module => module.title.startsWith('1.'));
                 this.elecItems = this.modules.filter(module => module.title.startsWith('2.'));
+                
+                // Automatically complete all Elektrikal modules because they are fully visible on screen!
+                this.elecItems.forEach(module => {
+                    this.markModuleComplete(module.id);
+                });
             },
 
             toggleMech(moduleId) {
@@ -890,7 +895,7 @@
 
                         <div class="space-y-4">
                             <template x-for="module in elecItems" :key="module.id">
-                                <article @click="markModuleComplete(module.id)" class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm cursor-pointer hover:border-emerald-200">
+                                <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
                                     <div class="border-b border-gray-100 pb-3">
                                         <h3 class="text-sm md:text-base font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                     </div>
@@ -914,6 +919,11 @@
                                 </article>
                             </template>
                         </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 4)
         <!-- Custom Layout for Chapter 4 - Hybrid Style (Top-Tabs + Auto-Open Subsections) -->
         <div class="py-6 select-none" x-data="{
@@ -949,7 +959,11 @@
                 // Mark main tab module complete
                 const mainMod = this.getSingleModule(tab);
                 if (mainMod && mainMod.id) {
-                    this.markModuleComplete(mainMod.id);
+                    if (mainMod.content.includes('<details') || mainMod.content.includes('TROUBLE')) {
+                        window.setupDetailsTracker(mainMod.id, 'content-area-chapter-4');
+                    } else {
+                        this.markModuleComplete(mainMod.id);
+                    }
                 }
                 
                 // Mark all submodules complete automatically when viewing this tab
@@ -957,7 +971,7 @@
                 if (tab === '4.6') {
                     subModules = this.modules.filter(m => m.title.startsWith('4.6.'));
                 } else if (tab === '4.7') {
-                    subModules = this.modules.filter(m => m.title.startsWith('4.7.'));
+                    subModules = [];
                 } else {
                     subModules = this.getTabModules(tab);
                 }
@@ -1078,7 +1092,11 @@
                     
                     <!-- Sub-chapter Title & Main Description -->
                     <div class="border-b border-slate-100 pb-5">
+<<<<<<< HEAD
                         <h3 class="text-base md:text-base font-extrabold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
+=======
+                        <h3 class="text-sm md:text-base font-extrabold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                         <div class="text-sm text-slate-600 leading-relaxed mt-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
                         
                         <!-- Action Buttons for Instructor inside Intro Card -->
@@ -1098,7 +1116,11 @@
                         <div class="space-y-8 divide-y divide-slate-100">
                             <template x-for="subModule in getTabModules(activeTab)" :key="subModule.id">
                                 <div class="pt-8 first:pt-0">
+<<<<<<< HEAD
                                     <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="subModule.title"></h4>
+=======
+                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="subModule.title"></h4>
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                     <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                     
                                     <!-- Action Buttons for Instructor inside Submodule -->
@@ -1127,7 +1149,11 @@
                             <!-- 4.6.1 -->
                             <template x-if="getSingleModule('4.6.1').id">
                                 <div class="pt-4 first:pt-0">
+<<<<<<< HEAD
                                     <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.1').title"></h4>
+=======
+                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.1').title"></h4>
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                     <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.1').content"></div>
                                     
                                     @if(auth()->user()->isInstruktur())
@@ -1150,7 +1176,11 @@
                             <!-- 4.6.2 -->
                             <template x-if="getSingleModule('4.6.2').id">
                                 <div class="pt-6 border-t border-slate-100">
+<<<<<<< HEAD
                                     <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.2').title"></h4>
+=======
+                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.2').title"></h4>
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                     <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.2').content"></div>
                                     
                                     @if(auth()->user()->isInstruktur())
@@ -1180,7 +1210,11 @@
                                     <div class="border-t border-slate-100 bg-white p-4 space-y-6 divide-y divide-slate-100">
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.3.'))" :key="subModule.id">
                                             <div class="pt-6 first:pt-0">
+<<<<<<< HEAD
                                                 <h5 class="font-bold text-slate-800 text-sm mb-3" x-text="subModule.title"></h5>
+=======
+                                                <h5 class="font-bold text-slate-800 text-xs mb-3" x-text="subModule.title"></h5>
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                                 <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                                 
                                                 @if(auth()->user()->isInstruktur())
@@ -1213,7 +1247,11 @@
                                     <div class="border-t border-slate-100 bg-white p-4 space-y-6 divide-y divide-slate-100">
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.4.'))" :key="subModule.id">
                                             <div class="pt-6 first:pt-0">
+<<<<<<< HEAD
                                                 <h5 class="font-bold text-slate-800 text-sm mb-3" x-text="subModule.title"></h5>
+=======
+                                                <h5 class="font-bold text-slate-800 text-xs mb-3" x-text="subModule.title"></h5>
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                                 <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                                 
                                                 @if(auth()->user()->isInstruktur())
@@ -1333,7 +1371,11 @@
                 }
                 const initialModule = this.getSingleModule(this.activeTab);
                 if (initialModule && initialModule.id) {
-                    this.markModuleComplete(initialModule.id);
+                    if (initialModule.content.includes('<details') || initialModule.content.includes('TROUBLE')) {
+                        window.setupDetailsTracker(initialModule.id, 'content-area-chapter-5');
+                    } else {
+                        this.markModuleComplete(initialModule.id);
+                    }
                 }
             },
             getTabModules(tab) {
@@ -1364,9 +1406,36 @@
                         'Accept': 'application/json',
                     },
                 });
+            },
+            setActiveTab(tab) {
+                this.activeTab = tab;
+                this.expandedModuleId = null;
+                const m = this.getSingleModule(tab);
+                if (m && m.id) {
+                    if (m.content.includes('<details') || m.content.includes('TROUBLE')) {
+                        window.setupDetailsTracker(m.id, 'content-area-chapter-5');
+                    } else {
+                        this.markModuleComplete(m.id);
+                    }
+                }
+                this.$nextTick(() => {
+                    document.getElementById('content-area-chapter-5')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            },
+            nextTab() {
+                const idx = this.tabs.indexOf(this.activeTab);
+                if (idx !== -1 && idx < this.tabs.length - 1) {
+                    this.setActiveTab(this.tabs[idx + 1]);
+                }
+            },
+            prevTab() {
+                const idx = this.tabs.indexOf(this.activeTab);
+                if (idx !== -1 && idx > 0) {
+                    this.setActiveTab(this.tabs[idx - 1]);
+                }
             }
         }">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6" id="content-area-chapter-5">
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
@@ -1411,8 +1480,13 @@
                         <div class="flex flex-wrap gap-2">
                             <template x-for="tab in tabs" :key="tab">
                                 <button
+<<<<<<< HEAD
                                     @click="activeTab = tab; expandedModuleId = null; const m = getSingleModule(tab); if(m && m.id) markModuleComplete(m.id);"
                                     class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
+=======
+                                    @click="setActiveTab(tab)"
+                                    class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                     :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
                                     <span x-text="getSingleModule(tab).title"></span>
@@ -1494,6 +1568,27 @@
                                 </div>
                             </div>
                         </template>
+                    </div>
+
+                    <!-- Prev/Next Navigation Buttons at the bottom of Content Card -->
+                    <div class="border-t border-slate-100 pt-6 flex items-center justify-between gap-4">
+                        <button 
+                            @click="prevTab()"
+                            class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg transition"
+                            x-show="tabs.indexOf(activeTab) > 0"
+                        >
+                            ← Kembali
+                        </button>
+                        <div x-show="tabs.indexOf(activeTab) === 0"></div>
+
+                        <button 
+                            @click="nextTab()"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition shadow-xs"
+                            x-show="tabs.indexOf(activeTab) < tabs.length - 1"
+                        >
+                            Lanjutkan →
+                        </button>
+                        <div x-show="tabs.indexOf(activeTab) === tabs.length - 1"></div>
                     </div>
 
                 </div>
@@ -1813,17 +1908,25 @@
                             <button
                                 @click="prevModule(); resetZoom()"
                                 :disabled="isFirst()"
+<<<<<<< HEAD
                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+=======
+                                class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                             >
-                                ← Sebelumnya
+                                ← Kembali
                             </button>
 
                             <button
                                 @click="nextModule(); resetZoom()"
                                 :disabled="isLast()"
+<<<<<<< HEAD
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+=======
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+>>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                             >
-                                Selanjutnya →
+                                Lanjutkan →
                             </button>
                         </div>
                     </div>
@@ -2022,4 +2125,216 @@
 
         @include('courses.partials.quiz-card')
     @endif
+
+    @php
+        $nextChapter = $chapters->where('order', '>', $chapter->order)->first();
+    @endphp
+
+    @if($chapter->order == 1)
+        {{-- Auto-complete scroll script ONLY for Chapter 1 --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const modules = @js($modules->pluck('id')->toArray());
+                const completeUrlTemplate = @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__']));
+                const csrfToken = @js(csrf_token());
+
+                let completed = new Set();
+                let hasQuiz = @js($chapterQuiz ? true : false);
+                let isQuizPassed = @js($chapterQuizAttempt?->is_passed ? true : false);
+
+                function markModuleComplete(moduleId) {
+                    if (!moduleId || isNaN(moduleId)) return;
+                    const idNum = Number(moduleId);
+                    if (completed.has(idNum)) return;
+                    completed.add(idNum);
+
+                    fetch(completeUrlTemplate.replace('__MODULE__', idNum), {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                    });
+                }
+
+                function unlockNextChapter() {
+                    if (!hasQuiz || isQuizPassed) {
+                        const descEl = document.getElementById('next-chapter-desc');
+                        const actionEl = document.getElementById('next-chapter-action');
+                        if (descEl) {
+                            descEl.innerText = 'Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.';
+                        }
+                        if (actionEl) {
+                            @if($nextChapter)
+                            actionEl.innerHTML = `
+                                <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
+                                   class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
+                                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                                </a>
+                            `;
+                            @endif
+                        }
+                    }
+                }
+
+                function handleBottomReached() {
+                    // Safeguard: only trigger if user has actually scrolled down from top (scrollY > 50)
+                    // to prevent the IntersectionObserver initial run from auto-completing on page load.
+                    if (window.scrollY < 50) return;
+
+                    modules.forEach(id => {
+                        markModuleComplete(id);
+                    });
+                    unlockNextChapter();
+                }
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            handleBottomReached();
+                        }
+                    });
+                }, {
+                    root: null,
+                    threshold: 0.1
+                });
+
+                const target = document.getElementById('next-chapter-desc');
+                if (target) {
+                    observer.observe(target);
+                }
+
+                window.addEventListener('scroll', function() {
+                    if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 150) {
+                        handleBottomReached();
+                    }
+                });
+            });
+        </script>
+    @endif
+
+    {{-- Global progress listener and dynamic unlocker for all chapters --}}
+    <script>
+        (function() {
+            // Set up fetch interceptor immediately to catch any initial load requests from Alpine init()
+            const originalFetch = window.fetch;
+            window.fetch = function (input, init) {
+                const url = typeof input === 'string' ? input : (input instanceof URL ? input.href : (input && input.url ? input.url : ''));
+                const match = url.match(/\/courses\/\d+\/chapters\/\d+\/modules\/(\d+)\/complete/);
+                if (match && match[1]) {
+                    const moduleId = Number(match[1]);
+                    if (window.registerModuleCompletion) {
+                        window.registerModuleCompletion(moduleId);
+                    } else {
+                        if (!window.pendingModuleCompletions) {
+                            window.pendingModuleCompletions = [];
+                        }
+                        window.pendingModuleCompletions.push(moduleId);
+                    }
+                }
+                return originalFetch.apply(this, arguments);
+            };
+        })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const totalModuleIds = @js($modules->pluck('id')->toArray());
+            let completedModuleIds = new Set(@js($learningProgress ? $learningProgress['completedModules']->intersect($modules->pluck('id'))->toArray() : []));
+            const hasQuiz = @js($chapterQuiz ? true : false);
+            const isQuizPassed = @js($chapterQuizAttempt?->is_passed ? true : false);
+
+            function checkAndUnlockNextChapter() {
+                const allCompleted = totalModuleIds.every(id => completedModuleIds.has(id));
+                if (allCompleted) {
+                    if (!hasQuiz || isQuizPassed) {
+                        const descEl = document.getElementById('next-chapter-desc');
+                        const actionEl = document.getElementById('next-chapter-action');
+                        if (descEl) {
+                            descEl.innerText = 'Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.';
+                        }
+                        if (actionEl) {
+                            @if($nextChapter)
+                            actionEl.innerHTML = `
+                                <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
+                                   class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
+                                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                                </a>
+                            `;
+                            @endif
+                        }
+                    }
+                }
+            }
+
+            // Register completion helper
+            window.registerModuleCompletion = function (moduleId) {
+                if (!moduleId || isNaN(moduleId)) return;
+                completedModuleIds.add(Number(moduleId));
+                checkAndUnlockNextChapter();
+            };
+
+            window.markModuleCompleteDirectly = function (moduleId) {
+                if (!moduleId || isNaN(moduleId)) return;
+                const idNum = Number(moduleId);
+                
+                const completeUrlTemplate = @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__']));
+                const csrfToken = @js(csrf_token());
+
+                fetch(completeUrlTemplate.replace('__MODULE__', idNum), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                }).then(res => {
+                    if (res.ok) {
+                        window.registerModuleCompletion(idNum);
+                    }
+                });
+            };
+
+            window.setupDetailsTracker = function (moduleId, containerId) {
+                if (!moduleId) return;
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                setTimeout(() => {
+                    const detailsElements = container.querySelectorAll('details');
+                    if (detailsElements.length === 0) {
+                        window.markModuleCompleteDirectly(moduleId);
+                        return;
+                    }
+
+                    let openedIds = new Set();
+                    detailsElements.forEach((details, index) => {
+                        const id = details.id || `details-${moduleId}-${index}`;
+                        details.id = id;
+
+                        if (details.open) {
+                            openedIds.add(id);
+                        }
+
+                        details.addEventListener('toggle', function onToggle() {
+                            if (details.open) {
+                                openedIds.add(id);
+                                if (openedIds.size === detailsElements.length) {
+                                    window.markModuleCompleteDirectly(moduleId);
+                                }
+                            }
+                        });
+                    });
+                }, 150);
+            };
+
+            // Process any completions that happened before DOMContentLoaded
+            if (window.pendingModuleCompletions) {
+                window.pendingModuleCompletions.forEach(id => {
+                    window.registerModuleCompletion(id);
+                });
+                delete window.pendingModuleCompletions;
+            }
+
+            // Run initial check on load
+            checkAndUnlockNextChapter();
+        });
+    </script>
 </x-app-layout>

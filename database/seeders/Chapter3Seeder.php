@@ -466,10 +466,8 @@ class Chapter3Seeder extends Seeder
                 <img src="/images/modules/chapter3_4.1_d.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.d">
             </figure>
 
-            <p><strong>e.</strong></p>
-
             <p>
-                Gunakan Joystick untuk menggerakkan Garbarata maju atau mundur,
+                <strong>e.</strong> Gunakan Joystick untuk menggerakkan Garbarata maju atau mundur,
                 gunakan tombol penggerak vertical dan cabin rotation untuk memosisikan
                 Garbarata sesuai dengan posisi pesawat.
             </p>
@@ -478,10 +476,8 @@ class Chapter3Seeder extends Seeder
                 <img src="/images/modules/chapter3_4.1_e.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.e">
             </figure>
 
-            <p><strong>f.</strong></p>
-
             <p>
-                Setelah Garbarata menyentuh badan pesawat, sesuaikan bumper cabin
+                <strong>f.</strong> Setelah Garbarata menyentuh badan pesawat, sesuaikan bumper cabin
                 dengan pintu pesawat. Saat bumper cabin sudah dekat dengan badan
                 pesawat, kecepatan Garbarata secara otomatis akan turun.
             </p>
@@ -507,9 +503,8 @@ class Chapter3Seeder extends Seeder
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <img src="/images/modules/chapter3_4.2_a.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.a">
             </figure>
-            <p><strong>b.</strong></p>
             <p>
-                Pastikan autolevel berkontak sempurna dengan badan pesawat. Jika
+                <strong>b.</strong> Pastikan autolevel berkontak sempurna dengan badan pesawat. Jika
                 Autolevel tidak bergerak secara sempurna jangan gunakan Garbarata,
                 perbaiki autolevel terlebih dahulu.
             </p>
