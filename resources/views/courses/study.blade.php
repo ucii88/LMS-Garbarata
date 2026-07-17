@@ -1309,7 +1309,7 @@
 
                     <!-- Prev/Next Navigation Buttons at the bottom of Content Card -->
                     <div class="border-t border-slate-100 pt-6 flex items-center justify-between gap-4">
-                        <button 
+                        <button
                             @click="prevTab()"
                             class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-sm font-bold rounded-lg transition"
                             x-show="tabs.indexOf(activeTab) > 0"
@@ -1318,7 +1318,7 @@
                         </button>
                         <div x-show="tabs.indexOf(activeTab) === 0"></div>
 
-                        <button 
+                        <button
                             @click="nextTab()"
                             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition shadow-xs"
                             x-show="tabs.indexOf(activeTab) < tabs.length - 1"
@@ -1553,7 +1553,7 @@
 
                     <!-- Prev/Next Navigation Buttons at the bottom of Content Card -->
                     <div class="border-t border-slate-100 pt-6 flex items-center justify-between gap-4">
-                        <button 
+                        <button
                             @click="prevTab()"
                             class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg transition"
                             x-show="tabs.indexOf(activeTab) > 0"
@@ -1562,7 +1562,7 @@
                         </button>
                         <div x-show="tabs.indexOf(activeTab) === 0"></div>
 
-                        <button 
+                        <button
                             @click="nextTab()"
                             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition shadow-xs"
                             x-show="tabs.indexOf(activeTab) < tabs.length - 1"

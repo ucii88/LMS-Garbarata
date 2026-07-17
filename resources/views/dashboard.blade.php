@@ -380,8 +380,8 @@
                             <div style="display: flex; flex-direction: column; align-items: center; flex: 1;" class="text-center">
                                 <span class="text-[10px] font-bold text-slate-400 uppercase mb-1">{{ $day['day_name'] }}</span>
                                 <div style="display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem;" class="rounded-lg text-sm font-bold transition
-                                    {{ $day['is_today'] 
-                                        ? 'border-2 border-blue-600 text-blue-600 bg-blue-50/30' 
+                                    {{ $day['is_today']
+                                        ? 'border-2 border-blue-600 text-blue-600 bg-blue-50/30'
                                         : 'text-slate-600 hover:bg-slate-50' }}">
                                     {{ $day['date'] }}
                                 </div>
