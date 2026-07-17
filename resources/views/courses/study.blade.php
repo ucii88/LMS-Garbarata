@@ -1,4 +1,14 @@
 <x-app-layout>
+    <style>
+        /* Force text inside study rooms to be 14px instead of 12px due to database HTML having hardcoded class="text-xs" */
+        .prose p.text-xs,
+        .prose span.text-xs,
+        .prose div.text-xs,
+        .prose .text-xs {
+            font-size: 0.875rem !important;
+            line-height: 1.5rem !important;
+        }
+    </style>
     @if($chapter->order == 1)
         <script>
             window.chapterOneStudy = function (modules) {
