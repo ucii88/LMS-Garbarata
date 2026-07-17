@@ -330,8 +330,11 @@
                                           <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
 
                                           <template x-if="item.image_path">
-                                              <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 max-w-xl mx-auto">
-                                                  <img :src="'/' + item.image_path" class="w-full max-h-64 object-contain rounded-lg select-none" :alt="item.title">
+                                              <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 mx-auto"
+                                                   :class="item.title.startsWith('1.1') || item.title.startsWith('1.4') || item.title.startsWith('1.5') ? 'max-w-4xl' : 'max-w-xl'">
+                                                  <img :src="'/' + item.image_path" class="w-full object-contain rounded-lg select-none"
+                                                       :class="item.title.startsWith('1.1') || item.title.startsWith('1.4') || item.title.startsWith('1.5') ? 'max-h-[600px]' : 'max-h-64'"
+                                                       :alt="item.title">
                                               </div>
                                           </template>
 
