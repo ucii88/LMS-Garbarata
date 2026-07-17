@@ -483,8 +483,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        â† Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -788,8 +788,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        â† Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1027,8 +1027,8 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1370,8 +1370,8 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1531,8 +1531,8 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1681,8 +1681,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1837,8 +1837,8 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
