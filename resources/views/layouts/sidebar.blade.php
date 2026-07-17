@@ -150,7 +150,7 @@
                 @else
                     <a
                         href="#"
-                        onclick="alert('Sertifikat belum tersedia. Silakan selesaikan semua quiz dengan nilai kelulusan terlebih dahulu!')"
+                        onclick="event.preventDefault(); showGlobalAlert('Sertifikat Belum Tersedia', 'Silakan selesaikan semua quiz dengan nilai kelulusan terlebih dahulu!')"
                         class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-500"
                     >
                         <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
