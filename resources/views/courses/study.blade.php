@@ -1102,11 +1102,7 @@
                     
                     <!-- Sub-chapter Title & Main Description -->
                     <div class="border-b border-slate-100 pb-5">
-<<<<<<< HEAD
                         <h3 class="text-base md:text-base font-extrabold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
-=======
-                        <h3 class="text-sm md:text-base font-extrabold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                         <div class="text-sm text-slate-600 leading-relaxed mt-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
                         
                         <!-- Action Buttons for Instructor inside Intro Card -->
@@ -1126,11 +1122,7 @@
                         <div class="space-y-8 divide-y divide-slate-100">
                             <template x-for="subModule in getTabModules(activeTab)" :key="subModule.id">
                                 <div class="pt-8 first:pt-0">
-<<<<<<< HEAD
                                     <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="subModule.title"></h4>
-=======
-                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="subModule.title"></h4>
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                     <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                     
                                     <!-- Action Buttons for Instructor inside Submodule -->
@@ -1159,11 +1151,7 @@
                             <!-- 4.6.1 -->
                             <template x-if="getSingleModule('4.6.1').id">
                                 <div class="pt-4 first:pt-0">
-<<<<<<< HEAD
                                     <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.1').title"></h4>
-=======
-                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.1').title"></h4>
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                     <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.1').content"></div>
                                     
                                     @if(auth()->user()->isInstruktur())
@@ -1186,11 +1174,7 @@
                             <!-- 4.6.2 -->
                             <template x-if="getSingleModule('4.6.2').id">
                                 <div class="pt-6 border-t border-slate-100">
-<<<<<<< HEAD
                                     <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.2').title"></h4>
-=======
-                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.2').title"></h4>
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                     <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.2').content"></div>
                                     
                                     @if(auth()->user()->isInstruktur())
@@ -1220,11 +1204,7 @@
                                     <div class="border-t border-slate-100 bg-white p-4 space-y-6 divide-y divide-slate-100">
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.3.'))" :key="subModule.id">
                                             <div class="pt-6 first:pt-0">
-<<<<<<< HEAD
                                                 <h5 class="font-bold text-slate-800 text-sm mb-3" x-text="subModule.title"></h5>
-=======
-                                                <h5 class="font-bold text-slate-800 text-xs mb-3" x-text="subModule.title"></h5>
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                                 <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                                 
                                                 @if(auth()->user()->isInstruktur())
@@ -1257,11 +1237,7 @@
                                     <div class="border-t border-slate-100 bg-white p-4 space-y-6 divide-y divide-slate-100">
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.4.'))" :key="subModule.id">
                                             <div class="pt-6 first:pt-0">
-<<<<<<< HEAD
                                                 <h5 class="font-bold text-slate-800 text-sm mb-3" x-text="subModule.title"></h5>
-=======
-                                                <h5 class="font-bold text-slate-800 text-xs mb-3" x-text="subModule.title"></h5>
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                                                 <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                                 
                                                 @if(auth()->user()->isInstruktur())
@@ -1490,13 +1466,8 @@
                         <div class="flex flex-wrap gap-2">
                             <template x-for="tab in tabs" :key="tab">
                                 <button
-<<<<<<< HEAD
-                                    @click="activeTab = tab; expandedModuleId = null; const m = getSingleModule(tab); if(m && m.id) markModuleComplete(m.id);"
-                                    class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
-=======
                                     @click="setActiveTab(tab)"
-                                    class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
+                                    class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
                                     :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
                                     <span x-text="getSingleModule(tab).title"></span>
@@ -1918,11 +1889,7 @@
                             <button
                                 @click="prevModule(); resetZoom()"
                                 :disabled="isFirst()"
-<<<<<<< HEAD
                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-=======
-                                class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                             >
                                 ← Kembali
                             </button>
@@ -1930,11 +1897,7 @@
                             <button
                                 @click="nextModule(); resetZoom()"
                                 :disabled="isLast()"
-<<<<<<< HEAD
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
-=======
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
                             >
                                 Lanjutkan →
                             </button>

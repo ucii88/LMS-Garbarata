@@ -24,25 +24,6 @@
         <div class="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2" id="edit-grid">
             <form id="quiz-config-form" action="{{ route($isPractice ? 'practices.update' : 'quizzes.update', [$course, $quiz]) }}" method="POST" class="flex flex-col rounded-2xl border bg-white p-6 lg:h-[calc(100vh-8rem)]">
                 @csrf @method('PUT')
-<<<<<<< HEAD
-                <h2 class="font-bold">Konfigurasi {{ $activityLabel }}</h2>
-                <div><label class="mb-1 block text-sm font-semibold">Judul *</label><input name="title" required value="{{ old('title', $quiz->title) }}" class="w-full rounded-xl border px-3 py-2.5 text-base"></div>
-                <div><label class="mb-1 block text-sm font-semibold">Deskripsi</label><textarea name="description" rows="2" class="w-full rounded-xl border px-3 py-2.5 text-base">{{ old('description', $quiz->description) }}</textarea></div>
-                <div><label class="mb-1 block text-sm font-semibold">Chapter</label><select name="chapter_id" {{ $isPractice ? 'required' : '' }} class="w-full rounded-xl border px-3 py-2.5 text-base"><option value="">{{ $isPractice ? '-- Pilih chapter --' : 'Ujian' }}</option>@foreach($chapters as $chapter)<option value="{{ $chapter->id }}" @selected($quiz->chapter_id == $chapter->id)>{{ $chapter->order }}. {{ $chapter->title }}</option>@endforeach</select></div>
-
-                @if($isPractice)
-                    <input type="hidden" name="review_policy" value="show_all">
-                    <div><label class="mb-1 block text-sm font-semibold">Maks. percobaan (kosong = tanpa batas)</label><input type="number" name="max_attempts" min="1" max="100" value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-base"></div>
-                @else
-                    <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-sm font-semibold">Dibuka pada</label><input type="datetime-local" name="start_time" value="{{ old('start_time', $quiz->start_time ? $quiz->start_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-base"></div><div><label class="mb-1 block text-sm font-semibold">Ditutup pada</label><input type="datetime-local" name="end_time" value="{{ old('end_time', $quiz->end_time ? $quiz->end_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-base"></div></div>
-                    <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-sm font-semibold">Timer</label><input type="number" name="time_limit" value="{{ old('time_limit', $quiz->time_limit) }}" class="w-full rounded-xl border px-3 py-2.5 text-base"></div><div><label class="mb-1 block text-sm font-semibold">Nilai lulus *</label><input type="number" name="passing_score" required value="{{ old('passing_score', $quiz->passing_score) }}" class="w-full rounded-xl border px-3 py-2.5 text-base"></div></div>
-                    <div><label class="mb-1 block text-sm font-semibold">Maks. percobaan *</label><input type="number" name="max_attempts" required value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-base"></div>
-                    <select name="review_policy" class="w-full rounded-xl border px-3 py-2.5 text-base"><option value="show_all" @selected($quiz->review_policy === 'show_all')>Tampilkan semua</option><option value="points_only" @selected($quiz->review_policy === 'points_only')>Skor saja</option><option value="hide_all" @selected($quiz->review_policy === 'hide_all')>Sembunyikan detail</option></select>
-                @endif
-
-                <div class="flex gap-4 text-sm"><label><input type="checkbox" name="shuffle_questions" value="1" @checked($quiz->shuffle_questions)> Acak soal</label><label><input type="checkbox" name="shuffle_options" value="1" @checked($quiz->shuffle_options)> Acak pilihan</label></div>
-                <button class="w-full rounded-xl bg-blue-600 py-2.5 text-base font-bold text-white">Simpan Perubahan</button>
-=======
                 <div class="flex-1 space-y-4">
                     <h2 class="font-bold">Konfigurasi {{ $activityLabel }}</h2>
                     <div><label class="mb-1 block text-xs font-semibold">Judul *</label><input name="title" required value="{{ old('title', $quiz->title) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
@@ -62,15 +43,10 @@
                     <div class="flex gap-4 text-xs"><label><input type="checkbox" name="shuffle_questions" value="1" @checked($quiz->shuffle_questions)> Acak soal</label><label><input type="checkbox" name="shuffle_options" value="1" @checked($quiz->shuffle_options)> Acak pilihan</label></div>
                 </div>
                 <button class="mt-auto w-full rounded-xl bg-blue-600 py-2.5 text-sm font-bold text-white">Simpan Perubahan</button>
->>>>>>> 3a5889f (memperbarui tampilan soal dalam ujian menjadi ada filternya)
             </form>
 
             <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border bg-white p-6 lg:h-[calc(100vh-8rem)] lg:sticky lg:top-6">
                 <div class="mb-4 flex items-start justify-between gap-4">
-<<<<<<< HEAD
-                    <div><h2 class="font-bold">Soal dalam {{ $activityLabel }}</h2><p class="text-sm text-slate-500">Pilih dari bank soal terkait.</p></div>
-                    <p class="text-right text-sm font-semibold text-slate-600"><span id="selected-question-count">{{ count($selectedQuestionIds) }}</span> soal dipilih<br><span id="selected-question-points" class="text-blue-600">0</span> / 100 poin</p>
-=======
                     <div>
                         <h2 class="font-bold">Soal dalam {{ $activityLabel }}</h2>
                         <p class="text-xs text-slate-500">
@@ -85,35 +61,10 @@
                         <span id="selected-question-count">{{ count($selectedQuestionIds) }}</span> soal dipilih<br>
                         <span id="selected-question-points" class="text-blue-600">0</span> / 100 poin
                     </p>
->>>>>>> 3a5889f (memperbarui tampilan soal dalam ujian menjadi ada filternya)
                 </div>
 
                 <form id="question-selection-form" action="{{ route($isPractice ? 'practices.questions.sync' : 'quizzes.questions.sync', [$course, $quiz]) }}" method="POST" class="flex min-h-0 flex-1 flex-col overflow-hidden">
                     @csrf
-<<<<<<< HEAD
-                    <div class="max-h-96 space-y-2 overflow-y-auto pr-1">
-                        @forelse($availableQuestions as $question)
-                            <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
-                                <input class="question-checkbox mt-0.5" type="checkbox" name="question_ids[]" value="{{ $question->id }}" data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}" @checked(in_array($question->id, $selectedQuestionIds))>
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-semibold leading-relaxed text-slate-800">{{ $question->question_text }}</p>
-                                    <p class="mt-1 text-[10px] text-slate-400">
-                                        {{ $question->type_label }} · 
-                                        @if($question->type === 'matching' || $question->type === 'ordering')
-                                            {{ $question->points * $question->options->count() }} poin ({{ $question->options->count() }} x {{ $question->points }} poin)
-                                        @else
-                                            {{ $question->points }} poin
-                                        @endif
-                                    </p>
-                                </div>
-                                <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route($isPractice ? 'practices.edit' : 'quizzes.edit', [$course, $quiz])) }}" class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50" onclick="event.stopPropagation()">Lihat detail</a>
-                            </label>
-                        @empty
-                            <div class="py-8 text-center text-base text-slate-400">Belum ada soal.</div>
-                        @endforelse
-                    </div>
-                    <button class="w-full rounded-xl bg-emerald-600 py-2.5 text-base font-bold text-white">Simpan Pilihan Soal</button>
-=======
                     @if($quiz->isFinalQuiz())
                         {{-- Ujian: Tab filter per bab --}}
                         @php $groupedQuestions = $availableQuestions->groupBy('chapter_id'); @endphp
@@ -233,8 +184,6 @@
                     @endif
 
                     <button class="mt-auto w-full rounded-xl bg-emerald-600 py-2.5 text-sm font-bold text-white">Simpan Pilihan Soal</button>
->>>>>>> 3a5889f (memperbarui tampilan soal dalam ujian menjadi ada filternya)
-                </form>
             </div>{{-- end card kanan --}}
         </div>{{-- end grid --}}
     </div>{{-- end container --}}

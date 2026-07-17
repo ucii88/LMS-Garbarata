@@ -171,12 +171,6 @@
             class="w-full flex items-center space-x-3 p-2 rounded-xl select-none text-left"
             title="Profil pengguna"
         >
-            <!-- Profile Avatar -->
-<<<<<<< HEAD
-            <div class="w-10 h-10 rounded-full bg-[#0091ff] text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                User
-            </div>
-=======
             @if(Auth::user()->avatar)
                 <img src="{{ Storage::url(Auth::user()->avatar) }}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shadow-sm shrink-0" alt="Avatar">
             @else
@@ -184,7 +178,6 @@
                     {{ substr(Auth::user()->name, 0, 1) }}
                 </div>
             @endif
->>>>>>> eec8056 (refactor: perbaikan navigasi bab, peningkatan ukuran font, dan alur login)
             <div class="flex-1 min-w-0">
                 <p class="text-base font-bold text-gray-800 truncate leading-tight">{{ Auth::user()->name }}</p>
                 <p class="text-sm text-gray-400 truncate mt-0.5">
