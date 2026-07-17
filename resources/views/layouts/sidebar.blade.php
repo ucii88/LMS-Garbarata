@@ -13,7 +13,10 @@
             <span class="text-base font-extrabold text-slate-800 tracking-tight">Garbarata</span>
             </div>
             <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Tutup sidebar">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v18"></path>
+                </svg>
             </button>
         </div>
 
@@ -194,6 +197,9 @@
 </aside>
 <aside x-cloak x-show="$store.ui.sidebarCollapsed" class="w-14 bg-white border-r border-[#f0f0f0] h-screen sticky top-0 shrink-0 flex justify-center pt-6">
     <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Buka sidebar">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v18"></path>
+        </svg>
     </button>
 </aside>

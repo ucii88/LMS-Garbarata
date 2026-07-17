@@ -49,6 +49,44 @@
                                     image_path: module.image_path,
                                 })),
                         ];
+
+                        // Auto-mark read using Intersection Observer as the user scrolls
+                        this.$nextTick(() => {
+                            const observerOptions = {
+                                root: null,
+                                rootMargin: '-20% 0px -50% 0px',
+                                threshold: 0
+                            };
+
+                            const observer = new IntersectionObserver((entries) => {
+                                entries.forEach(entry => {
+                                    if (entry.isIntersecting) {
+                                        const id = entry.target.dataset.moduleId;
+                                        const type = entry.target.dataset.type;
+                                        if (id) {
+                                            if (type === 'mech') {
+                                                this.activeMechId = isNaN(id) ? id : Number(id);
+                                            } else if (type === 'elec') {
+                                                this.activeElecId = isNaN(id) ? id : Number(id);
+                                            }
+                                            this.markModuleComplete(id);
+                                        }
+                                    }
+                                });
+                            }, observerOptions);
+
+                            // Observe mechanical sections
+                            this.mechItems.forEach(item => {
+                                const el = document.getElementById('mech-module-' + item.id);
+                                if (el) observer.observe(el);
+                            });
+
+                            // Observe electrical sections
+                            this.elecItems.forEach(item => {
+                                const el = document.getElementById('elec-module-' + item.id);
+                                if (el) observer.observe(el);
+                            });
+                        });
                     },
 
                     setMechModule(moduleId) {
@@ -278,7 +316,7 @@
 
                               <div class="space-y-12">
                                   <template x-for="item in mechItems" :key="item.id">
-                                      <div :id="'mech-module-' + item.id" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_mekanikal' ? 'border-t border-gray-100' : ''">
+                                      <div :id="'mech-module-' + item.id" :data-module-id="item.id" data-type="mech" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_mekanikal' ? 'border-t border-gray-100' : ''">
                                           <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
 
                                           <template x-if="item.image_path">
@@ -348,7 +386,7 @@
 
                               <div class="space-y-12">
                                   <template x-for="item in elecItems" :key="item.id">
-                                      <div :id="'elec-module-' + item.id" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_elektrikal' ? 'border-t border-gray-100' : ''">
+                                      <div :id="'elec-module-' + item.id" :data-module-id="item.id" data-type="elec" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_elektrikal' ? 'border-t border-gray-100' : ''">
                                           <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
 
                                           <template x-if="item.image_path">
