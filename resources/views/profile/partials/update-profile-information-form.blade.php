@@ -4,7 +4,7 @@
             {{ __('Profile Information') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-base text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
@@ -29,10 +29,10 @@
             </div>
             <label class="block">
                 <span class="sr-only">Choose profile photo</span>
-                <input type="file" name="avatar" accept="image/*" class="block w-full text-sm text-slate-500
+                <input type="file" name="avatar" accept="image/*" class="block w-full text-base text-slate-500
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0
-                    file:text-sm file:font-semibold
+                    file:text-base file:font-semibold
                     file:bg-blue-50 file:text-blue-700
                     hover:file:bg-blue-100
                 "/>
@@ -53,16 +53,16 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
+                    <p class="text-base mt-2 text-gray-800">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button form="send-verification" class="underline text-base text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
+                        <p class="mt-2 font-medium text-base text-green-600">
                             {{ __('A new verification link has been sent to your email address.') }}
                         </p>
                     @endif
@@ -79,7 +79,7 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
+                    class="text-base text-gray-600"
                 >{{ __('Saved.') }}</p>
             @endif
         </div>

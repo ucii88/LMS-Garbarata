@@ -95,13 +95,13 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-10">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -120,19 +120,19 @@
                     <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                     <div class="flex items-center space-x-3 border-b border-gray-100 pb-3">
                         <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
-                        <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Mekanikal</h2>
+                        <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Mekanikal</h2>
                     </div>
 
                     <!-- Sub-Chapter Selector for Mechanical -->
                     <div class="bg-slate-50/50 p-3 rounded-xl border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex items-center space-x-2 shrink-0">
-                            <span class="text-2xs font-bold text-slate-500 uppercase tracking-wide">Pilih Topik Mekanikal:</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Pilih Topik Mekanikal:</span>
                         </div>
                         <div class="flex flex-wrap gap-1.5">
                             <template x-for="item in mechItems" :key="item.id">
                                 <button
                                     @click="setMechModule(item.id)"
-                                    class="px-3 py-1.5 rounded-lg text-2xs font-bold transition text-left"
+                                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-left"
                                     :class="activeMechId === item.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
                                 >
                                     <span x-text="item.button_title"></span>
@@ -219,16 +219,16 @@
                             @touchend.window="stopDrag"
                         >
                             <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-sm font-bold text-slate-700">Diagram Interaktif</h3>
+                                <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
                                 @if(auth()->user()->isInstruktur())
                                     <div class="flex items-center gap-2">
-                                        <button x-show="!editMode" @click="editMode = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-bold transition">
+                                        <button x-show="!editMode" @click="editMode = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
                                             ⚙️ Atur Posisi Hotspot
                                         </button>
-                                        <button x-show="editMode" @click="editMode = false" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-bold transition">
+                                        <button x-show="editMode" @click="editMode = false" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
                                             Batal
                                         </button>
-                                        <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold transition">
+                                        <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-bold transition">
                                             <span x-show="!saving">💾 Simpan Posisi</span>
                                             <span x-show="saving">Menyimpan...</span>
                                         </button>
@@ -287,18 +287,18 @@
                                               </div>
                                           </template>
 
-                                          <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
+                                          <div class="text-base text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
 
                                           @if(auth()->user()->isInstruktur())
                                               <template x-if="item.id !== 'intro_mekanikal'">
                                                   <div class="flex items-center gap-2 pt-4 border-t border-slate-100 mt-4">
-                                                      <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                      <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                           Edit Modul
                                                       </a>
                                                       <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                           @csrf
                                                           @method('DELETE')
-                                                          <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                          <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                               Hapus
                                                           </button>
                                                       </form>
@@ -316,19 +316,19 @@
                   <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                       <div class="flex items-center space-x-3 border-b border-gray-100 pb-3">
                           <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
-                          <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Elektrikal dan Sistem Kontrol</h2>
+                          <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Elektrikal dan Sistem Kontrol</h2>
                       </div>
 
                       <!-- Sub-Chapter Selector for Electrical -->
                       <div class="bg-slate-50/50 p-3 rounded-xl border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                           <div class="flex items-center space-x-2 shrink-0">
-                              <span class="text-2xs font-bold text-slate-500 uppercase tracking-wide">Pilih Topik Elektrikal:</span>
+                              <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Pilih Topik Elektrikal:</span>
                           </div>
                           <div class="flex flex-wrap gap-1.5">
                               <template x-for="item in elecItems" :key="item.id">
                                   <button
                                       @click="setElecModule(item.id)"
-                                      class="px-3 py-1.5 rounded-lg text-2xs font-bold transition text-left"
+                                      class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-left"
                                       :class="activeElecId === item.id ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
                                   >
                                       <span x-text="item.button_title"></span>
@@ -357,18 +357,18 @@
                                               </div>
                                           </template>
 
-                                          <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
+                                          <div class="text-base text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
 
                                           @if(auth()->user()->isInstruktur())
                                               <template x-if="item.id !== 'intro_elektrikal'">
                                                   <div class="flex items-center gap-2 pt-4 border-t border-slate-100 mt-4">
-                                                      <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                      <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                           Edit Modul
                                                       </a>
                                                       <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                           @csrf
                                                           @method('DELETE')
-                                                          <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                          <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                               Hapus
                                                           </button>
                                                       </form>
@@ -445,13 +445,13 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         â† Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -466,10 +466,10 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 text-sm">
+                    <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
                         Materi Bab 3 dibagi menjadi detail pengoperasian, mode operasi manual, mode auto, dan prosedur pengoperasian. Setiap bagian dapat dibuka dan ditutup agar materi lebih mudah dibaca.
                     </p>
                 </div>
@@ -485,7 +485,7 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
                                 <div>
-                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Detail Pengoperasian</h2>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Detail Pengoperasian</h2>
                                     <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
                                 </div>
                             </div>
@@ -495,7 +495,7 @@
                                     Module 1.1
                                 </span>
                                 <span
-                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-black text-slate-600 transition"
                                     x-text="isSectionExpanded('detail') ? '-' : '+'"
                                 ></span>
                             </div>
@@ -506,20 +506,20 @@
                                 <template x-for="module in detailItems" :key="module.id">
                                     <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
                                         <div class="border-b border-gray-100 pb-3">
-                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                            <h3 class="text-sm md:text-base font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                         </div>
 
-                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                        <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
-                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     Edit Modul
                                                 </a>
                                                 <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                         Hapus
                                                     </button>
                                                 </form>
@@ -541,7 +541,7 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
                                 <div>
-                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Mode Operasi Manual</h2>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Mode Operasi Manual</h2>
                                     <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
                                 </div>
                             </div>
@@ -551,7 +551,7 @@
                                     Module 2.1 - 2.4
                                 </span>
                                 <span
-                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-black text-slate-600 transition"
                                     x-text="isSectionExpanded('manual') ? '-' : '+'"
                                 ></span>
                             </div>
@@ -559,27 +559,27 @@
 
                         <div x-show="isSectionExpanded('manual')" class="border-t border-gray-100 bg-white">
                             <div class="p-4 md:p-6 space-y-4">
-                                <p class="text-xs text-slate-600 leading-relaxed">
+                                <p class="text-sm text-slate-600 leading-relaxed">
                                     Dengan memutar keyswitch ke mode manual akan mengaktifkan seluruh komponen  penggerak Garbarata
                                 </p>
 
                                 <template x-for="module in manualItems" :key="module.id">
                                     <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
                                         <div class="border-b border-gray-100 pb-3">
-                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                            <h3 class="text-sm md:text-base font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                         </div>
 
-                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                        <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
-                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     Edit Modul
                                                 </a>
                                                 <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                         Hapus
                                                     </button>
                                                 </form>
@@ -601,7 +601,7 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-amber-200 bg-white text-[10px] font-black text-amber-600">03</span>
                                 <div>
-                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Mode Auto (Autolevel)</h2>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Mode Auto (Autolevel)</h2>
                                     <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
                                 </div>
                             </div>
@@ -611,7 +611,7 @@
                                     Module 3
                                 </span>
                                 <span
-                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-black text-slate-600 transition"
                                     x-text="isSectionExpanded('auto') ? '-' : '+'"
                                 ></span>
                             </div>
@@ -622,20 +622,20 @@
                                 <template x-for="module in autoItems" :key="module.id">
                                     <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
                                         <div class="border-b border-gray-100 pb-3">
-                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                            <h3 class="text-sm md:text-base font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                         </div>
 
-                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                        <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
-                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     Edit Modul
                                                 </a>
                                                 <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                         Hapus
                                                     </button>
                                                 </form>
@@ -657,7 +657,7 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-rose-200 bg-white text-[10px] font-black text-rose-600">04</span>
                                 <div>
-                                    <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Prosedur Pengoperasian</h2>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Prosedur Pengoperasian</h2>
                                     <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
                                 </div>
                             </div>
@@ -667,7 +667,7 @@
                                     Module 4.1 - 4.6
                                 </span>
                                 <span
-                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-black text-slate-600 transition"
                                     x-text="isSectionExpanded('procedure') ? '-' : '+'"
                                 ></span>
                             </div>
@@ -678,20 +678,20 @@
                                 <template x-for="module in procedureItems" :key="module.id">
                                     <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
                                         <div class="border-b border-gray-100 pb-3">
-                                            <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                            <h3 class="text-sm md:text-base font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                         </div>
 
-                                        <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                        <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
-                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     Edit Modul
                                                 </a>
                                                 <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                         Hapus
                                                     </button>
                                                 </form>
@@ -750,13 +750,13 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         â† Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -771,10 +771,10 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 text-sm">
+                    <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
                         Materi Bab 2 dibagi menjadi spesifikasi mekanikal dan elektrikal. Bagian mekanikal dapat dibuka dan ditutup per topik agar tabel dan gambar lebih mudah dibaca.
                     </p>
                 </div>
@@ -785,7 +785,7 @@
                         <div class="flex flex-col gap-2 border-b border-gray-100 pb-4 md:flex-row md:items-center md:justify-between">
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
-                                <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Mekanikal</h2>
+                                <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Mekanikal</h2>
                             </div>
 
                             <span class="inline-flex w-fit rounded-full border border-blue-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-blue-600 uppercase tracking-wider">
@@ -805,26 +805,26 @@
                                         @click="toggleMech(module.id)"
                                         class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
                                     >
-                                        <span class="text-xs md:text-sm font-bold text-slate-800" x-text="module.title"></span>
+                                        <span class="text-sm md:text-base font-bold text-slate-800" x-text="module.title"></span>
                                         <span
-                                            class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                            class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-black text-slate-600 transition"
                                             x-text="isMechExpanded(module.id) ? '-' : '+'"
                                         ></span>
                                     </button>
 
                                     <div x-show="isMechExpanded(module.id)" class="border-t border-gray-100 bg-white">
                                         <div class="p-4 md:p-6 space-y-4">
-                                            <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                            <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
                                             @if(auth()->user()->isInstruktur())
                                                 <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
-                                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                         Edit Modul
                                                     </a>
                                                     <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                        <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                             Hapus
                                                         </button>
                                                     </form>
@@ -842,7 +842,7 @@
                         <div class="flex flex-col gap-2 border-b border-gray-100 pb-4 md:flex-row md:items-center md:justify-between">
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
-                                <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider">Elektrikal</h2>
+                                <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Elektrikal</h2>
                             </div>
 
                             <span class="inline-flex w-fit rounded-full border border-emerald-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
@@ -854,20 +854,20 @@
                             <template x-for="module in elecItems" :key="module.id">
                                 <article @click="markModuleComplete(module.id)" class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm cursor-pointer hover:border-emerald-200">
                                     <div class="border-b border-gray-100 pb-3">
-                                        <h3 class="text-xs md:text-sm font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
+                                        <h3 class="text-sm md:text-base font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                     </div>
 
-                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                    <div class="text-sm text-slate-600 leading-relaxed space-y-3 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                 Edit Modul
                                             </a>
                                             <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-3xs font-bold transition shadow-xs">
+                                                <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     Hapus
                                                 </button>
                                             </form>
@@ -989,13 +989,13 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         ← Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -1011,10 +1011,10 @@
 
                 <!-- Chapter Header Description Card -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 text-sm">
+                    <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
                         Materi modul pembelajaran tertulis. Gunakan menu tab di bawah untuk memilih sub-bab secara cepat atau gunakan tombol navigasi di bawah halaman untuk membaca secara berurutan.
                     </p>
                 </div>
@@ -1026,7 +1026,7 @@
                         <template x-for="tab in tabs" :key="tab">
                             <button
                                 @click="setActiveTab(tab)"
-                                class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
+                                class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
                                 :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                             >
                                 <span x-text="tab === '4.6' ? '4.6 Checklist Inspeksi' : (tab === '4.7' ? '4.7 Troubleshooting' : getSingleModule(tab).title)"></span>
@@ -1040,14 +1040,14 @@
                     
                     <!-- Sub-chapter Title & Main Description -->
                     <div class="border-b border-slate-100 pb-5">
-                        <h3 class="text-sm md:text-base font-extrabold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
-                        <div class="text-xs text-slate-600 leading-relaxed mt-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
+                        <h3 class="text-base md:text-base font-extrabold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
+                        <div class="text-sm text-slate-600 leading-relaxed mt-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
                         
                         <!-- Action Buttons for Instructor inside Intro Card -->
                         @if(auth()->user()->isInstruktur())
                             <template x-if="getSingleModule(activeTab).id">
                                 <div class="flex items-center gap-2 pt-4 border-t border-slate-50 mt-4">
-                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                         Edit Deskripsi Pengantar
                                     </a>
                                 </div>
@@ -1060,19 +1060,19 @@
                         <div class="space-y-8 divide-y divide-slate-100">
                             <template x-for="subModule in getTabModules(activeTab)" :key="subModule.id">
                                 <div class="pt-8 first:pt-0">
-                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="subModule.title"></h4>
-                                    <div class="text-xs text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                    <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="subModule.title"></h4>
+                                    <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                     
                                     <!-- Action Buttons for Instructor inside Submodule -->
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 mt-4 pt-2">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 Edit Modul Ini
                                             </a>
                                             <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                     Hapus Modul
                                                 </button>
                                             </form>
@@ -1089,18 +1089,18 @@
                             <!-- 4.6.1 -->
                             <template x-if="getSingleModule('4.6.1').id">
                                 <div class="pt-4 first:pt-0">
-                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.1').title"></h4>
-                                    <div class="text-xs text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.1').content"></div>
+                                    <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.1').title"></h4>
+                                    <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.1').content"></div>
                                     
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 mt-4 pt-2">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 Edit Modul Ini
                                             </a>
                                             <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                     Hapus Modul
                                                 </button>
                                             </form>
@@ -1112,18 +1112,18 @@
                             <!-- 4.6.2 -->
                             <template x-if="getSingleModule('4.6.2').id">
                                 <div class="pt-6 border-t border-slate-100">
-                                    <h4 class="text-xs md:text-sm font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.2').title"></h4>
-                                    <div class="text-xs text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.2').content"></div>
+                                    <h4 class="text-sm md:text-base font-bold text-slate-800 mb-3" x-text="getSingleModule('4.6.2').title"></h4>
+                                    <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="getSingleModule('4.6.2').content"></div>
                                     
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 mt-4 pt-2">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 Edit Modul Ini
                                             </a>
                                             <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                     Hapus Modul
                                                 </button>
                                             </form>
@@ -1136,24 +1136,24 @@
                             <div class="pt-6 border-t border-slate-100">
                                 <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden" open>
                                     <summary class="flex items-center justify-between gap-3 cursor-pointer select-none px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors duration-150 list-none">
-                                        <span class="font-bold text-slate-800 text-xs uppercase tracking-wide">4.6.3 Inspeksi Bulanan</span>
+                                        <span class="font-bold text-slate-800 text-sm uppercase tracking-wide">4.6.3 Inspeksi Bulanan</span>
                                         <svg class="w-4 h-4 text-slate-500 transition-transform duration-200 group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                     </summary>
                                     <div class="border-t border-slate-100 bg-white p-4 space-y-6 divide-y divide-slate-100">
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.3.'))" :key="subModule.id">
                                             <div class="pt-6 first:pt-0">
-                                                <h5 class="font-bold text-slate-800 text-xs mb-3" x-text="subModule.title"></h5>
-                                                <div class="text-xs text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                                <h5 class="font-bold text-slate-800 text-sm mb-3" x-text="subModule.title"></h5>
+                                                <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                                 
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 mt-4 pt-2">
-                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             Edit Tabel Ini
                                                         </a>
                                                         <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini?')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                                 Hapus Tabel
                                                             </button>
                                                         </form>
@@ -1169,24 +1169,24 @@
                             <div class="pt-6 border-t border-slate-100">
                                 <details class="group rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden" open>
                                     <summary class="flex items-center justify-between gap-3 cursor-pointer select-none px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors duration-150 list-none">
-                                        <span class="font-bold text-slate-800 text-xs uppercase tracking-wide">4.6.4 Inspeksi Quartal</span>
+                                        <span class="font-bold text-slate-800 text-sm uppercase tracking-wide">4.6.4 Inspeksi Quartal</span>
                                         <svg class="w-4 h-4 text-slate-500 transition-transform duration-200 group-open:rotate-180 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                     </summary>
                                     <div class="border-t border-slate-100 bg-white p-4 space-y-6 divide-y divide-slate-100">
                                         <template x-for="subModule in modules.filter(m => m.title.startsWith('4.6.4.'))" :key="subModule.id">
                                             <div class="pt-6 first:pt-0">
-                                                <h5 class="font-bold text-slate-800 text-xs mb-3" x-text="subModule.title"></h5>
-                                                <div class="text-xs text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                                <h5 class="font-bold text-slate-800 text-sm mb-3" x-text="subModule.title"></h5>
+                                                <div class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                                 
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 mt-4 pt-2">
-                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             Edit Tabel Ini
                                                         </a>
                                                         <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini?')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                                 Hapus Tabel
                                                             </button>
                                                         </form>
@@ -1203,7 +1203,7 @@
                     <!-- 3. Display for tab 4.7 (Troubleshooting): Accordions list -->
                     <template x-if="activeTab === '4.7'">
                         <div class="space-y-4">
-                            <div class="text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Daftar Troubleshooting (Klik untuk membuka detail):</div>
+                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Daftar Troubleshooting (Klik untuk membuka detail):</div>
                             <div class="space-y-3">
                                 <template x-for="subModule in modules.filter(m => m.title.startsWith('4.7.') && m.title !== '4.7')" :key="subModule.id">
                                     <div class="rounded-xl border border-slate-100 bg-white overflow-hidden shadow-xs">
@@ -1212,26 +1212,26 @@
                                             @click="activeSectionId = activeSectionId === subModule.id ? null : subModule.id; if(activeSectionId === subModule.id) markModuleComplete(subModule.id);"
                                             class="w-full flex items-center justify-between gap-4 bg-slate-50/50 px-4 py-3.5 text-left transition hover:bg-slate-50"
                                         >
-                                            <span class="text-xs font-bold text-slate-800" x-text="subModule.title"></span>
+                                            <span class="text-sm font-bold text-slate-800" x-text="subModule.title"></span>
                                             <span
-                                                class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-xs font-black text-slate-600 transition"
+                                                class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
                                                 x-text="activeSectionId === subModule.id ? '-' : '+'"
                                             ></span>
                                         </button>
 
                                         <div x-show="activeSectionId === subModule.id" class="border-t border-slate-100 bg-white">
                                             <div class="p-4 md:p-6 space-y-4">
-                                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                                <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                                 
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             Edit Tabel Trouble Ini
                                                         </a>
                                                         <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel trouble ini?')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                                 Hapus Tabel Trouble
                                                             </button>
                                                         </form>
@@ -1249,7 +1249,7 @@
                     <div class="border-t border-slate-100 pt-6 flex items-center justify-between gap-4">
                         <button 
                             @click="prevTab()"
-                            class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg transition"
+                            class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-sm font-bold rounded-lg transition"
                             x-show="tabs.indexOf(activeTab) > 0"
                         >
                             ← Kembali
@@ -1258,7 +1258,7 @@
 
                         <button 
                             @click="nextTab()"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition shadow-xs"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition shadow-xs"
                             x-show="tabs.indexOf(activeTab) < tabs.length - 1"
                         >
                             Lanjutkan →
@@ -1332,13 +1332,13 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         ← Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -1354,10 +1354,10 @@
 
                 <!-- Chapter Header Description Card -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 text-sm">
+                    <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
                         Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih sub-bab dan membaca detail spesifikasi.
                     </p>
                 </div>
@@ -1368,13 +1368,13 @@
                     <!-- 1. Top horizontal Sub-Chapter Navigation Bar -->
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex items-center space-x-2 shrink-0">
-                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
+                            <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="tab in tabs" :key="tab">
                                 <button
                                     @click="activeTab = tab; expandedModuleId = null; const m = getSingleModule(tab); if(m && m.id) markModuleComplete(m.id);"
-                                    class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
+                                    class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
                                     :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
                                     <span x-text="getSingleModule(tab).title"></span>
@@ -1395,27 +1395,27 @@
                                             @click="toggleModule(module.id)"
                                             class="w-full flex items-center justify-between gap-4 bg-white px-4 py-3.5 text-left transition hover:bg-slate-50"
                                         >
-                                            <span class="text-xs font-bold text-slate-800" x-text="module.title"></span>
+                                            <span class="text-sm font-bold text-slate-800" x-text="module.title"></span>
                                             <span
-                                                class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-black text-slate-600 transition"
+                                                class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-black text-slate-600 transition"
                                                 x-text="expandedModuleId === module.id ? '-' : '+'"
                                             ></span>
                                         </button>
 
                                         <div x-show="expandedModuleId === module.id" class="border-t border-gray-100 bg-white">
                                             <div class="p-4 md:p-6 space-y-4">
-                                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+                                                <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
                                                 
                                                 <!-- Action Buttons for Instructor inside Accordion -->
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             Edit Modul Ini
                                                         </a>
                                                         <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                                 Hapus Modul
                                                             </button>
                                                         </form>
@@ -1434,19 +1434,19 @@
                                 <div class="p-6 md:p-8 space-y-6">
                                     <h3 class="text-base font-bold text-slate-800" x-text="getSingleModule(activeTab).title"></h3>
                                     
-                                    <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
+                                    <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
                                     
                                     <!-- Action Buttons for Instructor -->
                                     @if(auth()->user()->isInstruktur())
                                         <template x-if="getSingleModule(activeTab).id">
                                             <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                     Edit Modul Ini
                                                 </a>
                                                 <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                    <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                         Hapus Modul
                                                     </button>
                                                 </form>
@@ -1493,13 +1493,13 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         ← Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -1515,10 +1515,10 @@
 
                 <!-- Chapter Header Description Card -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 text-sm">
+                    <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
                         Halaman ini berisi katalog suku cadang dan komponen Garbarata dalam format PDF. Klik pada masing-masing judul katalog di bawah ini untuk membuka dokumen PDF terkait.
                     </p>
                 </div>
@@ -1534,7 +1534,7 @@
                             >
                                 <div class="flex items-center gap-3">
                                     <span class="flex-shrink-0 w-7 h-7 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center shadow-sm" x-text="index + 1"></span>
-                                    <span class="font-semibold text-slate-800 text-sm text-left" x-text="module.title"></span>
+                                    <span class="font-semibold text-slate-800 text-base text-left" x-text="module.title"></span>
                                 </div>
                                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-300 flex-shrink-0" :class="expandedModuleId === module.id ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
@@ -1543,18 +1543,18 @@
 
                             <div x-show="expandedModuleId === module.id" class="border-t border-slate-100">
                                 <div class="px-5 py-4 bg-slate-50/50 space-y-4">
-                                    <div class="text-xs text-slate-600 leading-relaxed max-w-none prose prose-slate prose-sm animate-fade-in" x-html="module.content"></div>
+                                    <div class="text-sm text-slate-600 leading-relaxed max-w-none prose prose-slate prose-sm animate-fade-in" x-html="module.content"></div>
                                     
                                     <!-- Action Buttons for Instructor inside Accordion -->
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 pt-4 border-t border-slate-200">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 Edit Katalog Ini
                                             </a>
                                             <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus katalog ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                     Hapus Katalog
                                                 </button>
                                             </form>
@@ -1643,13 +1643,13 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         ← Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -1666,12 +1666,12 @@
                 <!-- Chapter Header Description Card -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div class="flex items-center space-x-3 border-b border-gray-100 pb-3 mb-3">
-                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-xs font-bold text-blue-600 shadow-sm">07</span>
-                        <h3 class="font-extrabold text-sm text-slate-800 uppercase tracking-wider">
+                        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-sm font-bold text-blue-600 shadow-sm">07</span>
+                        <h3 class="font-extrabold text-base text-slate-800 uppercase tracking-wider">
                             {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                         </h3>
                     </div>
-                    <p class="text-xs text-slate-500 leading-relaxed">
+                    <p class="text-sm text-slate-500 leading-relaxed">
                         Halaman ini merupakan penampil lampiran gambar elektrikal (wiring diagram). Gunakan menu navigasi di bawah untuk memilih lembar gambar, dan gunakan kontrol zoom untuk memperbesar gambar agar diagram terbaca lebih jelas.
                     </p>
                 </div>
@@ -1679,12 +1679,12 @@
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <!-- Left Sidebar - List of Drawings -->
                     <div class="lg:col-span-1 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3">
-                        <span class="text-2xs font-extrabold text-slate-400 uppercase tracking-wide px-1">Daftar Lembar Gambar</span>
+                        <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wide px-1">Daftar Lembar Gambar</span>
                         <div class="flex flex-col gap-1 max-h-[500px] overflow-y-auto pr-1">
                             <template x-for="(module, index) in modules" :key="module.id">
                                 <button
                                     @click="setActiveModule(module.id); resetZoom()"
-                                    class="w-full px-3 py-2.5 rounded-xl text-xs font-bold transition text-left flex items-start gap-2.5 border"
+                                    class="w-full px-3 py-2.5 rounded-xl text-sm font-bold transition text-left flex items-start gap-2.5 border"
                                     :class="activeModuleId == module.id ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800 border-transparent'"
                                 >
                                     <span class="flex-shrink-0 w-5 h-5 rounded-full bg-black/10 flex items-center justify-center text-[10px]" :class="activeModuleId == module.id ? 'bg-white/20 text-white' : 'text-slate-500'" x-text="index + 1"></span>
@@ -1700,7 +1700,7 @@
                             <!-- Toolbar -->
                             <div class="bg-slate-50 border-b border-gray-150 px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-slate-800">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold text-slate-800" x-text="getActiveModule().title"></span>
+                                    <span class="text-sm font-bold text-slate-800" x-text="getActiveModule().title"></span>
                                 </div>
                                 <div class="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-0.5">
                                     <button @click="zoomOut()" class="p-1.5 text-slate-500 hover:text-slate-800 transition hover:bg-slate-100 rounded-md cursor-pointer" title="Zoom Out">
@@ -1742,26 +1742,26 @@
                                         <svg class="w-12 h-12 mx-auto mb-2 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375 3.75 0 11-.75 0 .375 3.75 0 01.75 0z"/>
                                         </svg>
-                                        <span class="text-xs">Gambar tidak ditemukan</span>
+                                        <span class="text-sm">Gambar tidak ditemukan</span>
                                     </div>
                                 </template>
                             </div>
 
                             <!-- Description/Content (if any) -->
                             <div class="bg-white p-4" x-show="getActiveModule().content">
-                                <div class="text-slate-600 text-xs leading-relaxed max-w-none prose prose-slate prose-sm" x-html="getActiveModule().content"></div>
+                                <div class="text-slate-600 text-sm leading-relaxed max-w-none prose prose-slate prose-sm" x-html="getActiveModule().content"></div>
                             </div>
 
                             @if(auth()->user()->isInstruktur())
                                 <template x-if="activeModuleId">
                                     <div class="bg-slate-50 border-t border-gray-100 p-4 flex gap-2 rounded-b-2xl">
-                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                             Edit Lembar Gambar
                                         </a>
                                         <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lembar gambar ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 Hapus Lembar Gambar
                                             </button>
                                         </form>
@@ -1775,7 +1775,7 @@
                             <button
                                 @click="prevModule(); resetZoom()"
                                 :disabled="isFirst()"
-                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 ← Sebelumnya
                             </button>
@@ -1783,7 +1783,7 @@
                             <button
                                 @click="nextModule(); resetZoom()"
                                 :disabled="isLast()"
-                                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 Selanjutnya →
                             </button>
@@ -1799,13 +1799,13 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
                         ← Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
-                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-2xs transition shadow-sm">
+                            <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
@@ -1821,10 +1821,10 @@
 
                 <!-- Chapter Header Description Card -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 text-sm">
+                    <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">
+                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
                         @if($diagram)
                             Materi pembelajaran interaktif dilengkapi visualisasi skematis. <strong>Klik pada titik-titik biru bernomor (hotspots)</strong> pada gambar atau pilih daftar sub-bab di bawah untuk membaca detail spesifikasi.
                         @else
@@ -1839,13 +1839,13 @@
                     <!-- 1. Top horizontal Sub-Chapter Navigation Bar -->
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex items-center space-x-2 shrink-0">
-                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
+                            <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="module in modules" :key="module.id">
                                 <button
                                     @click="setActiveModule(module.id)"
-                                    class="px-4 py-2.5 rounded-lg text-xs font-bold transition text-left"
+                                    class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
                                     :class="activeModuleId === module.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
                                     <span x-text="module.title"></span>
@@ -1876,9 +1876,9 @@
                                                 <path d="M100 280 L700 280 M150 280 L150 320 M150 320 L170 320" />
                                                 <circle cx="575" cy="200" r="10" />
                                             </svg>
-                                            <span class="absolute text-sm font-bold text-slate-500 tracking-wide text-center">
+                                            <span class="absolute text-base font-bold text-slate-500 tracking-wide text-center">
                                                 Skema Rangkaian Elektrik<br>
-                                                <span class="text-xs font-normal text-slate-400 mt-1 block">(Gambar Rangkaian Kontrol Daya 380V)</span>
+                                                <span class="text-sm font-normal text-slate-400 mt-1 block">(Gambar Rangkaian Kontrol Daya 380V)</span>
                                             </span>
                                         @else
                                             <!-- Standard Boarding Bridge Silhouette Fallback -->
@@ -1895,9 +1895,9 @@
                                                 <circle cx="515" cy="340" r="18" />
                                                 <path d="M495 200 L590 200 L630 170 L630 270 L590 240 Z" />
                                             </svg>
-                                            <span class="absolute text-sm font-bold text-slate-500 tracking-wide text-center">
+                                            <span class="absolute text-base font-bold text-slate-500 tracking-wide text-center">
                                                 Gambar 3D Garbarata<br>
-                                                <span class="text-xs font-normal text-slate-400 mt-1 block">(Siluet Jembatan Penumpang)</span>
+                                                <span class="text-sm font-normal text-slate-400 mt-1 block">(Siluet Jembatan Penumpang)</span>
                                             </span>
                                         @endif
                                     </div>
@@ -1935,20 +1935,20 @@
                                 </template>
 
                                 <!-- Active Module Content body (rendered with HTML) -->
-                                <div class="text-xs text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="renderModuleContent(getActiveModule().content)">
+                                <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="renderModuleContent(getActiveModule().content)">
                                     Memuat isi modul pembelajaran...
                                 </div>
 
                                 @if(auth()->user()->isInstruktur())
                                     <template x-if="activeModuleId">
                                         <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 Edit Modul Ini
                                             </a>
                                             <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                     Hapus Modul
                                                 </button>
                                             </form>
@@ -1963,7 +1963,7 @@
                             <button
                                 @click="prevModule()"
                                 :disabled="isFirst()"
-                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-2xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 ← Sebelumnya
                             </button>
@@ -1971,7 +1971,7 @@
                             <button
                                 @click="nextModule()"
                                 :disabled="isLast()"
-                                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-2xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
                                 Selanjutnya →
                             </button>

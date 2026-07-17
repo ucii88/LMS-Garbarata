@@ -48,15 +48,15 @@
                         🚪
                     </div>
                     <h3 class="text-base font-bold text-slate-800">Yakin ingin keluar?</h3>
-                    <p class="text-xs text-slate-500 mt-1">Anda akan keluar dari sesi masuk LMS-Garbarata saat ini.</p>
+                    <p class="text-sm text-slate-500 mt-1">Anda akan keluar dari sesi masuk LMS-Garbarata saat ini.</p>
                 </div>
                 <div class="flex gap-3">
                     <button type="button" onclick="closeLogoutModal()"
-                            class="flex-1 py-2.5 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
+                            class="flex-1 py-2.5 text-sm font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
                         Batal
                     </button>
                     <button type="button" onclick="submitLogoutForm()"
-                            class="flex-1 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition">
+                            class="flex-1 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition">
                         Ya, Keluar
                     </button>
                 </div>

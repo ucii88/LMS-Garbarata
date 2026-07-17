@@ -64,7 +64,7 @@
             </div>
 
             <!-- Simple Nav Link Back to Welcome -->
-            <a href="/" class="text-xs text-slate-400 hover:text-slate-600 transition duration-300 flex items-center gap-1">
+            <a href="/" class="text-sm text-slate-400 hover:text-slate-600 transition duration-300 flex items-center gap-1">
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>

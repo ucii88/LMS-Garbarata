@@ -14,7 +14,7 @@
 {{-- ========== QUIZ CARD ========== --}}
 @if($chapterQuiz)
 <div class="mt-8 px-4 sm:px-0">
-    <p class="text-xs font-bold text-blue-700 uppercase tracking-wider">Quiz Chapter</p>
+    <p class="text-sm font-bold text-blue-700 uppercase tracking-wider">Quiz Chapter</p>
 </div>
 <div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border-2 overflow-hidden
@@ -47,28 +47,28 @@
 
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-xs font-bold uppercase tracking-wider
+                    <span class="text-sm font-bold uppercase tracking-wider
                         @if($chapterQuizAttempt?->is_passed) text-emerald-600
                         @elseif($chapterQuizAttempt) text-red-500
                         @else text-blue-600 @endif">
                         Quiz Chapter
                     </span>
                     @if($chapterQuizAttempt?->is_passed)
-                        <span class="text-xs px-2 py-0.5 bg-emerald-500 text-white rounded-full font-semibold">
+                        <span class="text-sm px-2 py-0.5 bg-emerald-500 text-white rounded-full font-semibold">
                             Lulus · {{ number_format($chapterQuizAttempt->score, 0) }}%
                         </span>
                     @elseif($chapterQuizAttempt && !$chapterQuizAttempt->is_passed)
-                        <span class="text-xs px-2 py-0.5 bg-red-400 text-white rounded-full font-semibold">
+                        <span class="text-sm px-2 py-0.5 bg-red-400 text-white rounded-full font-semibold">
                             Belum Lulus · {{ number_format($chapterQuizAttempt->score, 0) }}%
                         </span>
                     @else
-                        <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full font-semibold">
+                        <span class="text-sm px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full font-semibold">
                             Belum Dikerjakan
                         </span>
                     @endif
                 </div>
-                <h3 class="text-sm font-bold text-slate-800 mt-0.5">{{ $chapterQuiz->title }}</h3>
-                <p class="text-xs text-slate-500">
+                <h3 class="text-base font-bold text-slate-800 mt-0.5">{{ $chapterQuiz->title }}</h3>
+                <p class="text-sm text-slate-500">
                     {{ $chapterQuiz->questions_count }} soal ·
                     {{ $chapterQuiz->time_limit ? $chapterQuiz->time_limit . ' mnt' : 'Tanpa timer' }} ·
                     Lulus: {{ $chapterQuiz->passing_score }}%
@@ -92,35 +92,35 @@
                 @if(auth()->user()->isPeserta())
                     @if($chapterQuizAttempt?->is_passed)
                         <a href="{{ route('quiz.result', [$course, $chapterQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 rounded-xl transition">
                             Lihat Hasil
                         </a>
                     @elseif($chapterQuiz->availability_status === 'upcoming')
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
                             Belum Dibuka
                         </span>
                     @elseif($chapterQuiz->availability_status === 'closed')
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
                             Sudah Ditutup
                         </span>
                     @elseif($chapterQuiz->canAttempt(auth()->id()))
                         <a href="{{ route('quiz.start', [$course, $chapterQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
                             {{ $chapterQuizAttempt ? 'Coba Lagi' : 'Mulai Quiz' }}
                         </a>
                     @else
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
                             Habis
                         </span>
                     @endif
                 @elseif(auth()->user()->isInstruktur())
                     <div class="flex items-center gap-2">
                         <a href="{{ route('quizzes.attempts', [$course, $chapterQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition">
                             Hasil Peserta
                         </a>
                         <a href="{{ route('quizzes.edit', [$course, $chapterQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-xl transition">
                             Edit
                         </a>
                     </div>
@@ -134,10 +134,10 @@
 <div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-5 py-4 flex items-center justify-between gap-4">
         <div>
-            <p class="text-xs font-semibold text-slate-500">Quiz untuk chapter ini belum dibuat</p>
+            <p class="text-sm font-semibold text-slate-500">Quiz untuk chapter ini belum dibuat</p>
         </div>
         <a href="{{ route('quizzes.create', $course) }}"
-           class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shrink-0">
+           class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shrink-0">
             + Buat Quiz Chapter
         </a>
     </div>
@@ -164,23 +164,23 @@
 
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Ujian</span>
+                    <span class="text-sm font-bold uppercase tracking-wider text-amber-600">Ujian</span>
                     @if($finalQuizAttempt?->is_passed)
-                        <span class="text-xs px-2 py-0.5 bg-amber-500 text-white rounded-full font-semibold">
+                        <span class="text-sm px-2 py-0.5 bg-amber-500 text-white rounded-full font-semibold">
                             Lulus · {{ number_format($finalQuizAttempt->score, 0) }}%
                         </span>
                     @elseif($finalQuizAttempt)
-                        <span class="text-xs px-2 py-0.5 bg-orange-400 text-white rounded-full font-semibold">
+                        <span class="text-sm px-2 py-0.5 bg-orange-400 text-white rounded-full font-semibold">
                             Belum Lulus · {{ number_format($finalQuizAttempt->score, 0) }}%
                         </span>
                     @else
-                        <span class="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-semibold">
+                        <span class="text-sm px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-semibold">
                             Ujian Akhir Course
                         </span>
                     @endif
                 </div>
-                <h3 class="text-sm font-bold text-slate-800 mt-0.5">{{ $finalQuiz->title }}</h3>
-                <p class="text-xs text-slate-500">
+                <h3 class="text-base font-bold text-slate-800 mt-0.5">{{ $finalQuiz->title }}</h3>
+                <p class="text-sm text-slate-500">
                     {{ $finalQuiz->questions_count }} soal ·
                     {{ $finalQuiz->time_limit ? $finalQuiz->time_limit . ' mnt' : 'Tanpa timer' }} ·
                     Lulus: {{ $finalQuiz->passing_score }}%
@@ -203,35 +203,35 @@
                 @if(auth()->user()->isPeserta())
                     @if($finalQuizAttempt?->is_passed)
                         <a href="{{ route('quiz.result', [$course, $finalQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-amber-700 bg-amber-100 hover:bg-emerald-200 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-amber-700 bg-amber-100 hover:bg-emerald-200 rounded-xl transition">
                             Lihat Hasil
                         </a>
                     @elseif($finalQuiz->availability_status === 'upcoming')
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
                             Belum Dibuka
                         </span>
                     @elseif($finalQuiz->availability_status === 'closed')
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
                             Sudah Ditutup
                         </span>
                     @elseif($finalQuiz->canAttempt(auth()->id()))
                         <a href="{{ route('quiz.start', [$course, $finalQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl transition">
                             Mulai Ujian
                         </a>
                     @else
-                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
+                        <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
                             Habis
                         </span>
                     @endif
                 @elseif(auth()->user()->isInstruktur())
                     <div class="flex items-center gap-2">
                         <a href="{{ route('quizzes.attempts', [$course, $finalQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 border border-amber-200 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-amber-800 bg-amber-100 hover:bg-amber-200 border border-amber-200 rounded-xl transition">
                             Hasil Peserta
                         </a>
                         <a href="{{ route('quizzes.edit', [$course, $finalQuiz]) }}"
-                           class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-amber-700 border border-amber-200 hover:bg-amber-50 rounded-xl transition">
+                           class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-amber-700 border border-amber-200 hover:bg-amber-50 rounded-xl transition">
                             Edit
                         </a>
                     </div>

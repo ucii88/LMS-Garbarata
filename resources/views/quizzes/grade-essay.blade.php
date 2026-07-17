@@ -6,18 +6,18 @@
     {{-- Header --}}
     <div>
         <a href="{{ route($isPractice ? 'practices.attempts' : 'quizzes.attempts', [$course, $quiz]) }}"
-           class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-blue-600 transition mb-2">
+           class="inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
             ← Kembali ke Daftar Peserta
         </a>
         <div class="flex items-start justify-between gap-4">
             <div>
                 <h1 class="text-xl font-bold text-slate-800">Evaluasi Jawaban</h1>
-                <p class="text-xs text-slate-500 mt-1">
+                <p class="text-sm text-slate-500 mt-1">
                     <span class="font-semibold text-blue-600">{{ $quiz->title }}</span>
                     · Peserta: <span class="font-semibold text-slate-700">{{ $attempt->user->name }}</span>
                     · {{ $attempt->user->email }}
                 </p>
-                <p class="text-xs text-slate-400 mt-0.5">
+                <p class="text-sm text-slate-400 mt-0.5">
                     Dikerjakan: {{ $attempt->started_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}
                     @if($attempt->submitted_at)
                         · Dikumpulkan: {{ $attempt->submitted_at->timezone('Asia/Jakarta')->format('H:i') }}
@@ -27,11 +27,11 @@
             </div>
             {{-- Status Badge --}}
             @if($attempt->isPendingEssay())
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-orange-100 text-orange-700">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold bg-orange-100 text-orange-700">
                      Menunggu Penilaian Esai
                 </span>
             @else
-                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700">
                      Selesai
                 </span>
             @endif
@@ -40,7 +40,7 @@
 
     {{-- Flash Messages --}}
     @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-base px-4 py-3 rounded-xl">
             {{ session('success') }}
         </div>
     @endif
@@ -65,19 +65,19 @@
                     {{-- Header soal --}}
                     <div class="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-100">
                         <div class="flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center">
+                            <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-bold flex items-center justify-center">
                                 Q{{ $question->order ?? ($i+1) }}
                             </span>
-                            <span class="text-xs font-bold text-orange-600 px-2 py-0.5 bg-orange-100 rounded-full">Esai</span>
+                            <span class="text-sm font-bold text-orange-600 px-2 py-0.5 bg-orange-100 rounded-full">Esai</span>
                         </div>
-                        <span class="text-xs text-slate-500 font-semibold">Maks. {{ $question->points }} poin</span>
+                        <span class="text-sm text-slate-500 font-semibold">Maks. {{ $question->points }} poin</span>
                     </div>
 
                     <div class="p-6 space-y-5">
                         {{-- Teks Soal --}}
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 mb-1">Soal:</p>
-                            <p class="text-sm font-medium text-slate-800 leading-relaxed">
+                            <p class="text-sm font-semibold text-slate-500 mb-1">Soal:</p>
+                            <p class="text-base font-medium text-slate-800 leading-relaxed">
                                 {!! nl2br(e($question->question_text)) !!}
                             </p>
                             @if($question->question_image)
@@ -88,8 +88,8 @@
 
                         {{-- Jawaban Peserta --}}
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 mb-1">Jawaban Peserta:</p>
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-800 leading-relaxed whitespace-pre-wrap min-h-[80px]">
+                            <p class="text-sm font-semibold text-slate-500 mb-1">Jawaban Peserta:</p>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-base text-slate-800 leading-relaxed whitespace-pre-wrap min-h-[80px]">
                                 {{ $answer->text_answer ?: '(tidak ada jawaban)' }}
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {{-- Input Nilai --}}
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">
                                     Nilai <span class="text-red-500">*</span>
                                     <span class="text-slate-400 font-normal">(0 – {{ $question->points }} poin)</span>
                                 </label>
@@ -116,9 +116,9 @@
                                            step="0.5"
                                            required
                                            placeholder="0"
-                                           class="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none"
+                                           class="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 text-base font-bold focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none"
                                            oninput="updatePointsDisplay({{ $i }}, this.value, {{ $question->points }})">
-                                    <span class="text-sm text-slate-400 shrink-0">/ {{ $question->points }}</span>
+                                    <span class="text-base text-slate-400 shrink-0">/ {{ $question->points }}</span>
                                 </div>
                                 {{-- Visual progress bar --}}
                                 <div class="mt-2 h-2 bg-slate-100 rounded-full overflow-hidden">
@@ -131,19 +131,19 @@
 
                             {{-- Feedback --}}
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">
                                     Feedback <span class="text-slate-400 font-normal">(opsional)</span>
                                 </label>
                                 <textarea name="grades[{{ $i }}][feedback]"
                                           rows="3"
                                           placeholder="Tulis komentar atau feedback untuk peserta..."
-                                          class="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none resize-none">{{ $answer->essay_feedback ?? '' }}</textarea>
+                                          class="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none resize-none">{{ $answer->essay_feedback ?? '' }}</textarea>
                             </div>
                         </div>
 
                         {{-- Info sudah dinilai sebelumnya --}}
                         @if($answer->essay_graded_at)
-                            <div class="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+                            <div class="flex items-center gap-2 text-sm text-blue-600 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
                                 <span></span>
                                 <span>
                                     Sebelumnya dinilai {{ $answer->essay_graded_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}
@@ -176,10 +176,10 @@
                     {{-- Header soal --}}
                     <div class="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-100">
                         <div class="flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center">
+                            <span class="w-7 h-7 rounded-full bg-slate-800 text-white text-sm font-bold flex items-center justify-center">
                                 Q{{ $question->order ?? ($j+1) }}
                             </span>
-                            <span class="text-xs font-bold text-blue-600 px-2 py-0.5 bg-blue-100 rounded-full">
+                            <span class="text-sm font-bold text-blue-600 px-2 py-0.5 bg-blue-100 rounded-full">
                                 @if($question->type === 'multiple_choice') Pilihan Ganda
                                 @elseif($question->type === 'true_false') Benar / Salah
                                 @elseif($question->type === 'matching') Mencocokkan
@@ -187,14 +187,14 @@
                                 @else Lainnya @endif
                             </span>
                         </div>
-                        <span class="text-xs text-slate-500 font-semibold">Maks. {{ $maxPoints }} poin</span>
+                        <span class="text-sm text-slate-500 font-semibold">Maks. {{ $maxPoints }} poin</span>
                     </div>
 
                     <div class="p-6 space-y-5">
                         {{-- Teks Soal --}}
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 mb-1">Soal:</p>
-                            <p class="text-sm font-medium text-slate-800 leading-relaxed">
+                            <p class="text-sm font-semibold text-slate-500 mb-1">Soal:</p>
+                            <p class="text-base font-medium text-slate-800 leading-relaxed">
                                 {!! nl2br(e($question->question_text)) !!}
                             </p>
                             @if($question->question_image)
@@ -205,8 +205,8 @@
 
                         {{-- Jawaban --}}
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 mb-1">Jawaban Peserta:</p>
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm {{ $answer->is_correct ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-red-700 bg-red-50 border-red-200' }} leading-relaxed font-semibold">
+                            <p class="text-sm font-semibold text-slate-500 mb-1">Jawaban Peserta:</p>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-base {{ $answer->is_correct ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-red-700 bg-red-50 border-red-200' }} leading-relaxed font-semibold">
                                 @if($question->type === 'multiple_choice' || $question->type === 'true_false')
                                     @php $opt = $question->options->where('id', $answer->selected_option_id)->first(); @endphp
                                     {{ $opt ? $opt->option_text : '(tidak menjawab)' }}
@@ -232,7 +232,7 @@
                                     {{ $answer->text_answer ?: '(tidak menjawab)' }}
                                 @endif
                                 
-                                <span class="block mt-4 pt-3 border-t {{ $answer->is_correct ? 'border-emerald-200' : 'border-red-200' }} text-xs font-bold {{ $answer->is_correct ? 'text-emerald-600' : 'text-red-600' }}">
+                                <span class="block mt-4 pt-3 border-t {{ $answer->is_correct ? 'border-emerald-200' : 'border-red-200' }} text-sm font-bold {{ $answer->is_correct ? 'text-emerald-600' : 'text-red-600' }}">
                                     @if($answer->is_correct) Benar @else Salah / Parsial @endif 
                                     · Poin didapat: {{ number_format($answer->points_earned, 0) }} / {{ $maxPoints }}
                                 </span>
@@ -240,7 +240,7 @@
                             
                             {{-- Tampilkan kunci jawaban benar jika salah --}}
                             @if(!$answer->is_correct)
-                                <div class="mt-3 text-xs bg-slate-50 p-3 rounded-lg border border-slate-200">
+                                <div class="mt-3 text-sm bg-slate-50 p-3 rounded-lg border border-slate-200">
                                     <span class="font-bold text-slate-500 mb-1 block">Kunci Jawaban Benar:</span>
                                     
                                     @if($question->type === 'multiple_choice' || $question->type === 'true_false')
@@ -272,17 +272,17 @@
 
             {{-- Total & Submit --}}
             <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between gap-4 sticky bottom-4 shadow-lg z-10">
-                <div class="text-sm text-slate-600">
+                <div class="text-base text-slate-600">
                     <span class="font-semibold">{{ $essayAnswers->count() + $otherAnswers->count() }}</span> soal total
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route($isPractice ? 'practices.attempts' : 'quizzes.attempts', [$course, $quiz]) }}"
-                       class="px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 transition">
+                       class="px-4 py-2.5 text-base font-semibold text-slate-600 hover:text-slate-800 transition">
                         Batal / Kembali
                     </a>
                     @if($essayAnswers->isNotEmpty())
                         <button type="submit"
-                                class="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-xl transition shadow-sm">
+                                class="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-base font-bold rounded-xl transition shadow-sm">
                              Simpan Semua Penilaian Esai
                         </button>
                     @endif

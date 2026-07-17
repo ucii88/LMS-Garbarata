@@ -7,10 +7,10 @@
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Back Button & Breadcrumbs -->
         <div class="flex items-center justify-between">
-            <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}" class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-blue-600 transition">
+            <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}" class="inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition">
                 &larr; Kembali ke Silabus / Materi
             </a>
-            <span class="text-xs text-slate-400 font-semibold">
+            <span class="text-sm text-slate-400 font-semibold">
                 {{ $chapter->title }}
             </span>
         </div>
@@ -19,7 +19,7 @@
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
             <div>
                 <h1 class="text-lg font-bold text-slate-800">Sunting Modul Pembelajaran</h1>
-                <p class="text-xs text-slate-500 mt-1">Ubah formulir di bawah untuk memperbarui isi modul pembelajaran yang sudah ada.</p>
+                <p class="text-sm text-slate-500 mt-1">Ubah formulir di bawah untuk memperbarui isi modul pembelajaran yang sudah ada.</p>
             </div>
 
             <!-- Form -->
@@ -31,39 +31,39 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <!-- Title Input -->
                     <div class="md:col-span-3">
-                        <label for="title" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Judul Modul</label>
+                        <label for="title" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Judul Modul</label>
                         <input type="text" name="title" id="title" value="{{ old('title', $module->title) }}" required placeholder="Contoh: 1.1 Deskripsi Komponen Utama"
-                               class="w-full text-xs text-slate-800 placeholder-slate-400 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                               class="w-full text-sm text-slate-800 placeholder-slate-400 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
                         @error('title')
-                            <p class="text-rose-600 text-2xs mt-1">{{ $message }}</p>
+                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Order Input -->
                     <div class="md:col-span-1">
-                        <label for="order" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor Urut</label>
+                        <label for="order" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Nomor Urut</label>
                         <input type="number" name="order" id="order" value="{{ old('order', $module->order) }}" required min="1"
-                               class="w-full text-xs text-slate-800 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                               class="w-full text-sm text-slate-800 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
                         @error('order')
-                            <p class="text-rose-600 text-2xs mt-1">{{ $message }}</p>
+                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
                 <!-- Image Path (Optional) -->
                 <div>
-                    <label for="image_path" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Path File Gambar (Opsional)</label>
+                    <label for="image_path" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Path File Gambar (Opsional)</label>
                     <input type="text" name="image_path" id="image_path" value="{{ old('image_path', $module->image_path) }}" placeholder="Contoh: images/modules/Bab7/bab7.15.png"
-                           class="w-full text-xs text-slate-800 placeholder-slate-400 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                           class="w-full text-sm text-slate-800 placeholder-slate-400 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
                     <p class="text-[10px] text-slate-400 mt-1">Masukkan lokasi relatif file gambar dari direktori <code>public</code>. Kosongkan jika materi ini tidak memerlukan visualisasi gambar.</p>
                     @error('image_path')
-                        <p class="text-rose-600 text-2xs mt-1">{{ $message }}</p>
+                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Rich Text Editor for Content -->
                 <div class="flex flex-col">
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Isi Materi Pembelajaran</label>
+                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Isi Materi Pembelajaran</label>
                     
                     <!-- TinyMCE Editor -->
                     <div class="rounded-xl border border-gray-200 overflow-hidden bg-white">
@@ -71,18 +71,18 @@
                     </div>
 
                     @error('content')
-                        <p class="text-rose-600 text-2xs mt-1">{{ $message }}</p>
+                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
                     <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}" 
-                       class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 shadow-2xs">
+                       class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 shadow-2xs">
                         Batal
                     </a>
                     <button type="submit" 
-                            class="inline-flex items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 text-xs font-bold transition shadow-xs">
+                            class="inline-flex items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 text-sm font-bold transition shadow-xs">
                         Simpan Perubahan
                     </button>
                 </div>

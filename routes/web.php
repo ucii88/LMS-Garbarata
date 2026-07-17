@@ -38,11 +38,14 @@ Route::get('/dashboard', DashboardController::class)
     ->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/users/export', [AdminUserController::class, 'export'])->name('admin.users.export');
     Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
     Route::post('/admin/users', [AdminUserController::class, 'store'])->name('admin.users.store');
+    Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
     Route::get('/admin/users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
     Route::put('/admin/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
     Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::get('/admin/certificates/{certificate}/download', [CertificateController::class, 'download'])->name('admin.certificates.download');
 });
 
 Route::middleware('auth')->group(function () {

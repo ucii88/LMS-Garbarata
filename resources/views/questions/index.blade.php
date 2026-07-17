@@ -7,17 +7,17 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
             <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}"
-               class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-blue-600 transition mb-2">
+               class="inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
                 ← Kembali ke Chapter
             </a>
             <h1 class="text-xl font-bold text-slate-800">Bank Soal</h1>
-            <p class="text-xs text-slate-500 mt-0.5">
+            <p class="text-sm text-slate-500 mt-0.5">
                 <span class="font-semibold text-blue-600">{{ $chapter->title }}</span> —
                 {{ $questions->count() }} soal tersedia
             </p>
         </div>
         <button onclick="openAddModal()"
-                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition">
+                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold px-4 py-2.5 rounded-xl transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -27,7 +27,7 @@
 
     {{-- Flash Messages --}}
     @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm px-4 py-3 rounded-xl">
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-base px-4 py-3 rounded-xl">
             {{ session('success') }}
         </div>
     @endif
@@ -37,7 +37,7 @@
         <div class="bg-white border border-dashed border-slate-200 rounded-2xl p-12 text-center">
             <div class="text-4xl mb-3">📝</div>
             <h3 class="font-semibold text-slate-700">Belum ada soal</h3>
-            <p class="text-sm text-slate-500 mt-1">Klik "Tambah Soal" untuk mulai mengisi bank soal chapter ini.</p>
+            <p class="text-base text-slate-500 mt-1">Klik "Tambah Soal" untuk mulai mengisi bank soal chapter ini.</p>
         </div>
     @else
         <div class="space-y-3">
@@ -46,10 +46,10 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="text-xs font-bold text-white bg-blue-500 rounded-full w-6 h-6 flex items-center justify-center">
+                            <span class="text-sm font-bold text-white bg-blue-500 rounded-full w-6 h-6 flex items-center justify-center">
                                 {{ $i + 1 }}
                             </span>
-                            <span class="text-xs font-semibold px-2 py-0.5 rounded-full
+                            <span class="text-sm font-semibold px-2 py-0.5 rounded-full
                                 @switch($question->type)
                                     @case('multiple_choice') bg-indigo-100 text-indigo-700 @break
                                     @case('true_false') bg-green-100 text-green-700 @break
@@ -59,14 +59,14 @@
                                 @endswitch">
                                 {{ $question->type_label }}
                             </span>
-                            <span class="text-xs text-slate-400">{{ $question->points }} poin</span>
+                            <span class="text-sm text-slate-400">{{ $question->points }} poin</span>
                             @if($question->topic_tag)
-                                <span class="text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full">
+                                <span class="text-sm px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full">
                                     {{ $question->topic_tag }}
                                 </span>
                             @endif
                         </div>
-                        <p class="text-sm text-slate-800 font-medium leading-relaxed">
+                        <p class="text-base text-slate-800 font-medium leading-relaxed">
                             {!! nl2br(e($question->question_text)) !!}
                         </p>
                         @if($question->question_image)
@@ -77,7 +77,7 @@
                         {{-- Pilihan Jawaban --}}
                         <div class="mt-3 space-y-1">
                             @foreach($question->options as $opt)
-                                <div class="flex items-center gap-2 text-xs {{ $opt->is_correct ? 'text-emerald-700 font-semibold' : 'text-slate-500' }}">
+                                <div class="flex items-center gap-2 text-sm {{ $opt->is_correct ? 'text-emerald-700 font-semibold' : 'text-slate-500' }}">
                                     <span class="w-4 h-4 rounded-full border flex items-center justify-center text-[10px]
                                         {{ $opt->is_correct ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300' }}">
                                         {{ $opt->is_correct ? '✓' : '' }}
@@ -91,7 +91,7 @@
                         </div>
 
                         @if($question->explanation)
-                            <div class="mt-3 text-xs bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-blue-700">
+                            <div class="mt-3 text-sm bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-blue-700">
                                 <span class="font-semibold">Penjelasan:</span> {{ $question->explanation }}
                             </div>
                         @endif
@@ -100,13 +100,13 @@
                     {{-- Actions --}}
                     <div class="flex items-center gap-1 shrink-0">
                         <button onclick="openEditModal({{ $question->id }})"
-                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-xs">
+                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-sm">
                             ✏️
                         </button>
                         <form action="{{ route('questions.destroy', [$course, $chapter, $question]) }}"
                               method="POST" onsubmit="return confirm('Hapus soal ini dari bank soal?')">
                             @csrf @method('DELETE')
-                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-xs">
+                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-sm">
                                 🗑️
                             </button>
                         </form>
@@ -134,9 +134,9 @@
 
             {{-- Tipe Soal --}}
             <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Tipe Soal <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Tipe Soal <span class="text-red-500">*</span></label>
                 <select name="type" id="q-type" onchange="renderOptionsUI(this.value)"
-                        class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                     <option value="multiple_choice">Pilihan Ganda</option>
                     <option value="true_false">Benar / Salah</option>
                     <option value="essay">Esai</option>
@@ -147,21 +147,21 @@
 
             {{-- Pertanyaan --}}
             <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Pertanyaan <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Pertanyaan <span class="text-red-500">*</span></label>
                 <textarea name="question_text" rows="3" required
-                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
                           placeholder="Tulis pertanyaan di sini..."></textarea>
             </div>
 
             {{-- Gambar Soal (opsional) --}}
             <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Gambar Soal <span class="text-slate-400">(opsional)</span></label>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Gambar Soal <span class="text-slate-400">(opsional)</span></label>
                 <input type="file" name="question_image" accept="image/*"
-                       class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+                       class="w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700">
                 <p class="mt-1 text-[10px] text-slate-400">Ukuran gambar maksimal 5MB.</p>
                 <div id="current-image-preview" class="hidden mt-2 p-2 border border-slate-100 rounded-xl bg-slate-50/50 flex items-center justify-between gap-3">
                     <img src="" id="current-image-img" class="max-h-20 max-w-[120px] rounded-lg object-contain border bg-white">
-                    <label class="flex items-center gap-1.5 text-xs text-red-600 font-bold cursor-pointer shrink-0 select-none">
+                    <label class="flex items-center gap-1.5 text-sm text-red-600 font-bold cursor-pointer shrink-0 select-none">
                         <input type="checkbox" name="delete_image" value="1" class="w-4 h-4 rounded text-red-600">
                         Hapus Gambar
                     </label>
@@ -176,38 +176,38 @@
             {{-- Poin & Tag --}}
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Poin <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Poin <span class="text-red-500">*</span></label>
                     <input type="number" name="points" value="1" min="1"
-                           class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                           class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Tag Topik <span class="text-slate-400">(opsional)</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tag Topik <span class="text-slate-400">(opsional)</span></label>
                     <input type="text" name="topic_tag" placeholder="misal: Hidrolik"
-                           class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                           class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
 
             {{-- Penjelasan --}}
             <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Penjelasan Jawaban <span class="text-slate-400">(opsional)</span></label>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Penjelasan Jawaban <span class="text-slate-400">(opsional)</span></label>
                 <textarea name="explanation" rows="2"
-                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-none"
                           placeholder="Penjelasan mengapa jawaban ini benar..."></textarea>
             </div>
 
             @if($errors->any())
-                <div class="bg-red-50 border border-red-200 text-red-700 text-xs px-4 py-3 rounded-xl">
+                <div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
                     @foreach($errors->all() as $error)<p>{{ $error }}</p>@endforeach
                 </div>
             @endif
 
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="closeQuestionModal()"
-                        class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition">
+                        class="px-4 py-2 text-base font-semibold text-slate-600 hover:text-slate-800 transition">
                     Batal
                 </button>
                 <button type="submit"
-                        class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition">
+                        class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-xl transition">
                     Simpan Soal
                 </button>
             </div>
@@ -233,7 +233,7 @@ function renderOptionsUI(type) {
     container.innerHTML = '';
 
     const label = document.createElement('label');
-    label.className = 'block text-xs font-semibold text-slate-700 mb-2';
+    label.className = 'block text-sm font-semibold text-slate-700 mb-2';
     label.textContent = 'Pilihan Jawaban *';
     container.appendChild(label);
 
@@ -268,15 +268,15 @@ function mcOptionRow(i, label) {
     const row = document.createElement('div');
     row.className = 'flex items-center gap-2';
     row.innerHTML = `
-        <span class="opt-label text-xs font-bold text-slate-500 w-5">${label}.</span>
+        <span class="opt-label text-sm font-bold text-slate-500 w-5">${label}.</span>
         <input type="text" name="options[${i}][text]" placeholder="Opsi ${label}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-        <label class="flex items-center gap-1 text-xs text-emerald-600 font-semibold cursor-pointer shrink-0">
+               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        <label class="flex items-center gap-1 text-sm text-emerald-600 font-semibold cursor-pointer shrink-0">
             <input type="radio" name="correct_mc" value="${i}">
             Benar
         </label>
         <input type="hidden" name="options[${i}][is_correct]" value="0">
-        <button type="button" onclick="removeOptionRow(this, 'multiple_choice')" class="text-xs text-red-500 hover:text-red-700 font-semibold px-2">
+        <button type="button" onclick="removeOptionRow(this, 'multiple_choice')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
             Hapus
         </button>
     `;
@@ -295,20 +295,20 @@ function buildTrueFalseOptions() {
     wrap.className = 'space-y-2';
     wrap.innerHTML = `
         <div class="flex items-center gap-4">
-            <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <label class="flex items-center gap-2 text-base cursor-pointer">
                 <input type="radio" name="correct_tf" value="0" checked onchange="setTFCorrect(0)">
                 <input type="hidden" name="options[0][text]" value="Benar">
                 <input type="hidden" name="options[0][is_correct]" id="tf-correct-0" value="1">
                 <span class="font-semibold text-emerald-600">✓ Benar</span>
             </label>
-            <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <label class="flex items-center gap-2 text-base cursor-pointer">
                 <input type="radio" name="correct_tf" value="1" onchange="setTFCorrect(1)">
                 <input type="hidden" name="options[1][text]" value="Salah">
                 <input type="hidden" name="options[1][is_correct]" id="tf-correct-1" value="0">
                 <span class="font-semibold text-red-500">✗ Salah</span>
             </label>
         </div>
-        <p class="text-xs text-slate-400">Pilih mana yang merupakan jawaban benar.</p>
+        <p class="text-sm text-slate-400">Pilih mana yang merupakan jawaban benar.</p>
     `;
     return wrap;
 }
@@ -323,8 +323,8 @@ function buildFillBlankOption() {
     wrap.innerHTML = `
         <input type="hidden" name="options[0][is_correct]" value="1">
         <input type="text" name="options[0][text]" required placeholder="Ketik jawaban yang benar (case-insensitive)"
-               class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-        <p class="text-xs text-slate-400 mt-1">Jawaban dicocokkan secara case-insensitive.</p>
+               class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        <p class="text-sm text-slate-400 mt-1">Jawaban dicocokkan secara case-insensitive.</p>
     `;
     return wrap;
 }
@@ -335,8 +335,8 @@ function buildEssayInfo() {
         <div class="flex items-start gap-3 p-4 bg-orange-50 border border-orange-200 rounded-xl">
             <span class="text-2xl">✍️</span>
             <div>
-                <p class="text-sm font-semibold text-orange-800">Soal Esai — Dinilai Manual</p>
-                <p class="text-xs text-orange-700 mt-1">Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.</p>
+                <p class="text-base font-semibold text-orange-800">Soal Esai — Dinilai Manual</p>
+                <p class="text-sm text-orange-700 mt-1">Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.</p>
             </div>
         </div>
     `;
@@ -358,14 +358,14 @@ function matchingRow(i, letter) {
     const row = document.createElement('div');
     row.className = 'flex items-center gap-2';
     row.innerHTML = `
-        <span class="opt-label text-xs font-bold text-slate-500 w-6">${letter}.</span>
+        <span class="opt-label text-sm font-bold text-slate-500 w-6">${letter}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
         <input type="text" name="options[${i}][text]" placeholder="Item kiri (soal)" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
         <span class="text-slate-400">→</span>
         <input type="text" name="options[${i}][match_label]" placeholder="Item kanan (pasangan)" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-        <button type="button" onclick="removeOptionRow(this, 'matching')" class="text-xs text-red-500 hover:text-red-700 font-semibold px-2">
+               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        <button type="button" onclick="removeOptionRow(this, 'matching')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
             Hapus
         </button>
     `;
@@ -386,11 +386,11 @@ function orderingRow(i) {
     const row = document.createElement('div');
     row.className = 'flex items-center gap-2';
     row.innerHTML = `
-        <span class="opt-label text-xs font-bold text-slate-500 w-6">${i+1}.</span>
+        <span class="opt-label text-sm font-bold text-slate-500 w-6">${i+1}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
         <input type="text" name="options[${i}][text]" placeholder="Langkah ke-${i+1}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-        <button type="button" onclick="removeOptionRow(this, 'ordering')" class="text-xs text-red-500 hover:text-red-700 font-semibold px-2">
+               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        <button type="button" onclick="removeOptionRow(this, 'ordering')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
             Hapus
         </button>
     `;
@@ -462,7 +462,7 @@ function reindexOptions(type) {
 function addOptionBtn(container, type) {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'mt-2 text-xs text-blue-600 hover:text-blue-800 font-semibold';
+    btn.className = 'mt-2 text-sm text-blue-600 hover:text-blue-800 font-semibold';
     btn.textContent = '+ Tambah opsi';
     btn.onclick = function() {
         const wrap = document.getElementById(type === 'matching' ? 'matching-options' : (type === 'ordering' ? 'ordering-options' : 'mc-options'));

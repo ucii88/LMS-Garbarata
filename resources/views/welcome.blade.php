@@ -70,7 +70,7 @@
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ route('dashboard') }}" 
-                           class="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 transition-premium flex items-center gap-1.5">
+                           class="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 transition-premium flex items-center gap-1.5">
                             Masuk Dashboard
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -78,12 +78,12 @@
                         </a>
                     @else
                         <a href="{{ route('login') }}" 
-                           class="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 transition-premium">
+                           class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-premium">
                             Log in
                         </a>
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" 
-                               class="px-4.5 py-2 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 text-xs font-medium bg-white shadow-sm transition-premium">
+                               class="px-4.5 py-2 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium bg-white shadow-sm transition-premium">
                                 Register
                             </a>
                         @endif
@@ -95,7 +95,7 @@
         <!-- Main Hero Section (Centered Layout) -->
         <main class="flex-1 w-full max-w-4xl mx-auto px-6 flex flex-col items-center justify-center text-center py-20 lg:py-28 relative z-10 gap-8">
             
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 text-xs font-semibold tracking-wide">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 text-sm font-semibold tracking-wide">
                 <span class="flex h-2 w-2 relative">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
@@ -108,14 +108,14 @@
                 <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent">Garbarata</span> Interaktif
             </h1>
             
-            <p class="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
+            <p class="text-base sm:text-base text-slate-600 leading-relaxed max-w-2xl">
                 Portal belajar mandiri terlengkap mengenai sistem mekanikal, elektrikal, perakitan Rotunda & Cabin, serta standardisasi suku cadang Passenger Boarding Bridge (PBB).
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-2 w-full sm:w-auto">
                 @auth
                     <a href="{{ route('dashboard') }}" 
-                       class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-premium flex items-center justify-center gap-2">
+                       class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-base font-semibold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-premium flex items-center justify-center gap-2">
                         Mulai Belajar Sekarang
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -123,7 +123,7 @@
                     </a>
                 @else
                     <a href="{{ route('login') }}" 
-                       class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-premium flex items-center justify-center gap-2">
+                       class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-base font-semibold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-premium flex items-center justify-center gap-2">
                         Masuk & Mulai Belajar
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -131,7 +131,7 @@
                     </a>
                 @endauth
                 <a href="#features" 
-                   class="px-8 py-4 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-850 text-sm font-medium bg-white shadow-sm transition-premium flex items-center justify-center gap-2">
+                   class="px-8 py-4 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-850 text-base font-medium bg-white shadow-sm transition-premium flex items-center justify-center gap-2">
                     Tinjau Fitur
                 </a>
             </div>
@@ -157,7 +157,7 @@
         <section id="features" class="w-full max-w-7xl mx-auto px-6 py-20 relative z-10 border-t border-slate-200">
             <div class="text-center max-w-2xl mx-auto mb-16">
                 <h2 class="font-outfit text-3xl font-bold text-slate-900 mb-4">Fitur Utama Pembelajaran</h2>
-                <p class="text-sm text-slate-500">Dirancang secara khusus dengan fitur pendukung lengkap guna menjamin akselerasi pemahaman kompetensi operasional & pemeliharaan.</p>
+                <p class="text-base text-slate-500">Dirancang secara khusus dengan fitur pendukung lengkap guna menjamin akselerasi pemahaman kompetensi operasional & pemeliharaan.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -169,7 +169,7 @@
                         </svg>
                     </div>
                     <h3 class="font-outfit text-lg font-bold text-slate-900">7 Bab Silabus Terstruktur</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <p class="text-sm text-slate-600 leading-relaxed">
                         Kurikulum lengkap dari dasar pengenalan struktur Rotunda Assembly, Cabin, hingga langkah pemecahan masalah (Troubleshooting) operasional di lapangan.
                     </p>
                 </div>
@@ -182,7 +182,7 @@
                         </svg>
                     </div>
                     <h3 class="font-outfit text-lg font-bold text-slate-900">Bank Soal & Kuis Mandiri</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <p class="text-sm text-slate-600 leading-relaxed">
                         Evaluasi komprehensif dengan berbagai tipe soal ujian interaktif seperti pilihan ganda, benar/salah, menjodohkan bagian drawing, dan esai deskriptif.
                     </p>
                 </div>
@@ -195,7 +195,7 @@
                         </svg>
                     </div>
                     <h3 class="font-outfit text-lg font-bold text-slate-900">Sertifikat Kompetensi Digital</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">
+                    <p class="text-sm text-slate-600 leading-relaxed">
                         Bukti pencapaian akademik terverifikasi. Selesaikan seluruh materi modul dan lulus kuis penilaian akhir untuk mengklaim sertifikat kompetensi Anda.
                     </p>
                 </div>
@@ -203,7 +203,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="w-full max-w-7xl mx-auto px-6 py-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10 mt-auto text-slate-400 text-xs">
+        <footer class="w-full max-w-7xl mx-auto px-6 py-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10 mt-auto text-slate-400 text-sm">
             <p>&copy; {{ date('Y') }} LMS Garbarata. Hak Cipta Dilindungi.</p>
             <p>Dirancang untuk Pembelajaran Mandiri Terintegrasi.</p>
         </footer>
