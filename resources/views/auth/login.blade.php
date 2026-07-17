@@ -68,11 +68,12 @@
 
         <!-- Submit Action -->
         <div class="mt-2">
-            <button type="submit" 
-                    class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-base font-semibold shadow-md hover:shadow-lg transition duration-300 flex items-center justify-center gap-2">
+            <button type="submit"
+                    style="background: linear-gradient(to right, #2563eb, #4f46e5); color: #fff; width: 100%; padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(37,99,235,0.25); transition: box-shadow 0.3s, opacity 0.3s;"
+                    onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
                 <span>Masuk Sekarang</span>
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14.5" />
+                <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
             </button>
         </div>
