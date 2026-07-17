@@ -114,24 +114,27 @@
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-2 w-full sm:w-auto">
                 @auth
-                    <a href="{{ route('dashboard') }}" 
-                       class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-base font-semibold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-premium flex items-center justify-center gap-2">
+                    <a href="{{ route('dashboard') }}"
+                       style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:linear-gradient(to right,#2563eb,#4f46e5);color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.2);transition:opacity 0.3s;"
+                       onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
                         Mulai Belajar Sekarang
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </a>
                 @else
-                    <a href="{{ route('login') }}" 
-                       class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-base font-semibold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-premium flex items-center justify-center gap-2">
-                        Masuk & Mulai Belajar
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <a href="{{ route('login') }}"
+                       style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:linear-gradient(to right,#2563eb,#4f46e5);color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.2);transition:opacity 0.3s;"
+                       onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                        Masuk &amp; Mulai Belajar
+                        <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </a>
                 @endauth
-                <a href="#features" 
-                   class="px-8 py-4 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-850 text-base font-medium bg-white shadow-sm transition-premium flex items-center justify-center gap-2">
+                <a href="#features"
+                   style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;border:1px solid #e2e8f0;background:#fff;color:#475569;font-size:1rem;font-weight:500;text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,0.06);transition:border-color 0.3s, color 0.3s;"
+                   onmouseover="this.style.borderColor='#94a3b8';this.style.color='#1e293b';" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#475569';">
                     Tinjau Fitur
                 </a>
             </div>
