@@ -1398,7 +1398,9 @@
                 this.expandedModuleId = null;
                 const m = this.getSingleModule(tab);
                 if (m && m.id) {
-                    if (m.content.includes('<details') || m.content.includes('TROUBLE')) {
+                    if (tab === '5.3') {
+                        this.markModuleComplete(m.id);
+                    } else if (m.content.includes('<details') || m.content.includes('TROUBLE')) {
                         window.setupDetailsTracker(m.id, 'content-area-chapter-5');
                     } else {
                         this.markModuleComplete(m.id);

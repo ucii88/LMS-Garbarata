@@ -21,8 +21,9 @@
             </div>
         @endif
 
-        <div class="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2" id="edit-grid">
-            <form id="quiz-config-form" action="{{ route($isPractice ? 'practices.update' : 'quizzes.update', [$course, $quiz]) }}" method="POST" class="flex flex-col rounded-2xl border bg-white p-6 lg:h-[calc(100vh-8rem)]">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start" id="edit-grid">
+            <!-- 1. PERUBAHAN DI SINI: height diganti menjadi calc(100vh - 8rem) dan ditambah overflow-y: auto -->
+            <form id="quiz-config-form" action="{{ route($isPractice ? 'practices.update' : 'quizzes.update', [$course, $quiz]) }}" method="POST" class="flex flex-col rounded-2xl border bg-white p-6" style="height: calc(100vh - 8rem); overflow-y: auto;">
                 @csrf @method('PUT')
                 <div class="flex-1 space-y-4">
                     <h2 class="font-bold">Konfigurasi {{ $activityLabel }}</h2>
@@ -38,14 +39,15 @@
                         <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">Timer (menit) <span class="text-gray-400 font-normal">— kosong = tanpa batas</span></label><input type="number" name="time_limit" min="1" placeholder="Contoh: 30" value="{{ old('time_limit', $quiz->time_limit) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">Nilai lulus *</label><input type="number" name="passing_score" required value="{{ old('passing_score', $quiz->passing_score) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
                         <div><label class="mb-1 block text-xs font-semibold">Maks. percobaan *</label><input type="number" name="max_attempts" required value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
                         <select name="review_policy" class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="show_all" @selected($quiz->review_policy === 'show_all')>Tampilkan semua</option><option value="points_only" @selected($quiz->review_policy === 'points_only')>Skor saja</option><option value="hide_all" @selected($quiz->review_policy === 'hide_all')>Sembunyikan detail</option></select>
+                        <div class="flex gap-4 text-xs -mt-2"><label><input type="checkbox" name="shuffle_questions" value="1" @checked($quiz->shuffle_questions)> Acak soal</label><label><input type="checkbox" name="shuffle_options" value="1" @checked($quiz->shuffle_options)> Acak pilihan</label></div>
                     @endif
-
-                    <div class="flex gap-4 text-xs"><label><input type="checkbox" name="shuffle_questions" value="1" @checked($quiz->shuffle_questions)> Acak soal</label><label><input type="checkbox" name="shuffle_options" value="1" @checked($quiz->shuffle_options)> Acak pilihan</label></div>
                 </div>
+                <!-- 2. PERUBAHAN DI SINI: mt-6 dikembalikan menjadi mt-auto -->
                 <button class="mt-auto w-full rounded-xl bg-blue-600 py-2.5 text-sm font-bold text-white">Simpan Perubahan</button>
             </form>
 
-            <div class="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border bg-white p-6 lg:h-[calc(100vh-8rem)] lg:sticky lg:top-6">
+            <!-- 3. PERUBAHAN DI SINI: max-height diganti menjadi height biasa -->
+            <div id="question-selection-card" class="flex flex-col overflow-hidden rounded-2xl border bg-white p-6 lg:sticky lg:top-6" style="height: calc(100vh - 8rem);">
                 <div class="mb-4 flex items-start justify-between gap-4">
                     <div>
                         <h2 class="font-bold">Soal dalam {{ $activityLabel }}</h2>
@@ -63,7 +65,7 @@
                     </p>
                 </div>
 
-                <form id="question-selection-form" action="{{ route($isPractice ? 'practices.questions.sync' : 'quizzes.questions.sync', [$course, $quiz]) }}" method="POST" class="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <form id="question-selection-form" action="{{ route($isPractice ? 'practices.questions.sync' : 'quizzes.questions.sync', [$course, $quiz]) }}" method="POST" class="flex flex-1 flex-col overflow-hidden min-h-0">
                     @csrf
                     @if($quiz->isFinalQuiz())
                         {{-- Ujian: Tab filter per bab --}}
@@ -96,6 +98,7 @@
                                 <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
                                     <input class="question-checkbox mt-0.5" type="checkbox"
                                         name="question_ids[]" value="{{ $question->id }}"
+                                        data-question-id="{{ $question->id }}"
                                         data-chapter="{{ $question->chapter_id }}"
                                         data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}"
                                         @checked(in_array($question->id, $selectedQuestionIds))>
@@ -135,6 +138,7 @@
                                         <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
                                             <input class="question-checkbox mt-0.5" type="checkbox"
                                                 name="question_ids[]" value="{{ $question->id }}"
+                                                data-question-id="{{ $question->id }}"
                                                 data-chapter="{{ $chapterId }}"
                                                 data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}"
                                                 @checked(in_array($question->id, $selectedQuestionIds))>
@@ -163,7 +167,7 @@
                         <div class="max-h-96 space-y-2 overflow-y-auto pr-1">
                             @forelse($availableQuestions as $question)
                                 <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
-                                    <input class="question-checkbox mt-0.5" type="checkbox" name="question_ids[]" value="{{ $question->id }}" data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}" @checked(in_array($question->id, $selectedQuestionIds))>
+                                    <input class="question-checkbox mt-0.5" type="checkbox" name="question_ids[]" value="{{ $question->id }}" data-question-id="{{ $question->id }}" data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}" @checked(in_array($question->id, $selectedQuestionIds))>
                                     <div class="min-w-0 flex-1">
                                         <p class="text-xs font-semibold leading-relaxed text-slate-800">{{ $question->question_text }}</p>
                                         <p class="mt-1 text-[10px] text-slate-400">
@@ -183,13 +187,12 @@
                         </div>
                     @endif
 
-                    <button class="mt-auto w-full rounded-xl bg-emerald-600 py-2.5 text-sm font-bold text-white">Simpan Pilihan Soal</button>
+                        <button class="mt-4 w-full shrink-0 rounded-xl bg-emerald-600 py-2.5 text-sm font-bold text-white">Simpan Pilihan Soal</button>
             </div>{{-- end card kanan --}}
         </div>{{-- end grid --}}
     </div>{{-- end container --}}
 
     <style>
-
         .chapter-tab-btn {
             background: #f1f5f9;
             color: #475569;
@@ -214,7 +217,16 @@
         // Hitung total poin yang dipilih
         function updateQuestionSummary() {
             questionCheckboxes = Array.from(document.querySelectorAll('.question-checkbox'));
-            const selected = questionCheckboxes.filter(cb => cb.checked);
+            const selectedById = new Map();
+
+            questionCheckboxes.forEach(cb => {
+                const questionId = cb.dataset.questionId || cb.value;
+                if (cb.checked && !selectedById.has(questionId)) {
+                    selectedById.set(questionId, cb);
+                }
+            });
+
+            const selected = Array.from(selectedById.values());
             const totalPoints = selected.reduce((sum, cb) => sum + Number(cb.dataset.points), 0);
             countElement.textContent = selected.length;
             pointsElement.textContent = totalPoints;
@@ -222,6 +234,15 @@
             return totalPoints;
         }
 
+        function setQuestionChecked(questionId, isChecked) {
+            document.querySelectorAll('.question-checkbox[data-question-id="' + questionId + '"]').forEach(cb => {
+                cb.checked = isChecked;
+            });
+        }
+
+        function syncQuestionCardHeight() {
+            // Height now controlled via CSS; nothing to do here.
+        }
 
         // Switch tab filter
         function switchTab(tabId, btn) {
@@ -243,7 +264,10 @@
             if (!group) return;
             const boxes = group.querySelectorAll('.question-checkbox');
             const allChecked = Array.from(boxes).every(cb => cb.checked);
-            boxes.forEach(cb => { cb.checked = !allChecked; });
+            const nextState = !allChecked;
+            boxes.forEach(cb => {
+                setQuestionChecked(cb.dataset.questionId || cb.value, nextState);
+            });
             btn.textContent = allChecked ? 'Pilih Semua' : 'Batal Pilih';
             updateQuestionSummary();
         }
@@ -251,12 +275,9 @@
         // Sync checkbox di panel "Semua" & panel bab (karena soal muncul di dua tempat)
         document.addEventListener('change', function(e) {
             if (!e.target.classList.contains('question-checkbox')) return;
-            const val = e.target.value;
+            const questionId = e.target.dataset.questionId || e.target.value;
             const isChecked = e.target.checked;
-            // Sync semua checkbox dengan value yang sama
-            document.querySelectorAll('.question-checkbox[value="' + val + '"]').forEach(cb => {
-                cb.checked = isChecked;
-            });
+            setQuestionChecked(questionId, isChecked);
             updateQuestionSummary();
         });
 
@@ -275,8 +296,10 @@
             }
         });
 
+        window.addEventListener('load', syncQuestionCardHeight);
+        window.addEventListener('resize', syncQuestionCardHeight);
         updateQuestionSummary();
+        syncQuestionCardHeight();
     </script>
 
 </x-app-layout>
-
