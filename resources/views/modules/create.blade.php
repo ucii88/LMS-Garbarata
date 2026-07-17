@@ -114,4 +114,4 @@
             });
         });
     </script>
-</x-app-layout>out>
+</x-app-layout>

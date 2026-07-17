@@ -29,7 +29,7 @@ class Chapter2Seeder extends Seeder
             </p>
 
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-                <img src="/images/garbarata.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Garbarata">
+                <img src="/images/modules/garbarata_2Tunnel.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Garbarata">
             </figure>
 
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
