@@ -13,7 +13,10 @@
             <span class="text-base font-extrabold text-slate-800 tracking-tight">Garbarata</span>
             </div>
             <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Tutup sidebar">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v18"></path>
+                </svg>
             </button>
         </div>
 
@@ -147,7 +150,7 @@
                 @else
                     <a
                         href="#"
-                        onclick="alert('Sertifikat belum tersedia. Silakan selesaikan semua quiz dengan nilai kelulusan terlebih dahulu!')"
+                        onclick="event.preventDefault(); showGlobalAlert('Sertifikat Belum Tersedia', 'Silakan selesaikan semua quiz dengan nilai kelulusan terlebih dahulu!')"
                         class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-500"
                     >
                         <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -168,10 +171,13 @@
             class="w-full flex items-center space-x-3 p-2 rounded-xl select-none text-left"
             title="Profil pengguna"
         >
-            <!-- Profile Avatar -->
-            <div class="w-10 h-10 rounded-full bg-[#0091ff] text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                User
-            </div>
+            @if(Auth::user()->avatar)
+                <img src="{{ Storage::url(Auth::user()->avatar) }}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shadow-sm shrink-0" alt="Avatar">
+            @else
+                <div class="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 font-bold shadow-sm text-sm shrink-0">
+                    {{ substr(Auth::user()->name, 0, 1) }}
+                </div>
+            @endif
             <div class="flex-1 min-w-0">
                 <p class="text-base font-bold text-gray-800 truncate leading-tight">{{ Auth::user()->name }}</p>
                 <p class="text-sm text-gray-400 truncate mt-0.5">
@@ -194,6 +200,9 @@
 </aside>
 <aside x-cloak x-show="$store.ui.sidebarCollapsed" class="w-14 bg-white border-r border-[#f0f0f0] h-screen sticky top-0 shrink-0 flex justify-center pt-6">
     <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Buka sidebar">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v18"></path>
+        </svg>
     </button>
 </aside>

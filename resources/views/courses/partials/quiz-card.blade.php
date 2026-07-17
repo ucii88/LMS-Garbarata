@@ -241,3 +241,46 @@
     </div>
 </div>
 @endif
+
+@php
+    $nextChapter = $chapters->where('order', '>', $chapter->order)->first();
+    
+    $isCurrentChapterComplete = false;
+    if (auth()->user()->isPeserta() && isset($learningProgress)) {
+        $curProgress = collect($learningProgress['chapters'])->firstWhere('id', $chapter->id);
+        $isCurrentChapterComplete = $curProgress && $curProgress['is_complete'];
+    } else {
+        $isCurrentChapterComplete = true;
+    }
+@endphp
+
+@if($nextChapter)
+<div class="mt-8 px-4 sm:px-0">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h4 class="text-sm font-bold text-slate-800">Selesai Mempelajari Bab Ini?</h4>
+            <p id="next-chapter-desc" class="text-xs text-slate-500 mt-1">
+                @if($isCurrentChapterComplete)
+                    Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.
+                @else
+                    Selesaikan semua modul pembelajaran dan lulus quiz di atas untuk melanjutkan ke bab berikutnya.
+                @endif
+            </p>
+        </div>
+        <div id="next-chapter-action">
+            @if($isCurrentChapterComplete)
+                <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
+                   class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
+                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                </a>
+            @else
+                <button disabled
+                        class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed whitespace-nowrap">
+                    Lanjut ke Bab {{ $nextChapter->order }}
+                </button>
+            @endif
+        </div>
+    </div>
+</div>
+@endif
+

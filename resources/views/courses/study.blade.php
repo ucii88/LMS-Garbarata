@@ -1,4 +1,14 @@
 <x-app-layout>
+    <style>
+        /* Force text inside study rooms to be 14px instead of 12px due to database HTML having hardcoded class="text-xs" */
+        .prose p.text-xs,
+        .prose span.text-xs,
+        .prose div.text-xs,
+        .prose .text-xs {
+            font-size: 0.875rem !important;
+            line-height: 1.5rem !important;
+        }
+    </style>
     @if($chapter->order == 1)
         <script>
             window.chapterOneStudy = function (modules) {
@@ -49,6 +59,44 @@
                                     image_path: module.image_path,
                                 })),
                         ];
+
+                        // Auto-mark read using Intersection Observer as the user scrolls
+                        this.$nextTick(() => {
+                            const observerOptions = {
+                                root: null,
+                                rootMargin: '-20% 0px -50% 0px',
+                                threshold: 0
+                            };
+
+                            const observer = new IntersectionObserver((entries) => {
+                                entries.forEach(entry => {
+                                    if (entry.isIntersecting) {
+                                        const id = entry.target.dataset.moduleId;
+                                        const type = entry.target.dataset.type;
+                                        if (id) {
+                                            if (type === 'mech') {
+                                                this.activeMechId = isNaN(id) ? id : Number(id);
+                                            } else if (type === 'elec') {
+                                                this.activeElecId = isNaN(id) ? id : Number(id);
+                                            }
+                                            this.markModuleComplete(id);
+                                        }
+                                    }
+                                });
+                            }, observerOptions);
+
+                            // Observe mechanical sections
+                            this.mechItems.forEach(item => {
+                                const el = document.getElementById('mech-module-' + item.id);
+                                if (el) observer.observe(el);
+                            });
+
+                            // Observe electrical sections
+                            this.elecItems.forEach(item => {
+                                const el = document.getElementById('elec-module-' + item.id);
+                                if (el) observer.observe(el);
+                            });
+                        });
                     },
 
                     setMechModule(moduleId) {
@@ -278,7 +326,7 @@
 
                               <div class="space-y-12">
                                   <template x-for="item in mechItems" :key="item.id">
-                                      <div :id="'mech-module-' + item.id" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_mekanikal' ? 'border-t border-gray-100' : ''">
+                                      <div :id="'mech-module-' + item.id" :data-module-id="item.id" data-type="mech" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_mekanikal' ? 'border-t border-gray-100' : ''">
                                           <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
 
                                           <template x-if="item.image_path">
@@ -348,7 +396,7 @@
 
                               <div class="space-y-12">
                                   <template x-for="item in elecItems" :key="item.id">
-                                      <div :id="'elec-module-' + item.id" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_elektrikal' ? 'border-t border-gray-100' : ''">
+                                      <div :id="'elec-module-' + item.id" :data-module-id="item.id" data-type="elec" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_elektrikal' ? 'border-t border-gray-100' : ''">
                                           <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
 
                                           <template x-if="item.image_path">
@@ -445,8 +493,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        â† Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -720,6 +768,11 @@
             init() {
                 this.mechItems = this.modules.filter(module => module.title.startsWith('1.'));
                 this.elecItems = this.modules.filter(module => module.title.startsWith('2.'));
+                
+                // Automatically complete all Elektrikal modules because they are fully visible on screen!
+                this.elecItems.forEach(module => {
+                    this.markModuleComplete(module.id);
+                });
             },
 
             toggleMech(moduleId) {
@@ -750,8 +803,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        â† Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -852,7 +905,7 @@
 
                         <div class="space-y-4">
                             <template x-for="module in elecItems" :key="module.id">
-                                <article @click="markModuleComplete(module.id)" class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm cursor-pointer hover:border-emerald-200">
+                                <article class="rounded-xl border border-gray-100 bg-white p-4 space-y-3 shadow-sm">
                                     <div class="border-b border-gray-100 pb-3">
                                         <h3 class="text-sm md:text-base font-bold text-slate-800 leading-snug" x-text="module.title"></h3>
                                     </div>
@@ -876,6 +929,11 @@
                                 </article>
                             </template>
                         </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        @include('courses.partials.quiz-card')
     @elseif($chapter->order == 4)
         <!-- Custom Layout for Chapter 4 - Hybrid Style (Top-Tabs + Auto-Open Subsections) -->
         <div class="py-6 select-none" x-data="{
@@ -911,7 +969,11 @@
                 // Mark main tab module complete
                 const mainMod = this.getSingleModule(tab);
                 if (mainMod && mainMod.id) {
-                    this.markModuleComplete(mainMod.id);
+                    if (mainMod.content.includes('<details') || mainMod.content.includes('TROUBLE')) {
+                        window.setupDetailsTracker(mainMod.id, 'content-area-chapter-4');
+                    } else {
+                        this.markModuleComplete(mainMod.id);
+                    }
                 }
                 
                 // Mark all submodules complete automatically when viewing this tab
@@ -919,7 +981,7 @@
                 if (tab === '4.6') {
                     subModules = this.modules.filter(m => m.title.startsWith('4.6.'));
                 } else if (tab === '4.7') {
-                    subModules = this.modules.filter(m => m.title.startsWith('4.7.'));
+                    subModules = [];
                 } else {
                     subModules = this.getTabModules(tab);
                 }
@@ -989,8 +1051,8 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1295,7 +1357,11 @@
                 }
                 const initialModule = this.getSingleModule(this.activeTab);
                 if (initialModule && initialModule.id) {
-                    this.markModuleComplete(initialModule.id);
+                    if (initialModule.content.includes('<details') || initialModule.content.includes('TROUBLE')) {
+                        window.setupDetailsTracker(initialModule.id, 'content-area-chapter-5');
+                    } else {
+                        this.markModuleComplete(initialModule.id);
+                    }
                 }
             },
             getTabModules(tab) {
@@ -1326,14 +1392,41 @@
                         'Accept': 'application/json',
                     },
                 });
+            },
+            setActiveTab(tab) {
+                this.activeTab = tab;
+                this.expandedModuleId = null;
+                const m = this.getSingleModule(tab);
+                if (m && m.id) {
+                    if (m.content.includes('<details') || m.content.includes('TROUBLE')) {
+                        window.setupDetailsTracker(m.id, 'content-area-chapter-5');
+                    } else {
+                        this.markModuleComplete(m.id);
+                    }
+                }
+                this.$nextTick(() => {
+                    document.getElementById('content-area-chapter-5')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            },
+            nextTab() {
+                const idx = this.tabs.indexOf(this.activeTab);
+                if (idx !== -1 && idx < this.tabs.length - 1) {
+                    this.setActiveTab(this.tabs[idx + 1]);
+                }
+            },
+            prevTab() {
+                const idx = this.tabs.indexOf(this.activeTab);
+                if (idx !== -1 && idx > 0) {
+                    this.setActiveTab(this.tabs[idx - 1]);
+                }
             }
         }">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6" id="content-area-chapter-5">
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1373,7 +1466,7 @@
                         <div class="flex flex-wrap gap-2">
                             <template x-for="tab in tabs" :key="tab">
                                 <button
-                                    @click="activeTab = tab; expandedModuleId = null; const m = getSingleModule(tab); if(m && m.id) markModuleComplete(m.id);"
+                                    @click="setActiveTab(tab)"
                                     class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
                                     :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
@@ -1458,6 +1551,27 @@
                         </template>
                     </div>
 
+                    <!-- Prev/Next Navigation Buttons at the bottom of Content Card -->
+                    <div class="border-t border-slate-100 pt-6 flex items-center justify-between gap-4">
+                        <button 
+                            @click="prevTab()"
+                            class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg transition"
+                            x-show="tabs.indexOf(activeTab) > 0"
+                        >
+                            ← Kembali
+                        </button>
+                        <div x-show="tabs.indexOf(activeTab) === 0"></div>
+
+                        <button 
+                            @click="nextTab()"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition shadow-xs"
+                            x-show="tabs.indexOf(activeTab) < tabs.length - 1"
+                        >
+                            Lanjutkan →
+                        </button>
+                        <div x-show="tabs.indexOf(activeTab) === tabs.length - 1"></div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -1493,8 +1607,8 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1643,8 +1757,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1777,7 +1891,7 @@
                                 :disabled="isFirst()"
                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
-                                ← Sebelumnya
+                                ← Kembali
                             </button>
 
                             <button
@@ -1785,7 +1899,7 @@
                                 :disabled="isLast()"
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
-                                Selanjutnya →
+                                Lanjutkan →
                             </button>
                         </div>
                     </div>
@@ -1799,8 +1913,8 @@
 
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        ← Kembali ke Silabus Kursus
+                    <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
+                        &larr; Kembali ke Silabus Kursus
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1984,4 +2098,216 @@
 
         @include('courses.partials.quiz-card')
     @endif
+
+    @php
+        $nextChapter = $chapters->where('order', '>', $chapter->order)->first();
+    @endphp
+
+    @if($chapter->order == 1)
+        {{-- Auto-complete scroll script ONLY for Chapter 1 --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const modules = @js($modules->pluck('id')->toArray());
+                const completeUrlTemplate = @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__']));
+                const csrfToken = @js(csrf_token());
+
+                let completed = new Set();
+                let hasQuiz = @js($chapterQuiz ? true : false);
+                let isQuizPassed = @js($chapterQuizAttempt?->is_passed ? true : false);
+
+                function markModuleComplete(moduleId) {
+                    if (!moduleId || isNaN(moduleId)) return;
+                    const idNum = Number(moduleId);
+                    if (completed.has(idNum)) return;
+                    completed.add(idNum);
+
+                    fetch(completeUrlTemplate.replace('__MODULE__', idNum), {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                    });
+                }
+
+                function unlockNextChapter() {
+                    if (!hasQuiz || isQuizPassed) {
+                        const descEl = document.getElementById('next-chapter-desc');
+                        const actionEl = document.getElementById('next-chapter-action');
+                        if (descEl) {
+                            descEl.innerText = 'Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.';
+                        }
+                        if (actionEl) {
+                            @if($nextChapter)
+                            actionEl.innerHTML = `
+                                <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
+                                   class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
+                                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                                </a>
+                            `;
+                            @endif
+                        }
+                    }
+                }
+
+                function handleBottomReached() {
+                    // Safeguard: only trigger if user has actually scrolled down from top (scrollY > 50)
+                    // to prevent the IntersectionObserver initial run from auto-completing on page load.
+                    if (window.scrollY < 50) return;
+
+                    modules.forEach(id => {
+                        markModuleComplete(id);
+                    });
+                    unlockNextChapter();
+                }
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            handleBottomReached();
+                        }
+                    });
+                }, {
+                    root: null,
+                    threshold: 0.1
+                });
+
+                const target = document.getElementById('next-chapter-desc');
+                if (target) {
+                    observer.observe(target);
+                }
+
+                window.addEventListener('scroll', function() {
+                    if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 150) {
+                        handleBottomReached();
+                    }
+                });
+            });
+        </script>
+    @endif
+
+    {{-- Global progress listener and dynamic unlocker for all chapters --}}
+    <script>
+        (function() {
+            // Set up fetch interceptor immediately to catch any initial load requests from Alpine init()
+            const originalFetch = window.fetch;
+            window.fetch = function (input, init) {
+                const url = typeof input === 'string' ? input : (input instanceof URL ? input.href : (input && input.url ? input.url : ''));
+                const match = url.match(/\/courses\/\d+\/chapters\/\d+\/modules\/(\d+)\/complete/);
+                if (match && match[1]) {
+                    const moduleId = Number(match[1]);
+                    if (window.registerModuleCompletion) {
+                        window.registerModuleCompletion(moduleId);
+                    } else {
+                        if (!window.pendingModuleCompletions) {
+                            window.pendingModuleCompletions = [];
+                        }
+                        window.pendingModuleCompletions.push(moduleId);
+                    }
+                }
+                return originalFetch.apply(this, arguments);
+            };
+        })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const totalModuleIds = @js($modules->pluck('id')->toArray());
+            let completedModuleIds = new Set(@js($learningProgress ? $learningProgress['completedModules']->intersect($modules->pluck('id'))->toArray() : []));
+            const hasQuiz = @js($chapterQuiz ? true : false);
+            const isQuizPassed = @js($chapterQuizAttempt?->is_passed ? true : false);
+
+            function checkAndUnlockNextChapter() {
+                const allCompleted = totalModuleIds.every(id => completedModuleIds.has(id));
+                if (allCompleted) {
+                    if (!hasQuiz || isQuizPassed) {
+                        const descEl = document.getElementById('next-chapter-desc');
+                        const actionEl = document.getElementById('next-chapter-action');
+                        if (descEl) {
+                            descEl.innerText = 'Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.';
+                        }
+                        if (actionEl) {
+                            @if($nextChapter)
+                            actionEl.innerHTML = `
+                                <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
+                                   class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
+                                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                                </a>
+                            `;
+                            @endif
+                        }
+                    }
+                }
+            }
+
+            // Register completion helper
+            window.registerModuleCompletion = function (moduleId) {
+                if (!moduleId || isNaN(moduleId)) return;
+                completedModuleIds.add(Number(moduleId));
+                checkAndUnlockNextChapter();
+            };
+
+            window.markModuleCompleteDirectly = function (moduleId) {
+                if (!moduleId || isNaN(moduleId)) return;
+                const idNum = Number(moduleId);
+                
+                const completeUrlTemplate = @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__']));
+                const csrfToken = @js(csrf_token());
+
+                fetch(completeUrlTemplate.replace('__MODULE__', idNum), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                }).then(res => {
+                    if (res.ok) {
+                        window.registerModuleCompletion(idNum);
+                    }
+                });
+            };
+
+            window.setupDetailsTracker = function (moduleId, containerId) {
+                if (!moduleId) return;
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                setTimeout(() => {
+                    const detailsElements = container.querySelectorAll('details');
+                    if (detailsElements.length === 0) {
+                        window.markModuleCompleteDirectly(moduleId);
+                        return;
+                    }
+
+                    let openedIds = new Set();
+                    detailsElements.forEach((details, index) => {
+                        const id = details.id || `details-${moduleId}-${index}`;
+                        details.id = id;
+
+                        if (details.open) {
+                            openedIds.add(id);
+                        }
+
+                        details.addEventListener('toggle', function onToggle() {
+                            if (details.open) {
+                                openedIds.add(id);
+                                if (openedIds.size === detailsElements.length) {
+                                    window.markModuleCompleteDirectly(moduleId);
+                                }
+                            }
+                        });
+                    });
+                }, 150);
+            };
+
+            // Process any completions that happened before DOMContentLoaded
+            if (window.pendingModuleCompletions) {
+                window.pendingModuleCompletions.forEach(id => {
+                    window.registerModuleCompletion(id);
+                });
+                delete window.pendingModuleCompletions;
+            }
+
+            // Run initial check on load
+            checkAndUnlockNextChapter();
+        });
+    </script>
 </x-app-layout>

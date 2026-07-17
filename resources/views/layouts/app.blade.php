@@ -63,12 +63,48 @@
             </div>
         </div>
 
+        {{-- Global Alert Modal --}}
+        <div id="global-alert-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-slate-100">
+                <div class="text-center mb-5">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 text-amber-600 text-2xl font-bold mb-3">
+                        📜
+                    </div>
+                    <h3 id="global-alert-title" class="text-base font-bold text-slate-800">Pemberitahuan</h3>
+                    <p id="global-alert-message" class="text-xs text-slate-500 mt-2 leading-relaxed"></p>
+                </div>
+                <div>
+                    <button type="button" onclick="closeGlobalAlertModal()"
+                            class="w-full py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+
         {{-- Global Logout Form --}}
         <form id="global-logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
             @csrf
         </form>
 
         <script>
+            function showGlobalAlert(title, message) {
+                document.getElementById('global-alert-title').innerText = title;
+                document.getElementById('global-alert-message').innerText = message;
+                document.getElementById('global-alert-modal').classList.remove('hidden');
+            }
+
+            function closeGlobalAlertModal() {
+                document.getElementById('global-alert-modal').classList.add('hidden');
+            }
+
+            // Close global alert modal when clicking outside the dialog card
+            document.getElementById('global-alert-modal').addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeGlobalAlertModal();
+                }
+            });
+
             function openLogoutModal(event) {
                 if (event) {
                     event.preventDefault();
