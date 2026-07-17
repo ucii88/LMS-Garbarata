@@ -34,112 +34,123 @@
         .corner-bl { bottom:8mm; left:7mm;  border-bottom:3.5px solid #92400e; border-left:3.5px solid #92400e; }
         .corner-br { bottom:8mm; right:7mm; border-bottom:3.5px solid #92400e; border-right:3.5px solid #92400e; }
 
-        /*
-         * ——— Content area ———
-         * Dari gambar target, "GARBARATA" mulai di ~18% dari atas halaman
-         * 18% × 210mm = 37.8mm ≈ 38mm dari atas halaman
-         * show.blade.php: content flex-centered dalam inner area (top:4.8%=10mm, bottom:4.8%=200mm)
-         * Jadi content mulai di ~10mm (inner top) + (190mm - ~130mm content) / 2 ≈ 40mm
-         */
-        .content {
+        /* Header Area */
+        .header-area {
             position: absolute;
-            top: 38mm;
-            left: 36mm;   /* 5% border + 8% padding ≈ 36mm dari tepi */
-            right: 36mm;
+            top: 24mm;
+            left: 28mm;
+            right: 28mm;
             text-align: center;
         }
 
-        /* ——— Typography (dikalibrasi: 1vw dari show.blade.php = 8.42pt di PDF 297mm) ——— */
-        /* org-name: 1.05vw = 8.84pt → 9pt */
+        /* Middle Content Area (Vertically centered between 58mm and 136mm) */
+        .middle-container {
+            position: absolute;
+            top: 58mm;
+            left: 28mm;
+            right: 28mm;
+            height: 78mm;
+        }
+        .middle-table {
+            width: 100%;
+            height: 100%;
+            border-collapse: collapse;
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+        .middle-cell {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* Footer Area (Anchored close to the bottom border) */
+        .footer-area {
+            position: absolute;
+            bottom: 24mm;
+            left: 28mm;
+            right: 28mm;
+            text-align: center;
+        }
+
+        /* Typography */
         .org-name {
-            font-size: 9pt;
+            font-size: 10.5pt;
             color: #b45309;
             letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 1mm;
+            margin-bottom: 2mm;
             font-weight: bold;
         }
-        /* cert-title: 1.5vw = 12.6pt → 13pt */
         .cert-title {
-            font-size: 13pt;
+            font-size: 15pt;
             font-weight: bold;
             letter-spacing: 5px;
             color: #92400e;
             text-transform: uppercase;
-            margin-bottom: 2.5mm;
+            margin-bottom: 0;
         }
-        /* stars: 2vw = 16.8pt → 17pt */
         .stars {
-            font-size: 17pt;
+            font-size: 20pt;
             color: #d97706;
             letter-spacing: 5px;
-            margin-bottom: 2.5mm;
+            margin-bottom: 0;
         }
-        /* rec-label: 0.9vw = 7.6pt → 8pt */
         .rec-label {
-            font-size: 8pt;
+            font-size: 9pt;
             color: #64748b;
-            margin-bottom: 1.5mm;
+            margin-bottom: 2mm;
         }
-        /* rec-name: 3.5vw = 29.5pt → 30pt */
         .rec-name {
-            font-size: 30pt;
+            font-size: 34pt;
             font-weight: bold;
             color: #1e293b;
             font-family: DejaVu Serif, serif;
             line-height: 1.1;
-            margin-bottom: 1.5mm;
+            margin-bottom: 3mm;
         }
-        /* divider: 20% of content width ≈ 45mm */
         .divider {
-            width: 45mm;
+            width: 60mm;
             height: 2px;
             background: #d97706;
-            margin: 0 auto 2.5mm auto;
+            margin: 0 auto 3.5mm auto;
         }
-        /* comp-text: 0.9vw → 8pt */
         .comp-text {
-            font-size: 8pt;
+            font-size: 9pt;
             color: #475569;
-            margin-bottom: 1mm;
+            margin-bottom: 2.5mm;
         }
-        /* course-nm: 1.5vw → 13pt */
         .course-nm {
-            font-size: 13pt;
+            font-size: 15pt;
             font-weight: bold;
             color: #1e293b;
-            margin-bottom: 1mm;
+            margin-bottom: 2.5mm;
         }
-        /* score: 0.9vw → 8pt, score-val: 1.1vw → 9pt */
         .score-text {
-            font-size: 8pt;
+            font-size: 9pt;
             color: #475569;
-            margin-bottom: 4mm;
+            margin-bottom: 0;
         }
         .score-val {
             font-weight: bold;
             color: #059669;
-            font-size: 9pt;
+            font-size: 11pt;
         }
 
-        /* Meta table: 55% of content width */
+        /* Meta table */
         .meta-tbl { width: 55%; margin: 0 auto 4mm auto; border-collapse: collapse; }
         .meta-tbl td { width: 50%; text-align: center; padding: 0 4mm; }
         .meta-tbl td:first-child { border-right: 1px solid #e2e8f0; }
-        /* meta-lbl: 0.7vw → 6pt */
-        .meta-lbl { font-size: 6pt; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1mm; }
-        /* meta-val: 0.95vw → 8pt */
-        .meta-val { font-size: 8pt; font-weight: bold; color: #334155; }
-        .meta-code { font-family: DejaVu Sans Mono, monospace; font-size: 7.5pt; letter-spacing: 2px; }
+        .meta-lbl { font-size: 7pt; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5mm; }
+        .meta-val { font-size: 9.5pt; font-weight: bold; color: #334155; }
+        .meta-code { font-family: DejaVu Sans Mono, monospace; font-size: 9pt; letter-spacing: 2px; }
 
-        /* Signature table: 65% of content width */
+        /* Signature table */
         .sig-tbl { width: 65%; margin: 0 auto; border-collapse: collapse; }
         .sig-tbl td { width: 50%; text-align: center; padding: 0 10mm; }
-        /* sig-space: 3vw = 25.3pt = ~9mm */
-        .sig-space { height: 9mm; }
-        .sig-line  { border-bottom: 1.5px solid #cbd5e1; width: 35mm; margin: 0 auto 1.5mm auto; }
-        /* sig-lbl: 0.75vw → 6.3pt → 6.5pt */
-        .sig-lbl   { font-size: 6.5pt; color: #64748b; }
+        .sig-space { height: 10mm; }
+        .sig-line  { border-bottom: 1.5px solid #cbd5e1; width: 45mm; margin: 0 auto 2mm auto; }
+        .sig-lbl   { font-size: 7.5pt; color: #64748b; }
     </style>
 </head>
 <body>
@@ -157,22 +168,35 @@
     <div class="corner corner-bl"></div>
     <div class="corner corner-br"></div>
 
-    {{-- Konten --}}
-    <div class="content">
+    {{-- Header Area (Tetap di Atas) --}}
+    <div class="header-area">
         <div class="org-name">Garbarata Training Center</div>
         <div class="cert-title">Sertifikat Kelulusan</div>
-        <div class="stars">&#9733; &#9733; &#9733;</div>
-        <div class="rec-label">Diberikan kepada:</div>
-        <div class="rec-name">{{ $certificate->user->name }}</div>
-        <div class="divider"></div>
-        <div class="comp-text">Telah berhasil menyelesaikan dan lulus semua evaluasi dalam kursus:</div>
-        <div class="course-nm">{{ $certificate->course->title }}</div>
-        <div class="score-text">
-            dengan nilai rata-rata
-            <span class="score-val">{{ number_format($certificate->total_score, 1) }}</span>
-            dari 100
-        </div>
+    </div>
 
+    {{-- Middle Content Area (Tengah Vertikal & Horizontal) --}}
+    <div class="middle-container">
+        <table class="middle-table">
+            <tr>
+                <td class="middle-cell">
+                    <div class="stars">&#9733; &#9733; &#9733;</div>
+                    <div class="rec-label">Diberikan kepada:</div>
+                    <div class="rec-name">{{ $certificate->user->name }}</div>
+                    <div class="divider"></div>
+                    <div class="comp-text">Telah berhasil menyelesaikan dan lulus semua evaluasi dalam kursus:</div>
+                    <div class="course-nm">{{ $certificate->course->title }}</div>
+                    <div class="score-text">
+                        dengan nilai rata-rata
+                        <span class="score-val">{{ number_format($certificate->total_score, 1) }}</span>
+                        dari 100
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {{-- Footer Area (Didekatkan ke Border Bawah) --}}
+    <div class="footer-area">
         <table class="meta-tbl">
             <tr>
                 <td>
