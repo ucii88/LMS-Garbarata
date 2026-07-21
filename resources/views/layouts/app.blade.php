@@ -47,17 +47,17 @@
                     <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 text-rose-600 text-2xl font-bold mb-3">
                         🚪
                     </div>
-                    <h3 class="text-base font-bold text-slate-800">Yakin ingin keluar?</h3>
-                    <p class="text-sm text-slate-500 mt-1">Anda akan keluar dari sesi masuk LMS-Garbarata saat ini.</p>
+                    <h3 class="text-base font-bold text-slate-800">{{ __('Yakin ingin keluar?') }}</h3>
+                    <p class="text-sm text-slate-500 mt-1">{{ __('Anda akan keluar dari sesi masuk LMS-Garbarata saat ini.') }}</p>
                 </div>
                 <div class="flex gap-3">
                     <button type="button" onclick="closeLogoutModal()"
                             class="flex-1 py-2.5 text-sm font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
-                        Batal
+                        {{ __('Batal') }}
                     </button>
                     <button type="button" onclick="submitLogoutForm()"
                             class="flex-1 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition">
-                        Ya, Keluar
+                        {{ __('Ya, Keluar') }}
                     </button>
                 </div>
             </div>
@@ -70,13 +70,13 @@
                     <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 text-amber-600 text-2xl font-bold mb-3">
                         📜
                     </div>
-                    <h3 id="global-alert-title" class="text-base font-bold text-slate-800">Pemberitahuan</h3>
+                    <h3 id="global-alert-title" class="text-base font-bold text-slate-800">{{ __('Pemberitahuan') }}</h3>
                     <p id="global-alert-message" class="text-xs text-slate-500 mt-2 leading-relaxed"></p>
                 </div>
                 <div>
                     <button type="button" onclick="closeGlobalAlertModal()"
                             class="w-full py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition">
-                        Tutup
+                        {{ __('Tutup') }}
                     </button>
                 </div>
             </div>

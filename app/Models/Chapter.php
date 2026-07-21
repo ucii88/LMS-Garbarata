@@ -7,12 +7,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+use App\Traits\HasTranslations;
+
 class Chapter extends Model
 {
+    use HasTranslations;
+
     protected $fillable = [
         'course_id',
         'title',
         'order',
+    ];
+
+    protected $translatable = [
+        'title',
+        'description',
     ];
 
     /**

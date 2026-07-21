@@ -29,14 +29,24 @@
 
                 <!-- Title & Order Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <!-- Title Input -->
-                    <div class="md:col-span-3">
-                        <label for="title" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Judul Modul</label>
-                        <input type="text" name="title" id="title" value="{{ old('title', $module->title) }}" required placeholder="Contoh: 1.1 Deskripsi Komponen Utama"
-                               class="w-full text-sm text-slate-800 placeholder-slate-400 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
-                        @error('title')
-                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                        @enderror
+                    <!-- Title Inputs -->
+                    <div class="md:col-span-3 space-y-4">
+                        <div>
+                            <label for="title_id" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Judul Modul (Bahasa Indonesia)</label>
+                            <input type="text" name="title[id]" id="title_id" value="{{ old('title.id', $module->getTranslation('title', 'id')) }}" required placeholder="Contoh: 1.1 Deskripsi Komponen Utama"
+                                   class="w-full text-sm text-slate-800 placeholder-slate-400 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                            @error('title.id')
+                                <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label for="title_en" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Judul Modul (English)</label>
+                            <input type="text" name="title[en]" id="title_en" value="{{ old('title.en', $module->getTranslation('title', 'en')) }}" placeholder="Example: 1.1 Main Component Description"
+                                   class="w-full text-sm text-slate-800 placeholder-slate-400 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition">
+                            @error('title.en')
+                                <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
 
                     <!-- Order Input -->
@@ -62,17 +72,26 @@
                 </div>
 
                 <!-- Rich Text Editor for Content -->
-                <div class="flex flex-col">
-                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Isi Materi Pembelajaran</label>
-                    
-                    <!-- TinyMCE Editor -->
-                    <div class="rounded-xl border border-gray-200 overflow-hidden bg-white">
-                        <textarea id="tinymce-editor" name="content" class="w-full h-80">{{ old('content', $module->content) }}</textarea>
+                <div class="flex flex-col space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Isi Materi Pembelajaran (Bahasa Indonesia)</label>
+                        <div class="rounded-xl border border-gray-200 overflow-hidden bg-white">
+                            <textarea class="tinymce-editor w-full h-80" name="content[id]">{{ old('content.id', $module->getTranslation('content', 'id')) }}</textarea>
+                        </div>
+                        @error('content.id')
+                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-
-                    @error('content')
-                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                    @enderror
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Isi Materi Pembelajaran (English)</label>
+                        <div class="rounded-xl border border-gray-200 overflow-hidden bg-white">
+                            <textarea class="tinymce-editor w-full h-80" name="content[en]">{{ old('content.en', $module->getTranslation('content', 'en')) }}</textarea>
+                        </div>
+                        @error('content.en')
+                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Action Buttons -->
@@ -94,7 +113,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             tinymce.init({
-                selector: '#tinymce-editor',
+                selector: '.tinymce-editor',
                 height: 400,
                 menubar: false,
                 plugins: [

@@ -46,7 +46,7 @@ class CourseController extends Controller
             if (! $selectedProgress || ! $selectedProgress['is_unlocked']) {
                 return redirect()
                     ->route('courses.show', $course)
-                    ->with('error', 'Bab ini masih terkunci. Selesaikan materi dan Quiz Chapter pada bab sebelumnya terlebih dahulu.');
+                    ->with('error', __('Bab ini masih terkunci. Selesaikan materi dan Quiz Chapter pada bab sebelumnya terlebih dahulu.'));
             }
         }
 
@@ -139,13 +139,13 @@ class CourseController extends Controller
             ->whereNotNull('submitted_at')->orderByDesc('submitted_at')->get()->unique('quiz_id')->keyBy('quiz_id');
 
         $sections = $isPractice
-            ? [['title' => 'Latihan Mandiri', 'description' => 'Kerjakan latihan mandiri untuk menguji pemahaman Anda.', 'items' => $activities, 'theme' => 'violet']]
+            ? [['title' => __('Latihan Mandiri'), 'description' => __('Kerjakan latihan mandiri untuk menguji pemahaman Anda.'), 'items' => $activities, 'theme' => 'violet']]
             : [
-                ['title' => 'Quiz Chapter', 'description' => 'Quiz evaluasi pada masing-masing chapter.', 'items' => $activities->filter(fn (Quiz $activity) => ! $activity->isFinalQuiz()), 'theme' => 'blue'],
-                ['title' => 'Ujian', 'description' => 'Ujian akhir course tersedia di halaman ini.', 'items' => $activities->filter(fn (Quiz $activity) => $activity->isFinalQuiz()), 'theme' => 'amber'],
+                ['title' => __('Quiz Chapter'), 'description' => __('Quiz evaluasi pada masing-masing chapter.'), 'items' => $activities->filter(fn (Quiz $activity) => ! $activity->isFinalQuiz()), 'theme' => 'blue'],
+                ['title' => __('Ujian'), 'description' => __('Ujian akhir course tersedia di halaman ini.'), 'items' => $activities->filter(fn (Quiz $activity) => $activity->isFinalQuiz()), 'theme' => 'amber'],
             ];
 
-        $pageTitle = $isPractice ? 'Latihan' : 'Quiz & Ujian';
+        $pageTitle = $isPractice ? __('Latihan') : __('Quiz & Ujian');
 
         return view('courses.activities', compact('course', 'lastAttempts', 'sections', 'pageTitle'));
     }

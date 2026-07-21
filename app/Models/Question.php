@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use App\Traits\HasTranslations;
+
 class Question extends Model
 {
+    use HasTranslations;
+
     protected $fillable = [
         'course_id',
         'chapter_id',
@@ -19,6 +23,11 @@ class Question extends Model
         'explanation',
         'topic_tag',
         'order',
+    ];
+
+    protected $translatable = [
+        'question_text',
+        'explanation',
     ];
 
     public function course(): BelongsTo

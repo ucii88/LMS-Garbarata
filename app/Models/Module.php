@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use App\Traits\HasTranslations;
+
 class Module extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'chapter_id',
@@ -17,6 +19,11 @@ class Module extends Model
         'content',
         'image_path',
         'order',
+    ];
+
+    protected $translatable = [
+        'title',
+        'content',
     ];
 
     /**

@@ -5,8 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use App\Traits\HasTranslations;
+
 class QuestionOption extends Model
 {
+    use HasTranslations;
+
     protected $fillable = [
         'question_id',
         'option_text',
@@ -14,6 +18,10 @@ class QuestionOption extends Model
         'is_correct',
         'match_label',
         'order',
+    ];
+
+    protected $translatable = [
+        'option_text',
     ];
 
     protected $casts = [
