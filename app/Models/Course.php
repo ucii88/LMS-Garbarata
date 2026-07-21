@@ -7,15 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+use App\Traits\HasTranslations;
+
 class Course extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'title',
         'description',
         'thumbnail',
         'is_published',
+    ];
+
+    protected $translatable = [
+        'title',
+        'description',
     ];
 
     protected $casts = [

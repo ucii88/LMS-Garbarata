@@ -44,7 +44,7 @@ class Chapter2Seeder extends Seeder
                                 General Specification
                             </th>
                         </tr>
-                    </thead>
+                    </thead>s
                     <tbody>
                         <tr class="border-b border-gray-400">
                             <td class="py-2 font-medium w-1/3">Type Number</td>
@@ -346,16 +346,12 @@ class Chapter2Seeder extends Seeder
 
     private function module(int $chapterId, string $title, string $content, int $order): void
     {
-        Module::updateOrCreate(
-            [
-                'chapter_id' => $chapterId,
-                'title' => $title,
-            ],
-            [
-                'content' => $content,
-                'image_path' => null,
-                'order' => $order,
-            ],
-        );
+        Module::create([
+            'chapter_id' => $chapterId,
+            'title' => $title,
+            'content' => $content,
+            'image_path' => null,
+            'order' => $order,
+        ]);
     }
 }

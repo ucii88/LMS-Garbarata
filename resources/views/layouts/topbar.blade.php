@@ -2,7 +2,7 @@
     <!-- Left Section: Dynamic Page Title -->
     <div class="flex items-center space-x-3">
         <h1 class="text-base font-bold text-slate-800 tracking-tight">
-            @yield('topbar_title', 'Dashboard')
+            @yield('topbar_title', __('Dashboard'))
         </h1>
     </div>
 
@@ -20,7 +20,7 @@
             <button
                 @click="toggleOpen()"
                 class="relative text-gray-400 hover:text-gray-600 transition focus:outline-none"
-                aria-label="Notifikasi"
+                aria-label="{{ __('Notifikasi') }}"
             >
                 <!-- Unread badge -->
                 <span
@@ -51,7 +51,7 @@
                 <!-- Header -->
                 <div class="flex items-center justify-between px-4 py-3 border-b border-[#f0f0f0] bg-slate-50/60">
                     <div class="flex items-center gap-2">
-                        <span class="text-sm font-bold text-slate-800">Notifikasi</span>
+                        <span class="text-sm font-bold text-slate-800">{{ __('Notifikasi') }}</span>
                         <span x-show="unreadCount > 0" x-text="unreadCount" class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[9px] font-black leading-none"></span>
                     </div>
                     <button
@@ -59,7 +59,7 @@
                         @click="markAllRead()"
                         class="text-[10px] font-bold text-blue-500 hover:text-blue-700 transition"
                     >
-                        Tandai semua dibaca
+                        {{ __('Tandai semua dibaca') }}
                     </button>
                 </div>
 
@@ -81,7 +81,7 @@
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
                             </svg>
-                            <p class="text-sm font-semibold">Tidak ada notifikasi</p>
+                            <p class="text-sm font-semibold">{{ __('Tidak ada notifikasi') }}</p>
                         </div>
                     </template>
 

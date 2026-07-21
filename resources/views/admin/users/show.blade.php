@@ -12,7 +12,8 @@
                         Kembali ke Daftar
                     </a>
                     <h1 class="text-2xl font-extrabold tracking-tight text-white mt-3">Detail Pengguna: {{ $user->name }}</h1>
-                    <p class="text-sm text-slate-300 leading-relaxed">{{ $user->email }} &bull; Peran: <span class="capitalize font-bold">{{ $user->role }}</span></p>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-white mt-3">{{ __('Detail Pengguna') }}: {{ $user->name }}</h1>
+                    <p class="text-sm text-slate-300 leading-relaxed">{{ $user->email }} &bull; {{ __('Peran') }}: <span class="capitalize font-bold">{{ $user->role }}</span></p>
                 </div>
             </div>
         </section>
@@ -20,19 +21,19 @@
         {{-- Quiz & Exam History --}}
         <section class="rounded-2xl border border-[#f0f0f0] bg-white shadow-sm overflow-hidden">
             <div class="border-b border-[#f0f0f0] px-6 py-4">
-                <h2 class="text-base font-bold text-slate-800">Riwayat Quiz & Ujian</h2>
-                <p class="text-[10px] text-slate-400 mt-0.5">Daftar semua quiz dan ujian akhir yang pernah diikuti.</p>
+                <h2 class="text-base font-bold text-slate-800">{{ __('Riwayat Quiz & Ujian') }}</h2>
+                <p class="text-[10px] text-slate-400 mt-0.5">{{ __('Daftar semua quiz dan ujian akhir yang pernah diikuti.') }}</p>
             </div>
             
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-[#f0f0f0] text-left text-sm">
                     <thead class="bg-gray-50">
                         <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                            <th class="px-5 py-3">Course / Chapter</th>
-                            <th class="px-5 py-3">Tipe</th>
-                            <th class="px-5 py-3">Tanggal</th>
-                            <th class="px-5 py-3 text-center">Skor</th>
-                            <th class="px-5 py-3 text-center">Status</th>
+                            <th class="px-5 py-3">{{ __('Course / Chapter') }}</th>
+                            <th class="px-5 py-3">{{ __('Tipe') }}</th>
+                            <th class="px-5 py-3">{{ __('Tanggal') }}</th>
+                            <th class="px-5 py-3 text-center">{{ __('Skor') }}</th>
+                            <th class="px-5 py-3 text-center">{{ __('Status') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#f0f0f0] bg-white text-slate-700">
@@ -40,11 +41,11 @@
                             <tr class="hover:bg-slate-50/50 transition">
                                 <td class="px-5 py-3.5">
                                     <div class="font-bold text-slate-800">{{ $attempt->quiz->course->title ?? '-' }}</div>
-                                    <div class="text-[11px] text-slate-500">{{ $attempt->quiz->chapter ? $attempt->quiz->chapter->title : 'Ujian Akhir Course' }}</div>
+                                    <div class="text-[11px] text-slate-500">{{ $attempt->quiz->chapter ? $attempt->quiz->chapter->title : __('Ujian Akhir Course') }}</div>
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <span class="inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold capitalize {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-blue-50 text-blue-600 border-blue-100' }}">
-                                        {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? 'Ujian Akhir' : 'Quiz Chapter' }}
+                                        {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? __('Ujian Akhir') : __('Quiz Chapter') }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-3.5 text-slate-500">
@@ -56,11 +57,11 @@
                                 <td class="px-5 py-3.5 text-center">
                                     @if($attempt->is_passed)
                                         <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-600 border border-emerald-200">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Lulus
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>{{ __('Lulus') }}
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-600 border border-rose-200">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>Gagal
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>{{ __('Gagal') }}
                                         </span>
                                     @endif
                                 </td>
@@ -68,7 +69,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-5 py-10 text-center text-sm text-slate-400">
-                                    Tidak ada riwayat quiz atau ujian.
+                                    {{ __('Tidak ada riwayat quiz atau ujian.') }}
                                 </td>
                             </tr>
                         @endforelse

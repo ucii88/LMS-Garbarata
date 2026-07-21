@@ -115,9 +115,9 @@
             <!-- Tabs Menu matching Mockup -->
             <div class="border-b border-[#f0f0f0]">
                 <nav class="-mb-px flex gap-6 sm:gap-8" aria-label="Menu pembelajaran">
-                    <button type="button" @click="participantTab = 'materi'" :class="participantTab === 'materi' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">Materi Belajar</button>
-                    <button type="button" @click="participantTab = 'quiz'" :class="participantTab === 'quiz' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">Quiz & Ujian</button>
-                    <button type="button" @click="participantTab = 'latihan'" :class="participantTab === 'latihan' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">Latihan Mandiri</button>
+                    <button type="button" @click="participantTab = 'materi'" :class="participantTab === 'materi' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">{{ __('Materi Belajar') }}</button>
+                    <button type="button" @click="participantTab = 'quiz'" :class="participantTab === 'quiz' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">{{ __('Quiz & Ujian') }}</button>
+                    <button type="button" @click="participantTab = 'latihan'" :class="participantTab === 'latihan' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">{{ __('Latihan Mandiri') }}</button>
                 </nav>
             </div>
         @endif
@@ -130,11 +130,11 @@
                     <section id="manajemen-user" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 md:flex-row md:items-center md:justify-between">
                             <div>
-                                <h2 class="text-base font-bold text-slate-800">Manajemen Pengguna</h2>
-                                <p class="text-sm text-slate-400 mt-1">Tambahkan atau hapus akun instruktur dan peserta dari dashboard.</p>
+                                <h2 class="text-base font-bold text-slate-800">{{ __('Manajemen Pengguna') }}</h2>
+                                <p class="text-sm text-slate-400 mt-1">{{ __('Kelola akun peserta dan instruktur dari satu panel.') }}</p>
                             </div>
                             <button @click="showModal = true" class="inline-flex items-center justify-center rounded-lg bg-slate-900 hover:bg-slate-800 px-4 py-2.5 text-sm font-bold text-white transition shadow-sm">
-                                Tambah User
+                                {{ __('Tambah User') }}
                             </button>
                         </div>
 
@@ -142,11 +142,11 @@
                             <table class="min-w-full divide-y divide-[#f0f0f0] text-left text-sm">
                                 <thead class="bg-gray-50">
                                     <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                                        <th class="px-5 py-3">Nama</th>
-                                        <th class="px-5 py-3">Email</th>
-                                        <th class="px-5 py-3">Role</th>
-                                        <th class="px-5 py-3">Terdaftar</th>
-                                        <th class="px-5 py-3 text-right">Aksi</th>
+                                        <th class="px-5 py-3">{{ __('Nama') }}</th>
+                                        <th class="px-5 py-3">{{ __('Email') }}</th>
+                                        <th class="px-5 py-3">{{ __('Role') }}</th>
+                                        <th class="px-5 py-3">{{ __('Terdaftar') }}</th>
+                                        <th class="px-5 py-3 text-right">{{ __('Aksi') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-[#f0f0f0] bg-white text-slate-700">
@@ -178,11 +178,11 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="font-bold text-rose-600 transition hover:text-rose-800">
-                                                            Hapus
+                                                            {{ __('Hapus') }}
                                                         </button>
                                                     </form>
                                                 @else
-                                                    <span class="text-xs font-semibold italic text-slate-400">Akun Anda</span>
+                                                    <span class="text-xs font-semibold italic text-slate-400">{{ __('Akun Anda') }}</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -197,8 +197,8 @@
                 @if ($isInstruktur)
                     <section id="kelola-kursus" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="border-b border-[#f0f0f0] pb-5">
-                            <h2 class="text-base font-bold text-slate-800">Kelola Materi</h2>
-                            <p class="text-sm text-slate-400 mt-1">Tambah, edit, dan hapus modul materi pada setiap bab kursus.</p>
+                            <h2 class="text-base font-bold text-slate-800">{{ __('Kelola Materi') }}</h2>
+                            <p class="text-sm text-slate-400 mt-1">{{ __('Atur course, modul, dan isi pembelajaran.') }}</p>
                         </div>
 
                         <div class="mt-5 grid gap-4">
@@ -206,9 +206,9 @@
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/50 p-5 space-y-4 hover:border-gray-300 transition duration-150">
                                     <div class="flex items-center justify-between">
                                         <span class="inline-flex rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider {{ $course->is_published ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-slate-200 text-slate-600' }}">
-                                            {{ $course->is_published ? 'Published' : 'Draft' }}
+                                            {{ $course->is_published ? __('Published') : __('Draft') }}
                                         </span>
-                                        <span class="text-xs font-bold text-slate-400">{{ $course->modules_count }} modul</span>
+                                        <span class="text-xs font-bold text-slate-400">{{ $course->modules_count }} {{ __('modul') }}</span>
                                     </div>
 
                                     <div class="space-y-1">
@@ -218,13 +218,13 @@
 
                                     <div class="flex items-center justify-between border-t border-gray-200/60 pt-3">
                                         <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center gap-1 justify-center rounded-lg bg-amber-500 hover:bg-amber-600 px-4 py-2 text-xs font-bold text-white transition shadow-sm">
-                                            Kelola Materi →
+                                            {{ __('Kelola Materi') }} →
                                         </a>
                                     </div>
                                 </article>
                             @empty
                                 <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400 sm:col-span-2">
-                                    Belum ada kursus yang tersedia.
+                                    {{ __('Belum ada kursus yang tersedia.') }}
                                 </div>
                             @endforelse
                         </div>
@@ -232,18 +232,18 @@
 
                     <section id="progress-peserta" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm mt-6">
                         <div class="border-b border-[#f0f0f0] pb-5">
-                            <h2 class="text-base font-bold text-slate-800">Progress Belajar Peserta</h2>
-                            <p class="text-sm text-slate-400 mt-1">Pantau perkembangan peserta dalam menyelesaikan modul dan bab pembelajaran.</p>
+                            <h2 class="text-base font-bold text-slate-800">{{ __('Progress Belajar Peserta') }}</h2>
+                            <p class="text-sm text-slate-400 mt-1">{{ __('Pantau perkembangan peserta dalam menyelesaikan modul dan bab pembelajaran.') }}</p>
                         </div>
 
                         <div class="mt-5 overflow-hidden rounded-xl border border-[#f0f0f0]">
                             <table class="min-w-full divide-y divide-[#f0f0f0] text-left text-sm">
                                 <thead class="bg-gray-50">
                                     <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                                        <th class="px-5 py-3">Nama Peserta</th>
-                                        <th class="px-5 py-3">Email</th>
-                                        <th class="px-5 py-3">Progress Keseluruhan</th>
-                                        <th class="px-5 py-3 text-right">Detail</th>
+                                        <th class="px-5 py-3">{{ __('Nama Peserta') }}</th>
+                                        <th class="px-5 py-3">{{ __('Email') }}</th>
+                                        <th class="px-5 py-3">{{ __('Progress Keseluruhan') }}</th>
+                                        <th class="px-5 py-3 text-right">{{ __('Detail') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-[#f0f0f0] bg-white text-slate-700">
@@ -269,13 +269,13 @@
                                             </td>
                                             <td class="px-5 py-3.5 text-right">
                                                 <button type="button" @click="selectedUserProgress = userProgress[{{ $participant->id }}]" class="inline-flex items-center gap-1 rounded border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold text-slate-600 transition hover:bg-slate-50">
-                                                    Lihat Detail
+                                                    {{ __('Lihat Detail') }}
                                                 </button>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="px-5 py-8 text-center text-sm text-slate-400">Belum ada peserta yang terdaftar.</td>
+                                            <td colspan="4" class="px-5 py-8 text-center text-sm text-slate-400">{{ __('Belum ada peserta yang terdaftar.') }}</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -288,28 +288,28 @@
                 @if ($isPeserta)
                     <section id="materi-kursus" x-show="participantTab === 'materi'" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="border-b border-[#f0f0f0] pb-5">
-                            <h2 class="text-base font-bold text-slate-800">Materi Kursus Tersedia</h2>
-                            <p class="text-sm text-slate-400 mt-1">Pilih materi untuk membaca modul pembelajaran.</p>
+                            <h2 class="text-base font-bold text-slate-800">{{ __('Materi Kursus Tersedia') }}</h2>
+                            <p class="text-sm text-slate-400 mt-1">{{ __('Pilih materi untuk membaca modul pembelajaran.') }}</p>
                         </div>
 
                         <div class="mt-5 space-y-4">
                             @forelse ($items as $course)
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 hover:bg-slate-50/80 transition duration-150">
                                     <div class="space-y-1.5 max-w-xl">
-                                        <span class="text-xs font-bold text-slate-400">{{ $course->modules_count ?? 0 }} modul</span>
+                                        <span class="text-xs font-bold text-slate-400">{{ $course->modules_count ?? 0 }} {{ __('modul') }}</span>
                                         <h3 class="text-base font-bold text-slate-800 leading-snug">{{ $course->title }}</h3>
                                         <p class="text-xs text-slate-500 leading-relaxed">{{ $course->description }}</p>
                                     </div>
 
                                     <div class="shrink-0 flex items-center border-t md:border-t-0 border-[#f0f0f0] pt-3 md:pt-0">
                                         <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-sm font-bold text-white transition shadow-sm">
-                                            Mulai Belajar →
+                                            {{ __('Mulai Belajar') }} →
                                         </a>
                                     </div>
                                 </article>
                             @empty
                                 <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400">
-                                    Belum ada materi kursus yang dipublikasikan.
+                                    {{ __('Belum ada materi kursus yang dipublikasikan.') }}
                                 </div>
                             @endforelse
                         </div>
@@ -318,22 +318,22 @@
                     <section id="quiz-ujian" x-cloak x-show="participantTab === 'quiz'" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                                <h2 class="text-base font-bold text-slate-800">Quiz & Ujian</h2>
-                                <p class="text-sm text-slate-400 mt-1">Kerjakan quiz chapter dan ujian akhir dari kursus yang tersedia.</p>
+                                <h2 class="text-base font-bold text-slate-800">{{ __('Quiz & Ujian') }}</h2>
+                                <p class="text-sm text-slate-400 mt-1">{{ __('Kerjakan quiz chapter dan ujian akhir dari kursus yang tersedia.') }}</p>
                             </div>
                         </div>
                         <div class="mt-5 space-y-3">
                             @forelse ($participantQuizzes as $quiz)
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-wider {{ $quiz->isFinalQuiz() ? 'text-amber-600' : 'text-blue-600' }}">{{ $quiz->isFinalQuiz() ? 'Ujian Akhir' : 'Quiz Chapter' }} · {{ $quiz->course->title }}</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider {{ $quiz->isFinalQuiz() ? 'text-amber-600' : 'text-blue-600' }}">{{ $quiz->isFinalQuiz() ? __('Ujian Akhir') : __('Quiz Chapter') }} · {{ $quiz->course->title }}</p>
                                         <h3 class="mt-1 text-base font-bold text-slate-800">{{ $quiz->title }}</h3>
-                                        <p class="mt-1 text-xs text-slate-500">{{ $quiz->questions_count }} soal{{ $quiz->chapter ? ' · ' . $quiz->chapter->title : '' }}</p>
+                                        <p class="mt-1 text-xs text-slate-500">{{ $quiz->questions_count }} {{ __('soal') }}{{ $quiz->chapter ? ' · ' . $quiz->chapter->title : '' }}</p>
                                     </div>
-                                    <a href="{{ route('quiz.start', [$quiz->course, $quiz]) }}" class="shrink-0 inline-flex items-center justify-center rounded-lg {{ $quiz->isFinalQuiz() ? 'bg-amber-500 hover:bg-amber-600' : 'bg-blue-600 hover:bg-blue-700' }} px-4 py-2 text-sm font-bold text-white transition">Mulai →</a>
+                                    <a href="{{ route('quiz.start', [$quiz->course, $quiz]) }}" class="shrink-0 inline-flex items-center justify-center rounded-lg {{ $quiz->isFinalQuiz() ? 'bg-amber-500 hover:bg-amber-600' : 'bg-blue-600 hover:bg-blue-700' }} px-4 py-2 text-sm font-bold text-white transition">{{ __('Mulai') }} →</a>
                                 </article>
                             @empty
-                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400">Belum ada quiz atau ujian yang tersedia.</div>
+                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400">{{ __('Belum ada quiz atau ujian yang tersedia.') }}</div>
                             @endforelse
                         </div>
                     </section>
@@ -341,22 +341,22 @@
                     <section id="latihan-mandiri" x-cloak x-show="participantTab === 'latihan'" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                                <h2 class="text-base font-bold text-slate-800">Latihan Mandiri</h2>
-                                <p class="text-sm text-slate-400 mt-1">Semua latihan dari kursus yang tersedia untuk mengasah pemahaman Anda.</p>
+                                <h2 class="text-base font-bold text-slate-800">{{ __('Latihan Mandiri') }}</h2>
+                                <p class="text-sm text-slate-400 mt-1">{{ __('Asah pemahaman lewat seluruh latihan yang tersedia.') }}</p>
                             </div>
                         </div>
                         <div class="mt-5 space-y-3">
                             @forelse ($participantPractices as $practice)
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-wider text-violet-600">Latihan · {{ $practice->course->title }}</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-violet-600">{{ __('Latihan') }} · {{ $practice->course->title }}</p>
                                         <h3 class="mt-1 text-base font-bold text-slate-800">{{ $practice->title }}</h3>
-                                        <p class="mt-1 text-xs text-slate-500">{{ $practice->questions_count }} soal{{ $practice->chapter ? ' · ' . $practice->chapter->title : '' }}</p>
+                                        <p class="mt-1 text-xs text-slate-500">{{ $practice->questions_count }} {{ __('soal') }}{{ $practice->chapter ? ' · ' . $practice->chapter->title : '' }}</p>
                                     </div>
-                                    <a href="{{ route('practice.start', [$practice->course, $practice]) }}" class="shrink-0 inline-flex items-center justify-center rounded-lg bg-violet-600 hover:bg-violet-700 px-4 py-2 text-sm font-bold text-white transition">Mulai Latihan →</a>
+                                    <a href="{{ route('practice.start', [$practice->course, $practice]) }}" class="shrink-0 inline-flex items-center justify-center rounded-lg bg-violet-600 hover:bg-violet-700 px-4 py-2 text-sm font-bold text-white transition">{{ __('Mulai Latihan') }} →</a>
                                 </article>
                             @empty
-                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400">Belum ada latihan yang tersedia.</div>
+                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400">{{ __('Belum ada latihan yang tersedia.') }}</div>
                             @endforelse
                         </div>
                     </section>
@@ -368,7 +368,7 @@
                 <div class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm space-y-5">
                     <!-- Title Area -->
                     <div class="flex items-center justify-between">
-                        <h2 class="text-base font-bold text-slate-800">Jadwal Mendatang</h2>
+                        <h2 class="text-base font-bold text-slate-800">{{ __('Jadwal Mendatang') }}</h2>
                         <button class="text-slate-400 hover:text-slate-600 transition text-lg" aria-label="Opsi">
                             •••
                         </button>
@@ -448,7 +448,7 @@
                             </article>
                         @empty
                             <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400 select-none">
-                                Tidak ada jadwal mendatang untuk minggu ini.
+                                {{ __('Tidak ada jadwal mendatang untuk minggu ini.') }}
                             </div>
                         @endforelse
                     </div>
@@ -456,7 +456,7 @@
                     <!-- Bottom Action Button -->
                     <button type="button" onclick="alert('Fitur kalender lengkap akan segera hadir!')"
                             class="w-full py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-bold rounded-xl transition border border-slate-200/50 shadow-2xs">
-                        Lihat Kalender Lengkap
+                        {{ __('Lihat Kalender Lengkap') }}
                     </button>
                 </div>
             </div>
@@ -470,37 +470,37 @@
                     <div class="relative z-10 w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-2xl">
                         <div class="flex items-start justify-between gap-4 border-b border-slate-100 px-6 py-5">
                             <div>
-                                <h3 class="text-base font-bold text-slate-900">Detail Progress Peserta</h3>
+                                <h3 class="text-base font-bold text-slate-900">{{ __('Detail Progress Peserta') }}</h3>
                                 <p class="mt-1 text-[10px] text-slate-400" x-text="selectedUserProgress ? selectedUserProgress.name + ' - ' + selectedUserProgress.email : ''"></p>
                             </div>
                             <button type="button" @click="selectedUserProgress = null" class="rounded-lg px-2 py-1 text-sm font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700">
-                                Tutup
+                                {{ __('Tutup') }}
                             </button>
                         </div>
 
                         <div class="max-h-[70vh] space-y-5 overflow-y-auto px-6 py-5">
                             <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-                                <p class="text-sm font-bold text-emerald-700">Progress materi keseluruhan</p>
+                                <p class="text-sm font-bold text-emerald-700">{{ __('Progress materi keseluruhan') }}</p>
                                 <p class="mt-1 text-2xl font-extrabold text-emerald-700" x-text="selectedUserProgress ? selectedUserProgress.material_percent + '%' : '0%'"></p>
                             </div>
 
                             <div class="space-y-2">
-                                <p class="text-sm font-bold text-slate-800">Progress per BAB</p>
+                                <p class="text-sm font-bold text-slate-800">{{ __('Progress per BAB') }}</p>
                                 <template x-for="chapter in (selectedUserProgress ? selectedUserProgress.chapters : [])" :key="chapter.order">
                                     <div class="rounded-xl border border-slate-100 bg-white p-3">
                                         <div class="flex items-center justify-between gap-3">
-                                            <p class="text-sm font-bold text-slate-700" x-text="'BAB ' + chapter.order + (chapter.title ? ' · ' + chapter.title : '')"></p>
+                                            <p class="text-sm font-bold text-slate-700" x-text="'{{ __('BAB') }}' + ' ' + chapter.order + (chapter.title ? ' · ' + chapter.title : '')"></p>
                                             <span class="rounded-full px-2.5 py-0.5 text-[10px] font-bold" :class="chapter.is_complete ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'" x-text="chapter.percent + '%'"></span>
                                         </div>
                                         <template x-if="chapter.missing_modules.length">
                                             <div class="mt-2 border-t border-amber-100 pt-2">
-                                                <p class="text-[10px] font-semibold text-amber-700" x-text="chapter.missing_modules.length + ' materi belum selesai'"></p>
+                                                <p class="text-[10px] font-semibold text-amber-700" x-text="chapter.missing_modules.length + ' {{ __('materi belum selesai') }}'"></p>
                                                 <div class="mt-1.5 flex flex-wrap gap-1.5">
                                                     <template x-for="module in chapter.missing_modules.slice(0, 5)" :key="module">
                                                         <span class="rounded-md bg-amber-50 px-2 py-1 text-[9px] font-medium leading-tight text-amber-700" x-text="module"></span>
                                                     </template>
                                                     <template x-if="chapter.missing_modules.length > 5">
-                                                        <span class="rounded-md bg-slate-100 px-2 py-1 text-[9px] font-bold text-slate-500" x-text="'+' + (chapter.missing_modules.length - 5) + ' lainnya'"></span>
+                                                        <span class="rounded-md bg-slate-100 px-2 py-1 text-[9px] font-bold text-slate-500" x-text="'+' + (chapter.missing_modules.length - 5) + ' {{ __('lainnya') }}'"></span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -510,11 +510,11 @@
                             </div>
 
                             <div class="space-y-3">
-                                <p class="text-sm font-bold text-slate-800">Aktivitas Evaluasi</p>
+                                <p class="text-sm font-bold text-slate-800">{{ __('Aktivitas Evaluasi') }}</p>
                                 <template x-for="section in [
-                                    { key: 'quizzes', title: 'Quiz', tone: 'blue' },
-                                    { key: 'exams', title: 'Ujian', tone: 'amber' },
-                                    { key: 'practices', title: 'Latihan', tone: 'violet' }
+                                    { key: 'quizzes', title: '{{ __('Quiz') }}', tone: 'blue' },
+                                    { key: 'exams', title: '{{ __('Ujian') }}', tone: 'amber' },
+                                    { key: 'practices', title: '{{ __('Latihan') }}', tone: 'violet' }
                                 ]" :key="section.key">
                                     <div class="rounded-xl border border-slate-100 bg-white p-3">
                                         <p class="text-[11px] font-bold" :class="section.tone === 'blue' ? 'text-blue-700' : (section.tone === 'amber' ? 'text-amber-700' : 'text-violet-700')" x-text="section.title"></p>
@@ -525,11 +525,11 @@
                                                         <p class="truncate text-[10px] font-semibold text-slate-700" x-text="activity.title"></p>
                                                         <p class="truncate text-[9px] text-slate-400" x-text="activity.course + (activity.chapter ? ' · ' + activity.chapter : '')"></p>
                                                     </div>
-                                                    <span class="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold" :class="activity.is_completed ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-200 text-slate-500'" x-text="activity.is_completed ? 'Selesai · ' + activity.score + '%' : 'Belum dikerjakan'"></span>
+                                                    <span class="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold" :class="activity.is_completed ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-200 text-slate-500'" x-text="activity.is_completed ? '{{ __('Selesai') }} · ' + activity.score + '%' : '{{ __('Belum dikerjakan') }}'"></span>
                                                 </div>
                                             </template>
                                             <template x-if="selectedUserProgress && !selectedUserProgress[section.key].length">
-                                                <p class="py-1 text-[10px] text-slate-400">Belum ada aktivitas tersedia.</p>
+                                                <p class="py-1 text-[10px] text-slate-400">{{ __('Belum ada aktivitas tersedia.') }}</p>
                                             </template>
                                         </div>
                                     </div>

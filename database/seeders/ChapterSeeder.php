@@ -18,43 +18,64 @@ class ChapterSeeder extends Seeder
 
         Chapter::create([
             'course_id' => $course->id,
-            'title' => 'BAB 1: Deskripsi Garbarata',
+            'title' => [
+                'id' => 'BAB 1: Deskripsi Garbarata',
+                'en' => 'CHAPTER 1: Passenger Boarding Bridge Description',
+            ],
             'order' => 1,
         ]);
 
         Chapter::create([
             'course_id' => $course->id,
-            'title' => 'BAB 2: Data Teknis',
+            'title' => [
+                'id' => 'BAB 2: Data Teknis',
+                'en' => 'CHAPTER 2: Technical Data',
+            ],
             'order' => 2,
         ]);
 
         Chapter::create([
             'course_id' => $course->id,
-            'title' => 'BAB 3: Instruksi Pengoperasian',
+            'title' => [
+                'id' => 'BAB 3: Instruksi Pengoperasian',
+                'en' => 'CHAPTER 3: Operating Instructions',
+            ],
             'order' => 3,
         ]);
 
         Chapter::create([
             'course_id' => $course->id,
-            'title' => 'BAB 4: Perawatan, Inspeksi & Penyelesaian Masalah',
+            'title' => [
+                'id' => 'BAB 4: Perawatan, Inspeksi & Penyelesaian Masalah',
+                'en' => 'CHAPTER 4: Maintenance, Inspection & Troubleshooting',
+            ],
             'order' => 4,
         ]);
 
         Chapter::create([
             'course_id' => $course->id,
-            'title' => 'BAB 5: Daftar Suku Cadang',
+            'title' => [
+                'id' => 'BAB 5: Daftar Suku Cadang',
+                'en' => 'CHAPTER 5: Spare Parts List',
+            ],
             'order' => 5,
         ]);
 
         Chapter::create([
             'course_id' => $course->id,
-            'title' => 'BAB 6: Katalog Bagian Utama',
+            'title' => [
+                'id' => 'BAB 6: Katalog Bagian Utama',
+                'en' => 'CHAPTER 6: Main Parts Catalog',
+            ],
             'order' => 6,
         ]);
 
         Chapter::create([
             'course_id' => $course->id,
-            'title' => 'BAB 7: Lampiran - Gambar Elektrik',
+            'title' => [
+                'id' => 'BAB 7: Lampiran - Gambar Elektrik',
+                'en' => 'CHAPTER 7: Appendix - Electrical Drawings',
+            ],
             'order' => 7,
         ]);
     }

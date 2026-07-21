@@ -25,9 +25,9 @@ class DashboardController extends Controller
         $stats = [];
         $cards = [];
         $items = collect();
-        $badgeLabel = 'Dashboard';
-        $headline = 'Ringkasan aktivitas belajar';
-        $description = 'Pantau aktivitas utama sesuai peran Anda dalam satu tampilan yang konsisten.';
+        $badgeLabel = __('Dashboard');
+        $headline = __('Ringkasan aktivitas belajar');
+        $description = __('Pantau aktivitas utama sesuai peran Anda dalam satu tampilan yang konsisten.');
         $primaryAction = null;
         $adminUserProgress = [];
         $participants = collect();
@@ -36,60 +36,60 @@ class DashboardController extends Controller
 
         if ($isAdmin) {
             $stats = [
-                ['label' => 'Total Peserta', 'value' => User::where('role', 'peserta')->count(), 'tone' => 'blue'],
-                ['label' => 'Total Instruktur', 'value' => User::where('role', 'instruktur')->count(), 'tone' => 'amber'],
-                ['label' => 'Total Kursus', 'value' => Course::count(), 'tone' => 'rose'],
+                ['label' => __('Total Peserta'), 'value' => User::where('role', 'peserta')->count(), 'tone' => 'blue'],
+                ['label' => __('Total Instruktur'), 'value' => User::where('role', 'instruktur')->count(), 'tone' => 'amber'],
+                ['label' => __('Total Kursus'), 'value' => Course::count(), 'tone' => 'rose'],
             ];
 
             $cards = [
-                ['title' => 'Manajemen Pengguna', 'description' => 'Kelola akun peserta dan instruktur dari satu panel.', 'meta' => 'Akses admin', 'action' => 'Tambah User', 'href' => '#manajemen-user', 'tone' => 'blue'],
-                ['title' => 'Kontrol Kursus', 'description' => 'Lihat status kursus, publikasi, dan materi aktif.', 'meta' => 'Data LMS', 'action' => 'Lihat Kursus', 'href' => '#daftar-kursus', 'tone' => 'slate'],
-                ['title' => 'Pengaturan Lanjutan', 'description' => 'Area ini bisa dipakai untuk approval, report, dan audit.', 'meta' => 'Coming soon', 'action' => 'Segera Hadir', 'href' => '#', 'tone' => 'amber', 'disabled' => true],
+                ['title' => __('Manajemen Pengguna'), 'description' => __('Kelola akun peserta dan instruktur dari satu panel.'), 'meta' => __('Akses admin'), 'action' => __('Tambah User'), 'href' => '#manajemen-user', 'tone' => 'blue'],
+                ['title' => __('Kontrol Kursus'), 'description' => __('Lihat status kursus, publikasi, dan materi aktif.'), 'meta' => __('Data LMS'), 'action' => __('Lihat Kursus'), 'href' => '#daftar-kursus', 'tone' => 'slate'],
+                ['title' => __('Pengaturan Lanjutan'), 'description' => __('Area ini bisa dipakai untuk approval, report, dan audit.'), 'meta' => __('Coming soon'), 'action' => __('Segera Hadir'), 'href' => '#', 'tone' => 'amber', 'disabled' => true],
             ];
 
             $items = User::orderBy('id', 'desc')->limit(6)->get();
             $adminUserProgress = $items
                 ->where('role', 'peserta')
                 ->mapWithKeys(fn (User $participant) => [$participant->id => $this->participantProgress($participant)]);
-            $badgeLabel = 'Admin Control Center';
-            $headline = 'Selamat datang, Administrator';
-            $description = 'Kendalikan pengguna, status kursus, dan struktur materi dari dashboard yang konsisten dan bersih.';
-            $primaryAction = ['label' => 'Buka Manajemen Pengguna', 'href' => route('admin.users.index')];
+            $badgeLabel = __('Admin Control Center');
+            $headline = __('Selamat datang, Administrator');
+            $description = __('Kendalikan pengguna, status kursus, dan struktur materi dari dashboard yang konsisten dan bersih.');
+            $primaryAction = ['label' => __('Buka Manajemen Pengguna'), 'href' => route('admin.users.index')];
         } elseif ($isInstruktur) {
             $stats = [
-                ['label' => 'Total Kursus', 'value' => Course::count(), 'tone' => 'blue'],
-                ['label' => 'Kursus Terpublikasi', 'value' => Course::where('is_published', true)->count(), 'tone' => 'emerald'],
-                ['label' => 'Modul Tersedia', 'value' => Course::withCount('modules')->get()->sum('modules_count'), 'tone' => 'amber'],
+                ['label' => __('Total Kursus'), 'value' => Course::count(), 'tone' => 'blue'],
+                ['label' => __('Kursus Terpublikasi'), 'value' => Course::where('is_published', true)->count(), 'tone' => 'emerald'],
+                ['label' => __('Modul Tersedia'), 'value' => Course::withCount('modules')->get()->sum('modules_count'), 'tone' => 'amber'],
             ];
 
             $items = Course::withCount('modules')->orderBy('id', 'desc')->limit(6)->get();
             $primaryCourse = $items->first();
             $cards = [
-                ['title' => 'Kelola Materi', 'description' => 'Atur course, modul, dan isi pembelajaran.', 'meta' => 'Materi', 'action' => 'Kelola Materi', 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#kelola-kursus', 'tone' => 'blue', 'button' => true],
-                ['title' => 'Kelola Quiz & Ujian', 'description' => 'Atur quiz chapter dan ujian akhir course.', 'meta' => 'Evaluasi', 'action' => 'Kelola Quiz & Ujian', 'href' => $primaryCourse ? route('quizzes.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'amber', 'button' => true],
-                ['title' => 'Kelola Latihan', 'description' => 'Atur latihan mandiri untuk setiap chapter.', 'meta' => 'Latihan', 'action' => 'Kelola Latihan', 'href' => $primaryCourse ? route('practices.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'slate', 'button' => true],
+                ['title' => __('Kelola Materi'), 'description' => __('Atur course, modul, dan isi pembelajaran.'), 'meta' => __('Materi'), 'action' => __('Kelola Materi'), 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#kelola-kursus', 'tone' => 'blue', 'button' => true],
+                ['title' => __('Kelola Quiz & Ujian'), 'description' => __('Atur quiz chapter dan ujian akhir course.'), 'meta' => __('Evaluasi'), 'action' => __('Kelola Quiz & Ujian'), 'href' => $primaryCourse ? route('quizzes.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'amber', 'button' => true],
+                ['title' => __('Kelola Latihan'), 'description' => __('Atur latihan mandiri untuk setiap chapter.'), 'meta' => __('Latihan'), 'action' => __('Kelola Latihan'), 'href' => $primaryCourse ? route('practices.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'slate', 'button' => true],
             ];
             
             $participants = User::where('role', 'peserta')->orderBy('id', 'desc')->get();
             $adminUserProgress = $participants->mapWithKeys(fn (User $participant) => [$participant->id => $this->participantProgress($participant)]);
 
-            $badgeLabel = 'Instructor Workspace';
-            $headline = 'Selamat datang, Instruktur';
-            $description = 'Kelola materi Garbarata dan pantau progress belajar seluruh peserta.';
-            $primaryAction = ['label' => 'Kelola Materi', 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#kelola-kursus'];
+            $badgeLabel = __('Instructor Workspace');
+            $headline = __('Selamat datang, Instruktur');
+            $description = __('Kelola materi Garbarata dan pantau progress belajar seluruh peserta.');
+            $primaryAction = ['label' => __('Kelola Materi'), 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#kelola-kursus'];
         } elseif ($isPeserta) {
             $stats = [
-                ['label' => 'Materi Aktif', 'value' => Course::where('is_published', true)->count(), 'tone' => 'blue'],
-                ['label' => 'Modul Belajar', 'value' => Course::where('is_published', true)->withCount('modules')->get()->sum('modules_count'), 'tone' => 'amber'],
-                ['label' => 'Progress Materi', 'value' => LearningProgress::forUser($user)['percent'].'%', 'tone' => 'emerald'],
+                ['label' => __('Materi Aktif'), 'value' => Course::where('is_published', true)->count(), 'tone' => 'blue'],
+                ['label' => __('Modul Belajar'), 'value' => Course::where('is_published', true)->withCount('modules')->get()->sum('modules_count'), 'tone' => 'amber'],
+                ['label' => __('Progress Materi'), 'value' => LearningProgress::forUser($user)['percent'].'%', 'tone' => 'emerald'],
             ];
 
             $items = Course::where('is_published', true)->withCount('modules')->orderBy('id', 'desc')->limit(6)->get();
             $primaryCourse = $items->first();
             $cards = [
-                ['title' => 'Materi Garbarata', 'description' => 'Masuk ke kursus interaktif untuk mempelajari komponen utama.', 'meta' => 'Belajar sekarang', 'action' => 'Mulai Belajar', 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#materi-kursus', 'tone' => 'blue'],
-                ['title' => 'Quiz & Ujian', 'description' => 'Kerjakan quiz chapter dan ujian akhir yang tersedia.', 'meta' => 'Evaluasi', 'action' => 'Lihat Quiz & Ujian', 'href' => $primaryCourse ? route('courses.quizzes', $primaryCourse) : '#quiz-ujian', 'tone' => 'amber'],
-                ['title' => 'Latihan Mandiri', 'description' => 'Asah pemahaman lewat seluruh latihan yang tersedia.', 'meta' => 'Latihan', 'action' => 'Lihat Latihan', 'href' => $primaryCourse ? route('courses.practices', $primaryCourse) : '#latihan-mandiri', 'tone' => 'slate'],
+                ['title' => __('Materi Garbarata'), 'description' => __('Masuk ke kursus interaktif untuk mempelajari komponen utama.'), 'meta' => __('Belajar sekarang'), 'action' => __('Mulai Belajar'), 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#materi-kursus', 'tone' => 'blue'],
+                ['title' => __('Quiz & Ujian'), 'description' => __('Kerjakan quiz chapter dan ujian akhir yang tersedia.'), 'meta' => __('Evaluasi'), 'action' => __('Lihat Quiz & Ujian'), 'href' => $primaryCourse ? route('courses.quizzes', $primaryCourse) : '#quiz-ujian', 'tone' => 'amber'],
+                ['title' => __('Latihan Mandiri'), 'description' => __('Asah pemahaman lewat seluruh latihan yang tersedia.'), 'meta' => __('Latihan'), 'action' => __('Lihat Latihan'), 'href' => $primaryCourse ? route('courses.practices', $primaryCourse) : '#latihan-mandiri', 'tone' => 'slate'],
             ];
             $activities = Quiz::with(['course', 'chapter'])->withCount('questions')
                 ->whereIn('course_id', $items->pluck('id'))
@@ -99,9 +99,9 @@ class DashboardController extends Controller
                 ->get();
             $participantQuizzes = $activities->filter(fn (Quiz $activity) => ! $activity->isPractice())->values();
             $participantPractices = $activities->filter(fn (Quiz $activity) => $activity->isPractice())->values();
-            $badgeLabel = 'Learner Portal';
-            $headline = 'Selamat datang, Peserta';
-            $description = 'Ikuti materi Garbarata dalam alur yang rapi, modern, dan sama untuk semua peran.';
+            $badgeLabel = __('Learner Portal');
+            $headline = __('Selamat datang, Peserta');
+            $description = __('Ikuti materi Garbarata dalam alur yang rapi, modern, dan sama untuk semua peran.');
             // Cari modul progress terakhir (updated_at terbaru), ambil chapter & course-nya
             $lastProgress = \App\Models\ModuleProgress::where('user_id', $user->id)
                 ->with(['module.chapter.course'])
@@ -114,7 +114,7 @@ class DashboardController extends Controller
             } elseif ($primaryCourse) {
                 $lastUrl = route('courses.show', $primaryCourse);
             }
-            $primaryAction = ['label' => 'Lanjutkan Belajar', 'href' => $lastUrl];
+            $primaryAction = ['label' => __('Lanjutkan Belajar'), 'href' => $lastUrl];
         }
 
         // Generate current week days (Monday - Sunday)
@@ -156,7 +156,7 @@ class DashboardController extends Controller
                 $scheduleEvents[] = [
                     'day_num' => $start->day,
                     'month_name' => strtoupper($start->translatedFormat('M')),
-                    'title' => ($q->isFinalQuiz() ? 'Ujian Akhir: ' : 'Quiz: ') . $q->title . ' (Dibuka)',
+                    'title' => ($q->isFinalQuiz() ? __('Final Exam:') . ' ' : __('Quiz:') . ' ') . $q->title . ' ' . __('(Opened)'),
                     'time_or_loc' => $start->format('H:i') . ' WIB · Online LMS',
                     'icon' => 'lock-open'
                 ];
@@ -166,7 +166,7 @@ class DashboardController extends Controller
                 $scheduleEvents[] = [
                     'day_num' => $end->day,
                     'month_name' => strtoupper($end->translatedFormat('M')),
-                    'title' => ($q->isFinalQuiz() ? 'Ujian Akhir: ' : 'Quiz: ') . $q->title . ' (Batas Akhir)',
+                    'title' => ($q->isFinalQuiz() ? __('Final Exam:') . ' ' : __('Quiz:') . ' ') . $q->title . ' ' . __('(Deadline)'),
                     'time_or_loc' => $end->format('H:i') . ' WIB · Online LMS',
                     'icon' => 'lock'
                 ];

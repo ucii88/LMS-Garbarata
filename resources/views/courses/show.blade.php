@@ -1,11 +1,11 @@
-@section('topbar_title', 'Silabus Pembelajaran')
+@section('topbar_title', __('Silabus Pembelajaran'))
 
 <x-app-layout>
     <div class="py-6 select-none">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="mb-2">
                 <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                    Kembali ke Dashboard
+                    {{ __('Kembali ke Dashboard') }}
                 </a>
             </div>
 
@@ -19,7 +19,7 @@
                 <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
                 <div class="relative z-10 space-y-3">
                     <span class="inline-flex items-center rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-400 border border-blue-500/20">
-                        Buku Panduan Teknis
+                        {{ __('Buku Panduan Teknis') }}
                     </span>
                     <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white leading-tight">
                         {{ $course->title }}
@@ -33,8 +33,8 @@
             <div class="grid gap-6 lg:grid-cols-12">
                 <div class="lg:col-span-8 space-y-4">
                     <div class="border-b border-[#f0f0f0] pb-3 mb-5">
-                        <h2 class="text-base font-bold text-slate-800">Daftar Bab & Pembelajaran</h2>
-                        <p class="text-sm text-slate-400 mt-0.5">Selesaikan semua topik pada sebuah bab untuk membuka bab berikutnya.</p>
+                        <h2 class="text-base font-bold text-slate-800">{{ __('Daftar Bab & Pembelajaran') }}</h2>
+                        <p class="text-sm text-slate-400 mt-0.5">{{ __('Selesaikan semua topik pada sebuah bab untuk membuka bab berikutnya.') }}</p>
                     </div>
 
                     <div class="space-y-4">
@@ -50,31 +50,31 @@
                                 <div class="space-y-2">
                                     <div class="flex flex-wrap items-center gap-2">
                                         <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-[9px] font-bold text-slate-500 tracking-wider">
-                                            BAB {{ $chapter->order }}
+                                            {{ __('BAB') }} {{ $chapter->order }}
                                         </span>
 
                                         <span class="inline-flex rounded-full {{ $hasDiagram ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-slate-50 text-slate-400 border-slate-100' }} px-2.5 py-0.5 text-[9px] font-bold border tracking-wider">
-                                            {{ $hasDiagram ? 'Diagram Interaktif' : 'Modul Pembelajaran' }}
+                                            {{ $hasDiagram ? __('Diagram Interaktif') : __('Modul Pembelajaran') }}
                                         </span>
 
                                         @if($chapterProgress)
                                             <span class="inline-flex rounded-full {{ $isLocked ? 'bg-slate-100 text-slate-400 border-slate-200' : ($chapterProgress['is_complete'] ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100') }} px-2.5 py-0.5 text-[9px] font-bold border tracking-wider">
-                                                {{ $isLocked ? 'Terkunci' : $chapterProgress['percent'].'%' }}
+                                                {{ $isLocked ? __('Terkunci') : $chapterProgress['percent'].'%' }}
                                             </span>
                                         @endif
                                     </div>
 
                                     <h3 class="text-base font-bold text-slate-800 leading-snug">
-                                        {{ str_replace("BAB {$chapter->order}: ", '', $chapter->title) }}
+                                        {{ $chapter->title }}
                                     </h3>
 
                                     <p class="text-xs text-slate-400 leading-normal">
-                                        Berisi {{ $chapter->modules_count }} topik pembahasan utama beserta materi evaluasi mandiri.
+                                        {{ __('Berisi :count topik pembahasan utama beserta materi evaluasi mandiri.', ['count' => $chapter->modules_count]) }}
                                     </p>
 
                                     @if($chapterProgress && ! $chapterProgress['is_complete'])
                                         <p class="text-[10px] font-semibold {{ $isLocked ? 'text-slate-400' : 'text-amber-600' }}">
-                                            {{ $isLocked ? 'Selesaikan semua materi BAB sebelumnya untuk membuka bab ini.' : 'Lengkapi pembelajaran BAB '.$chapter->order.' untuk module '.($missingModule->title ?? '-').'.' }}
+                                            {{ $isLocked ? __('Selesaikan semua materi BAB sebelumnya untuk membuka bab ini.') : __('Lengkapi pembelajaran BAB :order.', ['order' => $chapter->order]) }}
                                         </p>
                                     @endif
                                 </div>
@@ -82,19 +82,19 @@
                                 <div class="shrink-0 flex items-center justify-end gap-2 border-t sm:border-t-0 border-[#f0f0f0] pt-3 sm:pt-0">
                                     @if($isLocked)
                                         <span class="inline-flex items-center justify-center rounded-lg bg-slate-200 px-4 py-2 text-sm font-bold text-slate-500">
-                                            Terkunci
+                                            {{ __('Terkunci') }}
                                         </span>
                                     @else
                                         {{-- Tombol Bank Soal untuk instruktur --}}
                                         @if(auth()->user()->isInstruktur())
                                             <a href="{{ route('questions.index', [$course->id, $chapter->id]) }}"
                                                class="inline-flex items-center justify-center rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 text-sm font-bold text-indigo-700 transition"
-                                               title="Kelola bank soal chapter ini">
-                                                Bank Soal
+                                               title="{{ __('Kelola bank soal chapter ini') }}">
+                                                {{ __('Bank Soal') }}
                                             </a>
                                         @endif
                                         <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-sm font-bold text-white transition shadow-sm">
-                                            Buka Bab
+                                            {{ __('Buka Bab') }}
                                         </a>
                                     @endif
                                 </div>
@@ -107,28 +107,28 @@
                     @if(!auth()->user()->isInstruktur())
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-100">
-                            <h3 class="text-base font-bold text-slate-800">Petunjuk Belajar</h3>
+                            <h3 class="text-base font-bold text-slate-800">{{ __('Petunjuk Belajar') }}</h3>
                             <p class="text-sm text-slate-500 mt-1 leading-relaxed">
-                                Bab berikutnya terbuka setelah seluruh topik pada bab sebelumnya dibaca.
+                                {{ __('Bab berikutnya terbuka setelah seluruh topik pada bab sebelumnya dibaca.') }}
                             </p>
                         </div>
 
                         <div class="p-6 space-y-3">
                             @if($learningProgress)
                                 <div class="rounded-xl bg-emerald-50 border border-emerald-100 p-4">
-                                    <p class="text-sm font-semibold text-emerald-700">Progress materi</p>
-                                    <p class="text-[11px] leading-relaxed text-emerald-600 mt-1">{{ $learningProgress['percent'] }}% dari seluruh materi sudah dipelajari.</p>
+                                    <p class="text-sm font-semibold text-emerald-700">{{ __('Progress materi') }}</p>
+                                    <p class="text-[11px] leading-relaxed text-emerald-600 mt-1">{{ __(':percent% dari seluruh materi sudah dipelajari.', ['percent' => $learningProgress['percent']]) }}</p>
                                 </div>
                             @endif
 
                             <div class="rounded-xl bg-slate-50 border border-slate-100 p-4">
-                                <p class="text-sm font-semibold text-slate-700">Alur belajar</p>
-                                <p class="text-[11px] leading-relaxed text-slate-500 mt-1">Mulai dari Bab 1, lalu lanjutkan ke bab berikutnya sesuai urutan.</p>
+                                <p class="text-sm font-semibold text-slate-700">{{ __('Alur belajar') }}</p>
+                                <p class="text-[11px] leading-relaxed text-slate-500 mt-1">{{ __('Mulai dari Bab 1, lalu lanjutkan ke bab berikutnya sesuai urutan.') }}</p>
                             </div>
 
                             <div class="rounded-xl bg-blue-50 border border-blue-100 p-4">
-                                <p class="text-sm font-semibold text-blue-700">Diagram interaktif</p>
-                                <p class="text-[11px] leading-relaxed text-blue-600 mt-1">Klik hotspot atau tombol topik untuk menandai materi sebagai sudah dibaca.</p>
+                                <p class="text-sm font-semibold text-blue-700">{{ __('Diagram interaktif') }}</p>
+                                <p class="text-[11px] leading-relaxed text-blue-600 mt-1">{{ __('Klik hotspot atau tombol topik untuk menandai materi sebagai sudah dibaca.') }}</p>
                             </div>
                         </div>
                     </div>
@@ -138,9 +138,9 @@
                     @if(auth()->user()->isInstruktur())
                     <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 overflow-hidden">
                         <div class="p-6 border-b border-indigo-50">
-                            <h3 class="text-base font-bold text-slate-800">Manajemen Quiz</h3>
+                            <h3 class="text-base font-bold text-slate-800">{{ __('Manajemen Quiz') }}</h3>
                             <p class="text-sm text-slate-500 mt-1 leading-relaxed">
-                                Kelola Bank Soal, Quiz, dan Ujian untuk course ini.
+                                {{ __('Kelola Bank Soal, Quiz, dan Ujian untuk course ini.') }}
                             </p>
                         </div>
                         <div class="p-6 space-y-2">
@@ -149,25 +149,25 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
-                                Lihat Semua Quiz
+                                {{ __('Lihat Semua Quiz') }}
                             </a>
                             <a href="{{ route('quizzes.create', $course) }}"
                                class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-bold rounded-xl transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                 </svg>
-                                Buat Quiz Baru
+                                {{ __('Buat Quiz Baru') }}
                             </a>
                         </div>
                     </div>
                     <div class="bg-white rounded-2xl shadow-sm border border-violet-100 overflow-hidden mt-4">
                         <div class="p-6 border-b border-violet-50">
-                            <h3 class="text-base font-bold text-slate-800">Manajemen Latihan</h3>
-                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">Kelola latihan tiap chapter menggunakan bank soal yang sama.</p>
+                            <h3 class="text-base font-bold text-slate-800">{{ __('Manajemen Latihan') }}</h3>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">{{ __('Kelola latihan tiap chapter menggunakan bank soal yang sama.') }}</p>
                         </div>
                         <div class="p-6 space-y-2">
-                            <a href="{{ route('practices.index', $course) }}" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold rounded-xl transition">Lihat Semua Latihan</a>
-                            <a href="{{ route('practices.create', $course) }}" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-violet-50 border border-violet-200 text-violet-700 text-sm font-bold rounded-xl transition">+ Buat Latihan Baru</a>
+                            <a href="{{ route('practices.index', $course) }}" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold rounded-xl transition">{{ __('Lihat Semua Latihan') }}</a>
+                            <a href="{{ route('practices.create', $course) }}" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-violet-50 border border-violet-200 text-violet-700 text-sm font-bold rounded-xl transition">+ {{ __('Buat Latihan Baru') }}</a>
                         </div>
                     </div>
                     @endif

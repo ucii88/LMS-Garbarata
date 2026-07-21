@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             Chapter5QuestionSeeder::class,
             Chapter6Seeder::class,
             Chapter7Seeder::class,
+            EnglishContentSeeder::class,
         ]);
     }
 }

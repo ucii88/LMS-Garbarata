@@ -711,16 +711,12 @@ class Chapter3Seeder extends Seeder
 
     private function module(int $chapterId, string $title, string $content, int $order): void
     {
-        Module::updateOrCreate(
-            [
-                'chapter_id' => $chapterId,
-                'title' => $title,
-            ],
-            [
-                'content' => $content,
-                'image_path' => null,
-                'order' => $order,
-            ],
-        );
+        Module::create([
+            'chapter_id' => $chapterId,
+            'title' => $title,
+            'content' => $content,
+            'image_path' => null,
+            'order' => $order,
+        ]);
     }
 }

@@ -142,4 +142,11 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+Route::get('/lang/{locale}', function (string $locale) {
+    if (in_array($locale, ['id', 'en'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 require __DIR__.'/auth.php';

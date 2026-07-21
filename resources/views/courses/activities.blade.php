@@ -4,7 +4,7 @@
     <div class="max-w-5xl mx-auto space-y-8">
         <div>
             <h1 class="text-xl font-bold text-slate-800">{{ $pageTitle }}</h1>
-            <p class="text-base text-slate-500">Pilih aktivitas pembelajaran pada {{ $course->title }}.</p>
+            <p class="text-base text-slate-500">{{ __('Pilih aktivitas pembelajaran pada') }} {{ $course->title }}.</p>
         </div>
 
         @foreach ($sections as $section)
@@ -31,49 +31,49 @@
                         @php $attempt = $lastAttempts->get($activity->id); @endphp
                         <div class="border border-slate-100 rounded-xl p-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
                             <div>
-                                <p class="text-sm text-slate-400">{{ $activity->chapter?->title ?? 'Ujian akhir course' }}</p>
+                                <p class="text-sm text-slate-400">{{ $activity->chapter?->title ?? __('Ujian akhir course') }}</p>
                                 <h3 class="font-semibold text-slate-800 mt-1">{{ $activity->title }}</h3>
                                  <p class="text-sm text-slate-500 mt-1">
-                                    {{ $activity->questions_count }} soal ·
+                                    {{ $activity->questions_count }} {{ __('soal') }} ·
                                     @if($attempt)
                                         @if($attempt->grading_status === 'pending_essay')
-                                            <span class="text-orange-600 font-semibold">Menunggu penilaian</span>
+                                            <span class="text-orange-600 font-semibold">{{ __('Menunggu penilaian') }}</span>
                                         @else
-                                            Nilai terakhir: <b>{{ number_format($attempt->score, 0) }}%</b>
+                                            {{ __('Nilai terakhir:') }} <b>{{ number_format($attempt->score, 0) }}%</b>
                                         @endif
                                     @else
-                                        Belum dikerjakan
+                                        {{ __('Belum dikerjakan') }}
                                     @endif
                                 </p>
                             </div>
                             @if($activity->isPractice())
                                 <a href="{{ route('practice.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-sm font-bold text-white rounded-xl bg-violet-600 hover:bg-violet-700 transition">
-                                    {{ $attempt ? 'Latihan Lagi' : 'Mulai' }}
+                                    {{ $attempt ? __('Latihan Lagi') : __('Mulai') }}
                                 </a>
                             @elseif($activity->isFinalQuiz())
                                 @if($attempt)
                                     <a href="{{ route('quiz.result', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-sm font-bold text-white rounded-xl bg-amber-500 hover:bg-amber-600 transition">
-                                        Lihat Hasil
+                                        {{ __('Lihat Hasil') }}
                                     </a>
                                 @else
                                     <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-sm font-bold text-white rounded-xl bg-amber-500 hover:bg-amber-600 transition">
-                                        Mulai
+                                        {{ __('Mulai') }}
                                     </a>
                                 @endif
                             @else
                                 @if($attempt)
                                     <a href="{{ route('quiz.result', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-sm font-bold text-white rounded-xl bg-blue-600 hover:bg-blue-700 transition">
-                                        Lihat Hasil
+                                        {{ __('Lihat Hasil') }}
                                     </a>
                                 @else
                                     <a href="{{ route('quiz.start', [$course, $activity]) }}" class="shrink-0 px-4 py-2 text-sm font-bold text-white rounded-xl bg-blue-600 hover:bg-blue-700 transition">
-                                        Mulai
+                                        {{ __('Mulai') }}
                                     </a>
                                 @endif
                             @endif
                         </div>
                     @empty
-                        <div class="py-4 text-center text-sm text-slate-400">Belum ada {{ strtolower($section['title']) }} aktif.</div>
+                        <div class="py-4 text-center text-sm text-slate-400">{{ __('Belum ada') }} {{ strtolower($section['title']) }} {{ __('aktif.') }}</div>
                     @endforelse
                 </div>
             </section>

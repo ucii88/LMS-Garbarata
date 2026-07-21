@@ -51,10 +51,13 @@ class LearningProgress
             $isComplete = $isUnlocked && $materialComplete && $quizPassed;
 
             foreach ($missingModules as $module) {
-                $notes->push("Lengkapi pembelajaran BAB {$chapter->order} untuk module {$module->title}.");
+                $notes->push(__('Lengkapi pembelajaran BAB :order untuk module :module.', [
+                    'order' => $chapter->order,
+                    'module' => $module->title,
+                ]));
             }
             if ($materialComplete && $hasChapterQuiz && ! $quizPassed) {
-                $notes->push("Selesaikan Quiz Chapter BAB {$chapter->order} untuk membuka bab berikutnya.");
+                $notes->push(__('Selesaikan Quiz Chapter BAB :order untuk membuka bab berikutnya.', ['order' => $chapter->order]));
             }
 
             $previousComplete = $isComplete;

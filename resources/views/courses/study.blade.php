@@ -442,9 +442,9 @@
                         this.mechItems = [
                             {
                                 id: 'intro_mekanikal',
-                                title: 'Deskripsi Komponen Mekanikal',
-                                button_title: 'Pengantar',
-                                content: `<p class='mt-2'>Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.</p><p class='mt-4'>Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.</p>`,
+                                title: '{{ __('Deskripsi Komponen Mekanikal') }}',
+                                button_title: '{{ __('Pengantar') }}',
+                                content: `<p class='mt-2'>{{ __('Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.') }}</p><p class='mt-4'>{{ __('Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.') }}</p>`,
                                 image_path: null,
                             },
                             ...this.modules
@@ -461,9 +461,9 @@
                         this.elecItems = [
                             {
                                 id: 'intro_elektrikal',
-                                title: 'Deskripsi Komponen Elektrikal dan Sistem Kontrol',
-                                button_title: 'Pengantar',
-                                content: `<p class='mt-2'>Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.</p>`,
+                                title: '{{ __('Deskripsi Komponen Elektrikal dan Sistem Kontrol') }}',
+                                button_title: '{{ __('Pengantar') }}',
+                                content: `<p class='mt-2'>{{ __('Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.') }}</p>`,
                                 image_path: null,
                             },
                             ...this.modules
@@ -561,7 +561,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -570,12 +570,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -585,13 +585,13 @@
                     <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                     <div class="flex items-center space-x-3 border-b border-gray-100 pb-3">
                         <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
-                        <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Mekanikal</h2>
+                        <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Deskripsi Komponen Mekanikal') }}</h2>
                     </div>
 
                     <!-- Sub-Chapter Selector for Mechanical -->
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex items-center space-x-2 shrink-0">
-                            <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Mekanikal:</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">{{ __('Pilih Topik Mekanikal:') }}</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="item in mechItems" :key="item.id">
@@ -607,7 +607,7 @@
                     </div>
 
                     <p class="text-[10px] font-semibold text-slate-400">
-                        Klik judul topik untuk membuka materi yang lebih lengkap.
+                        {{ __('Klik judul topik untuk membuka materi yang lebih lengkap.') }}
                     </p>
 
                     <!-- Interactive Diagram with Hotspots -->
@@ -737,7 +737,7 @@
                           <div class="p-4 md:p-6 space-y-8">
                               <div class="flex items-center justify-between border-b border-gray-100 pb-3">
                                   <span class="inline-flex h-8 items-center rounded-full border border-blue-200 bg-white px-3 text-[9px] font-bold text-blue-600 uppercase tracking-wider">
-                                      Modul Mekanikal
+                                      {{ __('Modul Mekanikal') }}
                                   </span>
                               </div>
 
@@ -801,13 +801,13 @@
                                               <template x-if="item.id !== 'intro_mekanikal'">
                                                   <div class="flex items-center gap-2 pt-4 border-t border-slate-100 mt-4">
                                                       <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                          Edit Modul
+                                                          {{ __('Edit Modul') }}
                                                       </a>
-                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                           @csrf
                                                           @method('DELETE')
                                                           <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                              Hapus
+                                                              {{ __('Hapus') }}
                                                           </button>
                                                       </form>
                                                   </div>
@@ -824,13 +824,13 @@
                   <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                       <div class="flex items-center space-x-3 border-b border-gray-100 pb-3">
                           <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
-                          <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Deskripsi Komponen Elektrikal dan Sistem Kontrol</h2>
+                          <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Deskripsi Komponen Elektrikal dan Sistem Kontrol') }}</h2>
                       </div>
 
                       <!-- Sub-Chapter Selector for Electrical -->
                       <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                           <div class="flex items-center space-x-2 shrink-0">
-                              <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Elektrikal:</span>
+                              <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">{{ __('Pilih Topik Elektrikal:') }}</span>
                           </div>
                           <div class="flex flex-wrap gap-2">
                               <template x-for="item in elecItems" :key="item.id">
@@ -850,7 +850,7 @@
                           <div class="p-4 md:p-6 space-y-8">
                               <div class="flex items-center justify-between border-b border-gray-100 pb-3">
                                   <span class="inline-flex h-8 items-center rounded-full border border-emerald-200 bg-white px-3 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
-                                      Modul Elektrikal & Kontrol
+                                      {{ __('Modul Elektrikal & Kontrol') }}
                                   </span>
                               </div>
 
@@ -911,13 +911,13 @@
                                               <template x-if="item.id !== 'intro_elektrikal'">
                                                   <div class="flex items-center gap-2 pt-4 border-t border-slate-100 mt-4">
                                                       <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                          Edit Modul
+                                                          {{ __('Edit Modul') }}
                                                       </a>
-                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                           @csrf
                                                           @method('DELETE')
                                                           <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                              Hapus
+                                                              {{ __('Hapus') }}
                                                           </button>
                                                       </form>
                                                   </div>
@@ -934,7 +934,6 @@
           </div>
 
         @include('courses.partials.quiz-card')
-        @include('courses.partials.practice-cards')
     @elseif($chapter->order == 3)
         <!-- Custom Grouped Layout for Chapter 3: Operation Details & Procedures -->
         <div class="py-6 select-none" x-data="{
@@ -994,7 +993,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1003,12 +1002,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -1018,7 +1017,7 @@
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
-                        Materi Bab 3 dibagi menjadi detail pengoperasian, mode operasi manual, mode auto, dan prosedur pengoperasian. Setiap bagian dapat dibuka dan ditutup agar materi lebih mudah dibaca.
+                        {{ __('Materi Bab 3 dibagi menjadi detail pengoperasian, mode operasi manual, mode auto, dan prosedur pengoperasian. Setiap bagian dapat dibuka dan ditutup agar materi lebih mudah dibaca.') }}
                     </p>
                 </div>
 
@@ -1033,8 +1032,8 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
                                 <div>
-                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Detail Pengoperasian</h2>
-                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Detail Pengoperasian') }}</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">{{ __('Klik judul bagian untuk melihat materi lengkap.') }}</p>
                                 </div>
                             </div>
 
@@ -1102,13 +1101,13 @@
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                    Edit Modul
+                                                    {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                        Hapus
+                                                        {{ __('Hapus') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -1129,8 +1128,8 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
                                 <div>
-                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Mode Operasi Manual</h2>
-                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Mode Operasi Manual') }}</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">{{ __('Klik judul bagian untuk melihat materi lengkap.') }}</p>
                                 </div>
                             </div>
 
@@ -1148,7 +1147,7 @@
                         <div x-show="isSectionExpanded('manual')" class="border-t border-gray-100 bg-white">
                             <div class="p-4 md:p-6 space-y-4">
                                 <p class="text-sm text-slate-600 leading-relaxed">
-                                    Dengan memutar keyswitch ke mode manual akan mengaktifkan seluruh komponen  penggerak Garbarata
+                                    {{ __('Dengan memutar keyswitch ke mode manual akan mengaktifkan seluruh komponen penggerak Garbarata') }}
                                 </p>
 
                                 <template x-for="module in manualItems" :key="module.id">
@@ -1202,13 +1201,13 @@
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                    Edit Modul
+                                                    {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                        Hapus
+                                                        {{ __('Hapus') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -1229,8 +1228,8 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-amber-200 bg-white text-[10px] font-black text-amber-600">03</span>
                                 <div>
-                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Mode Auto (Autolevel)</h2>
-                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Mode Auto (Autolevel)') }}</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">{{ __('Klik judul bagian untuk melihat materi lengkap.') }}</p>
                                 </div>
                             </div>
 
@@ -1298,13 +1297,13 @@
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                    Edit Modul
+                                                    {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                        Hapus
+                                                        {{ __('Hapus') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -1325,8 +1324,8 @@
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-rose-200 bg-white text-[10px] font-black text-rose-600">04</span>
                                 <div>
-                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Prosedur Pengoperasian</h2>
-                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">Klik judul bagian untuk melihat materi lengkap.</p>
+                                    <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Prosedur Pengoperasian') }}</h2>
+                                    <p class="mt-1 text-[10px] font-semibold text-slate-400">{{ __('Klik judul bagian untuk melihat materi lengkap.') }}</p>
                                 </div>
                             </div>
 
@@ -1394,13 +1393,13 @@
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                    Edit Modul
+                                                    {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                        Hapus
+                                                        {{ __('Hapus') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -1464,7 +1463,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1473,12 +1472,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -1488,7 +1487,7 @@
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
-                        Materi Bab 2 dibagi menjadi spesifikasi mekanikal dan elektrikal. Bagian mekanikal dapat dibuka dan ditutup per topik agar tabel dan gambar lebih mudah dibaca.
+                        {{ __('Materi Bab 2 dibagi menjadi spesifikasi mekanikal dan elektrikal. Bagian mekanikal dapat dibuka dan ditutup per topik agar tabel dan gambar lebih mudah dibaca.') }}
                     </p>
                 </div>
 
@@ -1498,7 +1497,7 @@
                         <div class="flex flex-col gap-2 border-b border-gray-100 pb-4 md:flex-row md:items-center md:justify-between">
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-[10px] font-black text-blue-600">01</span>
-                                <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Mekanikal</h2>
+                                <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Mekanikal') }}</h2>
                             </div>
 
                             <span class="inline-flex w-fit rounded-full border border-blue-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-blue-600 uppercase tracking-wider">
@@ -1507,7 +1506,7 @@
                         </div>
 
                         <p class="text-[10px] font-semibold text-slate-400">
-                            Klik judul module untuk melihat materi lengkap.
+                            {{ __('Klik judul module untuk melihat materi lengkap.') }}
                         </p>
 
                         <div class="space-y-3">
@@ -1571,13 +1570,13 @@
                                             @if(auth()->user()->isInstruktur())
                                                 <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                                     <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                        Edit Modul
+                                                        {{ __('Edit Modul') }}
                                                     </a>
-                                                    <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                    <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                            Hapus
+                                                            {{ __('Hapus') }}
                                                         </button>
                                                     </form>
                                                 </div>
@@ -1594,7 +1593,7 @@
                         <div class="flex flex-col gap-2 border-b border-gray-100 pb-4 md:flex-row md:items-center md:justify-between">
                             <div class="flex items-center space-x-3">
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-[10px] font-black text-emerald-600">02</span>
-                                <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">Elektrikal</h2>
+                                <h2 class="text-base font-extrabold text-slate-800 uppercase tracking-wider">{{ __('Elektrikal') }}</h2>
                             </div>
 
                             <span class="inline-flex w-fit rounded-full border border-emerald-200 bg-white px-2.5 py-0.5 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
@@ -1654,13 +1653,13 @@
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                Edit Modul
+                                                {{ __('Edit Modul') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
-                                                    Hapus
+                                                    {{ __('Hapus') }}
                                                 </button>
                                             </form>
                                         </div>
@@ -1793,7 +1792,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -1802,12 +1801,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -1818,13 +1817,13 @@
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
-                        Materi modul pembelajaran tertulis. Gunakan menu tab di bawah untuk memilih sub-bab secara cepat atau gunakan tombol navigasi di bawah halaman untuk membaca secara berurutan.
+                        {{ __('Materi modul pembelajaran tertulis. Gunakan menu tab di bawah untuk memilih sub-bab secara cepat atau gunakan tombol navigasi di bawah halaman untuk membaca secara berurutan.') }}
                     </p>
                 </div>
 
                 <!-- Horizontal Sub-Chapter Tab Navigation Bar -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3">
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pilih Sub-Bab Utama</div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Pilih Sub-Bab Utama') }}</div>
                     <div class="flex flex-wrap gap-2">
                         <template x-for="tab in tabs" :key="tab">
                             <button
@@ -1894,7 +1893,7 @@
                             <template x-if="getSingleModule(activeTab).id">
                                 <div class="flex items-center gap-2 pt-4 border-t border-slate-50 mt-4">
                                     <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                        Edit Deskripsi Pengantar
+                                        {{ __('Edit Deskripsi Pengantar') }}
                                     </a>
                                 </div>
                             </template>
@@ -1954,13 +1953,13 @@
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 mt-4 pt-2">
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                Edit Modul Ini
+                                                {{ __('Edit Modul Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                    Hapus Modul
+                                                    {{ __('Hapus Modul') }}
                                                 </button>
                                             </form>
                                         </div>
@@ -2022,13 +2021,13 @@
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 mt-4 pt-2">
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                Edit Modul Ini
+                                                {{ __('Edit Modul Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                    Hapus Modul
+                                                    {{ __('Hapus Modul') }}
                                                 </button>
                                             </form>
                                         </div>
@@ -2085,13 +2084,13 @@
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 mt-4 pt-2">
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                Edit Modul Ini
+                                                {{ __('Edit Modul Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                    Hapus Modul
+                                                    {{ __('Hapus Modul') }}
                                                 </button>
                                             </form>
                                         </div>
@@ -2155,13 +2154,13 @@
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 mt-4 pt-2">
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                            Edit Tabel Ini
+                                                            {{ __('Edit Tabel Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini?')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus tabel ini?') }}')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                                Hapus Tabel
+                                                                {{ __('Hapus Tabel') }}
                                                             </button>
                                                         </form>
                                                     </div>
@@ -2228,13 +2227,13 @@
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 mt-4 pt-2">
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                            Edit Tabel Ini
+                                                            {{ __('Edit Tabel Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini?')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus tabel ini?') }}')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                                Hapus Tabel
+                                                                {{ __('Hapus Tabel') }}
                                                             </button>
                                                         </form>
                                                     </div>
@@ -2250,7 +2249,7 @@
                     <!-- 3. Display for tab 4.7 (Troubleshooting): Accordions list -->
                     <template x-if="activeTab === '4.7'">
                         <div class="space-y-4">
-                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Daftar Troubleshooting (Klik untuk membuka detail):</div>
+                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{{ __('Daftar Troubleshooting (Klik untuk membuka detail):') }}</div>
                             <div class="space-y-3">
                                 <template x-for="subModule in modules.filter(m => m.title.startsWith('4.7.') && m.title !== '4.7')" :key="subModule.id">
                                     <div class="rounded-xl border border-slate-100 bg-white overflow-hidden shadow-xs">
@@ -2312,13 +2311,13 @@
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                            Edit Tabel Trouble Ini
+                                                            {{ __('Edit Tabel Trouble Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel trouble ini?')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus tabel trouble ini?') }}')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                                Hapus Tabel Trouble
+                                                                {{ __('Hapus Tabel Trouble') }}
                                                             </button>
                                                         </form>
                                                     </div>
@@ -2338,7 +2337,7 @@
                             class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-sm font-bold rounded-lg transition"
                             x-show="tabs.indexOf(activeTab) > 0"
                         >
-                            ← Kembali
+                            &larr; {{ __('Kembali') }}
                         </button>
                         <div x-show="tabs.indexOf(activeTab) === 0"></div>
 
@@ -2347,7 +2346,7 @@
                             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition shadow-xs"
                             x-show="tabs.indexOf(activeTab) < tabs.length - 1"
                         >
-                            Lanjutkan →
+                            {{ __('Lanjutkan') }} &rarr;
                         </button>
                         <div x-show="tabs.indexOf(activeTab) === tabs.length - 1"></div>
                     </div>
@@ -2454,7 +2453,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -2463,12 +2462,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -2479,7 +2478,7 @@
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
-                        Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih sub-bab dan membaca detail spesifikasi.
+                        {{ __('Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih sub-bab dan membaca detail spesifikasi.') }}
                     </p>
                 </div>
 
@@ -2489,7 +2488,7 @@
                     <!-- 1. Top horizontal Sub-Chapter Navigation Bar -->
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex items-center space-x-2 shrink-0">
-                            <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
+                            <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">{{ __('Pilih Topik Sub-Bab:') }}</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="tab in tabs" :key="tab">
@@ -2570,13 +2569,13 @@
                                                 @if(auth()->user()->isInstruktur())
                                                     <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                            Edit Modul Ini
+                                                            {{ __('Edit Modul Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                                Hapus Modul
+                                                                {{ __('Hapus Modul') }}
                                                             </button>
                                                         </form>
                                                     </div>
@@ -2644,13 +2643,13 @@
                                         <template x-if="getSingleModule(activeTab).id">
                                             <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                    Edit Modul Ini
+                                                    {{ __('Edit Modul Ini') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                        Hapus Modul
+                                                        {{ __('Hapus Modul') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -2668,7 +2667,7 @@
                             class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-bold rounded-lg transition"
                             x-show="tabs.indexOf(activeTab) > 0"
                         >
-                            ← Kembali
+                            {{ __('← Kembali') }}
                         </button>
                         <div x-show="tabs.indexOf(activeTab) === 0"></div>
 
@@ -2677,7 +2676,7 @@
                             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition shadow-xs"
                             x-show="tabs.indexOf(activeTab) < tabs.length - 1"
                         >
-                            Lanjutkan →
+                            {{ __('Lanjutkan →') }}
                         </button>
                         <div x-show="tabs.indexOf(activeTab) === tabs.length - 1"></div>
                     </div>
@@ -2718,7 +2717,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -2727,12 +2726,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -2743,7 +2742,7 @@
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
                     <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
-                        Halaman ini berisi katalog suku cadang dan komponen Garbarata dalam format PDF. Klik pada masing-masing judul katalog di bawah ini untuk membuka dokumen PDF terkait.
+                        {{ __('Halaman ini berisi katalog suku cadang dan komponen Garbarata dalam format PDF. Klik pada masing-masing judul katalog di bawah ini untuk membuka dokumen PDF terkait.') }}
                     </p>
                 </div>
 
@@ -2773,13 +2772,13 @@
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 pt-4 border-t border-slate-200">
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                Edit Katalog Ini
+                                                {{ __('Edit Katalog Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus katalog ini?')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus katalog ini?') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                    Hapus Katalog
+                                                    {{ __('Hapus Katalog') }}
                                                 </button>
                                             </form>
                                         </div>
@@ -2868,7 +2867,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -2877,12 +2876,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -2896,14 +2895,14 @@
                         </h3>
                     </div>
                     <p class="text-sm text-slate-500 leading-relaxed">
-                        Halaman ini merupakan penampil lampiran gambar elektrikal (wiring diagram). Gunakan menu navigasi di bawah untuk memilih lembar gambar, dan gunakan kontrol zoom untuk memperbesar gambar agar diagram terbaca lebih jelas.
+                        {{ __('Halaman ini merupakan penampil lampiran gambar elektrikal (wiring diagram). Gunakan menu navigasi di bawah untuk memilih lembar gambar, dan gunakan kontrol zoom untuk memperbesar gambar agar diagram terbaca lebih jelas.') }}
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <!-- Left Sidebar - List of Drawings -->
                     <div class="lg:col-span-1 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3">
-                        <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wide px-1">Daftar Lembar Gambar</span>
+                        <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wide px-1">{{ __('Daftar Lembar Gambar') }}</span>
                         <div class="flex flex-col gap-1 max-h-[500px] overflow-y-auto pr-1">
                             <template x-for="(module, index) in modules" :key="module.id">
                                 <button
@@ -2927,18 +2926,18 @@
                                     <span class="text-sm font-bold text-slate-800" x-text="getActiveModule().title"></span>
                                 </div>
                                 <div class="flex items-center gap-1 bg-white border border-gray-200 rounded-lg p-0.5">
-                                    <button @click="zoomOut()" class="p-1.5 text-slate-500 hover:text-slate-800 transition hover:bg-slate-100 rounded-md cursor-pointer" title="Zoom Out">
+                                    <button @click="zoomOut()" class="p-1.5 text-slate-500 hover:text-slate-800 transition hover:bg-slate-100 rounded-md cursor-pointer" title="{{ __('Zoom Out') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15"/>
                                         </svg>
                                     </button>
                                     <span class="text-[10px] font-mono px-2 text-slate-600 w-12 text-center" x-text="zoom + '%'"></span>
-                                    <button @click="zoomIn()" class="p-1.5 text-slate-500 hover:text-slate-800 transition hover:bg-slate-100 rounded-md cursor-pointer" title="Zoom In">
+                                    <button @click="zoomIn()" class="p-1.5 text-slate-500 hover:text-slate-800 transition hover:bg-slate-100 rounded-md cursor-pointer" title="{{ __('Zoom In') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                         </svg>
                                     </button>
-                                    <button @click="resetZoom()" class="p-1.5 text-slate-500 hover:text-slate-800 transition hover:bg-slate-100 rounded-md border-l border-gray-200 cursor-pointer" title="Reset Zoom">
+                                    <button @click="resetZoom()" class="p-1.5 text-slate-500 hover:text-slate-800 transition hover:bg-slate-100 rounded-md border-l border-gray-200 cursor-pointer" title="{{ __('Reset Zoom') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3 3m12 9V4.5m0 4.5H19.5M15 9l6-6M9 15v4.5M9 15H4.5M9 15l-6 6m12-6v4.5m0-4.5H19.5m-4.5 0l6 6"/>
                                         </svg>
@@ -2946,7 +2945,7 @@
                                 </div>
                                 <div>
                                     <a :href="'/' + getActiveModule().image_path" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 transition text-slate-600 hover:text-slate-800 font-bold rounded-lg text-[10px] border border-gray-200 shadow-2xs">
-                                        Buka Gambar Penuh
+                                        {{ __('Buka Gambar Penuh') }}
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
                                         </svg>
@@ -2966,7 +2965,7 @@
                                         <svg class="w-12 h-12 mx-auto mb-2 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375 3.75 0 11-.75 0 .375 3.75 0 01.75 0z"/>
                                         </svg>
-                                        <span class="text-sm">Gambar tidak ditemukan</span>
+                                        <span class="text-sm font-semibold text-slate-400">{{ __('Gambar tidak ditemukan') }}</span>
                                     </div>
                                 </template>
                             </div>
@@ -2980,13 +2979,13 @@
                                 <template x-if="activeModuleId">
                                     <div class="bg-slate-50 border-t border-gray-100 p-4 flex gap-2 rounded-b-2xl">
                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                            Edit Lembar Gambar
+                                            {{ __('Edit Lembar Gambar') }}
                                         </a>
-                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lembar gambar ini?')">
+                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus lembar gambar ini?') }}')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                Hapus Lembar Gambar
+                                                {{ __('Hapus Lembar Gambar') }}
                                             </button>
                                         </form>
                                     </div>
@@ -3001,7 +3000,7 @@
                                 :disabled="isFirst()"
                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
-                                ← Kembali
+                                {{ __('← Kembali') }}
                             </button>
 
                             <button
@@ -3009,7 +3008,7 @@
                                 :disabled="isLast()"
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
                             >
-                                Lanjutkan →
+                                {{ __('Lanjutkan →') }}
                             </button>
                         </div>
                     </div>
@@ -3024,7 +3023,7 @@
                 <!-- Navigation Back & Title Bar -->
                 <div class="flex items-center justify-between">
                     <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                        &larr; Kembali ke Silabus Kursus
+                        &larr; {{ __('Kembali ke Silabus Kursus') }}
                     </a>
 
                     <div class="flex items-center gap-2">
@@ -3033,12 +3032,12 @@
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                                 </svg>
-                                Tambah Modul Baru
+                                {{ __('Tambah Modul Baru') }}
                             </a>
                         @endif
 
                         <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-100 uppercase tracking-wider">
-                            Bab {{ $chapter->order }} dari {{ $chapters->count() }}
+                            {{ __('Bab') }} {{ $chapter->order }} {{ __('dari') }} {{ $chapters->count() }}
                         </span>
                     </div>
                 </div>
@@ -3050,9 +3049,9 @@
                     </h3>
                     <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">
                         @if($diagram)
-                            Materi pembelajaran interaktif dilengkapi visualisasi skematis. <strong>Klik pada titik-titik biru bernomor (hotspots)</strong> pada gambar atau pilih daftar sub-bab di bawah untuk membaca detail spesifikasi.
+                            {{ __('Materi pembelajaran interaktif dilengkapi visualisasi skematis. Klik pada titik-titik biru bernomor (hotspots) pada gambar atau pilih daftar sub-bab di bawah untuk membaca detail spesifikasi.') }}
                         @else
-                            Materi modul pembelajaran tertulis. Gunakan menu navigasi di panel sebelah kiri untuk berpindah antar topik sub-bab.
+                            {{ __('Materi modul pembelajaran tertulis. Gunakan menu navigasi di panel sebelah kiri untuk berpindah antar topik sub-bab.') }}
                         @endif
                     </p>
                 </div>
@@ -3063,7 +3062,7 @@
                     <!-- 1. Top horizontal Sub-Chapter Navigation Bar -->
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div class="flex items-center space-x-2 shrink-0">
-                            <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Pilih Topik Sub-Bab:</span>
+                            <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">{{ __('Pilih Topik Sub-Bab:') }}</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="module in modules" :key="module.id">
@@ -3101,8 +3100,8 @@
                                                 <circle cx="575" cy="200" r="10" />
                                             </svg>
                                             <span class="absolute text-base font-bold text-slate-500 tracking-wide text-center">
-                                                Skema Rangkaian Elektrik<br>
-                                                <span class="text-sm font-normal text-slate-400 mt-1 block">(Gambar Rangkaian Kontrol Daya 380V)</span>
+                                                {{ __('Skema Rangkaian Elektrik') }}<br>
+                                                <span class="text-sm font-normal text-slate-400 mt-1 block">{{ __('(Gambar Rangkaian Kontrol Daya 380V)') }}</span>
                                             </span>
                                         @else
                                             <!-- Standard Boarding Bridge Silhouette Fallback -->
@@ -3245,14 +3244,14 @@
                         const descEl = document.getElementById('next-chapter-desc');
                         const actionEl = document.getElementById('next-chapter-action');
                         if (descEl) {
-                            descEl.innerText = 'Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.';
+                            descEl.innerText = @js(__('Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.'));
                         }
                         if (actionEl) {
                             @if($nextChapter)
                             actionEl.innerHTML = `
                                 <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
                                    class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
-                                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                                    {{ __('Lanjut ke Bab') }} {{ $nextChapter->order }} &rarr;
                                 </a>
                             `;
                             @endif
@@ -3332,14 +3331,14 @@
                         const descEl = document.getElementById('next-chapter-desc');
                         const actionEl = document.getElementById('next-chapter-action');
                         if (descEl) {
-                            descEl.innerText = 'Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.';
+                            descEl.innerText = @js(__('Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.'));
                         }
                         if (actionEl) {
                             @if($nextChapter)
                             actionEl.innerHTML = `
                                 <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
                                    class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
-                                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                                    {{ __('Lanjut ke Bab') }} {{ $nextChapter->order }} &rarr;
                                 </a>
                             `;
                             @endif

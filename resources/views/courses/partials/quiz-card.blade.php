@@ -14,7 +14,7 @@
 {{-- ========== QUIZ CARD ========== --}}
 @if($chapterQuiz)
 <div class="mt-8 px-4 sm:px-0">
-    <p class="text-sm font-bold text-blue-700 uppercase tracking-wider">Quiz Chapter</p>
+    <p class="text-sm font-bold text-blue-700 uppercase tracking-wider">{{ __('Quiz Chapter') }}</p>
 </div>
 <div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border-2 overflow-hidden
@@ -77,11 +77,11 @@
                     <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
                         <span>📅</span>
                         @if($chapterQuiz->availability_status === 'upcoming')
-                            <span class="text-amber-600 font-semibold">Dibuka: {{ $chapterQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
+                            <span class="text-amber-600 font-semibold">{{ __('Dibuka:') }} {{ $chapterQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
                         @elseif($chapterQuiz->availability_status === 'closed')
-                            <span class="text-red-500 font-semibold">Sudah Ditutup (Selesai: {{ $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
+                            <span class="text-red-500 font-semibold">{{ __('Sudah Ditutup') }} ({{ __('Selesai:') }} {{ $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
                         @else
-                            <span class="text-emerald-600 font-semibold">S/d: {{ $chapterQuiz->end_time ? $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : 'Seterusnya' }}</span>
+                            <span class="text-emerald-600 font-semibold">{{ __('S/d:') }} {{ $chapterQuiz->end_time ? $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : __('Seterusnya') }}</span>
                         @endif
                     </p>
                 @endif
@@ -134,7 +134,7 @@
 <div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-5 py-4 flex items-center justify-between gap-4">
         <div>
-            <p class="text-sm font-semibold text-slate-500">Quiz untuk chapter ini belum dibuat</p>
+            <p class="text-sm font-semibold text-slate-500">{{ __('Quiz untuk chapter ini belum dibuat') }}</p>
         </div>
         <a href="{{ route('quizzes.create', $course) }}"
            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shrink-0">
@@ -164,7 +164,7 @@
 
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-sm font-bold uppercase tracking-wider text-amber-600">Ujian</span>
+                    <span class="text-sm font-bold uppercase tracking-wider text-amber-600">{{ __('Ujian') }}</span>
                     @if($finalQuizAttempt?->is_passed)
                         <span class="text-sm px-2 py-0.5 bg-amber-500 text-white rounded-full font-semibold">
                             Lulus · {{ number_format($finalQuizAttempt->score, 0) }}%
@@ -189,11 +189,11 @@
                     <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
                         <span>📅</span>
                         @if($finalQuiz->availability_status === 'upcoming')
-                            <span class="text-amber-600 font-semibold">Dibuka: {{ $finalQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
+                            <span class="text-amber-600 font-semibold">{{ __('Dibuka:') }} {{ $finalQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
                         @elseif($finalQuiz->availability_status === 'closed')
-                            <span class="text-red-500 font-semibold">Sudah Ditutup (Selesai: {{ $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
+                            <span class="text-red-500 font-semibold">{{ __('Sudah Ditutup') }} ({{ __('Selesai:') }} {{ $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
                         @else
-                            <span class="text-emerald-600 font-semibold">S/d: {{ $finalQuiz->end_time ? $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : 'Seterusnya' }}</span>
+                            <span class="text-emerald-600 font-semibold">{{ __('S/d:') }} {{ $finalQuiz->end_time ? $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : __('Seterusnya') }}</span>
                         @endif
                     </p>
                 @endif
@@ -258,12 +258,12 @@
 <div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h4 class="text-sm font-bold text-slate-800">Selesai Mempelajari Bab Ini?</h4>
+            <h4 class="text-sm font-bold text-slate-800">{{ __('Selesai Mempelajari Bab Ini?') }}</h4>
             <p id="next-chapter-desc" class="text-xs text-slate-500 mt-1">
                 @if($isCurrentChapterComplete)
-                    Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.
+                    {{ __('Hebat! Anda telah menyelesaikan seluruh materi dan quiz pada bab ini. Silakan lanjut ke bab berikutnya.') }}
                 @else
-                    Selesaikan semua modul pembelajaran dan lulus quiz di atas untuk melanjutkan ke bab berikutnya.
+                    {{ __('Selesaikan semua modul pembelajaran dan lulus quiz di atas untuk melanjutkan ke bab berikutnya.') }}
                 @endif
             </p>
         </div>
@@ -271,16 +271,15 @@
             @if($isCurrentChapterComplete)
                 <a href="{{ route('courses.chapters.show', [$course->id, $nextChapter->id]) }}"
                    class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 whitespace-nowrap">
-                    Lanjut ke Bab {{ $nextChapter->order }} &rarr;
+                    {{ __('Lanjut ke Bab') }} {{ $nextChapter->order }} &rarr;
                 </a>
             @else
                 <button disabled
                         class="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-bold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed whitespace-nowrap">
-                    Lanjut ke Bab {{ $nextChapter->order }}
+                    {{ __('Lanjut ke Bab') }} {{ $nextChapter->order }}
                 </button>
             @endif
         </div>
     </div>
 </div>
 @endif
-

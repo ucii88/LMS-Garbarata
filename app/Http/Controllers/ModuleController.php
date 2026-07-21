@@ -26,13 +26,28 @@ class ModuleController extends Controller
     public function store(Request $request, Course $course, Chapter $chapter)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'title.id' => 'required|string|max:255',
+            'title.en' => 'nullable|string|max:255',
+            'content.id' => 'required|string',
+            'content.en' => 'nullable|string',
             'image_path' => 'nullable|string|max:255',
             'order' => 'required|integer|min:1',
         ]);
 
-        $module = new Module($validated);
+        $data = [
+            'title' => [
+                'id' => $validated['title']['id'],
+                'en' => $validated['title']['en'] ?? '',
+            ],
+            'content' => [
+                'id' => $validated['content']['id'],
+                'en' => $validated['content']['en'] ?? '',
+            ],
+            'image_path' => $validated['image_path'] ?? null,
+            'order' => $validated['order'],
+        ];
+
+        $module = new Module($data);
         $module->chapter_id = $chapter->id;
         $module->save();
 
@@ -65,13 +80,28 @@ class ModuleController extends Controller
         }
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'title.id' => 'required|string|max:255',
+            'title.en' => 'nullable|string|max:255',
+            'content.id' => 'required|string',
+            'content.en' => 'nullable|string',
             'image_path' => 'nullable|string|max:255',
             'order' => 'required|integer|min:1',
         ]);
 
-        $module->update($validated);
+        $data = [
+            'title' => [
+                'id' => $validated['title']['id'],
+                'en' => $validated['title']['en'] ?? '',
+            ],
+            'content' => [
+                'id' => $validated['content']['id'],
+                'en' => $validated['content']['en'] ?? '',
+            ],
+            'image_path' => $validated['image_path'] ?? null,
+            'order' => $validated['order'],
+        ];
+
+        $module->update($data);
 
         return redirect()
             ->route('courses.chapters.show', [$course->id, $chapter->id])

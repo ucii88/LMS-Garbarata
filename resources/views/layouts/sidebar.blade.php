@@ -31,7 +31,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
-                    <span>Dashboard</span>
+                    <span>{{ __('Dashboard') }}</span>
                 </a>
 
                 <a
@@ -41,7 +41,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('admin.users.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                     </svg>
-                    <span>Kelola Pengguna</span>
+                    <span>{{ __('Kelola Pengguna') }}</span>
                 </a>
             @endif
 
@@ -54,7 +54,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
-                    <span>Dashboard</span>
+                    <span>{{ __('Dashboard') }}</span>
                 </a>
 
                 <a
@@ -64,7 +64,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('courses.show') || request()->routeIs('courses.chapters.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                     </svg>
-                    <span>Kelola Materi</span>
+                    <span>{{ __('Kelola Materi') }}</span>
                 </a>
 
                 <a
@@ -74,7 +74,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('practices.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span>Kelola Latihan</span>
+                    <span>{{ __('Kelola Latihan') }}</span>
                 </a>
 
                 {{-- Kelola Quiz dan Ujian di sidebar instruktur --}}
@@ -85,7 +85,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('quizzes.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
-                    <span>Kelola Quiz dan Ujian</span>
+                    <span>{{ __('Kelola Quiz dan Ujian') }}</span>
                 </a>
             @endif
 
@@ -99,7 +99,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
-                    <span>Dashboard</span>
+                    <span>{{ __('Dashboard') }}</span>
                 </a>
 
                 <!-- Materi Garbarata Link -->
@@ -110,7 +110,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('courses.show') || request()->routeIs('courses.chapters.show') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                     </svg>
-                    <span>Materi Garbarata</span>
+                    <span>{{ __('Materi Garbarata') }}</span>
                 </a>
 
                  <a
@@ -120,7 +120,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('courses.practices') || request()->routeIs('practice.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span>Latihan</span>
+                    <span>{{ __('Latihan') }}</span>
                 </a>
 
                 <a
@@ -130,7 +130,7 @@
                     <svg class="w-5 h-5 {{ request()->routeIs('courses.quizzes') || request()->routeIs('quiz.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
-                    <span>Quiz & Ujian</span>
+                    <span>{{ __('Quiz & Ujian') }}</span>
                 </a>
 
                 <!-- Sertifikat Link -->
@@ -145,18 +145,18 @@
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
                         </svg>
-                        <span>Sertifikat</span>
+                        <span>{{ __('Sertifikat') }}</span>
                     </a>
                 @else
                     <a
                         href="#"
-                        onclick="event.preventDefault(); showGlobalAlert('Sertifikat Belum Tersedia', 'Silakan selesaikan semua quiz dengan nilai kelulusan terlebih dahulu!')"
+                        onclick="event.preventDefault(); showGlobalAlert('{{ __('Sertifikat Belum Tersedia') }}', '{{ __('Silakan selesaikan semua quiz dengan nilai kelulusan terlebih dahulu!') }}')"
                         class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 text-gray-400 hover:bg-[#f5f5f5] hover:text-gray-500"
                     >
                         <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
                         </svg>
-                        <span>Sertifikat</span>
+                        <span>{{ __('Sertifikat') }}</span>
                     </a>
                 @endif
             @endif
@@ -181,19 +181,28 @@
             <div class="flex-1 min-w-0">
                 <p class="text-base font-bold text-gray-800 truncate leading-tight">{{ Auth::user()->name }}</p>
                 <p class="text-sm text-gray-400 truncate mt-0.5">
-                    {{ Auth::user()->role === 'peserta' ? 'Peserta' : (Auth::user()->role === 'instruktur' ? 'Instruktur' : 'Administrator') }}
+                    {{ Auth::user()->role === 'peserta' ? __('Peserta') : (Auth::user()->role === 'instruktur' ? __('Instruktur') : __('Administrator')) }}
                 </p>
             </div>
         </button>
 
+        <!-- Language Switcher -->
+        <div class="flex items-center justify-between px-3 py-2 text-xs border border-gray-100 rounded-lg bg-gray-50 mb-2">
+            <span class="text-gray-500 font-semibold">{{ __('Pilih Bahasa') }}</span>
+            <div class="flex space-x-1.5">
+                <a href="{{ route('lang.switch', 'id') }}" class="px-2 py-0.5 rounded font-bold transition {{ App::getLocale() === 'id' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">ID</a>
+                <a href="{{ route('lang.switch', 'en') }}" class="px-2 py-0.5 rounded font-bold transition {{ App::getLocale() === 'en' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">EN</a>
+            </div>
+        </div>
+
         <button type="button" onclick="openLogoutModal(event)" class="w-full rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-left text-sm font-bold text-rose-600 transition hover:bg-rose-100 hover:text-rose-700">
-            Logout
+            {{ __('Logout') }}
         </button>
 
         <!-- Safe Reporting Link -->
         <div class="px-2">
             <a href="#" class="block text-[10px] text-gray-400 hover:underline transition">
-                Laporkan konten tidak aman
+                {{ __('Laporkan konten tidak aman') }}
             </a>
         </div>
     </div>
