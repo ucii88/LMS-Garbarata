@@ -96,7 +96,7 @@ class Chapter4Seeder extends Seeder
             'chapter_id' => $chapter->id,
             'title' => '4.2.1 Penyetelan Tekanan Curtain',
             'content' => '<p>Jika tegangan tidak sesuai berada pada Curtain dari lilitan pada panel Curtain barrel, lakukan hal berikut ini:</p>' .
-                '<ul class="list-decimal list-inside space-y-2 mt-2">' .
+                '<ul class="list-none space-y-2 mt-2">' .
                 '<li><strong>(a)</strong> Lepaskan tutup/cover curtain barrel rotunda dari atas rotunda yang menuju ke kumparan curtain. Untuk cabin buka tutup/cover curtain barrel yang berengsel agar kumparan dapat terlihat.</li>' .
                 '<li><strong>(b)</strong> Posisikan garbarata atau kabin agar Curtain yang akan disesuaikan dapat terbuka penuh.</li>' .
                 '<li><strong>(c)</strong> Putar garbarata atau kabin perlahan agar Curtain yang terbuka mulai menggulung. Putar garbarata ke arah yang Curtain akan gagal menggulung tanpa bantuan manual (manual assistance).</li>' .
@@ -181,7 +181,7 @@ class Chapter4Seeder extends Seeder
             'chapter_id' => $chapter->id,
             'title' => '4.3.7 Ban',
             'content' => '<p class="font-bold text-slate-700 text-xs mb-2">CARA MELEPASKAN BAN</p>' .
-                '<ul class="list-decimal list-inside space-y-1.5 text-xs text-slate-600">' .
+                '<ul class="list-none space-y-1.5 text-xs text-slate-600">' .
                 '<li><strong>a)</strong> Angkat garbarata di atas dongkrak/Jacking Stand.</li>' .
                 '<li><strong>b)</strong> Tahan tombol down hingga roda menyentuh tanah.</li>' .
                 '<li><strong>c)</strong> Bongkar pelindung rantai dan putus rantai dengan melepas penghubung rantai.</li>' .
@@ -238,9 +238,9 @@ class Chapter4Seeder extends Seeder
             'chapter_id' => $chapter->id,
             'title' => '4.4.2 Pengaturan Vertikal Roller',
             'content' => '<p>Perpanjangan dan lurusnya posisi garbarata untuk melepas bobot pada roller LF karena LF adalah vertical, tidak perlu diatur, thrust roller, ini menjadi awal yang baik untuk memulai.</p>' .
-                '<ul class="list-none space-y-3 mt-2 text-xs text-slate-600">' .
-                '<li>' .
-                '<strong>(a) Mengukur roller LR dan LF:</strong>' .
+                '<div class="space-y-3 mt-2 text-xs text-slate-600">' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-2 mb-1">(a) Mengukur roller LR dan LF:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Buang access covers dan weathering dari roller-roller ini.</li>' .
                 '<li>(ii) Tentukan bagaimana roller UR dan LR harus sesuai untuk memperoleh jarak yang sama antara A & B, dan jarak yang sama antara C dan D seperti ditunjukkan pada figure Tunnel Cross Section.</li>' .
@@ -252,37 +252,35 @@ class Chapter4Seeder extends Seeder
                 '<li>Kencangkan baut.</li>' .
                 '<li>Mundurkan satu putaran penuh pada bolt UR di sisi kiri, kencangkan jam nut.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(b) Panjangkan garbarata perlahan untuk mengalihkan beban/bobot ke roller UR:</strong>' .
+                '</div>' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-3 mb-1">(b) Panjangkan garbarata perlahan untuk mengalihkan beban/bobot ke roller UR:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Hilangkan access cover dari roller LR.</li>' .
                 '<li>(ii) Lepaskan jam nuts pada bolt pengaturan vertikal pada roller LR.</li>' .
                 '<li>(iii) Sesuaikan roller sehingga jarak antara A dan B sama dengan jarak antara C dan D. Lihat panduan Tunnel Cross Section.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(c) Pendekkan garbarata perlahan untuk memindahkan bobot belakang pada roller LR:</strong>' .
+                '</div>' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-3 mb-1">(c) Pendekkan garbarata perlahan untuk memindahkan bobot belakang pada roller LR:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Lepaskan jam nuts pada bolt pengaturan vertikal pada roller UR.</li>' .
                 '<li>(ii) Kencangkan bolt-bolt ini hingga roller merapat pada rel.</li>' .
                 '<li>(iii) Mundurkan bolt satu putaran penuh.</li>' .
                 '<li>(iv) Kencangkan jam nut.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(d) Panjangkan garbarata untuk memindahkan bobot pada roller UR dan LF:</strong>' .
+                '</div>' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-3 mb-1">(d) Panjangkan garbarata untuk memindahkan bobot pada roller UR dan LF:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Tarik access cover dari roller UF.</li>' .
                 '<li>(ii) Lepaskan jam nuts yang macet dan putar bolt pengaturan vertical pada roller UF hingga roller bersandar betul pada rel.</li>' .
                 '<li>(iii) Mundurkan baut satu putaran.</li>' .
                 '<li>(iv) Kencangkan mur.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(e)</strong> Jalankan garbarata mundur maju beberapa kali dan cek kembali jarak antara A dan B, C dan D. Jika setelah berturut-turut jaraknya tidak sama antara satu dengan yang lain, ulangi prosedur pengaturan pada langkah di atas.' .
-                '</li>' .
-                '</ul>' .
+                '</div>' .
+                '<p class="mt-3"><strong>(e)</strong> Jalankan garbarata mundur maju beberapa kali dan cek kembali jarak antara A dan B, C dan D. Jika setelah berturut-turut jaraknya tidak sama antara satu dengan yang lain, ulangi prosedur pengaturan pada langkah di atas.</p>' .
+                '</div>' .
                 '<div class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-sm my-6 max-w-2xl mx-auto flex flex-col items-center">' .
                 '<p class="text-[10px] font-bold text-slate-500 text-center mb-2">TUNNEL ROLLERS ADJUSTMENT</p>' .
                 '<img src="/images/modules/b2_tunnel_rollers_adjustment_hd.png" class="w-full max-h-64 object-contain rounded-lg select-none" alt="Tunnel Rollers Adjustment">' .
@@ -293,25 +291,21 @@ class Chapter4Seeder extends Seeder
         Module::create([
             'chapter_id' => $chapter->id,
             'title' => '4.4.3 Pengaturan Horizontal Roller',
-            'content' => '<ul class="list-none space-y-3 mt-2 text-xs text-slate-600">' .
-                '<li>' .
-                '<strong>(a) Panjangkan dan luruskan garbarata serta hilangkan semua access cover:</strong>' .
+            'content' => '<div class="space-y-3 mt-2 text-xs text-slate-600">' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-2 mb-1">(a) Panjangkan dan luruskan garbarata serta hilangkan semua access cover:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Mengukur dari dalam tunnel B, tentukan bagaimana roller LR and LF menyesuaikan untuk memperoleh jarak yang sama diantara E dan F.</li>' .
                 '<li>(ii) Mengukur dari luar tunnel B, tentukan bagaimana roller-roller ini menyesuaikan untuk memperoleh jarak yang sama diantara G dan H.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(b)</strong> Lepaskan jam nuts pada baut horizontal adjustment dengan memundurkan roller UF yang cukup untuk memperjelas pengaturan roller LT. Dimensi E dan F harus sama.' .
-                '</li>' .
-                '<li>' .
-                '<strong>(c)</strong> Pendekkan garbarata perlahan untuk mengalihkan beban pada roller LR and UF. Lepas jam nuts dan mundurkan roller UR yang cukup untuk melakukan pengaturan roller LR. Dimensi G dan H harus sama.' .
-                '</li>' .
-                '</ul>' .
+                '</div>' .
+                '<p><strong>(b)</strong> Lepaskan jam nuts pada baut horizontal adjustment dengan memundurkan roller UF yang cukup untuk memperjelas pengaturan roller LT. Dimensi E dan F harus sama.</p>' .
+                '<p><strong>(c)</strong> Pendekkan garbarata perlahan untuk mengalihkan beban pada roller LR and UF. Lepas jam nuts dan mundurkan roller UR yang cukup untuk melakukan pengaturan roller LR. Dimensi G dan H harus sama.</p>' .
+                '</div>' .
                 '<div class="my-4 p-3 bg-red-50 rounded-lg border border-red-100 text-red-800 font-semibold text-xs uppercase my-4">PERHATIAN: KETIKA MELEPAS ROLLER UR DAN UF, JANGAN MEMUNDURKANNYA MELEBIHI KEBUTUHAN UNTUK MENGATUR LR DAN LT. MELEPASKAN ROLLER INI TERLALU BANYAK DAPAT MERUSAK TUNNEL.</div>' .
-                '<ul class="list-none space-y-3 text-xs text-slate-600">' .
-                '<li>' .
-                '<strong>(d) Panjangkan perlahan garbarata untuk memindahkan bobot roller UR and LF:</strong>' .
+                '<div class="space-y-3 text-xs text-slate-600">' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-3 mb-1">(d) Panjangkan perlahan garbarata untuk memindahkan bobot roller UR and LF:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Lepaskan jam nuts pada roller LR and LT.</li>' .
                 '<li>(ii) Putarlah bolt pengaturan pada roller LR and LT pada arah tunnel yang bergerak untuk membuat jarak G ke H, dan E ke F sama. Lihat bagian A-A and C-C pada figure tunnel cross section.</li>' .
@@ -319,29 +313,25 @@ class Chapter4Seeder extends Seeder
                 '<li>(iv) Dengan jarak G ke H, dan A ke F sama, kencangkan setiap baut hingga roller bertumpu pada rel dengan baik, kemudian mundurkan masing-masing bolt satu persatu.</li>' .
                 '<li>(v) Kencangkan jam nuts.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(e) Roller UF:</strong>' .
+                '</div>' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-3 mb-1">(e) Roller UF:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Kencangkan roller UF-R hingga bertumpu pada rel dengan baik, kemudian kencangkan jam nut. Lihat bagian B-B pada figure tunnel cross section.</li>' .
                 '<li>(ii) Pada sisi yang berlawanan, kencangkan roller UF-L hingga bertumpu pada rel dengan baik kemudian mundurkan satu putaran, kencangkan jam nut. Lihat bagian B-B pada Tunnel Cross Section figure.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(f) Roller UR:</strong>' .
+                '</div>' .
+                '<div>' .
+                '<p class="font-bold text-slate-700 text-xs mt-3 mb-1">(f) Roller UR:</p>' .
                 '<ul class="list-disc list-inside ml-4 mt-1 space-y-1">' .
                 '<li>(i) Pendekkan garbarata untuk mengalihkan bobot pada roller UR and UF.</li>' .
                 '<li>(ii) Kencangkan roller UR-R hingga bertumpu pada rel dengan baik dan kencangkan jam nut. Lihat sesi A-A pada TCS.</li>' .
                 '<li>(iii) Pada sisi sebaliknya, kencangkan roller UR-L hingga bertumpu pada rel dengan baik dan mengencangkan jam nut.</li>' .
                 '</ul>' .
-                '</li>' .
-                '<li>' .
-                '<strong>(g)</strong> Gerakkan garbarata maju mundur beberapa kali untuk mengecek E ke F, G ke G tetap sama. Toleransi 3mm pada tiap arah tidak masalah.' .
-                '</li>' .
-                '<li>' .
-                '<strong>(h)</strong> Ganti access cover setelah selesai mengecek pengaturan.' .
-                '</li>' .
-                '</ul>' .
+                '</div>' .
+                '<p><strong>(g)</strong> Gerakkan garbarata maju mundur beberapa kali untuk mengecek E ke F, G ke G tetap sama. Toleransi 3mm pada tiap arah tidak masalah.</p>' .
+                '<p><strong>(h)</strong> Ganti access cover setelah selesai mengecek pengaturan.</p>' .
+                '</div>' .
                 '<p class="mt-4">Setelah pengaturan ini, gerakkan garbarata maju dan mundur beberapa kali sambil dengarkan jika ada decitan, suara tak normal atau letusan. Jika tunnel berisik, lepaskan bolt dari pengaturan pada roller yang berisik &frac14; putaran, dan lihat jika hal tersebut bisa memperbaiki masalahnya. Lanjutkan dengan melepas perlahan roller yang berisik hingga suara tersebut hilang. Jika anda tidak bisa mengatasi roller kanan, kerjakan prosedur kebalikannya pengaturan ini, lepas pada masing-masing putaran.</p>',
             'order' => $order++,
         ]);

@@ -71,9 +71,9 @@ class Chapter3Seeder extends Seeder
                                 Tombol Off
                             </td>
                             <td class="border border-gray-500 px-4 py-3">
-                                <p>i. Setelah pengoperasian normal dan Garbarata kembali ke posisi yang telah ditentukan/parkir, tombol power off harus ditekan. Hal ini akan menghentikan energi/daya pada mesin, dan kontrol power.</p>
+                                <p>1. Setelah pengoperasian normal dan Garbarata kembali ke posisi yang telah ditentukan/parkir, tombol power off harus ditekan. Hal ini akan menghentikan energi/daya pada mesin, dan kontrol power.</p>
 
-                                <p class="mt-3">ii. Dalam keadaan darurat, tombol Stop Emergency harus ditekan secepatnya, hal ini akan mematikan semua listrik, kecuali lampu.</p>
+                                <p class="mt-3">2. Dalam keadaan darurat, tombol Stop Emergency harus ditekan secepatnya, hal ini akan mematikan semua listrik, kecuali lampu.</p>
                             </td>
                         </tr>
                     </tbody>
@@ -427,16 +427,16 @@ class Chapter3Seeder extends Seeder
 
             <p><strong>c. Kontrol Konsol</strong></p>
 
-            <p>i. Pastikan keyswitch dalam mode Off</p>
+            <p>1. Pastikan keyswitch dalam mode Off</p>
 
-            <p>ii. Tekan tombol Power On dan lampu tombol On akan menyala</p>
+            <p>2. Tekan tombol Power On dan lampu tombol On akan menyala</p>
 
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <img src="/images/modules/chapter3_4.1_c2.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.c2">
             </figure>
 
             <p>
-                iii. Putar keyswitch ke mode manual, sesaat setelah diputar menuju mode
+                3. Putar keyswitch ke mode manual, sesaat setelah diputar menuju mode
                 manual, akan terdengar bunyi beep buzzer.
             </p>
 
@@ -535,7 +535,7 @@ class Chapter3Seeder extends Seeder
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <img src="/images/modules/chapter3_4.2_h.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.h">
             </figure>
-            <p><strong>i. Kembalikan Garbarata ke posisi parkir</strong></p>
+            <p><strong>1. Kembalikan Garbarata ke posisi parkir</strong></p>
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <img src="/images/modules/chapter3_4.2_i.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.i">
             </figure>
