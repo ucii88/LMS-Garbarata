@@ -261,11 +261,11 @@
                     if (!this.editMode) return;
                     this.dragId = id;
                     this.wasDragged = false;
-                    if (e.type !== 'touchstart') e.preventDefault();
                 },
                 onDrag(e) {
                     if (!this.editMode || !this.dragId) return;
                     this.wasDragged = true;
+                    if (e.cancelable) e.preventDefault();
                     const rect = this.$refs.diagramContainer.getBoundingClientRect();
                     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -283,6 +283,21 @@
                     setTimeout(() => {
                         this.dragId = null;
                     }, 50);
+                },
+                originalHotspots: [],
+                startEditMode() {
+                    try {
+                        this.originalHotspots = (this.hotspots || []).map(h => Object.assign({}, h));
+                    } catch (e) {
+                        this.originalHotspots = [];
+                    }
+                    this.editMode = true;
+                },
+                cancelEditMode() {
+                    if (this.originalHotspots && this.originalHotspots.length > 0) {
+                        this.hotspots = this.originalHotspots.map(h => Object.assign({}, h));
+                    }
+                    this.editMode = false;
                 },
                 async saveHotspots() {
                     this.saving = true;

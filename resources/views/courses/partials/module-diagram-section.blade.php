@@ -223,11 +223,11 @@
                     if (!this.editMode) return;
                     this.dragId = id;
                     this.wasDragged = false;
-                    if (e.type !== 'touchstart') e.preventDefault();
                 },
                 onDrag(e) {
                     if (!this.editMode || !this.dragId) return;
                     this.wasDragged = true;
+                    if (e.cancelable) e.preventDefault();
                     const rect = this.$refs.diagramContainer.getBoundingClientRect();
                     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -246,6 +246,21 @@
                         this.dragId = null;
                     }, 50);
                 },
+                originalHotspots: [],
+                startEditMode() {
+                    try {
+                        this.originalHotspots = (this.hotspots || []).map(h => Object.assign({}, h));
+                    } catch (e) {
+                        this.originalHotspots = [];
+                    }
+                    this.editMode = true;
+                },
+                cancelEditMode() {
+                    if (this.originalHotspots) {
+                        this.hotspots = this.originalHotspots.map(h => Object.assign({}, h));
+                    }
+                    this.editMode = false;
+                },
                 async saveHotspots() {
                     this.saving = true;
                     try {
@@ -260,6 +275,7 @@
                             body: JSON.stringify({ hotspots: payload })
                         });
                         if (res.ok) {
+                            this.originalHotspots = (this.hotspots || []).map(h => Object.assign({}, h));
                             this.editMode = false;
                             alert('Posisi Hotspot berhasil disimpan.');
                         } else {
@@ -276,6 +292,8 @@
 </script>
 
 <div
+    x-show="diagramObj && diagramObj.image_path"
+    x-cloak
     @mousemove.window="onDrag"
     @mouseup.window="stopDrag"
     @touchmove.window="onDrag"
@@ -301,13 +319,6 @@
 
         @if(auth()->user()->isInstruktur())
             <div class="flex flex-wrap items-center gap-2">
-                <template x-if="!diagramObj">
-                    <button @click="showUploadModal = true" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-blue-500/20 flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                        <span>Upload Diagram Gambar</span>
-                    </button>
-                </template>
-
                 <template x-if="diagramObj">
                     <div class="flex flex-wrap items-center gap-2">
                         <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
@@ -333,13 +344,13 @@
                             </template>
                         </button>
 
-                        <button x-show="!addHotspotMode && !editMode" @click="editMode = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                        <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             <span>Atur Posisi / Edit</span>
                         </button>
 
-                        <button x-show="editMode" @click="editMode = false" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">
-                            Selesai Edit
+                        <button x-show="editMode" @click="cancelEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">
+                            Batal Edit
                         </button>
                         <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>

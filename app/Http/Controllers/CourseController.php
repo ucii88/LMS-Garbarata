@@ -472,4 +472,48 @@ class CourseController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Hotspot modul berhasil dihapus.']);
     }
+
+    public function storeChapter(Request $request, Course $course)
+    {
+        abort_unless(auth()->user()->isInstruktur(), 403);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'order' => 'nullable|integer|min:1',
+        ]);
+
+        if (empty($validated['order'])) {
+            $validated['order'] = ($course->chapters()->max('order') ?? 0) + 1;
+        }
+
+        $course->chapters()->create([
+            'title' => $validated['title'],
+            'order' => $validated['order'],
+        ]);
+
+        return redirect()->route('courses.show', $course->id)->with('success', __('Bab baru berhasil ditambahkan.'));
+    }
+
+    public function updateChapter(Request $request, Course $course, Chapter $chapter)
+    {
+        abort_unless(auth()->user()->isInstruktur(), 403);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'order' => 'required|integer|min:1',
+        ]);
+
+        $chapter->update($validated);
+
+        return redirect()->route('courses.show', $course->id)->with('success', __('Bab berhasil diperbarui.'));
+    }
+
+    public function destroyChapter(Course $course, Chapter $chapter)
+    {
+        abort_unless(auth()->user()->isInstruktur(), 403);
+
+        $chapter->delete();
+
+        return redirect()->route('courses.show', $course->id)->with('success', __('Bab berhasil dihapus.'));
+    }
 }

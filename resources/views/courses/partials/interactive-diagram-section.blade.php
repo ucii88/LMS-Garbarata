@@ -1,7 +1,7 @@
 <!-- Interactive Diagram with Hotspots (Universal for All Chapters) -->
 <script>
     if (typeof window.interactiveDiagramData !== 'function') {
-        window.interactiveDiagramData = function(diagramObj, hotspotsData, courseId, chapterId, updateUrl, storeDiagramUrl, destroyDiagramUrl, storeHotspotUrl, csrfToken) {
+        window.interactiveDiagramData = function(diagramObj, hotspotsData, courseId, chapterId, updateUrl, storeDiagramUrl, destroyDiagramUrl, storeHotspotUrl, csrfToken, modulesData = []) {
             return {
                 editMode: false,
                 addHotspotMode: false,
@@ -29,6 +29,7 @@
                     y_percent: 50
                 },
                 hotspots: hotspotsData || [],
+                modules: modulesData || [],
                 diagramObj: diagramObj,
                 updateUrl: updateUrl,
                 storeDiagramUrl: storeDiagramUrl,
@@ -137,21 +138,76 @@
                     } else {
                         if (hotspot.action_type === 'popup') {
                             this.activePopupHotspot = hotspot;
-                        } else if (hotspot.target_module_id) {
-                            const targetId = hotspot.target_module_id;
-                            if (typeof window.setMechModule === 'function') {
-                                window.setMechModule(targetId);
+                        } else {
+                            let targetId = hotspot.target_module_id;
+
+                            // Fallback: search module by label or popup_title
+                            if (!targetId && (hotspot.label || hotspot.popup_title)) {
+                                const searchStr = (hotspot.popup_title || hotspot.label).trim().toLowerCase();
+                                const labelStr = String(hotspot.label).trim().toLowerCase();
+                                const found = (this.modules || []).find(m => {
+                                    if (!m || !m.title) return false;
+                                    const titleLower = m.title.trim().toLowerCase();
+                                    return titleLower.startsWith(labelStr + '.') || 
+                                           titleLower.startsWith(labelStr + ' ') || 
+                                           titleLower === labelStr ||
+                                           titleLower.includes(searchStr) ||
+                                           String(m.id) === labelStr;
+                                });
+                                if (found) {
+                                    targetId = found.id;
+                                }
                             }
-                            if (typeof window.setElecModule === 'function') {
-                                window.setElecModule(targetId);
+
+                            if (!targetId && (this.modules || []).length > 0) {
+                                const rawLabel = String(hotspot.label || '').replace(/hotspot/i, '').trim();
+                                const num = parseInt(rawLabel, 10);
+                                if (!isNaN(num) && num >= 1 && this.modules[num - 1]) {
+                                    targetId = this.modules[num - 1].id;
+                                } else if (this.modules[0]) {
+                                    targetId = this.modules[0].id;
+                                }
                             }
-                            const el = document.getElementById('module-' + targetId) 
-                                    || document.getElementById('mech-module-' + targetId)
-                                    || document.getElementById('elec-module-' + targetId)
-                                    || document.querySelector('[data-module-id="' + targetId + '"]');
-                            if (el) {
-                                const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
-                                window.scrollTo({ top: y, behavior: 'smooth' });
+
+                            if (targetId) {
+                                if (typeof window.setStudyModule === 'function') {
+                                    window.setStudyModule(targetId);
+                                }
+                                if (typeof window.setMechModule === 'function') {
+                                    window.setMechModule(targetId);
+                                }
+                                if (typeof window.setElecModule === 'function') {
+                                    window.setElecModule(targetId);
+                                }
+
+                                // Switch active tab if target module belongs to a specific tab
+                                const targetMod = (this.modules || []).find(m => String(m.id) === String(targetId));
+                                if (targetMod && targetMod.title) {
+                                    const match = targetMod.title.match(/^(\d+\.\d+)/);
+                                    if (match) {
+                                        const tabCode = match[1];
+                                        const tabButtons = Array.from(document.querySelectorAll('button'));
+                                        const tabBtn = tabButtons.find(b => b.textContent && b.textContent.trim().startsWith(tabCode));
+                                        if (tabBtn) tabBtn.click();
+                                    }
+                                }
+
+                                this.$nextTick(() => {
+                                    const el = document.getElementById('module-' + targetId) 
+                                            || document.getElementById('mech-module-' + targetId)
+                                            || document.getElementById('elec-module-' + targetId)
+                                            || document.querySelector('[data-module-id="' + targetId + '"]');
+                                    if (el) {
+                                        const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
+                                        window.scrollTo({ top: y, behavior: 'smooth' });
+                                    } else {
+                                        const contentContainer = document.querySelector('.space-y-6') || document.querySelector('.min-h-\\[250px\\]');
+                                        if (contentContainer) {
+                                            const y = contentContainer.getBoundingClientRect().top + window.pageYOffset - 100;
+                                            window.scrollTo({ top: y, behavior: 'smooth' });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -212,11 +268,11 @@
                     if (!this.editMode) return;
                     this.dragId = id;
                     this.wasDragged = false;
-                    if (e.type !== 'touchstart') e.preventDefault();
                 },
                 onDrag(e) {
                     if (!this.editMode || !this.dragId) return;
                     this.wasDragged = true;
+                    if (e.cancelable) e.preventDefault();
                     const rect = this.$refs.diagramContainer.getBoundingClientRect();
                     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -235,6 +291,21 @@
                         this.dragId = null;
                     }, 50);
                 },
+                originalHotspots: [],
+                startEditMode() {
+                    try {
+                        this.originalHotspots = (this.hotspots || []).map(h => Object.assign({}, h));
+                    } catch (e) {
+                        this.originalHotspots = [];
+                    }
+                    this.editMode = true;
+                },
+                cancelEditMode() {
+                    if (this.originalHotspots) {
+                        this.hotspots = this.originalHotspots.map(h => Object.assign({}, h));
+                    }
+                    this.editMode = false;
+                },
                 async saveHotspots() {
                     this.saving = true;
                     try {
@@ -249,6 +320,7 @@
                             body: JSON.stringify({ hotspots: payload })
                         });
                         if (res.ok) {
+                            this.originalHotspots = (this.hotspots || []).map(h => Object.assign({}, h));
                             this.editMode = false;
                             alert('Posisi Hotspot berhasil disimpan.');
                         } else {
@@ -274,14 +346,15 @@
         @js(route('courses.diagram.store', [$course->id, $chapter->id])),
         @js(route('courses.diagram.destroy', [$course->id, $chapter->id])),
         @js(route('courses.diagram.hotspots.store', [$course->id, $chapter->id])),
-        @js(csrf_token())
+        @js(csrf_token()),
+        @js(isset($modules) ? $modules->values() : [])
     )"
     @mousemove.window="onDrag"
     @mouseup.window="stopDrag"
     @touchmove.window="onDrag"
     @touchend.window="stopDrag"
 >
-    <div x-show="(diagramObj && diagramObj.image_path) || @js(auth()->user()->isInstruktur())" x-cloak class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full mb-6">
+    <div x-show="diagramObj && diagramObj.image_path" x-cloak class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full mb-6">
     <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
         <div class="flex items-center gap-2">
             <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
@@ -301,13 +374,6 @@
 
         @if(auth()->user()->isInstruktur())
             <div class="flex flex-wrap items-center gap-2">
-                <template x-if="!diagramObj">
-                    <button @click="showUploadModal = true" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-blue-500/20 flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                        <span>Upload Diagram Gambar</span>
-                    </button>
-                </template>
-
                 <template x-if="diagramObj">
                     <div class="flex flex-wrap items-center gap-2">
                         <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
@@ -333,13 +399,13 @@
                             </template>
                         </button>
 
-                        <button x-show="!addHotspotMode && !editMode" @click="editMode = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                        <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             <span>Atur Posisi / Edit</span>
                         </button>
 
-                        <button x-show="editMode" @click="editMode = false" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">
-                            Selesai Edit
+                        <button x-show="editMode" @click="cancelEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">
+                            Batal Edit
                         </button>
                         <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>

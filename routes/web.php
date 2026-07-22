@@ -83,6 +83,11 @@ Route::middleware('auth')->group(function () {
 
     // Module management (exclusive to Instruktur)
     Route::middleware('role:instruktur')->group(function () {
+        // Chapter management
+        Route::post('/courses/{course}/chapters', [App\Http\Controllers\CourseController::class, 'storeChapter'])->name('courses.chapters.store');
+        Route::put('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'updateChapter'])->name('courses.chapters.update');
+        Route::delete('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'destroyChapter'])->name('courses.chapters.destroy');
+
         Route::get('/courses/{course}/chapters/{chapter}/modules/create', [App\Http\Controllers\ModuleController::class, 'create'])->name('modules.create');
         Route::post('/courses/{course}/chapters/{chapter}/modules', [App\Http\Controllers\ModuleController::class, 'store'])->name('modules.store');
         Route::get('/courses/{course}/chapters/{chapter}/modules/{module}/edit', [App\Http\Controllers\ModuleController::class, 'edit'])->name('modules.edit');

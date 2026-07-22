@@ -365,6 +365,34 @@ Alpine.data('studyPage', (modules = [], completeUrlTemplate = null) => ({
 		completeUrlTemplate,
 		csrfToken: document.querySelector('meta[name="csrf-token"]')?.content || '',
 		init() {
+			window.setStudyModule = (targetId) => {
+				if (!targetId) return;
+				const str = String(targetId).trim().toLowerCase();
+
+				// 1. Direct ID match
+				let found = this.modules.find(m => String(m.id) === str);
+
+				// 2. Title prefix / match
+				if (!found) {
+					found = this.modules.find(m => {
+						if (!m || !m.title) return false;
+						const t = m.title.trim().toLowerCase();
+						return t.startsWith(str + '.') || t.startsWith(str + ' ') || t.startsWith(str) || t.includes(str);
+					});
+				}
+
+				// 3. 1-based index match (if hotspot label is "1", pick 1st module; if "2", pick 2nd module)
+				if (!found) {
+					const num = parseInt(str, 10);
+					if (!isNaN(num) && num >= 1 && num <= this.modules.length) {
+						found = this.modules[num - 1];
+					}
+				}
+
+				if (found) {
+					this.setActiveModule(found.id);
+				}
+			};
 			this.markModuleComplete(this.activeModuleId);
 		},
 		setActiveModule(moduleId) {
