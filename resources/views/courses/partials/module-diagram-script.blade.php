@@ -36,6 +36,7 @@
                 baseUrl: '/courses/' + courseId + '/chapters/' + chapterId + '/modules/' + moduleId + '/hotspots',
                 csrfToken: csrfToken,
                 dragId: null,
+                wasDragged: false,
 
                 previewImage(e) {
                     const file = e.target.files[0];
@@ -128,6 +129,10 @@
                     this.addHotspotMode = false;
                 },
                 clickHotspot(hotspot) {
+                    if (this.wasDragged) {
+                        this.wasDragged = false;
+                        return;
+                    }
                     if (this.editMode) {
                         this.activeHotspot = Object.assign({}, hotspot);
                         this.showHotspotFormModal = true;
@@ -135,6 +140,21 @@
                         if (hotspot.action_type === 'popup') {
                             this.activePopupHotspot = hotspot;
                         } else {
+                            if (hotspot.target_module_id) {
+                                const targetId = hotspot.target_module_id;
+                                if (typeof window.setMechModule === 'function') window.setMechModule(targetId);
+                                if (typeof window.setElecModule === 'function') window.setElecModule(targetId);
+                                const el = document.getElementById('module-' + targetId) 
+                                        || document.getElementById('mech-module-' + targetId)
+                                        || document.getElementById('elec-module-' + targetId)
+                                        || document.querySelector('[data-module-id="' + targetId + '"]');
+                                if (el) {
+                                    const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
+                                    window.scrollTo({ top: y, behavior: 'smooth' });
+                                    return;
+                                }
+                            }
+
                             const num = parseInt(hotspot.label, 10);
                             const targetId = hotspot.label;
 
@@ -240,10 +260,12 @@
                 startDrag(e, id) {
                     if (!this.editMode) return;
                     this.dragId = id;
+                    this.wasDragged = false;
                     if (e.type !== 'touchstart') e.preventDefault();
                 },
                 onDrag(e) {
                     if (!this.editMode || !this.dragId) return;
+                    this.wasDragged = true;
                     const rect = this.$refs.diagramContainer.getBoundingClientRect();
                     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -251,14 +273,16 @@
                     let yPos = ((clientY - rect.top) / rect.height) * 100;
                     xPos = Math.max(0, Math.min(100, xPos));
                     yPos = Math.max(0, Math.min(100, yPos));
-                    const hotspot = this.hotspots.find(h => h.id === this.dragId);
+                    const hotspot = this.hotspots.find(h => String(h.id) === String(this.dragId));
                     if (hotspot) {
                         hotspot.x_percent = Math.round(xPos * 100) / 100;
                         hotspot.y_percent = Math.round(yPos * 100) / 100;
                     }
                 },
                 stopDrag() {
-                    this.dragId = null;
+                    setTimeout(() => {
+                        this.dragId = null;
+                    }, 50);
                 },
                 async saveHotspots() {
                     this.saving = true;

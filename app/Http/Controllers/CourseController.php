@@ -275,7 +275,7 @@ class CourseController extends Controller
             'diagram_id' => $diagram->id,
             'label' => $request->label,
             'action_type' => $request->action_type,
-            'target_module_id' => $request->action_type === 'navigate' ? $request->target_module_id : null,
+            'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
             'popup_title' => $request->action_type === 'popup' ? $request->popup_title : null,
             'popup_content' => $request->action_type === 'popup' ? $request->popup_content : null,
             'x_percent' => $request->x_percent,
@@ -306,7 +306,7 @@ class CourseController extends Controller
         $hotspot->update([
             'label' => $request->label,
             'action_type' => $request->action_type,
-            'target_module_id' => $request->action_type === 'navigate' ? $request->target_module_id : null,
+            'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
             'popup_title' => $request->action_type === 'popup' ? $request->popup_title : null,
             'popup_content' => $request->action_type === 'popup' ? $request->popup_content : null,
             'x_percent' => $request->x_percent,
@@ -398,7 +398,7 @@ class CourseController extends Controller
         $hotspot = $diagram->hotspots()->create([
             'label' => $request->label,
             'action_type' => $request->action_type,
-            'target_module_id' => $request->action_type === 'navigate' ? $request->target_module_id : null,
+            'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
             'popup_title' => $request->popup_title ?? $request->label,
             'popup_content' => $request->popup_content,
             'x_percent' => $request->x_percent,
@@ -450,7 +450,7 @@ class CourseController extends Controller
         $hotspot->update([
             'label' => $request->label,
             'action_type' => $request->action_type,
-            'target_module_id' => $request->action_type === 'navigate' ? $request->target_module_id : null,
+            'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
             'popup_title' => $request->popup_title ?? $request->label,
             'popup_content' => $request->popup_content,
             'x_percent' => $request->x_percent,

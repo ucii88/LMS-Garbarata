@@ -11,13 +11,13 @@
      x-transition:leave="transition ease-in duration-150"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100" @click.stop>
         <div class="flex justify-between items-center pb-4 border-b border-slate-100">
             <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 <span>Upload / Ganti Diagram Gambar</span>
             </h3>
-            <button @click="showUploadModal = false" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition">
+            <button type="button" @click="showUploadModal = false" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
@@ -90,13 +90,13 @@
      x-transition:leave="transition ease-in duration-150"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 overflow-hidden border border-slate-100">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 overflow-hidden border border-slate-100" @click.stop>
         <div class="flex justify-between items-center pb-4 border-b border-slate-100">
             <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 <span x-text="activeHotspot.id ? 'Edit Hotspot' : 'Tambah Hotspot Baru'"></span>
             </h3>
-            <button @click="showHotspotFormModal = false" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition">
+            <button type="button" @click="showHotspotFormModal = false" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
@@ -111,30 +111,32 @@
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Tipe Aksi Hotspot</label>
                 <div class="grid grid-cols-2 gap-3">
-                    <label class="relative flex flex-col p-3 rounded-xl border-2 cursor-pointer transition"
-                           :class="activeHotspot.action_type === 'navigate' ? 'border-blue-500 bg-blue-50/40 text-blue-900' : 'border-slate-200 hover:border-slate-300 text-slate-700'">
+                    <button type="button"
+                            @click.prevent="activeHotspot.action_type = 'navigate'"
+                            class="relative flex flex-col p-3 rounded-xl border-2 text-left cursor-pointer transition focus:outline-none"
+                            :class="activeHotspot.action_type !== 'popup' ? 'border-blue-500 bg-blue-50/40 text-blue-900' : 'border-slate-200 hover:border-slate-300 text-slate-700'">
                         <div class="flex items-center gap-2 font-bold text-sm">
-                            <input type="radio" value="navigate" x-model="activeHotspot.action_type" class="sr-only">
                             <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                             <span>Navigasi Subbab</span>
                         </div>
                         <span class="text-[11px] text-slate-500 mt-1">Scroll langsung ke Modul/Subbab tertentu</span>
-                    </label>
+                    </button>
 
-                    <label class="relative flex flex-col p-3 rounded-xl border-2 cursor-pointer transition"
-                           :class="activeHotspot.action_type === 'popup' ? 'border-blue-500 bg-blue-50/40 text-blue-900' : 'border-slate-200 hover:border-slate-300 text-slate-700'">
+                    <button type="button"
+                            @click.prevent="activeHotspot.action_type = 'popup'"
+                            class="relative flex flex-col p-3 rounded-xl border-2 text-left cursor-pointer transition focus:outline-none"
+                            :class="activeHotspot.action_type === 'popup' ? 'border-blue-500 bg-blue-50/40 text-blue-900' : 'border-slate-200 hover:border-slate-300 text-slate-700'">
                         <div class="flex items-center gap-2 font-bold text-sm">
-                            <input type="radio" value="popup" x-model="activeHotspot.action_type" class="sr-only">
                             <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                             <span>Pop-Up Informasi</span>
                         </div>
                         <span class="text-[11px] text-slate-500 mt-1">Tampilkan modal info penjelasan singkat</span>
-                    </label>
+                    </button>
                 </div>
             </div>
 
             {{-- Fields for Navigate Action --}}
-            <div x-show="activeHotspot.action_type === 'navigate'" class="space-y-2">
+            <div x-show="activeHotspot.action_type !== 'popup'" class="space-y-2">
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Target Modul / Subbab</label>
                 <select x-model="activeHotspot.target_module_id" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm font-medium text-slate-800 outline-none transition">
                     <option value="">-- Pilih Modul Tujuan --</option>
@@ -191,7 +193,7 @@
      x-transition:leave="transition ease-in duration-150"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100" @click.stop>
         <div class="flex justify-between items-start pb-3 border-b border-slate-100">
             <div class="flex items-center gap-3">
                 <span class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center text-sm shadow-sm" x-text="activePopupHotspot?.label || 'i'"></span>

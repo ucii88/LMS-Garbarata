@@ -13,6 +13,11 @@
                 imagePreview: null,
                 imageFileName: '',
                 activePopupHotspot: null,
+                dotSize: localStorage.getItem('lms_dotsize_chap_' + chapterId) || 'md',
+                setDotSize(size) {
+                    this.dotSize = size;
+                    localStorage.setItem('lms_dotsize_chap_' + chapterId, size);
+                },
                 activeHotspot: {
                     id: null,
                     label: '',
@@ -32,6 +37,7 @@
                 baseUrl: '/courses/' + courseId + '/chapters/' + chapterId + '/hotspots',
                 csrfToken: csrfToken,
                 dragId: null,
+                wasDragged: false,
 
                 previewImage(e) {
                     const file = e.target.files[0];
@@ -121,6 +127,10 @@
                     this.addHotspotMode = false;
                 },
                 clickHotspot(hotspot) {
+                    if (this.wasDragged) {
+                        this.wasDragged = false;
+                        return;
+                    }
                     if (this.editMode) {
                         this.activeHotspot = Object.assign({}, hotspot);
                         this.showHotspotFormModal = true;
@@ -128,14 +138,20 @@
                         if (hotspot.action_type === 'popup') {
                             this.activePopupHotspot = hotspot;
                         } else if (hotspot.target_module_id) {
+                            const targetId = hotspot.target_module_id;
                             if (typeof window.setMechModule === 'function') {
-                                window.setMechModule(hotspot.target_module_id);
+                                window.setMechModule(targetId);
                             }
-                            const el = document.getElementById('module-' + hotspot.target_module_id) 
-                                    || document.getElementById('mech-module-' + hotspot.target_module_id)
-                                    || document.querySelector('[data-module-id="' + hotspot.target_module_id + '"]');
+                            if (typeof window.setElecModule === 'function') {
+                                window.setElecModule(targetId);
+                            }
+                            const el = document.getElementById('module-' + targetId) 
+                                    || document.getElementById('mech-module-' + targetId)
+                                    || document.getElementById('elec-module-' + targetId)
+                                    || document.querySelector('[data-module-id="' + targetId + '"]');
                             if (el) {
-                                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
+                                window.scrollTo({ top: y, behavior: 'smooth' });
                             }
                         }
                     }
@@ -195,10 +211,12 @@
                 startDrag(e, id) {
                     if (!this.editMode) return;
                     this.dragId = id;
+                    this.wasDragged = false;
                     if (e.type !== 'touchstart') e.preventDefault();
                 },
                 onDrag(e) {
                     if (!this.editMode || !this.dragId) return;
+                    this.wasDragged = true;
                     const rect = this.$refs.diagramContainer.getBoundingClientRect();
                     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -206,14 +224,16 @@
                     let yPos = ((clientY - rect.top) / rect.height) * 100;
                     xPos = Math.max(0, Math.min(100, xPos));
                     yPos = Math.max(0, Math.min(100, yPos));
-                    const hotspot = this.hotspots.find(h => h.id === this.dragId);
+                    const hotspot = this.hotspots.find(h => String(h.id) === String(this.dragId));
                     if (hotspot) {
                         hotspot.x_percent = Math.round(xPos * 100) / 100;
                         hotspot.y_percent = Math.round(yPos * 100) / 100;
                     }
                 },
                 stopDrag() {
-                    this.dragId = null;
+                    setTimeout(() => {
+                        this.dragId = null;
+                    }, 50);
                 },
                 async saveHotspots() {
                     this.saving = true;
@@ -261,13 +281,22 @@
     @touchmove.window="onDrag"
     @touchend.window="stopDrag"
 >
-    <div x-show="diagramObj && diagramObj.image_path" x-cloak class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full mb-6">
+    <div x-show="(diagramObj && diagramObj.image_path) || @js(auth()->user()->isInstruktur())" x-cloak class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full mb-6">
     <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
         <div class="flex items-center gap-2">
             <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
             <template x-if="diagramObj">
                 <span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
             </template>
+
+            <!-- Controls Ukuran Bulatan Hotspot -->
+            <div x-show="hotspots.length > 0" class="flex items-center gap-1 border-l border-slate-200 pl-2">
+                <span class="text-[10px] text-slate-500 font-semibold mr-1">Ukuran Dot:</span>
+                <button type="button" @click="setDotSize('sm')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">S</button>
+                <button type="button" @click="setDotSize('md')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">M</button>
+                <button type="button" @click="setDotSize('lg')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">L</button>
+                <button type="button" @click="setDotSize('xl')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">XL</button>
+            </div>
         </div>
 
         @if(auth()->user()->isInstruktur())
@@ -332,7 +361,7 @@
     <!-- Diagram Display Container -->
     <div x-ref="diagramContainer" 
          @click="onDiagramClick($event)"
-         class="relative bg-slate-50 rounded-xl overflow-hidden w-full border border-gray-200 flex items-center justify-center shadow-sm select-none"
+         class="relative bg-slate-50 rounded-xl overflow-hidden w-full max-w-xl mx-auto border border-gray-200 flex items-center justify-center shadow-sm select-none"
          :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
         
         <template x-if="diagramObj && diagramObj.image_path">
@@ -357,11 +386,14 @@
                       :class="hotspot.action_type === 'popup' ? 'bg-amber-400' : 'bg-blue-500'"></span>
                 
                 <!-- Hotspot Dot -->
-                <span class="relative inline-flex rounded-full h-6 w-6 border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110"
-                      :class="hotspot.action_type === 'popup' 
-                        ? 'bg-amber-500 text-white' 
-                        : (typeof activeMechId !== 'undefined' && activeMechId === hotspot.target_module_id && !editMode ? 'bg-blue-700 scale-110 ring-4 ring-blue-500/30' : 'bg-blue-600 text-white')">
-                    <span class="text-white text-[10px] font-bold" x-text="hotspot.label ? (hotspot.label.length <= 2 ? hotspot.label : index + 1) : index + 1"></span>
+                <span class="relative inline-flex rounded-full border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110 shrink-0"
+                      :class="[
+                          hotspot.action_type === 'popup' 
+                            ? 'bg-amber-500 text-white' 
+                            : (typeof activeMechId !== 'undefined' && activeMechId === hotspot.target_module_id && !editMode ? 'bg-blue-700 scale-110 ring-4 ring-blue-500/30' : 'bg-blue-600 text-white'),
+                          dotSize === 'sm' ? 'w-5 h-5 text-[10px]' : (dotSize === 'md' ? 'w-6 h-6 text-[11px]' : (dotSize === 'lg' ? 'w-7 h-7 text-[12px]' : 'w-8 h-8 text-[13px]'))
+                      ]">
+                    <span class="font-extrabold leading-none select-none" x-text="hotspot.label ? (hotspot.label.length <= 2 ? hotspot.label : index + 1) : index + 1"></span>
                 </span>
 
                 <!-- Tooltip Hover Preview -->
