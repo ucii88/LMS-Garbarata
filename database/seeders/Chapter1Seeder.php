@@ -21,7 +21,7 @@ class Chapter1Seeder extends Seeder
         // 1.1 Rotunda
         $module1_1 = Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '1.1 Rotunda',
+            'title' => ['id' => '1.1 Rotunda', 'en' => '1.1 Rotunda'],
             'image_path' => 'images/modules/rotunda.png',
             'content' => '
                 <p><strong>Komponen utama Garbarata terdiri dari :</strong></p>
@@ -82,7 +82,7 @@ class Chapter1Seeder extends Seeder
 
         $module1_2 = Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '1.2 Telescopic Tunnel',
+            'title' => ['id' => '1.2 Telescopic Tunnel', 'en' => '1.2 Telescopic Tunnel'],
             'image_path' => 'images/modules/telescoping_tunnels.png',
             'content' => '
                 <p>
@@ -157,7 +157,7 @@ class Chapter1Seeder extends Seeder
         // 1.3 Vertical Lift Column
         $module1_3 = Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '1.3 Vertical Lift Column',
+            'title' => ['id' => '1.3 Vertical Lift Column', 'en' => '1.3 Vertical Lift Column'],
             'image_path' => null,
             'content' => '
                 <p>
@@ -221,7 +221,7 @@ class Chapter1Seeder extends Seeder
         // 1.4 Wheel Boogie
         $module1_4 = Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '1.4 Wheel Boogie',
+            'title' => ['id' => '1.4 Wheel Boogie', 'en' => '1.4 Wheel Boogie'],
             'image_path' => 'images/modules/wheel_boogie.png',
             'content' => '
                 <p>
@@ -281,7 +281,7 @@ class Chapter1Seeder extends Seeder
         // 1.5 Service Access
         $module1_5 = Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '1.5 Service Access',
+            'title' => ['id' => '1.5 Service Access', 'en' => '1.5 Service Access'],
             'image_path' => 'images/modules/service_access.png',
             'content' => '
                 <p>
@@ -333,7 +333,7 @@ class Chapter1Seeder extends Seeder
         // 1.6 Cabin
         $module1_6 = Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '1.6 Cabin',
+            'title' => ['id' => '1.6 Cabin', 'en' => '1.6 Cabin'],
             'image_path' => 'images/modules/cabin.png',
             'content' => '
                 <p>
@@ -454,7 +454,7 @@ class Chapter1Seeder extends Seeder
         // 2.1 Main-Distribution Panel
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '2.1 Main-Distribution Panel',
+            'title' => ['id' => '2.1 Main-Distribution Panel', 'en' => '2.1 Main Distribution Panel'],
             'content' => '
                 <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                     <img src="/images/modules/main_distribution_panel.png"
@@ -531,7 +531,7 @@ class Chapter1Seeder extends Seeder
         // 2.2 Distribution Power Panel
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '2.2 Distribution Power Panel',
+            'title' => ['id' => '2.2 Distribution Power Panel', 'en' => '2.2 Distribution Power Panel'],
             'content' => '
                 <p>
                     Distribution Power Panel terdiri dari Transistor, inverter,
@@ -614,7 +614,7 @@ class Chapter1Seeder extends Seeder
         // 2.3 Console Desk
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '2.3 Console Desk',
+            'title' => ['id' => '2.3 Console Desk', 'en' => '2.3 Console Desk'],
             'content' => '
                 <p>
                     Garbarata dikendalikan dan dikontrol melalui Console Desk.
@@ -661,7 +661,7 @@ class Chapter1Seeder extends Seeder
         // 2.4 Pencahayaan
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '2.4 Pencahayaan',
+            'title' => ['id' => '2.4 Pencahayaan', 'en' => '2.4 Lighting'],
             'content' => '
                 <p><strong>a. Pencahayaan Interior</strong></p>
                 <div class="overflow-x-auto my-6">
@@ -754,7 +754,7 @@ class Chapter1Seeder extends Seeder
         // 2.5 Safety Device / Sensor / Actuator
         Module::create([
             'chapter_id' => $chapter->id,
-            'title' => '2.5 Safety Device / Sensor / Actuator',
+            'title' => ['id' => '2.5 Safety Device / Sensor / Actuator', 'en' => '2.5 Safety Device / Sensor / Actuator'],
             'content' => '
                 <p>
                     Garbarata menggunakan motor listrik dan sistem mekanik yang
