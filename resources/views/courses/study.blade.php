@@ -1843,10 +1843,23 @@
             get tabs() {
                 const uniqueTabs = new Set();
                 this.modules.forEach(m => {
-                    const match = m.title.match(/^(5\.\d+)/);
-                    if (match) uniqueTabs.add(match[1]);
+                    const match = m.title.match(/^(\d+\.\d+)/);
+                    if (match) {
+                        uniqueTabs.add(match[1]);
+                    } else {
+                        uniqueTabs.add(m.title);
+                    }
                 });
-                return Array.from(uniqueTabs).sort((a, b) => parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]));
+                return Array.from(uniqueTabs).sort((a, b) => {
+                    const matchA = a.match(/^(\d+)\.(\d+)/);
+                    const matchB = b.match(/^(\d+)\.(\d+)/);
+                    if (matchA && matchB) {
+                        return parseInt(matchA[2]) - parseInt(matchB[2]);
+                    }
+                    if (matchA) return -1;
+                    if (matchB) return 1;
+                    return a.localeCompare(b);
+                });
             },
             init() {
                 if (!this.tabs.includes(this.activeTab) && this.tabs.length > 0) {
@@ -1862,10 +1875,10 @@
                 }
             },
             getTabModules(tab) {
-                return this.modules.filter(m => m.title.startsWith(tab + '.'));
+                return this.modules.filter(m => m.title.startsWith(tab + '.') || m.title === tab);
             },
             getSingleModule(tab) {
-                let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' '));
+                let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' ') || m.title.startsWith(tab + '.'));
                 if (!m) m = this.modules.find(m => m.title.startsWith(tab));
                 return m || { title: tab, content: '' };
             },
