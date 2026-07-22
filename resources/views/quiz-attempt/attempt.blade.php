@@ -1,4 +1,4 @@
-@section('topbar_title', $quiz->title . ' — Sedang Dikerjakan')
+@section('topbar_title', $quiz->title . ' — ' . __('Sedang Dikerjakan'))
 
 <x-app-layout>
 {{-- Quiz meminta konfirmasi keluar; latihan boleh ditinggalkan dan dilanjutkan. --}}
@@ -26,7 +26,7 @@
             <div class="flex items-center gap-3">
                 <div class="text-base font-bold text-slate-700">{{ $quiz->title }}</div>
                 <span class="text-sm text-slate-400" id="progress-label">
-                    Soal <span id="current-q">1</span> / {{ $questions->count() }}
+                    {{ __('Soal') }} <span id="current-q">1</span> / {{ $questions->count() }}
                 </span>
             </div>
 
@@ -41,7 +41,7 @@
 
             <button type="button" onclick="confirmSubmit()"
                     class="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                Submit {{ $quiz->isPractice() ? 'Latihan' : 'Quiz' }}
+                Submit {{ $quiz->isPractice() ? __('Latihan') : __('Quiz') }}
             </button>
         </div>
 
@@ -120,7 +120,7 @@
                                            {{ isset($savedAnswers[$question->id]) && $savedAnswers[$question->id]->selected_option_id == $option->id ? 'checked' : '' }}
                                            onchange="autoSave({{ $question->id }}, {{ $option->id }}, 'radio')">
                                     <span class="text-base font-semibold {{ $option->option_text === 'Benar' ? 'text-emerald-600' : 'text-red-500' }}">
-                                        {{ $option->option_text === 'Benar' ? '✓ Benar' : '✗ Salah' }}
+                                        {{ $option->option_text === 'Benar' ? '✓ ' . __('Benar') : '✗ ' . __('Salah') }}
                                     </span>
                                 </label>
                             @endforeach
@@ -129,11 +129,11 @@
                             <div class="space-y-2">
                                 <div class="flex items-center gap-2 text-sm text-orange-700 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
                                     <span>✍️</span>
-                                    <span>Tulis jawaban esai kamu di bawah ini. Jawaban akan dinilai oleh instruktur.</span>
+                                    <span>{{ __('Tulis jawaban esai kamu di bawah ini. Jawaban akan dinilai oleh instruktur.') }}</span>
                                 </div>
                                 <textarea name="answers[{{ $question->id }}]"
                                           rows="8"
-                                          placeholder="Tuliskan jawaban kamu di sini..."
+                                          placeholder="{{ __('Tuliskan jawaban kamu di sini...') }}"
                                           class="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-base focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none resize-y"
                                           oninput="autoSaveText({{ $question->id }}, this.value)">{{ $savedAnswers[$question->id]->text_answer ?? '' }}</textarea>
                                 <div class="text-right text-sm text-slate-400" id="essay-charcount-{{ $question->id }}"></div>
@@ -153,7 +153,7 @@
                                         <select name="answers[{{ $question->id }}][{{ $option->id }}]" required
                                                 onchange="autoSaveMatching({{ $question->id }})"
                                                 class="w-full border-2 border-slate-200 rounded-lg px-3 py-2.5 text-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                                            <option value="">-- Pilih Pasangan --</option>
+                                            <option value="">-- {{ __('Pilih Pasangan') }} --</option>
                                             @foreach($rightItems as $itemText)
                                                 <option value="{{ $itemText }}"
                                                         {{ isset($savedMatch[$option->id]) && $savedMatch[$option->id] === $itemText ? 'selected' : '' }}>
