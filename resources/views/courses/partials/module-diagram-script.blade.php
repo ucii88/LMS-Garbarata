@@ -61,7 +61,14 @@
                     this.uploading = true;
                     try {
                         const formData = new FormData(e.target);
-                        const res = await fetch(this.storeDiagramUrl, {
+                        const targetModuleId = formData.get('target_module_id');
+                        let uploadUrl = this.storeDiagramUrl;
+
+                        if (targetModuleId && targetModuleId !== 'chapter') {
+                            uploadUrl = '/courses/' + courseId + '/chapters/' + chapterId + '/modules/' + targetModuleId + '/diagram';
+                        }
+
+                        const res = await fetch(uploadUrl, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': this.csrfToken,

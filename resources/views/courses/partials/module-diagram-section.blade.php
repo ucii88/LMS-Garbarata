@@ -246,24 +246,7 @@
     }
 </script>
 
-<div class="my-6"
-    x-data="moduleDiagramData(
-        @js($module->diagram),
-        @js($module->diagram ? $module->diagram->hotspots : []),
-        {{ $course->id }},
-        {{ $chapter->id }},
-        {{ $module->id }},
-        @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, $module->id])),
-        @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, $module->id])),
-        @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, $module->id])),
-        @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, $module->id])),
-        @js(csrf_token())
-    )"
-    @mousemove.window="onDrag"
-    @mouseup.window="stopDrag"
-    @touchmove.window="onDrag"
-    @touchend.window="stopDrag"
->
+
     <!-- Top toolbar for Instructor -->
     @if(auth()->user()->isInstruktur())
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -481,4 +464,3 @@
             </form>
         </div>
     </div>
-</div>

@@ -1,6 +1,8 @@
 {{-- Modal 1: Upload / Replace Diagram Image --}}
 @if(auth()->user()->isInstruktur())
 <div x-show="showUploadModal" 
+     @open-upload-diagram-modal.window="showUploadModal = true"
+     @click.self="showUploadModal = false"
      x-cloak
      class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity"
      x-transition:enter="transition ease-out duration-200"
@@ -9,11 +11,11 @@
      x-transition:leave="transition ease-in duration-150"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100" @click.away="showUploadModal = false">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100">
         <div class="flex justify-between items-center pb-4 border-b border-slate-100">
             <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span>{{ $diagram ? 'Ganti Diagram Gambar' : 'Upload Diagram Gambar' }}</span>
+                <span>Upload / Ganti Diagram Gambar</span>
             </h3>
             <button @click="showUploadModal = false" class="text-slate-400 hover:text-slate-600 rounded-lg p-1 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -21,6 +23,18 @@
         </div>
 
         <form @submit.prevent="uploadDiagram($event)" class="mt-4 space-y-4">
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Pilih Lokasi Modul / Bab</label>
+                <select name="target_module_id" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold text-slate-800 outline-none transition">
+                    <option value="chapter">-- Diagram Utama Bab (Peta Lokasi Umum) --</option>
+                    @if(isset($modules) && count($modules) > 0)
+                        @foreach($modules as $mod)
+                            <option value="{{ $mod->id }}" :selected="typeof module !== 'undefined' && module.id == {{ $mod->id }}">Modul {{ $mod->title }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </div>
+
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">File Gambar Diagram</label>
                 <div class="border-2 border-dashed border-slate-200 hover:border-blue-500 rounded-xl p-6 text-center bg-slate-50/50 transition cursor-pointer relative"
@@ -67,6 +81,7 @@
 
 {{-- Modal 2: Add / Edit Hotspot Modal --}}
 <div x-show="showHotspotFormModal" 
+     @click.self="showHotspotFormModal = false"
      x-cloak
      class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity"
      x-transition:enter="transition ease-out duration-200"
@@ -75,7 +90,7 @@
      x-transition:leave="transition ease-in duration-150"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 overflow-hidden border border-slate-100" @click.away="showHotspotFormModal = false">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 overflow-hidden border border-slate-100">
         <div class="flex justify-between items-center pb-4 border-b border-slate-100">
             <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -167,6 +182,7 @@
 
 {{-- Modal 3: Pop-Up Information Modal (Viewable by Students & Instructors) --}}
 <div x-show="activePopupHotspot" 
+     @click.self="activePopupHotspot = null"
      x-cloak
      class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity"
      x-transition:enter="transition ease-out duration-200"
@@ -175,7 +191,7 @@
      x-transition:leave="transition ease-in duration-150"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100" @click.away="activePopupHotspot = null">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 overflow-hidden border border-slate-100">
         <div class="flex justify-between items-start pb-3 border-b border-slate-100">
             <div class="flex items-center gap-3">
                 <span class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center text-sm shadow-sm" x-text="activePopupHotspot?.label || 'i'"></span>
