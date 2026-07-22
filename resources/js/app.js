@@ -5,22 +5,28 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 
 window.scrollToPartRow = function(no) {
-	const row = document.getElementById("part-row-" + no);
+	const prefixes = [
+		"part-row-", "roller-row-", "cable-row-", "lift-row-", "bogie-row-",
+		"stair-row-", "rotation-row-", "curtain-row-", "leveler-row-", "closure-row-",
+		"swing-row-", "weathering-row-", "equalizer-row-", "row-"
+	];
+	let row = null;
+	for (const prefix of prefixes) {
+		row = document.getElementById(prefix + no);
+		if (row) break;
+	}
 	if (row) {
 		row.scrollIntoView({ behavior: "smooth", block: "center" });
 		
-		// Remove highlight class from all rows first
-		document.querySelectorAll('[id^="part-row-"]').forEach(r => {
-			r.classList.remove("bg-blue-50", "text-blue-900", "font-semibold");
+		document.querySelectorAll('tr').forEach(r => {
+			r.classList.remove("bg-blue-50", "text-blue-900", "font-semibold", "bg-blue-100", "ring-2", "ring-blue-400");
 		});
 		
-		// Add highlight class
-		row.classList.add("bg-blue-50", "text-blue-900", "font-semibold");
+		row.classList.add("bg-blue-100", "ring-2", "ring-blue-400", "font-semibold");
 		
-		// Remove highlight after 2 seconds
 		setTimeout(() => {
-			row.classList.remove("bg-blue-50", "text-blue-900", "font-semibold");
-		}, 2000);
+			row.classList.remove("bg-blue-100", "ring-2", "ring-blue-400", "font-semibold");
+		}, 2500);
 	}
 };
 

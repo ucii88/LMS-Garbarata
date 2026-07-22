@@ -11,6 +11,7 @@
     </style>
 
     @include('courses.partials.tts-engine')
+    @include('courses.partials.module-diagram-script')
 
 
     @if($chapter->order == 1)
@@ -195,125 +196,7 @@
                         {{ __('Klik judul topik untuk membuka materi yang lebih lengkap.') }}
                     </p>
 
-                    <!-- Interactive Diagram with Hotspots -->
-                    @if($diagram)
-                        <section class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full"
-                            x-data="{
-                                editMode: false,
-                                saving: false,
-                                hotspots: @js($diagram->hotspots),
-                                updateUrl: '{{ route('courses.diagram.hotspots.update', [$course->id, $chapter->id]) }}',
-                                dragId: null,
-                                dragStartX: 0,
-                                dragStartY: 0,
-                                startDrag(e, id) {
-                                    if (!this.editMode) return;
-                                    this.dragId = id;
-                                    if (e.type === 'touchstart') {
-                                        // prevent scroll on mobile when dragging
-                                        // cannot preventDefault here passively, but we'll try
-                                    } else {
-                                        e.preventDefault();
-                                    }
-                                },
-                                onDrag(e) {
-                                    if (!this.editMode || !this.dragId) return;
-                                    const rect = this.$refs.diagramContainer.getBoundingClientRect();
-                                    
-                                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-                                    let xPos = ((clientX - rect.left) / rect.width) * 100;
-                                    let yPos = ((clientY - rect.top) / rect.height) * 100;
-                                    
-                                    xPos = Math.max(0, Math.min(100, xPos));
-                                    yPos = Math.max(0, Math.min(100, yPos));
-                                    
-                                    const hotspot = this.hotspots.find(h => h.id === this.dragId);
-                                    if (hotspot) {
-                                        hotspot.x_percent = xPos;
-                                        hotspot.y_percent = yPos;
-                                    }
-                                },
-                                stopDrag() {
-                                    this.dragId = null;
-                                },
-                                async saveHotspots() {
-                                    this.saving = true;
-                                    try {
-                                        const payload = this.hotspots.map(h => ({id: h.id, x: h.x_percent, y: h.y_percent}));
-                                        const res = await window.fetch(this.updateUrl, {
-                                            method: 'PUT',
-                                            headers: {
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                                'Content-Type': 'application/json',
-                                                'Accept': 'application/json'
-                                            },
-                                            body: JSON.stringify({ hotspots: payload })
-                                        });
-                                        if (res.ok) {
-                                            this.editMode = false;
-                                            alert('Posisi Hotspot berhasil disimpan.');
-                                        } else {
-                                            alert('Gagal menyimpan posisi.');
-                                        }
-                                    } catch (e) {
-                                        alert('Terjadi kesalahan jaringan.');
-                                    }
-                                    this.saving = false;
-                                }
-                            }"
-                            @mousemove.window="onDrag"
-                            @mouseup.window="stopDrag"
-                            @touchmove.window="onDrag"
-                            @touchend.window="stopDrag"
-                        >
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
-                                @if(auth()->user()->isInstruktur())
-                                    <div class="flex items-center gap-2">
-                                        <button x-show="!editMode" @click="editMode = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
-                                            ⚙️ Atur Posisi Hotspot
-                                        </button>
-                                        <button x-show="editMode" @click="editMode = false" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
-                                            Batal
-                                        </button>
-                                        <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-bold transition">
-                                            <span x-show="!saving">💾 Simpan Posisi</span>
-                                            <span x-show="saving">Menyimpan...</span>
-                                        </button>
-                                    </div>
-                                @endif
-                            </div>
-                            
-                            <div x-ref="diagramContainer" class="relative bg-white rounded-xl overflow-hidden aspect-[1755/896] w-full border border-gray-200 flex items-center justify-center shadow-sm"
-                                :class="editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : ''">
-                                @if($diagram->image_path && file_exists(public_path($diagram->image_path)))
-                                    <img src="{{ asset($diagram->image_path) }}" class="w-full h-full object-contain select-none" alt="Diagram {{ $chapter->title }}" draggable="false">
-                                @endif
-                                
-                                <!-- Overlay Hotspots (Drag & Drop) -->
-                                <template x-for="hotspot in hotspots" :key="hotspot.id">
-                                    <button
-                                        @click="!editMode && setMechModule(hotspot.target_module_id)"
-                                        @mousedown="startDrag($event, hotspot.id)"
-                                        @touchstart="startDrag($event, hotspot.id)"
-                                        class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
-                                        :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
-                                        :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
-                                    >
-                                        <span x-show="!editMode" class="absolute inline-flex h-8 w-8 rounded-full bg-[#0091ff] opacity-40 animate-ping -left-[4px] -top-[4px]"></span>
-                                        <span class="relative inline-flex rounded-full h-6 w-6 bg-[#0091ff] border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110"
-                                              :class="activeMechId === hotspot.target_module_id && !editMode ? 'bg-[#0070c6] scale-110 ring-4 ring-[#0091ff]/20' : ''">
-                                            <span class="text-white text-[10px] font-bold" x-text="hotspots.findIndex(h => h.id === hotspot.id) + 1"></span>
-                                        </span>
-                                        <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-7 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow transition-all duration-150 opacity-0 transform translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 whitespace-nowrap z-30 pointer-events-none" x-text="hotspot.label">
-                                        </span>
-                                    </button>
-                                </template>
-                              </div>
-                          </section>
-                      @endif
+                    @include('courses.partials.interactive-diagram-section')
 
                     </div>
 
@@ -597,7 +480,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -605,6 +488,8 @@
                         {{ __('Materi Bab 3 dibagi menjadi detail pengoperasian, mode operasi manual, mode auto, dan prosedur pengoperasian. Setiap bagian dapat dibuka dan ditutup agar materi lebih mudah dibaca.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <div class="space-y-4">
                     <!-- Detail Operation Group -->
@@ -1067,7 +952,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -1075,6 +960,8 @@
                         {{ __('Materi Bab 2 dibagi menjadi spesifikasi mekanikal dan elektrikal. Bagian mekanikal dapat dibuka dan ditutup per topik agar tabel dan gambar lebih mudah dibaca.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <div class="space-y-8">
                     <!-- Mechanical Group -->
@@ -1397,7 +1284,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -1405,6 +1292,8 @@
                         {{ __('Materi modul pembelajaran tertulis. Gunakan menu tab di bawah untuk memilih sub-bab secara cepat atau gunakan tombol navigasi di bawah halaman untuk membaca secara berurutan.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <!-- Horizontal Sub-Chapter Tab Navigation Bar -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3">
@@ -2058,7 +1947,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -2066,6 +1955,10 @@
                         {{ __('Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih sub-bab dan membaca detail spesifikasi.') }}
                     </p>
                 </div>
+
+                @if($diagram)
+                    @include('courses.partials.interactive-diagram-section')
+                @endif
 
                 <!-- Main Study Room Content -->
                 <div class="space-y-6">
@@ -2148,6 +2041,167 @@
                                                         <span class="tts-speed-val">1x</span>
                                                     </button>
                                                 </div>
+
+                                                <!-- Module Diagram Component -->
+                                                <template x-if="module.diagram || @js(auth()->user()->isInstruktur())">
+                                                    <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                                        x-data="moduleDiagramData(
+                                                            module.diagram,
+                                                            module.diagram ? module.diagram.hotspots : [],
+                                                            {{ $course->id }},
+                                                            {{ $chapter->id }},
+                                                            module.id,
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/diagram',
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/diagram',
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/hotspots',
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/hotspots',
+                                                            @js(csrf_token())
+                                                        )"
+                                                        @mousemove.window="onDrag"
+                                                        @mouseup.window="stopDrag"
+                                                        @touchmove.window="onDrag"
+                                                        @touchend.window="stopDrag"
+                                                    >
+                                                        @if(auth()->user()->isInstruktur())
+                                                            <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+                                                                <div class="flex items-center gap-2">
+                                                                    <span class="text-xs font-bold text-slate-700">Diagram / Technical Drawing Modul</span>
+                                                                    <template x-if="diagramObj">
+                                                                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold" x-text="hotspots.length + ' Hotspots'"></span>
+                                                                    </template>
+                                                                </div>
+
+                                                                <div class="flex flex-wrap items-center gap-2">
+                                                                    <template x-if="!diagramObj">
+                                                                        <button @click="showUploadModal = true" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                                                            <span>Upload Technical Drawing</span>
+                                                                        </button>
+                                                                    </template>
+
+                                                                    <template x-if="diagramObj">
+                                                                        <div class="flex flex-wrap items-center gap-2">
+                                                                            <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                                <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                                                <span>Ganti Gambar</span>
+                                                                            </button>
+
+                                                                            <button x-show="!editMode" 
+                                                                                    @click="addHotspotMode = !addHotspotMode" 
+                                                                                    class="px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1"
+                                                                                    :class="addHotspotMode ? 'bg-amber-500 text-white shadow-xs' : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'">
+                                                                                <template x-if="addHotspotMode">
+                                                                                    <div class="flex items-center gap-1">
+                                                                                        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                                                        <span>Batal Tambah</span>
+                                                                                    </div>
+                                                                                </template>
+                                                                                <template x-if="!addHotspotMode">
+                                                                                    <div class="flex items-center gap-1">
+                                                                                        <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                                                        <span>Tambah Hotspot Dot</span>
+                                                                                    </div>
+                                                                                </template>
+                                                                            </button>
+
+                                                                            <button x-show="!addHotspotMode && !editMode" @click="editMode = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                                <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                                                <span>Atur Posisi / Edit</span>
+                                                                            </button>
+
+                                                                            <button x-show="editMode" @click="editMode = false" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">
+                                                                                Selesai
+                                                                            </button>
+                                                                            <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                                                                                <span>Simpan Posisi</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        <div x-show="addHotspotMode" x-cloak class="mb-3 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-semibold flex items-center gap-2 animate-pulse">
+                                                            <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                                                            <span>Klik di posisi mana saja pada gambar Technical Drawing untuk menambah titik hotspot baru.</span>
+                                                        </div>
+
+                                                        <!-- Hotspot Dot Size Selector Bar -->
+                                                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 px-3 py-2 bg-slate-100/80 rounded-xl border border-slate-200/80">
+                                                            <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                                                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                                                                <span>Ukuran Bulatan Hotspot:</span>
+                                                            </div>
+                                                            <div class="inline-flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-200 shadow-2xs">
+                                                                <button type="button" @click="setDotSize('sm')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Kecil</button>
+                                                                <button type="button" @click="setDotSize('md')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Sedang</button>
+                                                                <button type="button" @click="setDotSize('lg')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Besar</button>
+                                                                <button type="button" @click="setDotSize('xl')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Jumbo</button>
+                                                            </div>
+                                                        </div>
+
+                                                        <template x-if="diagramObj && diagramObj.image_path">
+                                                            <div x-ref="diagramContainer" 
+                                                                 @click="onDiagramClick($event)"
+                                                                 class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm max-w-sm w-full select-none my-4"
+                                                                 :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
+                                                                
+                                                                <img :src="'{{ asset('') }}' + diagramObj.image_path" class="w-full h-auto block select-none pointer-events-none" alt="Technical Drawing" draggable="false">
+
+                                                                <template x-for="(hotspot, index) in hotspots" :key="hotspot.id">
+                                                                    <button
+                                                                        type="button"
+                                                                        @click.stop="clickHotspot(hotspot)"
+                                                                        @mousedown="startDrag($event, hotspot.id)"
+                                                                        @touchstart="startDrag($event, hotspot.id)"
+                                                                        class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
+                                                                        :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
+                                                                        :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
+                                                                        :title="hotspot.popup_title || ('Part No. ' + hotspot.label)"
+                                                                    >
+                                                                        <span class="relative inline-flex rounded-full border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110 shrink-0"
+                                                                              :class="[
+                                                                                  hotspot.action_type === 'popup' ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white',
+                                                                                  dotSize === 'sm' ? 'w-4 h-4 text-[9px]' : (dotSize === 'lg' ? 'w-6 h-6 text-[11px]' : (dotSize === 'xl' ? 'w-7 h-7 text-[12px]' : 'w-5 h-5 text-[10px]'))
+                                                                              ]"
+                                                                        >
+                                                                            <span class="font-extrabold leading-none select-none" x-text="hotspot.label"></span>
+                                                                        </span>
+
+                                                                        <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 bg-slate-900/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-lg opacity-0 transition-opacity group-hover:opacity-100 whitespace-nowrap z-30 pointer-events-none">
+                                                                            <span x-text="hotspot.popup_title || ('Part No. ' + hotspot.label)"></span>
+                                                                        </span>
+                                                                    </button>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+
+                                                        <div x-show="editMode && hotspots.length > 0" class="mt-4 pt-3 border-t border-slate-200" x-cloak>
+                                                            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1">
+                                                                <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                                                <span>Daftar Hotspot modul ini:</span>
+                                                            </h5>
+                                                            <div class="flex flex-wrap gap-1.5">
+                                                                <template x-for="(hotspot, idx) in hotspots" :key="hotspot.id">
+                                                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-2xs">
+                                                                        <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold" x-text="hotspot.label"></span>
+                                                                        <span class="text-[11px]" x-text="hotspot.popup_title || ('Part ' + hotspot.label)"></span>
+                                                                        <button type="button" @click="activeHotspot = Object.assign({}, hotspot); showHotspotFormModal = true;" class="text-blue-600 hover:text-blue-800 font-bold ml-1 hover:underline">
+                                                                            Edit
+                                                                        </button>
+                                                                        <button type="button" @click="deleteHotspot(hotspot.id)" class="text-rose-600 hover:text-rose-800 font-bold ml-1 bg-rose-50 px-1.5 py-0.5 rounded text-[10px]">
+                                                                            Hapus
+                                                                        </button>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+
+                                                        @include('courses.partials.diagram-hotspot-editor')
+                                                    </div>
+                                                </template>
+
                                                 <div :id="'ch5acc-tts-' + module.id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
                                                 
                                                 <!-- Action Buttons for Instructor inside Accordion -->
@@ -2222,6 +2276,148 @@
                                     </div>
                                     
                                     <div id="ch5main-tts-content" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
+                                    
+                                    <!-- Module Diagram Component for Single Module Tab -->
+                                    <template x-if="getSingleModule(activeTab).diagram || @js(auth()->user()->isInstruktur())">
+                                        <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                            :key="getSingleModule(activeTab).id"
+                                            x-data="moduleDiagramData(
+                                                getSingleModule(activeTab).diagram,
+                                                getSingleModule(activeTab).diagram ? getSingleModule(activeTab).diagram.hotspots : [],
+                                                {{ $course->id }},
+                                                {{ $chapter->id }},
+                                                getSingleModule(activeTab).id,
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/diagram',
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/diagram',
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/hotspots',
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/hotspots',
+                                                @js(csrf_token())
+                                            )"
+                                            @mousemove.window="onDrag"
+                                            @mouseup.window="stopDrag"
+                                            @touchmove.window="onDrag"
+                                            @touchend.window="stopDrag"
+                                        >
+                                            @if(auth()->user()->isInstruktur())
+                                                <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-xs font-bold text-slate-700">Diagram / Technical Drawing Modul</span>
+                                                        <template x-if="diagramObj">
+                                                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold" x-text="hotspots.length + ' Hotspots'"></span>
+                                                        </template>
+                                                    </div>
+
+                                                    <div class="flex flex-wrap items-center gap-2">
+                                                        <template x-if="!diagramObj">
+                                                            <button @click="showUploadModal = true" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                                                <span>Upload Technical Drawing</span>
+                                                            </button>
+                                                        </template>
+
+                                                        <template x-if="diagramObj">
+                                                            <div class="flex flex-wrap items-center gap-2">
+                                                                <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                    <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                                    <span>Ganti Gambar</span>
+                                                                </button>
+
+                                                                <button x-show="!editMode" 
+                                                                        @click="addHotspotMode = !addHotspotMode" 
+                                                                        class="px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1"
+                                                                        :class="addHotspotMode ? 'bg-amber-500 text-white shadow-xs' : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'">
+                                                                    <template x-if="addHotspotMode">
+                                                                        <div class="flex items-center gap-1">
+                                                                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                                            <span>Batal Tambah</span>
+                                                                        </div>
+                                                                    </template>
+                                                                    <template x-if="!addHotspotMode">
+                                                                        <div class="flex items-center gap-1">
+                                                                            <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                                            <span>Tambah Hotspot Dot</span>
+                                                                        </div>
+                                                                    </template>
+                                                                </button>
+
+                                                                <button x-show="!addHotspotMode && !editMode" @click="editMode = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                    <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                                    <span>Atur Posisi / Edit</span>
+                                                                </button>
+
+                                                                <button x-show="editMode" @click="editMode = false" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">
+                                                                    Selesai
+                                                                </button>
+                                                                <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                                                                    <span>Simpan Posisi</span>
+                                                                </button>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            <div x-show="addHotspotMode" x-cloak class="mb-3 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-semibold flex items-center gap-2 animate-pulse">
+                                                <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                                                <span>Klik di posisi mana saja pada gambar Technical Drawing untuk menambah titik hotspot baru.</span>
+                                            </div>
+
+                                            <template x-if="diagramObj && diagramObj.image_path">
+                                                <div x-ref="diagramContainer" 
+                                                     @click="onDiagramClick($event)"
+                                                     class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm aspect-[1085/1450] max-w-sm select-none my-4"
+                                                     :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
+                                                    
+                                                    <img :src="'{{ asset('') }}' + diagramObj.image_path" class="w-full h-full object-contain select-none pointer-events-none" alt="Technical Drawing" draggable="false">
+
+                                                    <template x-for="(hotspot, index) in hotspots" :key="hotspot.id">
+                                                        <button
+                                                            type="button"
+                                                            @click.stop="clickHotspot(hotspot)"
+                                                            @mousedown="startDrag($event, hotspot.id)"
+                                                            @touchstart="startDrag($event, hotspot.id)"
+                                                            class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
+                                                            :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
+                                                            :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
+                                                        >
+                                                            <span class="relative inline-flex rounded-full h-5 w-5 border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110"
+                                                                  :class="hotspot.action_type === 'popup' ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white'">
+                                                                <span class="text-white text-[9px] font-extrabold" x-text="hotspot.label"></span>
+                                                            </span>
+
+                                                            <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-6 bg-slate-900/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-lg opacity-0 transition-opacity group-hover:opacity-100 whitespace-nowrap z-30 pointer-events-none">
+                                                                <span x-text="hotspot.popup_title || ('Part No. ' + hotspot.label)"></span>
+                                                            </span>
+                                                        </button>
+                                                    </template>
+                                                </div>
+                                            </template>
+
+                                            <div x-show="editMode && hotspots.length > 0" class="mt-4 pt-3 border-t border-slate-200" x-cloak>
+                                                <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                                    <span>Daftar Hotspot modul ini:</span>
+                                                </h5>
+                                                <div class="flex flex-wrap gap-1.5">
+                                                    <template x-for="(hotspot, idx) in hotspots" :key="hotspot.id">
+                                                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-2xs">
+                                                            <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold" x-text="hotspot.label"></span>
+                                                            <span class="text-[11px]" x-text="hotspot.popup_title || ('Part ' + hotspot.label)"></span>
+                                                            <button type="button" @click="activeHotspot = Object.assign({}, hotspot); showHotspotFormModal = true;" class="text-blue-600 hover:text-blue-800 font-bold ml-1 hover:underline">
+                                                                Edit
+                                                            </button>
+                                                            <button type="button" @click="deleteHotspot(hotspot.id)" class="text-rose-600 hover:text-rose-800 font-bold ml-1 bg-rose-50 px-1.5 py-0.5 rounded text-[10px]">
+                                                                Hapus
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+
+                                            @include('courses.partials.diagram-hotspot-editor')
+                                        </div>
+                                    </template>
                                     
                                     <!-- Action Buttons for Instructor -->
                                     @if(auth()->user()->isInstruktur())
@@ -2322,7 +2518,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -2330,6 +2526,8 @@
                         {{ __('Halaman ini berisi katalog suku cadang dan komponen Garbarata dalam format PDF. Klik pada masing-masing judul katalog di bawah ini untuk membuka dokumen PDF terkait.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <!-- List of Catalogs Accordions directly -->
                 <div class="space-y-3">
@@ -2472,7 +2670,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
                     <div class="flex items-center space-x-3 border-b border-gray-100 pb-3 mb-3">
                         <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-sm font-bold text-blue-600 shadow-sm">07</span>
                         <h3 class="font-extrabold text-base text-slate-800 uppercase tracking-wider">
@@ -2483,6 +2681,8 @@
                         {{ __('Halaman ini merupakan penampil lampiran gambar elektrikal (wiring diagram). Gunakan menu navigasi di bawah untuk memilih lembar gambar, dan gunakan kontrol zoom untuk memperbesar gambar agar diagram terbaca lebih jelas.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <!-- Left Sidebar - List of Drawings -->
@@ -2628,7 +2828,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -2640,6 +2840,8 @@
                         @endif
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <!-- Main study room layout (Stacked, clean, and full width) -->
                 <div class="space-y-6">
