@@ -10,451 +10,9 @@
         }
     </style>
 
-    {{-- ========================================================= --}}
-    {{-- GLOBAL TTS ENGINE (Web Speech API) — Bab 1 s.d. 5 saja   --}}
-    {{-- ========================================================= --}}
-    @if($chapter->order >= 1 && $chapter->order <= 5)
-    <style>
-        /* Highlight paragraf yang sedang dibacakan TTS */
-        .tts-paragraph-highlight {
-            background-color: #fef9c3 !important; /* amber/yellow-100 */
-            border-left: 4px solid #f59e0b !important; /* amber-500 indicator bar */
-            padding-left: 0.75rem !important;
-            padding-top: 0.375rem !important;
-            padding-bottom: 0.375rem !important;
-            border-radius: 0.375rem !important;
-            transition: all 0.25s ease-in-out !important;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-        }
+    @include('courses.partials.tts-engine')
+    @include('courses.partials.module-diagram-script')
 
-        /* Control Group Wrapper */
-        .tts-controls-group {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 3px 4px;
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-        }
-
-        /* Tombol TTS Utama */
-        .tts-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            border: 1px solid;
-            transition: all 0.15s ease;
-            user-select: none;
-        }
-        .tts-btn-idle {
-            background: #eff6ff;
-            color: #2563eb;
-            border-color: #bfdbfe;
-        }
-        .tts-btn-idle:hover {
-            background: #dbeafe;
-        }
-        .tts-btn-playing {
-            background: #fef3c7;
-            color: #b45309;
-            border-color: #fcd34d;
-            animation: tts-pulse 1.8s ease-in-out infinite;
-        }
-        .tts-btn-paused {
-            background: #f0fdf4;
-            color: #15803d;
-            border-color: #bbf7d0;
-        }
-        .tts-btn-paused:hover {
-            background: #dcfce7;
-        }
-
-        /* Tombol Speed Control & Navigasi */
-        .tts-speed-btn,
-        .tts-nav-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #334155;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            user-select: none;
-        }
-        .tts-speed-btn:hover,
-        .tts-nav-btn:hover {
-            background: #f1f5f9;
-            border-color: #94a3b8;
-            color: #0f172a;
-        }
-        .tts-nav-btn {
-            padding: 5px 8px;
-        }
-
-        @keyframes tts-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-    </style>
-    <script>
-        window.LmsTTS = (function () {
-            const _ttsT = {
-                playing: '{{ __('Sedang Dibaca...') }}',
-                resume: '{{ __('Lanjutkan') }}',
-                listen: '{{ __('Dengarkan') }}'
-            };
-            const synth = window.speechSynthesis;
-            let currentId          = null;   // Active module ID
-            let currentUtt         = null;   // Active SpeechSynthesisUtterance
-            let isPaused           = false;
-            let currentRate        = 1.0;    // Playback rate: 0.75, 1.0, 1.25, 1.5, 2.0
-            let currentParagraphs  = [];     // Array of { el: DOMElement, text: string }
-            let currentIndex       = 0;      // Current paragraph index
-            let currentCharIndex   = 0;      // Current character position inside paragraph
-
-            const SVG_SPEAKER = `<svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>`;
-
-            const SVG_PAUSE = `<svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-
-            const SVG_PLAY = `<svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-
-            /* ── Ambil paragraf-paragraf dari container DOM ── */
-            function getParagraphs(containerEl) {
-                if (!containerEl) return [];
-
-                const blockSelector = 'p, li, h1, h2, h3, h4, h5, h6, blockquote, td, th, div, section, aside, dt, dd';
-                let nodes = Array.from(containerEl.querySelectorAll(blockSelector));
-
-                // Ambil elemen yang memiliki teks dan tidak membungkus elemen blok lain yang ber-teks
-                nodes = nodes.filter(el => {
-                    const txt = (el.innerText || el.textContent || '').trim();
-                    if (!txt) return false;
-
-                    const hasTextBlockChild = Array.from(el.querySelectorAll(blockSelector)).some(child => {
-                        return (child.innerText || child.textContent || '').trim().length > 0;
-                    });
-
-                    return !hasTextBlockChild;
-                });
-
-                // Fallback jika tidak ada elemen terpisah
-                if (nodes.length === 0 && containerEl.innerText && containerEl.innerText.trim()) {
-                    nodes = [containerEl];
-                }
-
-                return nodes.map(el => ({
-                    el: el,
-                    text: (el.innerText || el.textContent || '').trim()
-                })).filter(item => item.text.length > 0);
-            }
-
-            /* ── Clear & Highlight per Paragraf ── */
-            function clearHighlight() {
-                document.querySelectorAll('.tts-paragraph-highlight').forEach(el => {
-                    el.classList.remove('tts-paragraph-highlight');
-                });
-            }
-
-            function highlightParagraph(el) {
-                clearHighlight();
-                if (!el) return;
-                el.classList.add('tts-paragraph-highlight');
-                el.scrollIntoView({ block: 'center', behavior: 'smooth' });
-            }
-
-            function broadcastState(id, state /* 'idle'|'playing'|'paused' */) {
-                document.querySelectorAll('[data-tts-id]').forEach(btn => {
-                    const btnId = btn.getAttribute('data-tts-id');
-                    const icon  = btn.querySelector('.tts-icon');
-                    const label = btn.querySelector('.tts-label');
-                    if (btnId === String(id) && state !== 'idle') {
-                        if (state === 'playing') {
-                            btn.className = 'tts-btn tts-btn-playing';
-                            if (icon)  icon.innerHTML   = SVG_PAUSE;
-                            if (label) label.textContent = _ttsT.playing;
-                        } else {
-                            btn.className = 'tts-btn tts-btn-paused';
-                            if (icon)  icon.innerHTML   = SVG_PLAY;
-                            if (label) label.textContent = _ttsT.resume;
-                        }
-                    } else {
-                        btn.className = 'tts-btn tts-btn-idle';
-                        if (icon)  icon.innerHTML   = SVG_SPEAKER;
-                        if (label) label.textContent = _ttsT.listen;
-                    }
-                });
-            }
-
-            /* ── Stop semua ── */
-            function stop() {
-                if (currentUtt) {
-                    currentUtt.onend = null;
-                    currentUtt.onerror = null;
-                    currentUtt.onboundary = null;
-                }
-                synth.cancel();
-                clearHighlight();
-                const prevId = currentId;
-                currentId         = null;
-                currentUtt        = null;
-                isPaused          = false;
-                currentParagraphs = [];
-                currentIndex      = 0;
-                currentCharIndex  = 0;
-                if (prevId !== null) broadcastState(prevId, 'idle');
-            }
-
-            /* ── Normalisasi teks agar Angka Romawi & Penomoran Ganda dibaca bersih oleh TTS ── */
-            function cleanTextForSpeech(text) {
-                if (!text) return '';
-
-                const romanMap = {
-                    'viii': '8', 'vii': '7', 'iii': '3', 'vi': '6',
-                    'iv': '4', 'ix': '9', 'ii': '2', 'v': '5', 'x': '10', 'i': '1'
-                };
-
-                // Hapus penomoran ganda seperti "1. (a) ", "1. a) " -> "(a) ", "a) "
-                let cleaned = text.replace(/^\d+\.\s+(\([a-z0-9]+\)|[a-z0-9]\))\s+/gi, '$1 ');
-
-                cleaned = cleaned.replace(/\((viii|vii|iii|vi|iv|ix|ii|v|x|i)\)/gi, (match, roman) => {
-                    const num = romanMap[roman.toLowerCase()];
-                    return num ? `(${num})` : match;
-                });
-
-                cleaned = cleaned.replace(/(^|\n|\s)\b(viii|vii|iii|vi|iv|ix|ii|v|x|i)\.\s+/gi, (match, prefix, roman) => {
-                    const num = romanMap[roman.toLowerCase()];
-                    return num ? `${prefix}${num}. ` : match;
-                });
-
-                return cleaned;
-            }
-
-            /* ── Main Playback per Paragraf ── */
-            function playCurrentParagraph(fromCharIndex = 0) {
-                if (!currentParagraphs || currentIndex >= currentParagraphs.length) {
-                    stop();
-                    return;
-                }
-
-                const item = currentParagraphs[currentIndex];
-                highlightParagraph(item.el);
-
-                const fullText = item.text;
-                const rawText = fromCharIndex > 0 ? fullText.substring(fromCharIndex) : fullText;
-                const textToSpeak = cleanTextForSpeech(rawText);
-
-                if (!textToSpeak.trim()) {
-                    currentIndex++;
-                    playCurrentParagraph(0);
-                    return;
-                }
-
-                const utt = new SpeechSynthesisUtterance(textToSpeak);
-                utt.lang  = 'id-ID';
-                utt.rate  = currentRate;
-                utt.pitch = 1;
-
-                const voices = synth.getVoices();
-                const idVoice = voices.find(v => v.lang === 'id-ID') ||
-                                voices.find(v => v.lang.startsWith('id'));
-                if (idVoice) utt.voice = idVoice;
-
-                currentCharIndex = fromCharIndex;
-
-                utt.onboundary = (event) => {
-                    if (event.name === 'word') {
-                        currentCharIndex = fromCharIndex + event.charIndex;
-                    }
-                };
-
-                utt.onend = () => {
-                    if (currentId !== null && !isPaused) {
-                        currentCharIndex = 0;
-                        currentIndex++;
-                        playCurrentParagraph(0);
-                    }
-                };
-
-                utt.onerror = (e) => {
-                    console.warn('TTS Error:', e);
-                    if (currentId !== null && !isPaused) {
-                        currentCharIndex = 0;
-                        currentIndex++;
-                        playCurrentParagraph(0);
-                    }
-                };
-
-                currentUtt = utt;
-                synth.speak(utt);
-            }
-
-            /* ── Toggle Play / Pause / Resume ── */
-            function toggle(moduleId, contentHtml, containerId) {
-                const id = String(moduleId);
-
-                // Jika modul yang sama
-                if (currentId === id) {
-                    if (isPaused) {
-                        isPaused = false;
-                        broadcastState(id, 'playing');
-                        if (synth.paused) {
-                            synth.resume();
-                        } else {
-                            playCurrentParagraph(currentCharIndex);
-                        }
-                    } else {
-                        isPaused = true;
-                        synth.pause();
-                        broadcastState(id, 'paused');
-                    }
-                    return;
-                }
-
-                // Jika modul baru
-                stop();
-
-                const container = containerId ? document.getElementById(containerId) : null;
-                if (!container) return;
-
-                currentParagraphs = getParagraphs(container);
-                if (currentParagraphs.length === 0) return;
-
-                currentId        = id;
-                currentIndex     = 0;
-                currentCharIndex = 0;
-                isPaused         = false;
-
-                broadcastState(id, 'playing');
-                playCurrentParagraph(0);
-            }
-
-            /* ── Navigasi Ke Paragraf Sebelumnya / Selanjutnya ── */
-            function prevParagraph() {
-                if (currentId === null || !currentParagraphs.length) return;
-                if (currentIndex > 0) {
-                    currentIndex--;
-                }
-                currentCharIndex = 0;
-                if (currentUtt) {
-                    currentUtt.onend = null;
-                    currentUtt.onerror = null;
-                    currentUtt.onboundary = null;
-                }
-                synth.cancel();
-                isPaused = false;
-                broadcastState(currentId, 'playing');
-                playCurrentParagraph(0);
-            }
-
-            function nextParagraph() {
-                if (currentId === null || !currentParagraphs.length) return;
-                if (currentIndex < currentParagraphs.length - 1) {
-                    currentIndex++;
-                    currentCharIndex = 0;
-                    if (currentUtt) {
-                        currentUtt.onend = null;
-                        currentUtt.onerror = null;
-                        currentUtt.onboundary = null;
-                    }
-                    synth.cancel();
-                    isPaused = false;
-                    broadcastState(currentId, 'playing');
-                    playCurrentParagraph(0);
-                }
-            }
-
-            /* ── Update & Cycle Speed Rate ── */
-            function setRate(newRate) {
-                currentRate = parseFloat(newRate) || 1.0;
-                document.querySelectorAll('.tts-speed-val').forEach(el => {
-                    el.textContent = currentRate + 'x';
-                });
-
-                // Lanjutkan pembacaan dari kata posisi saat ini dengan kecepatan baru
-                if (currentId !== null && !isPaused && synth.speaking) {
-                    const resumeCharIndex = currentCharIndex;
-                    if (currentUtt) {
-                        currentUtt.onend = null;
-                        currentUtt.onerror = null;
-                        currentUtt.onboundary = null;
-                    }
-                    synth.cancel();
-                    playCurrentParagraph(resumeCharIndex);
-                }
-            }
-
-            function cycleRate() {
-                const rates = [1, 1.25, 1.5, 2, 0.75];
-                const idx = rates.indexOf(currentRate);
-                const nextRate = rates[(idx + 1) % rates.length];
-                setRate(nextRate);
-            }
-
-            return { toggle, stop, setRate, cycleRate, getRate: () => currentRate, prevParagraph, nextParagraph, isActive: () => currentId !== null };
-        })();
-
-        /* ── Helper: buat HTML tombol TTS (dipanggil dari inline onclick) ── */
-        window.ttsToggle = function(moduleId, contentHtml, containerId) {
-            window.LmsTTS.toggle(moduleId, contentHtml, containerId || null);
-        };
-
-        /* ── Keyboard Shortcuts (Panah Kanan/Kiri & Atas/Bawah) untuk Navigasi Paragraf TTS ── */
-        document.addEventListener('keydown', function(e) {
-            const activeEl = document.activeElement;
-            if (activeEl && (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName) || activeEl.isContentEditable)) {
-                return;
-            }
-
-            if (window.LmsTTS && window.LmsTTS.isActive()) {
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    window.LmsTTS.prevParagraph();
-                } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    window.LmsTTS.nextParagraph();
-                }
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const locale = '{{ app()->getLocale() }}';
-            if (locale === 'en') {
-                document.querySelectorAll('[title="Dengarkan Suara Subab"]').forEach(el => {
-                    el.title = "Listen to Subsection Audio";
-                });
-                document.querySelectorAll('[title="Paragraf Sebelumnya"]').forEach(el => {
-                    el.title = "Previous Paragraph";
-                });
-                document.querySelectorAll('[title="Paragraf Selanjutnya"]').forEach(el => {
-                    el.title = "Next Paragraph";
-                });
-                document.querySelectorAll('[title="Klik untuk mengubah kecepatan suara"]').forEach(el => {
-                    el.title = "Click to change voice speed";
-                });
-                document.querySelectorAll('.tts-speed-btn').forEach(el => {
-                    el.title = "Click to change voice speed";
-                });
-                document.querySelectorAll('.tts-label').forEach(el => {
-                    if (el.textContent.trim() === 'Dengarkan') {
-                        el.textContent = 'Listen';
-                    }
-                });
-            }
-        });
-    </script>
-    @endif
 
     @if($chapter->order == 1)
         <script>
@@ -507,7 +65,6 @@
                                 })),
                         ];
 
-                        // Auto-mark read using Intersection Observer as the user scrolls
                         this.$nextTick(() => {
                             const observerOptions = {
                                 root: null,
@@ -532,13 +89,12 @@
                                 });
                             }, observerOptions);
 
-                            // Observe mechanical sections
+                        
                             this.mechItems.forEach(item => {
                                 const el = document.getElementById('mech-module-' + item.id);
                                 if (el) observer.observe(el);
                             });
 
-                            // Observe electrical sections
                             this.elecItems.forEach(item => {
                                 const el = document.getElementById('elec-module-' + item.id);
                                 if (el) observer.observe(el);
@@ -576,7 +132,7 @@
                         this.$nextTick(() => {
                             const el = document.getElementById(elementId);
                             if (el) {
-                                // Scroll element header minus topbar height
+    
                                 const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
                                 window.scrollTo({ top: y, behavior: 'smooth' });
                             }
@@ -596,6 +152,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -640,125 +201,7 @@
                         {{ __('Klik judul topik untuk membuka materi yang lebih lengkap.') }}
                     </p>
 
-                    <!-- Interactive Diagram with Hotspots -->
-                    @if($diagram)
-                        <section class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full"
-                            x-data="{
-                                editMode: false,
-                                saving: false,
-                                hotspots: @js($diagram->hotspots),
-                                updateUrl: '{{ route('courses.diagram.hotspots.update', [$course->id, $chapter->id]) }}',
-                                dragId: null,
-                                dragStartX: 0,
-                                dragStartY: 0,
-                                startDrag(e, id) {
-                                    if (!this.editMode) return;
-                                    this.dragId = id;
-                                    if (e.type === 'touchstart') {
-                                        // prevent scroll on mobile when dragging
-                                        // cannot preventDefault here passively, but we'll try
-                                    } else {
-                                        e.preventDefault();
-                                    }
-                                },
-                                onDrag(e) {
-                                    if (!this.editMode || !this.dragId) return;
-                                    const rect = this.$refs.diagramContainer.getBoundingClientRect();
-                                    
-                                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-                                    let xPos = ((clientX - rect.left) / rect.width) * 100;
-                                    let yPos = ((clientY - rect.top) / rect.height) * 100;
-                                    
-                                    xPos = Math.max(0, Math.min(100, xPos));
-                                    yPos = Math.max(0, Math.min(100, yPos));
-                                    
-                                    const hotspot = this.hotspots.find(h => h.id === this.dragId);
-                                    if (hotspot) {
-                                        hotspot.x_percent = xPos;
-                                        hotspot.y_percent = yPos;
-                                    }
-                                },
-                                stopDrag() {
-                                    this.dragId = null;
-                                },
-                                async saveHotspots() {
-                                    this.saving = true;
-                                    try {
-                                        const payload = this.hotspots.map(h => ({id: h.id, x: h.x_percent, y: h.y_percent}));
-                                        const res = await window.fetch(this.updateUrl, {
-                                            method: 'PUT',
-                                            headers: {
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                                'Content-Type': 'application/json',
-                                                'Accept': 'application/json'
-                                            },
-                                            body: JSON.stringify({ hotspots: payload })
-                                        });
-                                        if (res.ok) {
-                                            this.editMode = false;
-                                            alert('Posisi Hotspot berhasil disimpan.');
-                                        } else {
-                                            alert('Gagal menyimpan posisi.');
-                                        }
-                                    } catch (e) {
-                                        alert('Terjadi kesalahan jaringan.');
-                                    }
-                                    this.saving = false;
-                                }
-                            }"
-                            @mousemove.window="onDrag"
-                            @mouseup.window="stopDrag"
-                            @touchmove.window="onDrag"
-                            @touchend.window="stopDrag"
-                        >
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-base font-bold text-slate-700">Interactive Diagram</h3>
-                                @if(auth()->user()->isInstruktur())
-                                    <div class="flex items-center gap-2">
-                                        <button x-show="!editMode" @click="editMode = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
-                                            ⚙️ Manage Hotspots
-                                        </button>
-                                        <button x-show="editMode" @click="editMode = false" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
-                                            Cancel
-                                        </button>
-                                        <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-bold transition">
-                                            <span x-show="!saving">💾 Save Positions</span>
-                                            <span x-show="saving">Saving...</span>
-                                        </button>
-                                    </div>
-                                @endif
-                            </div>
-                            
-                            <div x-ref="diagramContainer" class="relative bg-white rounded-xl overflow-hidden aspect-[1755/896] w-full border border-gray-200 flex items-center justify-center shadow-sm"
-                                :class="editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : ''">
-                                @if($diagram->image_path && file_exists(public_path($diagram->image_path)))
-                                    <img src="{{ asset($diagram->image_path) }}" class="w-full h-full object-contain select-none" alt="Diagram {{ $chapter->title }}" draggable="false">
-                                @endif
-                                
-                                <!-- Overlay Hotspots (Drag & Drop) -->
-                                <template x-for="hotspot in hotspots" :key="hotspot.id">
-                                    <button
-                                        @click="!editMode && setMechModule(hotspot.target_module_id)"
-                                        @mousedown="startDrag($event, hotspot.id)"
-                                        @touchstart="startDrag($event, hotspot.id)"
-                                        class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
-                                        :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
-                                        :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
-                                    >
-                                        <span x-show="!editMode" class="absolute inline-flex h-8 w-8 rounded-full bg-[#0091ff] opacity-40 animate-ping -left-[4px] -top-[4px]"></span>
-                                        <span class="relative inline-flex rounded-full h-6 w-6 bg-[#0091ff] border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110"
-                                              :class="activeMechId === hotspot.target_module_id && !editMode ? 'bg-[#0070c6] scale-110 ring-4 ring-[#0091ff]/20' : ''">
-                                            <span class="text-white text-[10px] font-bold" x-text="hotspots.findIndex(h => h.id === hotspot.id) + 1"></span>
-                                        </span>
-                                        <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-7 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow transition-all duration-150 opacity-0 transform translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 whitespace-nowrap z-30 pointer-events-none" x-text="hotspot.label">
-                                        </span>
-                                    </button>
-                                </template>
-                              </div>
-                          </section>
-                      @endif
+                    @include('courses.partials.interactive-diagram-section')
 
                     </div>
 
@@ -782,7 +225,7 @@
                                                   type="button"
                                                   class="tts-nav-btn"
                                                   onclick="window.LmsTTS.prevParagraph()"
-                                                  title="Paragraf Sebelumnya"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                               >
                                                   <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                               </button>
@@ -790,18 +233,18 @@
                                                   class="tts-btn tts-btn-idle"
                                                   :data-tts-id="'mech_' + item.id"
                                                   @click="window.ttsToggle('mech_' + item.id, item.content, 'mech-tts-content-' + item.id)"
-                                                  title="Dengarkan Suara Subab"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                               >
                                                   <span class="tts-icon">
                                                       <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                   </span>
-                                                  <span class="tts-label">Dengarkan</span>
+                                                  <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                               </button>
                                               <button
                                                   type="button"
                                                   class="tts-nav-btn"
                                                   onclick="window.LmsTTS.nextParagraph()"
-                                                  title="Paragraf Selanjutnya"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                               >
                                                   <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                               </button>
@@ -809,7 +252,7 @@
                                                   type="button"
                                                   class="tts-speed-btn"
                                                   onclick="window.LmsTTS.cycleRate()"
-                                                  title="Klik untuk mengubah kecepatan suara"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                               >
                                                   <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                   <span class="tts-speed-val">1x</span>
@@ -833,7 +276,7 @@
                                                       <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                           {{ __('Edit Modul') }}
                                                       </a>
-                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                           @csrf
                                                           @method('DELETE')
                                                           <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -895,7 +338,7 @@
                                                   type="button"
                                                   class="tts-nav-btn"
                                                   onclick="window.LmsTTS.prevParagraph()"
-                                                  title="Paragraf Sebelumnya"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                               >
                                                   <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                               </button>
@@ -903,18 +346,18 @@
                                                   class="tts-btn tts-btn-idle"
                                                   :data-tts-id="'elec_' + item.id"
                                                   @click="window.ttsToggle('elec_' + item.id, item.content, 'elec-tts-content-' + item.id)"
-                                                  title="Dengarkan Suara Subab"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                               >
                                                   <span class="tts-icon">
                                                       <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                   </span>
-                                                  <span class="tts-label">Dengarkan</span>
+                                                  <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                               </button>
                                               <button
                                                   type="button"
                                                   class="tts-nav-btn"
                                                   onclick="window.LmsTTS.nextParagraph()"
-                                                  title="Paragraf Selanjutnya"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                               >
                                                   <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                               </button>
@@ -922,7 +365,7 @@
                                                   type="button"
                                                   class="tts-speed-btn"
                                                   onclick="window.LmsTTS.cycleRate()"
-                                                  title="Klik untuk mengubah kecepatan suara"
+                                                  title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                               >
                                                   <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                   <span class="tts-speed-val">1x</span>
@@ -943,7 +386,7 @@
                                                       <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                           {{ __('Edit Modul') }}
                                                       </a>
-                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                      <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + item.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                           @csrf
                                                           @method('DELETE')
                                                           <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -1028,6 +471,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -1042,7 +490,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -1050,6 +498,8 @@
                         {{ __('Materi Bab 3 dibagi menjadi detail pengoperasian, mode operasi manual, mode auto, dan prosedur pengoperasian. Setiap bagian dapat dibuka dan ditutup agar materi lebih mudah dibaca.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <div class="space-y-4">
                     <!-- Detail Operation Group -->
@@ -1092,7 +542,7 @@
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.prevParagraph()"
-                                                title="Paragraf Sebelumnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                             </button>
@@ -1100,18 +550,18 @@
                                                 class="tts-btn tts-btn-idle"
                                                 :data-tts-id="'ch3detail_' + module.id"
                                                 @click="window.ttsToggle('ch3detail_' + module.id, module.content, 'ch3detail-tts-' + module.id)"
-                                                title="Dengarkan Suara Subab"
+                                                title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                             >
                                                 <span class="tts-icon">
                                                     <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                 </span>
-                                                <span class="tts-label">Dengarkan</span>
+                                                <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.nextParagraph()"
-                                                title="Paragraf Selanjutnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                             </button>
@@ -1119,7 +569,7 @@
                                                 type="button"
                                                 class="tts-speed-btn"
                                                 onclick="window.LmsTTS.cycleRate()"
-                                                title="Klik untuk mengubah kecepatan suara"
+                                                title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                 <span class="tts-speed-val">1x</span>
@@ -1133,7 +583,7 @@
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -1192,7 +642,7 @@
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.prevParagraph()"
-                                                title="Paragraf Sebelumnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                             </button>
@@ -1200,18 +650,18 @@
                                                 class="tts-btn tts-btn-idle"
                                                 :data-tts-id="'ch3manual_' + module.id"
                                                 @click="window.ttsToggle('ch3manual_' + module.id, module.content, 'ch3manual-tts-' + module.id)"
-                                                title="Dengarkan Suara Subab"
+                                                title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                             >
                                                 <span class="tts-icon">
                                                     <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                 </span>
-                                                <span class="tts-label">Dengarkan</span>
+                                                <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.nextParagraph()"
-                                                title="Paragraf Selanjutnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                             </button>
@@ -1219,7 +669,7 @@
                                                 type="button"
                                                 class="tts-speed-btn"
                                                 onclick="window.LmsTTS.cycleRate()"
-                                                title="Klik untuk mengubah kecepatan suara"
+                                                title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                 <span class="tts-speed-val">1x</span>
@@ -1233,7 +683,7 @@
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -1288,7 +738,7 @@
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.prevParagraph()"
-                                                title="Paragraf Sebelumnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                             </button>
@@ -1296,18 +746,18 @@
                                                 class="tts-btn tts-btn-idle"
                                                 :data-tts-id="'ch3auto_' + module.id"
                                                 @click="window.ttsToggle('ch3auto_' + module.id, module.content, 'ch3auto-tts-' + module.id)"
-                                                title="Dengarkan Suara Subab"
+                                                title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                             >
                                                 <span class="tts-icon">
                                                     <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                 </span>
-                                                <span class="tts-label">Dengarkan</span>
+                                                <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.nextParagraph()"
-                                                title="Paragraf Selanjutnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                             </button>
@@ -1315,7 +765,7 @@
                                                 type="button"
                                                 class="tts-speed-btn"
                                                 onclick="window.LmsTTS.cycleRate()"
-                                                title="Klik untuk mengubah kecepatan suara"
+                                                title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                 <span class="tts-speed-val">1x</span>
@@ -1329,7 +779,7 @@
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -1384,7 +834,7 @@
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.prevParagraph()"
-                                                title="Paragraf Sebelumnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                             </button>
@@ -1392,18 +842,18 @@
                                                 class="tts-btn tts-btn-idle"
                                                 :data-tts-id="'ch3proc_' + module.id"
                                                 @click="window.ttsToggle('ch3proc_' + module.id, module.content, 'ch3proc-tts-' + module.id)"
-                                                title="Dengarkan Suara Subab"
+                                                title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                             >
                                                 <span class="tts-icon">
                                                     <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                 </span>
-                                                <span class="tts-label">Dengarkan</span>
+                                                <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.nextParagraph()"
-                                                title="Paragraf Selanjutnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                             </button>
@@ -1411,7 +861,7 @@
                                                 type="button"
                                                 class="tts-speed-btn"
                                                 onclick="window.LmsTTS.cycleRate()"
-                                                title="Klik untuk mengubah kecepatan suara"
+                                                title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                 <span class="tts-speed-val">1x</span>
@@ -1425,7 +875,7 @@
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                     {{ __('Edit Modul') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -1498,6 +948,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -1512,7 +967,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -1520,6 +975,8 @@
                         {{ __('Materi Bab 2 dibagi menjadi spesifikasi mekanikal dan elektrikal. Bagian mekanikal dapat dibuka dan ditutup per topik agar tabel dan gambar lebih mudah dibaca.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <div class="space-y-8">
                     <!-- Mechanical Group -->
@@ -1541,7 +998,7 @@
 
                         <div class="space-y-3">
                             <template x-for="module in mechItems" :key="module.id">
-                                <article class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+                                <article :id="'module-' + module.id" :data-module-id="module.id" class="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
                                     <button
                                         type="button"
                                         @click="toggleMech(module.id)"
@@ -1562,7 +1019,7 @@
                                                     type="button"
                                                     class="tts-nav-btn"
                                                     onclick="window.LmsTTS.prevParagraph()"
-                                                    title="Paragraf Sebelumnya"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                                 >
                                                     <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                                 </button>
@@ -1570,18 +1027,18 @@
                                                     class="tts-btn tts-btn-idle"
                                                     :data-tts-id="'ch2mech_' + module.id"
                                                     @click="window.ttsToggle('ch2mech_' + module.id, module.content, 'ch2mech-tts-' + module.id)"
-                                                    title="Dengarkan Suara Subab"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                                 >
                                                     <span class="tts-icon">
                                                         <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                     </span>
-                                                    <span class="tts-label">Dengarkan</span>
+                                                    <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                                 </button>
                                                 <button
                                                     type="button"
                                                     class="tts-nav-btn"
                                                     onclick="window.LmsTTS.nextParagraph()"
-                                                    title="Paragraf Selanjutnya"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                                 >
                                                     <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                                 </button>
@@ -1589,7 +1046,7 @@
                                                     type="button"
                                                     class="tts-speed-btn"
                                                     onclick="window.LmsTTS.cycleRate()"
-                                                    title="Klik untuk mengubah kecepatan suara"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                                 >
                                                     <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                     <span class="tts-speed-val">1x</span>
@@ -1602,7 +1059,7 @@
                                                     <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                         {{ __('Edit Modul') }}
                                                     </a>
-                                                    <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                    <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -1644,7 +1101,7 @@
                                             type="button"
                                             class="tts-nav-btn"
                                             onclick="window.LmsTTS.prevParagraph()"
-                                            title="Paragraf Sebelumnya"
+                                            title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                         >
                                             <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                         </button>
@@ -1652,18 +1109,18 @@
                                             class="tts-btn tts-btn-idle"
                                             :data-tts-id="'ch2elec_' + module.id"
                                             @click="window.ttsToggle('ch2elec_' + module.id, module.content, 'ch2elec-tts-' + module.id)"
-                                            title="Dengarkan Suara Subab"
+                                            title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                         >
                                             <span class="tts-icon">
                                                 <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                             </span>
-                                            <span class="tts-label">Dengarkan</span>
+                                            <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                         </button>
                                         <button
                                             type="button"
                                             class="tts-nav-btn"
                                             onclick="window.LmsTTS.nextParagraph()"
-                                            title="Paragraf Selanjutnya"
+                                            title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                         >
                                             <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                         </button>
@@ -1671,7 +1128,7 @@
                                             type="button"
                                             class="tts-speed-btn"
                                             onclick="window.LmsTTS.cycleRate()"
-                                            title="Klik untuk mengubah kecepatan suara"
+                                            title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                         >
                                             <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                             <span class="tts-speed-val">1x</span>
@@ -1685,7 +1142,7 @@
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
                                                 {{ __('Edit Modul') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -1827,6 +1284,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -1842,7 +1304,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -1850,6 +1312,8 @@
                         {{ __('Materi modul pembelajaran tertulis. Gunakan menu tab di bawah untuk memilih sub-bab secara cepat atau gunakan tombol navigasi di bawah halaman untuk membaca secara berurutan.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <!-- Horizontal Sub-Chapter Tab Navigation Bar -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3">
@@ -1881,7 +1345,7 @@
                                         type="button"
                                         class="tts-nav-btn"
                                         onclick="window.LmsTTS.prevParagraph()"
-                                        title="Paragraf Sebelumnya"
+                                        title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                     >
                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                     </button>
@@ -1889,18 +1353,18 @@
                                         class="tts-btn tts-btn-idle"
                                         :data-tts-id="'ch4main_' + getSingleModule(activeTab).id"
                                         @click="window.ttsToggle('ch4main_' + getSingleModule(activeTab).id, getSingleModule(activeTab).content, 'ch4main-tts-content')"
-                                        title="Dengarkan Suara Subab"
+                                        title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                     >
                                         <span class="tts-icon">
                                             <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                         </span>
-                                        <span class="tts-label">Dengarkan</span>
+                                        <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                     </button>
                                     <button
                                         type="button"
                                         class="tts-nav-btn"
                                         onclick="window.LmsTTS.nextParagraph()"
-                                        title="Paragraf Selanjutnya"
+                                        title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                     >
                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                     </button>
@@ -1908,7 +1372,7 @@
                                         type="button"
                                         class="tts-speed-btn"
                                         onclick="window.LmsTTS.cycleRate()"
-                                        title="Klik untuk mengubah kecepatan suara"
+                                        title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                     >
                                         <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                         <span class="tts-speed-val">1x</span>
@@ -1934,7 +1398,7 @@
                     <template x-if="activeTab !== '4.6' && activeTab !== '4.7'">
                         <div class="space-y-8 divide-y divide-slate-100">
                             <template x-for="subModule in getTabModules(activeTab)" :key="subModule.id">
-                                <div class="pt-8 first:pt-0">
+                                <div :id="'module-' + subModule.id" :data-module-id="subModule.id" class="pt-8 first:pt-0">
                                     <div class="flex items-center justify-between flex-wrap gap-2">
                                         <h4 class="text-sm md:text-base font-bold text-slate-800" x-text="subModule.title"></h4>
                                         {{-- TTS Button Chapter 4 Sub-module --}}
@@ -1943,7 +1407,7 @@
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.prevParagraph()"
-                                                title="Paragraf Sebelumnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                             </button>
@@ -1951,18 +1415,18 @@
                                                 class="tts-btn tts-btn-idle"
                                                 :data-tts-id="'ch4sub_' + subModule.id"
                                                 @click="window.ttsToggle('ch4sub_' + subModule.id, subModule.content, 'ch4sub-tts-' + subModule.id)"
-                                                title="Dengarkan Suara Subab"
+                                                title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                             >
                                                 <span class="tts-icon">
                                                     <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                 </span>
-                                                <span class="tts-label">Dengarkan</span>
+                                                <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.nextParagraph()"
-                                                title="Paragraf Selanjutnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                             </button>
@@ -1970,7 +1434,7 @@
                                                 type="button"
                                                 class="tts-speed-btn"
                                                 onclick="window.LmsTTS.cycleRate()"
-                                                title="Klik untuk mengubah kecepatan suara"
+                                                title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                 <span class="tts-speed-val">1x</span>
@@ -1979,13 +1443,38 @@
                                     </div>
                                     <div :id="'ch4sub-tts-' + subModule.id" class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                                     
+                                    <!-- Interactive Diagram for Sub-Module -->
+                                    <template x-if="subModule.diagram || @js(auth()->user()->isInstruktur())">
+                                        <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                            x-data="moduleDiagramData(
+                                                subModule.diagram,
+                                                subModule.diagram ? subModule.diagram.hotspots : [],
+                                                {{ $course->id }},
+                                                {{ $chapter->id }},
+                                                subModule.id,
+                                                @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                @js(csrf_token())
+                                            )"
+                                            @mousemove.window="onDrag"
+                                            @mouseup.window="stopDrag"
+                                            @touchmove.window="onDrag"
+                                            @touchend.window="stopDrag"
+                                        >
+                                            @include('courses.partials.module-diagram-section')
+                                            @include('courses.partials.diagram-hotspot-editor')
+                                        </div>
+                                    </template>
+                                    
                                     <!-- Action Buttons for Instructor inside Submodule -->
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 mt-4 pt-2">
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 {{ __('Edit Modul Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2012,7 +1501,7 @@
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.prevParagraph()"
-                                                title="Paragraf Sebelumnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                             </button>
@@ -2020,18 +1509,18 @@
                                                 class="tts-btn tts-btn-idle"
                                                 data-tts-id="ch4-tab461"
                                                 @click="window.ttsToggle('ch4-tab461', getSingleModule('4.6.1').content, 'ch4-tts-461')"
-                                                title="Dengarkan Suara Subab"
+                                                title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                             >
                                                 <span class="tts-icon">
                                                     <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                 </span>
-                                                <span class="tts-label">Dengarkan</span>
+                                                <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.nextParagraph()"
-                                                title="Paragraf Selanjutnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                             </button>
@@ -2039,7 +1528,7 @@
                                                 type="button"
                                                 class="tts-speed-btn"
                                                 onclick="window.LmsTTS.cycleRate()"
-                                                title="Klik untuk mengubah kecepatan suara"
+                                                title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                 <span class="tts-speed-val">1x</span>
@@ -2053,7 +1542,7 @@
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 {{ __('Edit Modul Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.1').id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2075,7 +1564,7 @@
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.prevParagraph()"
-                                                title="Paragraf Sebelumnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                             </button>
@@ -2083,18 +1572,18 @@
                                                 class="tts-btn tts-btn-idle"
                                                 data-tts-id="ch4-tab462"
                                                 @click="window.ttsToggle('ch4-tab462', getSingleModule('4.6.2').content, 'ch4-tts-462')"
-                                                title="Dengarkan Suara Subab"
+                                                title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                             >
                                                 <span class="tts-icon">
                                                     <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                 </span>
-                                                <span class="tts-label">Dengarkan</span>
+                                                <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 class="tts-nav-btn"
                                                 onclick="window.LmsTTS.nextParagraph()"
-                                                title="Paragraf Selanjutnya"
+                                                title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                             </button>
@@ -2102,7 +1591,7 @@
                                                 type="button"
                                                 class="tts-speed-btn"
                                                 onclick="window.LmsTTS.cycleRate()"
-                                                title="Klik untuk mengubah kecepatan suara"
+                                                title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                             >
                                                 <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                 <span class="tts-speed-val">1x</span>
@@ -2116,7 +1605,7 @@
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 {{ __('Edit Modul Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule('4.6.2').id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2145,7 +1634,7 @@
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.prevParagraph()"
-                                                        title="Paragraf Sebelumnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                                     </button>
@@ -2153,18 +1642,18 @@
                                                         class="tts-btn tts-btn-idle"
                                                         :data-tts-id="'ch4-463sub_' + subModule.id"
                                                         @click="window.ttsToggle('ch4-463sub_' + subModule.id, subModule.content, 'ch4-463sub-tts-' + subModule.id)"
-                                                        title="Dengarkan Suara Subab"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                                     >
                                                         <span class="tts-icon">
                                                             <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                         </span>
-                                                        <span class="tts-label">Dengarkan</span>
+                                                        <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                                     </button>
                                                     <button
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.nextParagraph()"
-                                                        title="Paragraf Selanjutnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                                     </button>
@@ -2172,7 +1661,7 @@
                                                         type="button"
                                                         class="tts-speed-btn"
                                                         onclick="window.LmsTTS.cycleRate()"
-                                                        title="Klik untuk mengubah kecepatan suara"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                         <span class="tts-speed-val">1x</span>
@@ -2186,7 +1675,7 @@
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             {{ __('Edit Tabel Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus tabel ini?') }}')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus tabel ini?') }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2218,7 +1707,7 @@
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.prevParagraph()"
-                                                        title="Paragraf Sebelumnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                                     </button>
@@ -2226,18 +1715,18 @@
                                                         class="tts-btn tts-btn-idle"
                                                         :data-tts-id="'ch4-464sub_' + subModule.id"
                                                         @click="window.ttsToggle('ch4-464sub_' + subModule.id, subModule.content, 'ch4-464sub-tts-' + subModule.id)"
-                                                        title="Dengarkan Suara Subab"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                                     >
                                                         <span class="tts-icon">
                                                             <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                         </span>
-                                                        <span class="tts-label">Dengarkan</span>
+                                                        <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                                     </button>
                                                     <button
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.nextParagraph()"
-                                                        title="Paragraf Selanjutnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                                     </button>
@@ -2245,7 +1734,7 @@
                                                         type="button"
                                                         class="tts-speed-btn"
                                                         onclick="window.LmsTTS.cycleRate()"
-                                                        title="Klik untuk mengubah kecepatan suara"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                         <span class="tts-speed-val">1x</span>
@@ -2259,7 +1748,7 @@
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             {{ __('Edit Tabel Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus tabel ini?') }}')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus tabel ini?') }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2303,7 +1792,7 @@
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.prevParagraph()"
-                                                        title="Paragraf Sebelumnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                                     </button>
@@ -2311,18 +1800,18 @@
                                                         class="tts-btn tts-btn-idle"
                                                         :data-tts-id="'ch4-47_' + subModule.id"
                                                         @click="window.ttsToggle('ch4-47_' + subModule.id, subModule.content, 'ch4-47-tts-' + subModule.id)"
-                                                        title="Dengarkan Suara Subab"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                                     >
                                                         <span class="tts-icon">
                                                             <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                         </span>
-                                                        <span class="tts-label">Dengarkan</span>
+                                                        <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                                     </button>
                                                     <button
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.nextParagraph()"
-                                                        title="Paragraf Selanjutnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                                     </button>
@@ -2330,7 +1819,7 @@
                                                         type="button"
                                                         class="tts-speed-btn"
                                                         onclick="window.LmsTTS.cycleRate()"
-                                                        title="Klik untuk mengubah kecepatan suara"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                         <span class="tts-speed-val">1x</span>
@@ -2343,7 +1832,7 @@
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             {{ __('Edit Tabel Trouble Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus tabel trouble ini?') }}')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus tabel trouble ini?') }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2399,10 +1888,23 @@
             get tabs() {
                 const uniqueTabs = new Set();
                 this.modules.forEach(m => {
-                    const match = m.title.match(/^(5\.\d+)/);
-                    if (match) uniqueTabs.add(match[1]);
+                    const match = m.title.match(/^(\d+\.\d+)/);
+                    if (match) {
+                        uniqueTabs.add(match[1]);
+                    } else {
+                        uniqueTabs.add(m.title);
+                    }
                 });
-                return Array.from(uniqueTabs).sort((a, b) => parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]));
+                return Array.from(uniqueTabs).sort((a, b) => {
+                    const matchA = a.match(/^(\d+)\.(\d+)/);
+                    const matchB = b.match(/^(\d+)\.(\d+)/);
+                    if (matchA && matchB) {
+                        return parseInt(matchA[2]) - parseInt(matchB[2]);
+                    }
+                    if (matchA) return -1;
+                    if (matchB) return 1;
+                    return a.localeCompare(b);
+                });
             },
             init() {
                 if (!this.tabs.includes(this.activeTab) && this.tabs.length > 0) {
@@ -2418,10 +1920,10 @@
                 }
             },
             getTabModules(tab) {
-                return this.modules.filter(m => m.title.startsWith(tab + '.'));
+                return this.modules.filter(m => m.title.startsWith(tab + '.') || m.title === tab);
             },
             getSingleModule(tab) {
-                let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' '));
+                let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' ') || m.title.startsWith(tab + '.'));
                 if (!m) m = this.modules.find(m => m.title.startsWith(tab));
                 return m || { title: tab, content: '' };
             },
@@ -2488,6 +1990,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -2503,7 +2010,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -2511,6 +2018,10 @@
                         {{ __('Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih sub-bab dan membaca detail spesifikasi.') }}
                     </p>
                 </div>
+
+                @if($diagram)
+                    @include('courses.partials.interactive-diagram-section')
+                @endif
 
                 <!-- Main Study Room Content -->
                 <div class="space-y-6">
@@ -2560,7 +2071,7 @@
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.prevParagraph()"
-                                                        title="Paragraf Sebelumnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                                     </button>
@@ -2568,18 +2079,18 @@
                                                         class="tts-btn tts-btn-idle"
                                                         :data-tts-id="'ch5acc_' + module.id"
                                                         @click="window.ttsToggle('ch5acc_' + module.id, module.content, 'ch5acc-tts-' + module.id)"
-                                                        title="Dengarkan Suara Subab"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                                     >
                                                         <span class="tts-icon">
                                                             <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                         </span>
-                                                        <span class="tts-label">Dengarkan</span>
+                                                        <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                                     </button>
                                                     <button
                                                         type="button"
                                                         class="tts-nav-btn"
                                                         onclick="window.LmsTTS.nextParagraph()"
-                                                        title="Paragraf Selanjutnya"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                                     </button>
@@ -2587,12 +2098,162 @@
                                                         type="button"
                                                         class="tts-speed-btn"
                                                         onclick="window.LmsTTS.cycleRate()"
-                                                        title="Klik untuk mengubah kecepatan suara"
+                                                        title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                                     >
                                                         <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                         <span class="tts-speed-val">1x</span>
                                                     </button>
                                                 </div>
+
+                                                <!-- Module Diagram Component -->
+                                                <template x-if="module.diagram || @js(auth()->user()->isInstruktur())">
+                                                    <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                                        x-data="moduleDiagramData(
+                                                            module.diagram,
+                                                            module.diagram ? module.diagram.hotspots : [],
+                                                            {{ $course->id }},
+                                                            {{ $chapter->id }},
+                                                            module.id,
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/diagram',
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/diagram',
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/hotspots',
+                                                            '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/hotspots',
+                                                            @js(csrf_token())
+                                                        )"
+                                                        @mousemove.window="onDrag"
+                                                        @mouseup.window="stopDrag"
+                                                        @touchmove.window="onDrag"
+                                                        @touchend.window="stopDrag"
+                                                    >
+                                                        @if(auth()->user()->isInstruktur())
+                                                            <template x-if="diagramObj">
+                                                                <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+                                                                    <div class="flex items-center gap-2">
+                                                                        <span class="text-xs font-bold text-slate-700">Diagram / Technical Drawing Modul</span>
+                                                                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold" x-text="hotspots.length + ' Hotspots'"></span>
+                                                                    </div>
+
+                                                                    <div class="flex flex-wrap items-center gap-2">
+                                                                        <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                                            <span>Ganti Gambar</span>
+                                                                        </button>
+
+                                                                        <button x-show="!editMode" 
+                                                                                @click="addHotspotMode = !addHotspotMode" 
+                                                                                class="px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1"
+                                                                                :class="addHotspotMode ? 'bg-amber-500 text-white shadow-xs' : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'">
+                                                                            <template x-if="addHotspotMode">
+                                                                                <div class="flex items-center gap-1">
+                                                                                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                                                    <span>Batal Tambah</span>
+                                                                                </div>
+                                                                            </template>
+                                                                            <template x-if="!addHotspotMode">
+                                                                                <div class="flex items-center gap-1">
+                                                                                    <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                                                    <span>Tambah Hotspot Dot</span>
+                                                                                </div>
+                                                                            </template>
+                                                                        </button>
+
+                                                                        <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                            <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                                            <span>Atur Posisi / Edit</span>
+                                                                        </button>
+
+                                                                        <button x-show="editMode" @click="cancelEditMode()" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">
+                                                                            Batal Edit
+                                                                        </button>
+                                                                        <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                                                                            <span>Simpan Posisi</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                        @endif
+
+                                                        <div x-show="addHotspotMode" x-cloak class="mb-3 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-semibold flex items-center gap-2 animate-pulse">
+                                                            <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                                                            <span>Klik di posisi mana saja pada gambar Technical Drawing untuk menambah titik hotspot baru.</span>
+                                                        </div>
+
+                                                        <!-- Hotspot Dot Size Selector Bar -->
+                                                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 px-3 py-2 bg-slate-100/80 rounded-xl border border-slate-200/80">
+                                                            <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+                                                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                                                                <span>Ukuran Bulatan Hotspot:</span>
+                                                            </div>
+                                                            <div class="inline-flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-200 shadow-2xs">
+                                                                <button type="button" @click="setDotSize('sm')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Kecil</button>
+                                                                <button type="button" @click="setDotSize('md')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Sedang</button>
+                                                                <button type="button" @click="setDotSize('lg')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Besar</button>
+                                                                <button type="button" @click="setDotSize('xl')" class="px-2.5 py-0.5 rounded text-[10px] font-extrabold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'">Jumbo</button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div x-ref="diagramContainer" 
+                                                             @click="onDiagramClick($event)"
+                                                             class="relative bg-slate-50 rounded-xl overflow-hidden w-full max-w-xl mx-auto border border-gray-200 flex items-center justify-center shadow-sm select-none my-4"
+                                                             :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
+                                                            
+                                                            <template x-if="diagramObj && diagramObj.image_path">
+                                                                <img :src="'{{ asset('') }}' + diagramObj.image_path" class="w-full h-auto block select-none pointer-events-none" alt="Technical Drawing" draggable="false">
+                                                            </template>
+
+                                                            <template x-for="(hotspot, index) in hotspots" :key="hotspot.id">
+                                                                <button
+                                                                    type="button"
+                                                                    @click.stop="clickHotspot(hotspot)"
+                                                                    @mousedown="startDrag($event, hotspot.id)"
+                                                                    @touchstart="startDrag($event, hotspot.id)"
+                                                                    class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
+                                                                    :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
+                                                                    :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
+                                                                    :title="hotspot.popup_title || ('Part No. ' + hotspot.label)"
+                                                                >
+                                                                    <span class="relative inline-flex rounded-full border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110 shrink-0"
+                                                                          :class="[
+                                                                              hotspot.action_type === 'popup' ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white',
+                                                                              dotSize === 'sm' ? 'w-5 h-5 text-[10px]' : (dotSize === 'md' ? 'w-6 h-6 text-[11px]' : (dotSize === 'lg' ? 'w-7 h-7 text-[12px]' : 'w-8 h-8 text-[13px]'))
+                                                                          ]"
+                                                                    >
+                                                                        <span class="font-extrabold leading-none select-none" x-text="hotspot.label"></span>
+                                                                    </span>
+
+                                                                    <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 bg-slate-900/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-lg opacity-0 transition-opacity group-hover:opacity-100 whitespace-nowrap z-30 pointer-events-none">
+                                                                        <span x-text="hotspot.popup_title || ('Part No. ' + hotspot.label)"></span>
+                                                                    </span>
+                                                                </button>
+                                                            </template>
+                                                        </div>
+
+                                                        <div x-show="editMode && hotspots.length > 0" class="mt-4 pt-3 border-t border-slate-200" x-cloak>
+                                                            <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1">
+                                                                <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                                                <span>Daftar Hotspot modul ini:</span>
+                                                            </h5>
+                                                            <div class="flex flex-wrap gap-1.5">
+                                                                <template x-for="(hotspot, idx) in hotspots" :key="hotspot.id">
+                                                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-2xs">
+                                                                        <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold" x-text="hotspot.label"></span>
+                                                                        <span class="text-[11px]" x-text="hotspot.popup_title || ('Part ' + hotspot.label)"></span>
+                                                                        <button type="button" @click="activeHotspot = Object.assign({}, hotspot); showHotspotFormModal = true;" class="text-blue-600 hover:text-blue-800 font-bold ml-1 hover:underline">
+                                                                            Edit
+                                                                        </button>
+                                                                        <button type="button" @click="deleteHotspot(hotspot.id)" class="text-rose-600 hover:text-rose-800 font-bold ml-1 bg-rose-50 px-1.5 py-0.5 rounded text-[10px]">
+                                                                            Hapus
+                                                                        </button>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+
+                                                        @include('courses.partials.diagram-hotspot-editor')
+                                                    </div>
+                                                </template>
+
                                                 <div :id="'ch5acc-tts-' + module.id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
                                                 
                                                 <!-- Action Buttons for Instructor inside Accordion -->
@@ -2601,7 +2262,7 @@
                                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                             {{ __('Edit Modul Ini') }}
                                                         </a>
-                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2630,7 +2291,7 @@
                                                     type="button"
                                                     class="tts-nav-btn"
                                                     onclick="window.LmsTTS.prevParagraph()"
-                                                    title="Paragraf Sebelumnya"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
                                                 >
                                                     <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                                 </button>
@@ -2638,18 +2299,18 @@
                                                     class="tts-btn tts-btn-idle"
                                                     :data-tts-id="'ch5main_' + getSingleModule(activeTab).id"
                                                     @click="window.ttsToggle('ch5main_' + getSingleModule(activeTab).id, getSingleModule(activeTab).content, 'ch5main-tts-content')"
-                                                    title="Dengarkan Suara Subab"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
                                                 >
                                                     <span class="tts-icon">
                                                         <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
                                                     </span>
-                                                    <span class="tts-label">Dengarkan</span>
+                                                    <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
                                                 </button>
                                                 <button
                                                     type="button"
                                                     class="tts-nav-btn"
                                                     onclick="window.LmsTTS.nextParagraph()"
-                                                    title="Paragraf Selanjutnya"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
                                                 >
                                                     <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                                 </button>
@@ -2657,7 +2318,7 @@
                                                     type="button"
                                                     class="tts-speed-btn"
                                                     onclick="window.LmsTTS.cycleRate()"
-                                                    title="Klik untuk mengubah kecepatan suara"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
                                                 >
                                                     <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                                     <span class="tts-speed-val">1x</span>
@@ -2668,6 +2329,141 @@
                                     
                                     <div id="ch5main-tts-content" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
                                     
+                                    <!-- Module Diagram Component for Single Module Tab -->
+                                    <template x-if="getSingleModule(activeTab).diagram || @js(auth()->user()->isInstruktur())">
+                                        <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                            :key="getSingleModule(activeTab).id"
+                                            x-data="moduleDiagramData(
+                                                getSingleModule(activeTab).diagram,
+                                                getSingleModule(activeTab).diagram ? getSingleModule(activeTab).diagram.hotspots : [],
+                                                {{ $course->id }},
+                                                {{ $chapter->id }},
+                                                getSingleModule(activeTab).id,
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/diagram',
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/diagram',
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/hotspots',
+                                                '/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/hotspots',
+                                                @js(csrf_token())
+                                            )"
+                                            @mousemove.window="onDrag"
+                                            @mouseup.window="stopDrag"
+                                            @touchmove.window="onDrag"
+                                            @touchend.window="stopDrag"
+                                        >
+                                            @if(auth()->user()->isInstruktur())
+                                                <template x-if="diagramObj">
+                                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+                                                        <div class="flex items-center gap-2">
+                                                            <span class="text-xs font-bold text-slate-700">Diagram / Technical Drawing Modul</span>
+                                                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold" x-text="hotspots.length + ' Hotspots'"></span>
+                                                        </div>
+
+                                                        <div class="flex flex-wrap items-center gap-2">
+                                                            <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                                <span>Ganti Gambar</span>
+                                                            </button>
+
+                                                            <button x-show="!editMode" 
+                                                                    @click="addHotspotMode = !addHotspotMode" 
+                                                                    class="px-2.5 py-1 text-xs font-bold rounded-lg transition flex items-center gap-1"
+                                                                    :class="addHotspotMode ? 'bg-amber-500 text-white shadow-xs' : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'">
+                                                                <template x-if="addHotspotMode">
+                                                                    <div class="flex items-center gap-1">
+                                                                        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                                        <span>Batal Tambah</span>
+                                                                    </div>
+                                                                </template>
+                                                                <template x-if="!addHotspotMode">
+                                                                    <div class="flex items-center gap-1">
+                                                                        <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                                        <span>Tambah Hotspot Dot</span>
+                                                                    </div>
+                                                                </template>
+                                                            </button>
+
+                                                            <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                                                <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                                <span>Atur Posisi / Edit</span>
+                                                            </button>
+
+                                                            <button x-show="editMode" @click="cancelEditMode()" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">
+                                                                Batal Edit
+                                                            </button>
+                                                            <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                                                                <span>Simpan Posisi</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            @endif
+
+                                            <div x-show="addHotspotMode" x-cloak class="mb-3 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-semibold flex items-center gap-2 animate-pulse">
+                                                <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                                                <span>Klik di posisi mana saja pada gambar Technical Drawing untuk menambah titik hotspot baru.</span>
+                                            </div>
+
+                                            <div x-ref="diagramContainer" 
+                                                 @click="onDiagramClick($event)"
+                                                 class="relative bg-slate-50 rounded-xl overflow-hidden w-full max-w-xl mx-auto border border-gray-200 flex items-center justify-center shadow-sm select-none my-4"
+                                                 :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
+                                                
+                                                <template x-if="diagramObj && diagramObj.image_path">
+                                                    <img :src="'{{ asset('') }}' + diagramObj.image_path" class="w-full h-auto block select-none pointer-events-none" alt="Technical Drawing" draggable="false">
+                                                </template>
+
+                                                <template x-for="(hotspot, index) in hotspots" :key="hotspot.id">
+                                                    <button
+                                                        type="button"
+                                                        @click.stop="clickHotspot(hotspot)"
+                                                        @mousedown="startDrag($event, hotspot.id)"
+                                                        @touchstart="startDrag($event, hotspot.id)"
+                                                        class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
+                                                        :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
+                                                        :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
+                                                    >
+                                                        <span class="relative inline-flex rounded-full border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110 shrink-0"
+                                                              :class="[
+                                                                  hotspot.action_type === 'popup' ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white',
+                                                                  dotSize === 'sm' ? 'w-5 h-5 text-[10px]' : (dotSize === 'md' ? 'w-6 h-6 text-[11px]' : (dotSize === 'lg' ? 'w-7 h-7 text-[12px]' : 'w-8 h-8 text-[13px]'))
+                                                              ]"
+                                                        >
+                                                            <span class="font-extrabold leading-none select-none" x-text="hotspot.label"></span>
+                                                        </span>
+
+                                                        <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 bg-slate-900/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-lg opacity-0 transition-opacity group-hover:opacity-100 whitespace-nowrap z-30 pointer-events-none">
+                                                            <span x-text="hotspot.popup_title || ('Part No. ' + hotspot.label)"></span>
+                                                        </span>
+                                                    </button>
+                                                </template>
+                                            </div>
+
+                                            <div x-show="editMode && hotspots.length > 0" class="mt-4 pt-3 border-t border-slate-200" x-cloak>
+                                                <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                                    <span>Daftar Hotspot modul ini:</span>
+                                                </h5>
+                                                <div class="flex flex-wrap gap-1.5">
+                                                    <template x-for="(hotspot, idx) in hotspots" :key="hotspot.id">
+                                                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-2xs">
+                                                            <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold" x-text="hotspot.label"></span>
+                                                            <span class="text-[11px]" x-text="hotspot.popup_title || ('Part ' + hotspot.label)"></span>
+                                                            <button type="button" @click="activeHotspot = Object.assign({}, hotspot); showHotspotFormModal = true;" class="text-blue-600 hover:text-blue-800 font-bold ml-1 hover:underline">
+                                                                Edit
+                                                            </button>
+                                                            <button type="button" @click="deleteHotspot(hotspot.id)" class="text-rose-600 hover:text-rose-800 font-bold ml-1 bg-rose-50 px-1.5 py-0.5 rounded text-[10px]">
+                                                                Hapus
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+
+                                            @include('courses.partials.diagram-hotspot-editor')
+                                        </div>
+                                    </template>
+                                    
                                     <!-- Action Buttons for Instructor -->
                                     @if(auth()->user()->isInstruktur())
                                         <template x-if="getSingleModule(activeTab).id">
@@ -2675,7 +2471,7 @@
                                                 <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                     {{ __('Edit Modul Ini') }}
                                                 </a>
-                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}')">
+                                                <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2752,6 +2548,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -2767,7 +2568,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -2775,6 +2576,8 @@
                         {{ __('Halaman ini berisi katalog suku cadang dan komponen Garbarata dalam format PDF. Klik pada masing-masing judul katalog di bawah ini untuk membuka dokumen PDF terkait.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <!-- List of Catalogs Accordions directly -->
                 <div class="space-y-3">
@@ -2804,7 +2607,7 @@
                                             <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                                 {{ __('Edit Katalog Ini') }}
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus katalog ini?') }}')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus katalog ini?') }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -2902,6 +2705,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -2917,7 +2725,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
                     <div class="flex items-center space-x-3 border-b border-gray-100 pb-3 mb-3">
                         <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-sm font-bold text-blue-600 shadow-sm">07</span>
                         <h3 class="font-extrabold text-base text-slate-800 uppercase tracking-wider">
@@ -2928,6 +2736,8 @@
                         {{ __('Halaman ini merupakan penampil lampiran gambar elektrikal (wiring diagram). Gunakan menu navigasi di bawah untuk memilih lembar gambar, dan gunakan kontrol zoom untuk memperbesar gambar agar diagram terbaca lebih jelas.') }}
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <!-- Left Sidebar - List of Drawings -->
@@ -3011,7 +2821,7 @@
                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
                                             {{ __('Edit Lembar Gambar') }}
                                         </a>
-                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus lembar gambar ini?') }}')">
+                                        <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus lembar gambar ini?') }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
@@ -3046,8 +2856,126 @@
             </div>
         </div>
     @else
-        <!-- Standard Layout for other chapters -->
-        <div class="py-6 select-none" x-data="studyPage(@js($modules->values()), @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])))">
+        <!-- Standard Layout for custom/new chapters with Sub-Bab Grouping (e.g. 8.1, 8.1.1, 8.1.2) -->
+        <div class="py-6 select-none" x-data="{
+            modules: @js($modules->values()),
+            activeTab: '',
+            completedModuleIds: @js($learningProgress ? $learningProgress['completedModules']->toArray() : []),
+            completeUrlTemplate: @js(route('courses.modules.complete', [$course->id, $chapter->id, '__MODULE__'])),
+            csrfToken: @js(csrf_token()),
+
+            get tabs() {
+                const uniqueTabs = new Set();
+                this.modules.forEach(m => {
+                    if (!m || !m.title) return;
+                    const match = m.title.match(/^(\d+\.\d+)/);
+                    if (match) {
+                        uniqueTabs.add(match[1]);
+                    } else {
+                        uniqueTabs.add(m.title);
+                    }
+                });
+                const arr = Array.from(uniqueTabs);
+                return arr.sort((a, b) => {
+                    const matchA = a.match(/^(\d+)\.(\d+)/);
+                    const matchB = b.match(/^(\d+)\.(\d+)/);
+                    if (matchA && matchB) {
+                        const chapterA = parseInt(matchA[1], 10);
+                        const chapterB = parseInt(matchB[1], 10);
+                        if (chapterA !== chapterB) return chapterA - chapterB;
+                        const subA = parseInt(matchA[2], 10);
+                        const subB = parseInt(matchB[2], 10);
+                        if (subA !== subB) return subA - subB;
+                    }
+                    return a.localeCompare(b);
+                });
+            },
+
+            init() {
+                if (this.tabs.length > 0) {
+                    this.activeTab = this.tabs[0];
+                }
+                window.setStudyModule = (targetId) => {
+                    if (!targetId) return;
+                    const str = String(targetId).trim().toLowerCase();
+                    const targetMod = this.modules.find(m => String(m.id) === str || (m.title && m.title.toLowerCase().includes(str)));
+                    if (targetMod) {
+                        const match = targetMod.title.match(/^(\d+\.\d+)/);
+                        if (match && this.tabs.includes(match[1])) {
+                            this.setActiveTab(match[1]);
+                        } else if (this.tabs.includes(targetMod.title)) {
+                            this.setActiveTab(targetMod.title);
+                        }
+                    }
+                };
+                const initialMod = this.getSingleModule(this.activeTab);
+                if (initialMod && initialMod.id) {
+                    this.markModuleComplete(initialMod.id);
+                }
+            },
+
+            setActiveTab(tab) {
+                this.activeTab = tab;
+                const mainMod = this.getSingleModule(tab);
+                if (mainMod && mainMod.id) {
+                    this.markModuleComplete(mainMod.id);
+                }
+                this.getTabModules(tab).forEach(sub => {
+                    if (sub && sub.id) this.markModuleComplete(sub.id);
+                });
+            },
+
+            getSingleModule(tab) {
+                if (!tab) return { title: '', content: '', image_path: null };
+                let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' '));
+                if (!m) m = this.modules.find(m => m.title.startsWith(tab + '.'));
+                if (!m) m = this.modules.find(m => m.title.startsWith(tab));
+                return m || { title: tab, content: '', image_path: null };
+            },
+
+            getTabModules(tab) {
+                if (!tab) return [];
+                const mainMod = this.getSingleModule(tab);
+                return this.modules.filter(m => m.id !== mainMod.id && (m.title.startsWith(tab + '.') || m.title.startsWith(tab + ' ')));
+            },
+
+            markModuleComplete(moduleId) {
+                const idNum = Number(moduleId);
+                if (!Number.isInteger(idNum) || !this.completeUrlTemplate) return;
+                if (this.completedModuleIds.includes(idNum)) return;
+                
+                fetch(this.completeUrlTemplate.replace('__MODULE__', moduleId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrfToken,
+                        'Accept': 'application/json',
+                    },
+                }).then(res => {
+                    if (res.ok) {
+                        this.completedModuleIds.push(idNum);
+                    }
+                });
+            },
+
+            nextTab() {
+                const idx = this.tabs.indexOf(this.activeTab);
+                if (idx !== -1 && idx < this.tabs.length - 1) {
+                    this.setActiveTab(this.tabs[idx + 1]);
+                }
+            },
+            prevTab() {
+                const idx = this.tabs.indexOf(this.activeTab);
+                if (idx !== -1 && idx > 0) {
+                    this.setActiveTab(this.tabs[idx - 1]);
+                }
+            },
+            isFirst() {
+                return this.tabs.indexOf(this.activeTab) <= 0;
+            },
+            isLast() {
+                return this.tabs.indexOf(this.activeTab) >= this.tabs.length - 1;
+            }
+        }">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
                 <!-- Navigation Back & Title Bar -->
@@ -3058,6 +2986,11 @@
 
                     <div class="flex items-center gap-2">
                         @if(auth()->user()->isInstruktur())
+                            <button type="button" @click="window.dispatchEvent(new CustomEvent('open-upload-diagram-modal'))" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
+                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ __('Upload Diagram Interaktif') }}</span>
+                            </button>
+
                             <a href="{{ route('modules.create', [$course->id, $chapter->id]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
@@ -3073,7 +3006,7 @@
                 </div>
 
                 <!-- Chapter Header Description Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-gray-800 text-base">
                         {{ str_replace("BAB {$chapter->order}: ", "", $chapter->title) }}
                     </h3>
@@ -3081,86 +3014,36 @@
                         @if($diagram)
                             {{ __('Materi pembelajaran interaktif dilengkapi visualisasi skematis. Klik pada titik-titik biru bernomor (hotspots) pada gambar atau pilih daftar sub-bab di bawah untuk membaca detail spesifikasi.') }}
                         @else
-                            {{ __('Materi modul pembelajaran tertulis. Gunakan menu navigasi di panel sebelah kiri untuk berpindah antar topik sub-bab.') }}
+                            {{ __('Materi modul pembelajaran tertulis. Gunakan menu navigasi di bawah untuk memilih topik sub-bab.') }}
                         @endif
                     </p>
                 </div>
+
+                @include('courses.partials.interactive-diagram-section')
 
                 <!-- Main study room layout (Stacked, clean, and full width) -->
                 <div class="space-y-6">
                     
                     <!-- 1. Top horizontal Sub-Chapter Navigation Bar -->
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3">
                         <div class="flex items-center space-x-2 shrink-0">
                             <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">{{ __('Pilih Topik Sub-Bab:') }}</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <template x-for="module in modules" :key="module.id">
+                            <template x-for="tab in tabs" :key="tab">
                                 <button
-                                    @click="setActiveModule(module.id)"
-                                    class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left"
-                                    :class="activeModuleId === module.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
+                                    @click="setActiveTab(tab)"
+                                    class="px-4 py-2.5 rounded-lg text-sm font-bold transition text-left cursor-pointer"
+                                    :class="activeTab === tab ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-800'"
                                 >
-                                    <span x-text="module.title"></span>
+                                    <span x-text="getSingleModule(tab).title"></span>
                                 </button>
                             </template>
                         </div>
                     </div>
 
-                    <!-- 2. Interactive Diagram (if exists) -->
-                    @if($diagram)
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 max-w-4xl mx-auto w-full">
-                            <div class="relative bg-[#eef3f8] rounded-xl overflow-hidden aspect-[1755/896] w-full border border-[#dce4ec] flex items-center justify-center shadow-inner">
-                                
-                                @if($diagram->image_path && file_exists(public_path($diagram->image_path)))
-                                    <img src="{{ asset($diagram->image_path) }}" class="w-full h-full object-contain select-none" alt="Diagram {{ $chapter->title }}">
-                                @else
-                                    <!-- Dynamic Fallback SVG Schematic based on Chapter Order -->
-                                    <div class="absolute inset-0 flex flex-col items-center justify-center p-8 select-none">
-                                        @if($chapter->order == 7)
-                                            <!-- Electrical Panel Fallback Schematic -->
-                                            <svg class="w-full h-full max-h-[260px] opacity-[0.06] text-[#0091ff]" viewBox="0 0 800 400" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                                <rect x="50" y="50" width="700" height="300" rx="10" stroke-dasharray="5" />
-                                                <path d="M100 200 L200 200 M250 200 L350 200 M400 200 L550 200 M600 200 L700 200" />
-                                                <rect x="200" y="170" width="50" height="60" rx="4" />
-                                                <rect x="350" y="170" width="50" height="60" rx="4" />
-                                                <rect x="550" y="150" width="50" height="100" rx="5" />
-                                                <line x1="575" y1="150" x2="575" y2="100" />
-                                                <path d="M100 280 L700 280 M150 280 L150 320 M150 320 L170 320" />
-                                                <circle cx="575" cy="200" r="10" />
-                                            </svg>
-                                            <span class="absolute text-base font-bold text-slate-500 tracking-wide text-center">
-                                                {{ __('Skema Rangkaian Elektrik') }}<br>
-                                                <span class="text-sm font-normal text-slate-400 mt-1 block">{{ __('(Gambar Rangkaian Kontrol Daya 380V)') }}</span>
-                                            </span>
-                                        @else
-                                            <!-- Standard Boarding Bridge Silhouette Fallback -->
-                                            <svg class="w-full h-full max-h-[260px] opacity-[0.06] text-[#0091ff]" viewBox="0 0 800 400" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                                                <line x1="50" y1="360" x2="750" y2="360" stroke-dasharray="5 5" />
-                                                <path d="M50 150 L50 250 M50 180 L110 180 L110 220 L50 220" stroke-dasharray="4" />
-                                                <circle cx="150" cy="200" r="35" fill="currentColor" fill-opacity="0.03" />
-                                                <circle cx="150" cy="200" r="10" />
-                                                <rect x="185" y="175" width="160" height="50" rx="6" />
-                                                <rect x="345" y="180" width="150" height="40" rx="6" />
-                                                <line x1="495" y1="220" x2="495" y2="320" stroke-width="5" />
-                                                <line x1="460" y1="320" x2="530" y2="320" stroke-width="8" />
-                                                <circle cx="475" cy="340" r="18" />
-                                                <circle cx="515" cy="340" r="18" />
-                                                <path d="M495 200 L590 200 L630 170 L630 270 L590 240 Z" />
-                                            </svg>
-                                            <span class="absolute text-base font-bold text-slate-500 tracking-wide text-center">
-                                                Gambar 3D Garbarata<br>
-                                                <span class="text-sm font-normal text-slate-400 mt-1 block">(Siluet Jembatan Penumpang)</span>
-                                            </span>
-                                        @endif
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
-
-                    <!-- 3. Full-Width Content Reader Card -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[250px] w-full">
+                    <!-- 2. Full-Width Content Reader Card -->
+                    <div id="study-content-reader" :id="'module-' + getSingleModule(activeTab).id" :data-module-id="getSingleModule(activeTab).id" class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[250px] w-full">
                         
                         <!-- Article Content Area -->
                         <div class="p-6 md:p-8 space-y-6">
@@ -3171,62 +3054,152 @@
                                 </span>
                                 
                                 <span class="text-[10px] text-gray-400 font-semibold">
-                                    Mode Belajar Mandiri (Lebar Penuh)
+                                    Mode Belajar Mandiri
                                 </span>
                             </div>
 
-                            <!-- Title and HTML Content -->
+                            <!-- Main Sub-Bab Title and HTML Content -->
                             <div class="space-y-4">
-                                <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="getActiveModule().title">
+                                <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="getSingleModule(activeTab).title">
                                     Memuat materi...
                                 </h2>
 
-                                <template x-if="getActiveModule().image_path">
+                                <template x-if="getSingleModule(activeTab).image_path">
                                     <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-sm my-3 max-w-2xl mx-auto">
-                                        <img :src="'/' + getActiveModule().image_path" class="w-full max-h-72 object-contain rounded-lg select-none" :alt="getActiveModule().title">
+                                        <img :src="'/' + getSingleModule(activeTab).image_path" class="w-full max-h-72 object-contain rounded-lg select-none" :alt="getSingleModule(activeTab).title">
+                                    </div>
+                                </template>
+
+                                <template x-if="getSingleModule(activeTab).diagram">
+                                    <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                        x-data="moduleDiagramData(
+                                            getSingleModule(activeTab).diagram,
+                                            getSingleModule(activeTab).diagram ? getSingleModule(activeTab).diagram.hotspots : [],
+                                            {{ $course->id }},
+                                            {{ $chapter->id }},
+                                            getSingleModule(activeTab).id,
+                                            @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', getSingleModule(activeTab).id),
+                                            @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', getSingleModule(activeTab).id),
+                                            @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', getSingleModule(activeTab).id),
+                                            @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', getSingleModule(activeTab).id),
+                                            @js(csrf_token())
+                                        )"
+                                        @mousemove.window="onDrag"
+                                        @mouseup.window="stopDrag"
+                                        @touchmove.window="onDrag"
+                                        @touchend.window="stopDrag"
+                                    >
+                                        @include('courses.partials.module-diagram-section')
+                                        @include('courses.partials.diagram-hotspot-editor')
                                     </div>
                                 </template>
 
                                 <!-- Active Module Content body (rendered with HTML) -->
-                                <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="renderModuleContent(getActiveModule().content)">
+                                <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content">
                                     Memuat isi modul pembelajaran...
                                 </div>
 
                                 @if(auth()->user()->isInstruktur())
-                                    <template x-if="activeModuleId">
+                                    <template x-if="getSingleModule(activeTab).id">
                                         <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                Edit Modul Ini
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                <span>Edit Modul Ini</span>
                                             </a>
-                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + activeModuleId" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus modul ini?')">
+                                            <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" data-confirm="Apakah Anda yakin ingin menghapus modul ini?">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                    Hapus Modul
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                    <span>Hapus Modul</span>
                                                 </button>
                                             </form>
                                         </div>
                                     </template>
                                 @endif
                             </div>
+
+                            <!-- Nested Sub-Modules (e.g. 8.1.1, 8.1.2 under 8.1) -->
+                            <template x-if="getTabModules(activeTab).length > 0">
+                                <div class="mt-8 pt-6 border-t-2 border-slate-100 space-y-8">
+                                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                                        Sub-Bab & Detail Komponen
+                                    </h3>
+
+                                    <template x-for="subModule in getTabModules(activeTab)" :key="subModule.id">
+                                        <div :id="'module-' + subModule.id" :data-module-id="subModule.id" class="pt-6 first:pt-0 border-t border-slate-100 space-y-4">
+                                            <h4 class="text-base font-bold text-slate-800 leading-snug" x-text="subModule.title"></h4>
+
+                                            <template x-if="subModule.image_path">
+                                                <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-xs my-3 max-w-2xl mx-auto">
+                                                    <img :src="'/' + subModule.image_path" class="w-full max-h-72 object-contain rounded-lg select-none" :alt="subModule.title">
+                                                </div>
+                                            </template>
+
+                                            <template x-if="subModule.diagram">
+                                                <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                                    x-data="moduleDiagramData(
+                                                        subModule.diagram,
+                                                        subModule.diagram ? subModule.diagram.hotspots : [],
+                                                        {{ $course->id }},
+                                                        {{ $chapter->id }},
+                                                        subModule.id,
+                                                        @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                        @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                        @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                        @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', subModule.id),
+                                                        @js(csrf_token())
+                                                    )"
+                                                    @mousemove.window="onDrag"
+                                                    @mouseup.window="stopDrag"
+                                                    @touchmove.window="onDrag"
+                                                    @touchend.window="stopDrag"
+                                                >
+                                                    @include('courses.partials.module-diagram-section')
+                                                    @include('courses.partials.diagram-hotspot-editor')
+                                                </div>
+                                            </template>
+
+                                            <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+
+                                            @if(auth()->user()->isInstruktur())
+                                                <div class="flex items-center gap-2 pt-3 border-t border-slate-100">
+                                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                        <span>Edit Sub-Modul Ini</span>
+                                                    </a>
+                                                    <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" data-confirm="Apakah Anda yakin ingin menghapus sub-modul ini?">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                            <span>Hapus Sub-Modul</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
                         </div>
 
                         <!-- Footer Navigation inside Card -->
                         <div class="border-t border-gray-100 p-4 bg-gray-50/50 flex items-center justify-between rounded-b-2xl">
                             <button
-                                @click="prevModule()"
+                                @click="prevTab()"
                                 :disabled="isFirst()"
-                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs cursor-pointer"
                             >
-                                ← Sebelumnya
+                                ← Sub-Bab Sebelumnya
                             </button>
                             
                             <button
-                                @click="nextModule()"
+                                @click="nextTab()"
                                 :disabled="isLast()"
-                                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs cursor-pointer"
                             >
-                                Selanjutnya →
+                                Sub-Bab Selanjutnya →
                             </button>
                         </div>
                     </div>

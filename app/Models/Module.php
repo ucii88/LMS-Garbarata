@@ -46,4 +46,12 @@ class Module extends Model
     {
         return $this->hasMany(ModuleProgress::class);
     }
+
+    /**
+     * Get the diagram for this module.
+     */
+    public function diagram(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Diagram::class);
+    }
 }

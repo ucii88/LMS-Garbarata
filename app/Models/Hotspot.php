@@ -13,7 +13,11 @@ class Hotspot extends Model
     protected $fillable = [
         'diagram_id',
         'target_module_id',
+        'action_type',
         'label',
+        'popup_title',
+        'popup_content',
+        'popup_image',
         'x_percent',
         'y_percent',
     ];

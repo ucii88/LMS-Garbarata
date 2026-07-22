@@ -24,28 +24,6 @@ class Chapter5Seeder extends Seeder
         $c_5_1_1 = '<h4 class="font-bold text-slate-800 text-xs mb-2">5.1.1. Rotunda Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Rotunda Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
-            // Interactive Diagram Container (Aspect ratio matched to 1085:1450 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1085/1450] max-w-sm select-none">' .
-            '<img src="/images/modules/technical_drawing.png" class="w-full h-full object-cover rounded-lg" alt="Rotunda Technical Drawing">' .
-            
-            // Absolute-positioned hotspots mapped center-wise via translate
-            '<!-- Hotspots -->' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 29.31%; top: 45.93%;" onclick="scrollToPartRow(1)" title="1. Barrel Rotunda Curtain Assembly (Left side)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 38.34%; top: 56.00%;" onclick="scrollToPartRow(3)" title="3. Guide Pipe Barrel"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 45.71%; top: 66.48%;" onclick="scrollToPartRow(3)" title="3. Guide Pipe Barrel"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 48.66%; top: 50.62%;" onclick="scrollToPartRow(4)" title="4. Tension Barrel Bearing"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 5.53%; top: 69.38%;" onclick="scrollToPartRow(5)" title="5. Slat Curtain Assy (L/R)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 22.67%; top: 57.52%;" onclick="scrollToPartRow(6)" title="6. Tension Barrel"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 53.27%; top: 56.00%;" onclick="scrollToPartRow(7)" title="7. Guide Pipe Barrel Bearing"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 73.92%; top: 6.21%;" onclick="scrollToPartRow(8)" title="8. Roller Bearing Rotunda"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 59.72%; top: 5.52%;" onclick="scrollToPartRow(9)" title="9. Plate Curtain Upper"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 13.27%; top: 46.76%;" onclick="scrollToPartRow(9)" title="9. Plate Curtain Upper"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 19.72%; top: 28.55%;" onclick="scrollToPartRow(10)" title="10. Potentiometer Rotunda Assy"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 88.66%; top: 30.62%;" onclick="scrollToPartRow(11)" title="11. Hinge Pin"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 45.71%; top: 55.59%;" onclick="scrollToPartRow(12)" title="12. Plate Seat Curtain (L/R)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 18.99%; top: 45.66%;" onclick="scrollToPartRow(13)" title="13. Worm Gear Assembly (L/R)"></button>' .
-            '</div>' .
-            
             // Rotunda Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
             '<table class="min-w-full divide-y divide-slate-200 text-xs">' .
@@ -67,18 +45,7 @@ class Chapter5Seeder extends Seeder
             '<tr id="part-row-14" class="transition duration-300"><td class="p-2.5 text-center font-bold">14</td><td class="p-2.5 font-mono">ORT107AM</td><td class="p-2.5">Carpet for Rotunda</td></tr>' .
             '</tbody></table></div>' .
             
-            // Embedded Scroll & Highlight Interaction Script for Rotunda
             '<script>' .
-            'function scrollToPartRow(no) {' .
-            '    const row = document.getElementById("part-row-" + no);' .
-            '    if (row) {' .
-            '        row.scrollIntoView({ behavior: "smooth", block: "center" });' .
-            '        document.querySelectorAll(\'[id^="part-row-"]\').forEach(r => {' .
-            '            r.classList.remove("bg-blue-50", "text-blue-900", "font-semibold");' .
-            '        });' .
-            '        row.classList.add("bg-blue-50", "text-blue-900", "font-semibold");' .
-            '        setTimeout(() => {' .
-            '            row.classList.remove("bg-blue-50", "text-blue-900", "font-semibold");' .
             '        }, 2000);' .
             '    }' .
             '}' .
@@ -89,75 +56,119 @@ class Chapter5Seeder extends Seeder
         $c_5_1_2 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.2. Tunnel Roller</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) lokasi pemasangan roller dan detail rakitan komponen untuk Tunnel Roller. <strong>Klik pada tombol lingkaran biru transparan di gambar peta lokasi</strong> untuk melihat detail rakitan pada lembar referensi yang sesuai, serta menyorot part number pada tabel di bawah.</p>' .
             
-            // Main Location Map Container (Aspect ratio matched to 1181:1332)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1181/1332] max-w-sm select-none">' .
-            '<img src="/images/modules/TunnelRoller/tunnel_roller.png" class="w-full h-full object-cover rounded-lg" alt="Tunnel Roller Location Map">' .
-            
-            // Hotspots for Location Map (1 to 18)
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 42.85%; top: 15.62%;" onclick="scrollToRollerRow(1)" title="1. Fixed Roller (B2 Tunnel A Upper Rear)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 63.51%; top: 34.23%;" onclick="scrollToRollerRow(2)" title="2. Side Roller (B2 Tunnel A Lower Outer Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 55.38%; top: 37.99%;" onclick="scrollToRollerRow(3)" title="3. Tandem Roller (B2 Tunnel A Lower Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 71.46%; top: 29.13%;" onclick="scrollToRollerRow(4)" title="4. Nosing Ramp"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 52.50%; top: 12.76%;" onclick="scrollToRollerRow(5)" title="5. Fixed Roller (B2 Tunnel A Upper Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 41.49%; top: 43.09%;" onclick="scrollToRollerRow(6)" title="6. Fixed Roller (B2 Tunnel A Lower Rear)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 30.14%; top: 62.91%;" onclick="scrollToRollerRow(7)" title="7. Fixed Roller (B3 Tunnel A Upper Rear)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 36.75%; top: 59.46%;" onclick="scrollToRollerRow(8)" title="8. Fixed Roller (B3 Tunnel A Upper Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 34.21%; top: 87.84%;" onclick="scrollToRollerRow(9)" title="9. Fixed Roller (B3 Tunnel A Lower Rear)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 54.36%; top: 50.60%;" onclick="scrollToRollerRow(10)" title="10. Fixed Roller (B3 Tunnel B Upper Rear)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 60.29%; top: 46.55%;" onclick="scrollToRollerRow(11)" title="11. Fixed Roller (B3 Tunnel B Upper Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 57.41%; top: 77.03%;" onclick="scrollToRollerRow(12)" title="12. Fixed Roller (B3 Tunnel B Lower Rear)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 44.88%; top: 86.04%;" onclick="scrollToRollerRow(13)" title="13. Side Roller (B3 Tunnel A Lower Middle)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 74.68%; top: 67.87%;" onclick="scrollToRollerRow(14)" title="14. Side Roller (B3 Tunnel B Lower Outer Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 50.80%; top: 81.83%;" onclick="scrollToRollerRow(15)" title="15. Tandem Roller (B3 Tunnel A Lower Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 69.43%; top: 75.08%;" onclick="scrollToRollerRow(16)" title="16. Tandem Roller (B3 Tunnel B Lower Front)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 60.97%; top: 81.68%;" onclick="scrollToRollerRow(17)" title="17. Nosing Ramp"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 81.29%; top: 65.62%;" onclick="scrollToRollerRow(18)" title="18. Nosing Ramp"></button>' .
-            '</div>' .
-            
-            // Component Detail Sheets Alpine Tab Container
-            '<div x-data="{ activeTab: 1 }" @switch-detail-tab.window="activeTab = $event.detail.tab" class="my-6 border border-slate-200 rounded-xl bg-slate-50/50 p-4 shadow-sm">' .
-            '  <!-- Tab Headers -->' .
-            '  <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3 mb-4 text-[10px] font-bold text-slate-500">' .
-            '    <button type="button" @click="activeTab = 1" :class="activeTab === 1 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
-            '        Detail B2 (Roller 1-6)' .
-            '    </button>' .
-            '    <button type="button" @click="activeTab = 2" :class="activeTab === 2 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
-            '        Detail B3 - Bagian 1 (Roller 7-12)' .
-            '    </button>' .
-            '    <button type="button" @click="activeTab = 3" :class="activeTab === 3 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
-            '        Detail B3 - Bagian 2 (Roller 13-16)' .
-            '    </button>' .
-            '  </div>' .
+            // Component Detail Sheets Alpine Tab Container with Drag & Drop Editor
+            '<div x-data="{' .
+            '   activeTab: 1,' .
+            '   editMode: false,' .
+            '   dragId: null,' .
+            '   hotspotsB2: [' .
+            '       { id: 1, label: \'1\', title: \'1. Fixed Roller (B2 Upper Rear)\', left: 9.32, top: 37.93 },' .
+            '       { id: 2, label: \'2\', title: \'2. Side Roller (B2 Lower Outer Front)\', left: 57.60, top: 33.83 },' .
+            '       { id: 3, label: \'3\', title: \'3. Tandem Roller (B2 Lower Front)\', left: 9.32, top: 70.94 },' .
+            '       { id: 5, label: \'5\', title: \'5. Fixed Roller (B2 Upper Front)\', left: 60.76, top: 70.80 },' .
+            '       { id: 6, label: \'6\', title: \'6. Fixed Roller (B2 Lower Rear)\', left: 34.30, top: 90.59 }' .
+            '   ],' .
+            '   hotspotsB3_1: [' .
+            '       { id: 7, label: \'7\', title: \'7. Fixed Roller (B3 Upper Rear)\', left: 6.17, top: 33.49 },' .
+            '       { id: 8, label: \'8\', title: \'8. Fixed Roller (B3 Upper Front)\', left: 60.95, top: 43.51 },' .
+            '       { id: 9, label: \'9\', title: \'9. Fixed Roller (B3 Lower Rear)\', left: 9.45, top: 66.58 },' .
+            '       { id: 10, label: \'10\', title: \'10. Fixed Roller (B3 Upper Rear)\', left: 62.87, top: 67.50 },' .
+            '       { id: 11, label: \'11\', title: \'11. Fixed Roller (B3 Upper Front)\', left: 7.91, top: 97.17 },' .
+            '       { id: 12, label: \'12\', title: \'12. Fixed Roller (B3 Lower Rear)\', left: 63.84, top: 96.64 }' .
+            '   ],' .
+            '   hotspotsB3_2: [' .
+            '       { id: 13, label: \'13\', title: \'13. Side Roller (B3 Lower Middle)\', left: 6.44, top: 44.58 },' .
+            '       { id: 14, label: \'14\', title: \'14. Side Roller (B3 Lower Outer Front)\', left: 57.98, top: 45.12 },' .
+            '       { id: 15, label: \'15\', title: \'15. Tandem Roller (B3 Lower Front)\', left: 6.30, top: 91.83 },' .
+            '       { id: 16, label: \'16\', title: \'16. Tandem Roller (B3 Lower Front)\', left: 57.70, top: 92.01 }' .
+            '   ],' .
+            '   init() {' .
+            '       const b2 = localStorage.getItem(\'lms_ref_b2\'); if (b2) this.hotspotsB2 = JSON.parse(b2);' .
+            '       const b31 = localStorage.getItem(\'lms_ref_b31\'); if (b31) this.hotspotsB3_1 = JSON.parse(b31);' .
+            '       const b32 = localStorage.getItem(\'lms_ref_b32\'); if (b32) this.hotspotsB3_2 = JSON.parse(b32);' .
+            '   },' .
+            '   savePos() {' .
+            '       localStorage.setItem(\'lms_ref_b2\', JSON.stringify(this.hotspotsB2));' .
+            '       localStorage.setItem(\'lms_ref_b31\', JSON.stringify(this.hotspotsB3_1));' .
+            '       localStorage.setItem(\'lms_ref_b32\', JSON.stringify(this.hotspotsB3_2));' .
+            '       this.editMode = false;' .
+            '       alert(\'Posisi Hotspot Lembar Referensi Detail berhasil disimpan!\');' .
+            '   },' .
+            '   onDrag(e) {' .
+            '       if (!this.editMode || !this.dragId) return;' .
+            '       const containers = Array.from(document.querySelectorAll(\'[data-detail-tab]\'));' .
+            '       const activeEl = containers.find(el => el.offsetWidth > 0 && el.offsetHeight > 0);' .
+            '       if (!activeEl) return;' .
+            '       const rect = activeEl.getBoundingClientRect();' .
+            '       if (!rect.width || !rect.height) return;' .
+            '       let x = ((e.clientX - rect.left) / rect.width) * 100;' .
+            '       let y = ((e.clientY - rect.top) / rect.height) * 100;' .
+            '       x = Math.max(0, Math.min(100, Math.round(x * 100) / 100));' .
+            '       y = Math.max(0, Math.min(100, Math.round(y * 100) / 100));' .
+            '       let list = this.activeTab === 1 ? this.hotspotsB2 : (this.activeTab === 2 ? this.hotspotsB3_1 : this.hotspotsB3_2);' .
+            '       const item = list.find(h => String(h.id) === String(this.dragId));' .
+            '       if (item && !isNaN(x) && !isNaN(y)) { item.left = x; item.top = y; }' .
+            '   }' .
+            '}" @switch-detail-tab.window="activeTab = $event.detail.tab" @mousemove.window="onDrag($event)" @mouseup.window="dragId = null" class="my-6 border border-slate-200 rounded-xl bg-slate-50/50 p-4 shadow-sm">' .
+            '  <!-- Header Toolbar -->' .
+            '  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 mb-4">' .
+            '    <div class="flex flex-wrap gap-2 text-[10px] font-bold text-slate-500">' .
+            '      <button type="button" @click="activeTab = 1" :class="activeTab === 1 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
+            '          Detail B2 (Roller 1-6)' .
+            '      </button>' .
+            '      <button type="button" @click="activeTab = 2" :class="activeTab === 2 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
+            '          Detail B3 - Bagian 1 (Roller 7-12)' .
+            '      </button>' .
+            '      <button type="button" @click="activeTab = 3" :class="activeTab === 3 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
+            '          Detail B3 - Bagian 2 (Roller 13-16)' .
+            '      </button>' .
+            '    </div>';
 
+        $c_5_1_2 .= '    <div>' .
+            '      <button type="button" x-show="!editMode" @click="editMode = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">' .
+            '        <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>' .
+            '        <span>Atur Posisi / Edit Hotspot Detail</span>' .
+            '      </button>' .
+            '      <div x-show="editMode" class="flex items-center gap-1.5" x-cloak>' .
+            '        <button type="button" @click="editMode = false" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Batal</button>' .
+            '        <button type="button" @click="savePos()" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold shadow-xs flex items-center gap-1">' .
+            '          <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>' .
+            '          <span>Simpan Posisi</span>' .
+            '        </button>' .
+            '      </div>' .
+            '    </div>';
+
+        $c_5_1_2 .= '  </div>' .
+            
             '  <!-- Tab Contents -->' .
             '  <!-- Tab 1: reference_B2.png (B2 - Roller 1 to 6) -->' .
-            '  <div x-show="activeTab === 1" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm aspect-[1073/1466] max-w-xs select-none">' .
-            '    <img src="/images/modules/TunnelRoller/reference_B2.png" class="w-full h-full object-cover rounded-lg" alt="Reference B2 Rollers">' .
-            '    <button type="button" id="roller-hotspot-1" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 9.32%; top: 37.93%;" onclick="scrollToRollerRow(1)" title="1. Fixed Roller (B2 Upper Rear)"></button>' .
-            '    <button type="button" id="roller-hotspot-2" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 57.60%; top: 33.83%;" onclick="scrollToRollerRow(2)" title="2. Side Roller (B2 Lower Outer Front)"></button>' .
-            '    <button type="button" id="roller-hotspot-3" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 9.32%; top: 70.94%;" onclick="scrollToRollerRow(3)" title="3. Tandem Roller (B2 Lower Front)"></button>' .
-            '    <button type="button" id="roller-hotspot-5" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 60.76%; top: 70.80%;" onclick="scrollToRollerRow(5)" title="5. Fixed Roller (B2 Upper Front)"></button>' .
-            '    <button type="button" id="roller-hotspot-6" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 34.30%; top: 90.59%;" onclick="scrollToRollerRow(6)" title="6. Fixed Roller (B2 Lower Rear)"></button>' .
+            '  <div x-show="activeTab === 1" data-detail-tab="1" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm max-w-xs w-full select-none" :class="editMode ? \'ring-2 ring-blue-500 cursor-crosshair\' : \'\'">' .
+            '    <img src="/images/modules/TunnelRoller/reference_B2.png" class="w-full h-auto block select-none pointer-events-none" alt="Reference B2 Rollers" draggable="false">' .
+            '    <template x-for="item in hotspotsB2" :key="item.id">' .
+            '      <button type="button" :id="\'roller-hotspot-\' + item.id" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="`left: ${item.left}%; top: ${item.top}%; cursor: ${editMode ? \'grab\' : \'pointer\'};`" @mousedown="if(editMode) dragId = item.id" @click="if(!editMode) scrollToRollerRow(item.id)" :title="item.title">' .
+            '        <span x-text="item.label"></span>' .
+            '      </button>' .
+            '    </template>' .
             '  </div>' .
 
             '  <!-- Tab 2: reference_B3.png (B3 - Roller 7 to 12) -->' .
-            '  <div x-show="activeTab === 2" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm aspect-[1037/1517] max-w-xs select-none">' .
-            '    <img src="/images/modules/TunnelRoller/reference_B3.png" class="w-full h-full object-cover rounded-lg" alt="Reference B3 Rollers Part 1">' .
-            '    <button type="button" id="roller-hotspot-7" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 6.17%; top: 33.49%;" onclick="scrollToRollerRow(7)" title="7. Fixed Roller (B3 Upper Rear)"></button>' .
-            '    <button type="button" id="roller-hotspot-8" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 60.95%; top: 43.51%;" onclick="scrollToRollerRow(8)" title="8. Fixed Roller (B3 Upper Front)"></button>' .
-            '    <button type="button" id="roller-hotspot-9" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 9.45%; top: 66.58%;" onclick="scrollToRollerRow(9)" title="9. Fixed Roller (B3 Lower Rear)"></button>' .
-            '    <button type="button" id="roller-hotspot-10" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 62.87%; top: 67.50%;" onclick="scrollToRollerRow(10)" title="10. Fixed Roller (B3 Upper Rear)"></button>' .
-            '    <button type="button" id="roller-hotspot-11" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 7.91%; top: 97.17%;" onclick="scrollToRollerRow(11)" title="11. Fixed Roller (B3 Upper Front)"></button>' .
-            '    <button type="button" id="roller-hotspot-12" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 63.84%; top: 96.64%;" onclick="scrollToRollerRow(12)" title="12. Fixed Roller (B3 Lower Rear)"></button>' .
+            '  <div x-show="activeTab === 2" data-detail-tab="2" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm max-w-xs w-full select-none" :class="editMode ? \'ring-2 ring-blue-500 cursor-crosshair\' : \'\'">' .
+            '    <img src="/images/modules/TunnelRoller/reference_B3.png" class="w-full h-auto block select-none pointer-events-none" alt="Reference B3 Rollers Part 1" draggable="false">' .
+            '    <template x-for="item in hotspotsB3_1" :key="item.id">' .
+            '      <button type="button" :id="\'roller-hotspot-\' + item.id" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="`left: ${item.left}%; top: ${item.top}%; cursor: ${editMode ? \'grab\' : \'pointer\'};`" @mousedown="if(editMode) dragId = item.id" @click="if(!editMode) scrollToRollerRow(item.id)" :title="item.title">' .
+            '        <span x-text="item.label"></span>' .
+            '      </button>' .
+            '    </template>' .
             '  </div>' .
 
             '  <!-- Tab 3: reference_B3(2).png (B3 - Roller 13 to 16) -->' .
-            '  <div x-show="activeTab === 3" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm aspect-[1397/1126] max-w-sm select-none">' .
-            '    <img src="/images/modules/TunnelRoller/reference_B3(2).png" class="w-full h-full object-cover rounded-lg" alt="Reference B3 Rollers Part 2">' .
-            '    <button type="button" id="roller-hotspot-13" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 6.44%; top: 44.58%;" onclick="scrollToRollerRow(13)" title="13. Side Roller (B3 Lower Middle)"></button>' .
-            '    <button type="button" id="roller-hotspot-14" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 57.98%; top: 45.12%;" onclick="scrollToRollerRow(14)" title="14. Side Roller (B3 Lower Outer Front)"></button>' .
-            '    <button type="button" id="roller-hotspot-15" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 6.30%; top: 91.83%;" onclick="scrollToRollerRow(15)" title="15. Tandem Roller (B3 Lower Front)"></button>' .
-            '    <button type="button" id="roller-hotspot-16" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition duration-300 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 57.70%; top: 92.01%;" onclick="scrollToRollerRow(16)" title="16. Tandem Roller (B3 Lower Front)"></button>' .
+            '  <div x-show="activeTab === 3" data-detail-tab="3" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm max-w-sm w-full select-none" :class="editMode ? \'ring-2 ring-blue-500 cursor-crosshair\' : \'\'">' .
+            '    <img src="/images/modules/TunnelRoller/reference_B3(2).png" class="w-full h-auto block select-none pointer-events-none" alt="Reference B3 Rollers Part 2" draggable="false">' .
+            '    <template x-for="item in hotspotsB3_2" :key="item.id">' .
+            '      <button type="button" :id="\'roller-hotspot-\' + item.id" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="`left: ${item.left}%; top: ${item.top}%; cursor: ${editMode ? \'grab\' : \'pointer\'};`" @mousedown="if(editMode) dragId = item.id" @click="if(!editMode) scrollToRollerRow(item.id)" :title="item.title">' .
+            '        <span x-text="item.label"></span>' .
+            '      </button>' .
+            '    </template>' .
             '  </div>' .
             '</div>' .
             
@@ -194,14 +205,6 @@ class Chapter5Seeder extends Seeder
         $c_5_1_3 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.3. Cable carriage device</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Cable carriage device. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
-            // Interactive Diagram Container (Aspect ratio matched to 1068:1473 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1068/1473] max-w-sm select-none">' .
-            '<img src="/images/modules/5.1.3.cable.png" class="w-full h-full object-cover rounded-lg" alt="Cable Carriage Device Technical Drawing">' .
-            
-            // Hotspot for circle 1
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 61.05%; top: 59.88%;" onclick="scrollToCableRow(1)" title="1. Scissor Cable Assembly"></button>' .
-            '</div>' .
-            
             // Cable carriage device Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
             '<table class="min-w-full divide-y divide-slate-200 text-xs">' .
@@ -214,24 +217,6 @@ class Chapter5Seeder extends Seeder
 // 5.1.4 Vertical lift column
         $c_5_1_4 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.4. Vertical lift column</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Vertical lift column. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
-            
-            // Interactive Diagram Container (Aspect ratio matched to 1440:2560 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1440/2560] max-w-[280px] select-none">' .
-            '<img src="/images/modules/5.1.4Vertical_lift_column.png" class="w-full h-full object-cover rounded-lg" alt="Vertical Lift Column Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 11
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 90.97%; top: 52.50%;" onclick="scrollToLiftRow(1)" title="1. Vertical Lift Column Assembly"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.47%; top: 5.39%;" onclick="scrollToLiftRow(2)" title="2. Motor Cover"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 71.39%; top: 22.50%;" onclick="scrollToLiftRow(3)" title="3. Horizontal Motor + Horizontal Motor Bracket + Chain Sprocket"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.33%; top: 93.98%;" onclick="scrollToLiftRow(4)" title="4. Pad Teflon Bearing Comp."></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 13.47%; top: 28.98%;" onclick="scrollToLiftRow(5)" title="5. Side Cover"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 59.72%; top: 26.09%;" onclick="scrollToLiftRow(6)" title="6. Proximity Switch"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.47%; top: 36.02%;" onclick="scrollToLiftRow(7)" title="7. Coupling system assy"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.47%; top: 39.77%;" onclick="scrollToLiftRow(8)" title="8. Upper Column Flange"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.33%; top: 51.25%;" onclick="scrollToLiftRow(9)" title="9. Bearing Thrust Assy /w Cup washer"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.47%; top: 65.08%;" onclick="scrollToLiftRow(10)" title="10. Ball Screw and Nut Assembly"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.47%; top: 81.95%;" onclick="scrollToLiftRow(11)" title="11. Nut Stopper"></button>' .
-            '</div>' .
             
             // Vertical lift column Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
@@ -256,31 +241,6 @@ class Chapter5Seeder extends Seeder
 // 5.1.5 Wheel Bogie Assembly
         $c_5_1_5 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.5. Wheel Bogie Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Wheel Bogie Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
-            
-            // Interactive Diagram Container (Aspect ratio matched to 864:1217 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[864/1217] max-w-sm select-none">' .
-            '<img src="/images/modules/5.1.5.Wheel_Bogie_Assembly.png" class="w-full h-full object-cover rounded-lg" alt="Wheel Bogie Assembly Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 19
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 31.25%; top: 86.28%;" onclick="scrollToBogieRow(1)" title="1. Potentiometer Assy /w Cover"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 15.74%; top: 71.98%;" onclick="scrollToBogieRow(2)" title="2. Boogie Frame"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 18.75%; top: 40.10%;" onclick="scrollToBogieRow(3)" title="3. Thrust Bearing /w Clamp"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 37.50%; top: 58.01%;" onclick="scrollToBogieRow(4)" title="4. Swiveling Column"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 15.74%; top: 34.02%;" onclick="scrollToBogieRow(5)" title="5. Tyre Complete"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 61.81%; top: 25.80%;" onclick="scrollToBogieRow(6)" title="6. Horizontal Motor"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 63.43%; top: 42.89%;" onclick="scrollToBogieRow(7)" title="7. Carriage Frame Shaft"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 61.57%; top: 48.48%;" onclick="scrollToBogieRow(8)" title="8. Carriage Frame"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 54.65%; top: 64.75%;" onclick="scrollToBogieRow(9)" title="9. Drive System (Chain and Sprocket)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 35.42%; top: 1.48%;" onclick="scrollToBogieRow(10)" title="10. Chain Cover"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 82.18%; top: 69.35%;" onclick="scrollToBogieRow(11)" title="11. Solid Tyre"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 86.81%; top: 73.62%;" onclick="scrollToBogieRow(12)" title="12. Wheel Rim"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 66.20%; top: 53.25%;" onclick="scrollToBogieRow(13)" title="13. Oil Seal"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 70.83%; top: 53.57%;" onclick="scrollToBogieRow(14)" title="14. Bushing Oil Seal"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 86.57%; top: 61.79%;" onclick="scrollToBogieRow(15)" title="15. Wheel Hub /w Roller Bearing"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 59.03%; top: 94.66%;" onclick="scrollToBogieRow(16)" title="16. Wheel Cover"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 62.96%; top: 97.95%;" onclick="scrollToBogieRow(17)" title="17. Hub Cap"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 52.78%; top: 89.73%;" onclick="scrollToBogieRow(18)" title="18. Landing Gear"></button>' .
-            '</div>' .
             
             // Wheel Bogie Assembly Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
@@ -314,23 +274,6 @@ class Chapter5Seeder extends Seeder
         $c_5_1_6 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.6. Landing Stair</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Landing Stair. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
-            // Interactive Diagram Container (Aspect ratio matched to 1664:2536 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1664/2536] max-w-sm select-none">' .
-            '<img src="/images/modules/5.1.6.Landing_Stair.png" class="w-full h-full object-cover rounded-lg" alt="Landing Stair Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 10 (Sized w-6 h-6 to match the larger circles on drawing)
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 88.40%; top: 10.76%;" onclick="scrollToStairRow(1)" title="1. Door Closer"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 88.40%; top: 17.11%;" onclick="scrollToStairRow(2)" title="2. Service Door Assembly"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 47.00%; top: 3.51%;" onclick="scrollToStairRow(3)" title="3. Roof Ladder 1"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 88.40%; top: 28.12%;" onclick="scrollToStairRow(4)" title="4. Lock Unit & door handle"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 51.92%; top: 3.47%;" onclick="scrollToStairRow(5)" title="5. Roof Ladder 2"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 9.19%; top: 90.14%;" onclick="scrollToStairRow(6)" title="6. Castor Wheel"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 37.38%; top: 14.67%;" onclick="scrollToStairRow(7)" title="7. Hand Rail 2"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 57.57%; top: 7.26%;" onclick="scrollToStairRow(8)" title="8. Hand Rail 3"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 18.39%; top: 48.03%;" onclick="scrollToStairRow(9)" title="9. Hand Rail 1"></button>' .
-            '<button type="button" class="absolute w-6 h-6 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 26.38%; top: 43.85%;" onclick="scrollToStairRow(10)" title="10. Step Plate"></button>' .
-            '</div>' .
-            
             // Landing Stair Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
             '<table class="min-w-full divide-y divide-slate-200 text-xs">' .
@@ -353,17 +296,6 @@ class Chapter5Seeder extends Seeder
         $c_5_1_7 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.7. Cabin Rotation</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Cabin Rotation. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
-            // Interactive Diagram Container (Aspect ratio matched to 1824:2328 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1824/2328] max-w-sm select-none">' .
-            '<img src="/images/modules/5.1.7.Cabin_Rotation.png" class="w-full h-full object-cover rounded-lg" alt="Cabin Rotation Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 4
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 16.67%; top: 31.62%;" onclick="scrollToRotationRow(1)" title="1. Rotation Drive System"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 66.45%; top: 55.41%;" onclick="scrollToRotationRow(2)" title="2. Bracket Mounting Motor"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 80.37%; top: 84.62%;" onclick="scrollToRotationRow(3)" title="3. Drive Unit Cabin Rotation"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 89.47%; top: 19.16%;" onclick="scrollToRotationRow(4)" title="4. Safety Door Shoe"></button>' .
-            '</div>' .
-            
             // Cabin Rotation Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
             '<table class="min-w-full divide-y divide-slate-200 text-xs">' .
@@ -380,27 +312,6 @@ class Chapter5Seeder extends Seeder
 // 5.1.8 Cabin Curtain Assembly
         $c_5_1_8 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.8. Cabin Curtain Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Cabin Curtain Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
-            
-            // Interactive Diagram Container (Aspect ratio matched to 1536:2304 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1536/2304] max-w-sm select-none">' .
-            '<img src="/images/modules/5.1.8.Cabin_Curtain_Assembly.png" class="w-full h-full object-cover rounded-lg" alt="Cabin Curtain Assembly Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 11
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 70.44%; top: 75.00%;" onclick="scrollToCurtainRow(1)" title="1. Roller I Cabin Rotation Ass\'y"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 55.60%; top: 97.31%;" onclick="scrollToCurtainRow(2)" title="2. Roller Cabin Lateral"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 82.55%; top: 73.44%;" onclick="scrollToCurtainRow(3)" title="3. Roller Cabin"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 69.92%; top: 9.46%;" onclick="scrollToCurtainRow(4)" title="4. Slat Curtain (with Glass)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 18.88%; top: 57.73%;" onclick="scrollToCurtainRow(5)" title="5. Slat Curtain (without glass)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 55.21%; top: 78.12%;" onclick="scrollToCurtainRow(6)" title="6. Bearing Housing"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 32.16%; top: 56.94%;" onclick="scrollToCurtainRow(7)" title="7. Barrel Curtain"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 91.28%; top: 16.15%;" onclick="scrollToCurtainRow(8)" title="8. Cover Side Curtain R/L (Top)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 91.28%; top: 58.77%;" onclick="scrollToCurtainRow(8)" title="8. Cover Side Curtain R/L (Bottom)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 35.29%; top: 2.26%;" onclick="scrollToCurtainRow(9)" title="9. Worm Gear Assembly (Top)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 64.84%; top: 66.93%;" onclick="scrollToCurtainRow(9)" title="9. Worm Gear Assembly (Bottom)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 57.68%; top: 2.26%;" onclick="scrollToCurtainRow(10)" title="10. Roller (Top)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 57.42%; top: 70.40%;" onclick="scrollToCurtainRow(10)" title="10. Roller (Bottom)"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 33.20%; top: 67.10%;" onclick="scrollToCurtainRow(11)" title="11. Plate Curtain Cabin"></button>' .
-            '</div>' .
             
             // Cabin Curtain Assembly Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
@@ -425,15 +336,6 @@ class Chapter5Seeder extends Seeder
         $c_5_1_9 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.9. Auto Leveler Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Auto Leveler Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
-            // Interactive Diagram Container (Aspect ratio matched to 2318:1824 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[2318/1824] max-w-md select-none">' .
-            '<img src="/images/modules/5.1.9.Auto_Leverel_Assembly.png" class="w-full h-full object-cover rounded-lg" alt="Auto Leveler Assembly Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 2
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 67.30%; top: 76.64%;" onclick="scrollToLevelerRow(1)" title="1. Autolevel Assembly"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 47.71%; top: 24.89%;" onclick="scrollToLevelerRow(2)" title="2. Actuator Motor 4\""></button>' .
-            '</div>' .
-            
             // Auto Leveler Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
             '<table class="min-w-full divide-y divide-slate-200 text-xs">' .
@@ -448,20 +350,6 @@ class Chapter5Seeder extends Seeder
 // 5.1.10 Aircraft/Canopy Closure
         $c_5_1_10 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.10. Aircraft/Canopy Closure</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Aircraft/Canopy Closure. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
-            
-            // Interactive Diagram Container (Aspect ratio matched to 1632:2176 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1632/2176] max-w-xs select-none">' .
-            '<img src="/images/modules/5.1.10.Aircraft_Closure.png" class="w-full h-full object-cover rounded-lg" alt="Aircraft/Canopy Closure Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 7
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 4.04%; top: 31.25%;" onclick="scrollToClosureRow(1)" title="1. Pad Closure"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 9.93%; top: 3.49%;" onclick="scrollToClosureRow(2)" title="2. Aircraft Closure Ass\'y"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 86.89%; top: 29.50%;" onclick="scrollToClosureRow(3)" title="3. Canopy Actuator"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 37.38%; top: 31.53%;" onclick="scrollToClosureRow(4)" title="4. Cover Aircraft Closure Right"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 41.30%; top: 31.53%;" onclick="scrollToClosureRow(5)" title="5. Cover Aircraft closure Left"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 56.99%; top: 97.52%;" onclick="scrollToClosureRow(6)" title="6. Closure Arm Ass\'y Right"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 60.78%; top: 97.52%;" onclick="scrollToClosureRow(7)" title="7. Closure Arm Ass\'y Left"></button>' .
-            '</div>' .
             
             // Aircraft Closure Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
@@ -483,21 +371,6 @@ class Chapter5Seeder extends Seeder
         $c_5_1_11 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.11. Swing Door and Window Assembly</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Swing Door and Window Assembly. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
-            // Interactive Diagram Container (Aspect ratio matched to 1632:2176 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1632/2176] max-w-xs select-none">' .
-            '<img src="/images/modules/5.1.11.Swing_door.png" class="w-full h-full object-cover rounded-lg" alt="Swing Door and Window Assembly Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 8
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 79.29%; top: 5.70%;" onclick="scrollToSwingRow(1)" title="1. Left Side Shield Glass"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 60.60%; top: 25.87%;" onclick="scrollToSwingRow(2)" title="2. Front Shield Glass"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 59.38%; top: 50.74%;" onclick="scrollToSwingRow(3)" title="3. Bumper"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 36.50%; top: 32.70%;" onclick="scrollToSwingRow(4)" title="4. Right Side Glass"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 7.29%; top: 62.36%;" onclick="scrollToSwingRow(5)" title="5. Door Leaf Assy"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 7.29%; top: 57.86%;" onclick="scrollToSwingRow(6)" title="6. Lock System"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 84.07%; top: 31.53%;" onclick="scrollToSwingRow(7)" title="7. Safety Rope"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 36.34%; top: 75.60%;" onclick="scrollToSwingRow(8)" title="8. Door Handle"></button>' .
-            '</div>' .
-            
             // Swing Door Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
             '<table class="min-w-full divide-y divide-slate-200 text-xs">' .
@@ -518,26 +391,6 @@ class Chapter5Seeder extends Seeder
 // 5.1.12. Rubber Weathering
         $c_5_1_12 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.12. Rubber Weathering</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Rubber Weathering. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
-            
-            // Interactive Diagram Container (Aspect ratio matched to 1632:2176 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[1632/2176] max-w-xs select-none">' .
-            '<img src="/images/modules/5.1.12.Rubber_Weathering.png" class="w-full h-full object-cover rounded-lg" alt="Rubber Weathering Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 12
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 14.52%; top: 75.60%;" onclick="scrollToWeatheringRow(1)" title="1. Rigid Frame Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 8.27%; top: 88.28%;" onclick="scrollToWeatheringRow(2)" title="2. Weathering Corner Upper"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 31.74%; top: 95.82%;" onclick="scrollToWeatheringRow(3)" title="3. Rigid Frame Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 58.64%; top: 95.36%;" onclick="scrollToWeatheringRow(4)" title="4. Weathering Corner Lower"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 49.69%; top: 68.70%;" onclick="scrollToWeatheringRow(5)" title="5. Rigid Frame Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 8.21%; top: 71.92%;" onclick="scrollToWeatheringRow(6)" title="6. Weathering Corner Upper"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 23.04%; top: 56.11%;" onclick="scrollToWeatheringRow(7)" title="7. Rubber Black"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 70.04%; top: 92.23%;" onclick="scrollToWeatheringRow(8)" title="8. Upper Rotunda Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 48.10%; top: 24.13%;" onclick="scrollToWeatheringRow(9)" title="9. Inside Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 77.63%; top: 71.28%;" onclick="scrollToWeatheringRow(9)" title="9. Inside Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 90.99%; top: 52.25%;" onclick="scrollToWeatheringRow(10)" title="10. Inside Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 77.88%; top: 23.67%;" onclick="scrollToWeatheringRow(11)" title="11. Upper Bubble Weathering"></button>' .
-            '<button type="button" class="absolute w-4 h-4 rounded-full border-2 border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 46.08%; top: 16.68%;" onclick="scrollToWeatheringRow(12)" title="12. Inside Weathering"></button>' .
-            '</div>' .
             
             // Rubber Weathering Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
@@ -565,21 +418,6 @@ class Chapter5Seeder extends Seeder
         $c_5_1_13 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.13. Wire Rope Equalizer</h4>' .
             '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) beserta daftar komponen penyusun Wire Rope Equalizer. <strong>Klik pada tombol nomor komponen berwarna biru di gambar</strong> untuk secara otomatis menyorot dan menggeser ke baris part number yang sesuai pada tabel di bawah.</p>' .
             
-            // Interactive Diagram Container (Aspect ratio matched to 2176:1632 image)
-            '<div class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm my-6 aspect-[2176/1632] w-full select-none" style="max-width: 440px;">' .
-            '<img src="/images/modules/5.1.13.Wire_Rope_Equalizer.png" class="w-full h-full object-cover rounded-lg" alt="Wire Rope Equalizer Technical Drawing">' .
-            
-            // Hotspots mapping for 1 to 6 (including duplicate circles for 1 and 2, sized to match drawing circles)
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 91.00%; top: 39.00%;" onclick="scrollToEqualizerRow(1)" title="1. Wire Rope 1"></button>' .
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 38.30%; top: 5.00%;" onclick="scrollToEqualizerRow(1)" title="1. Wire Rope 1"></button>' .
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 93.90%; top: 39.00%;" onclick="scrollToEqualizerRow(2)" title="2. Wire Rope 2"></button>' .
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 65.90%; top: 33.80%;" onclick="scrollToEqualizerRow(2)" title="2. Wire Rope 2"></button>' .
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 3.70%; top: 80.50%;" onclick="scrollToEqualizerRow(3)" title="3. Drum Tension Ass\'y"></button>' .
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 44.00%; top: 44.00%;" onclick="scrollToEqualizerRow(4)" title="4. Cable Sheave Ass\'y"></button>' .
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 35.10%; top: 63.10%;" onclick="scrollToEqualizerRow(5)" title="5. Cable Equalizer ass\'y, Detail B"></button>' .
-            '<button type="button" class="absolute w-2.5 h-2.5 rounded-full border border-blue-400 bg-blue-500/10 shadow-inner transition hover:scale-110 hover:border-blue-600 hover:bg-blue-600/20 -translate-x-1/2 -translate-y-1/2 cursor-pointer focus:outline-none" style="left: 61.80%; top: 38.20%;" onclick="scrollToEqualizerRow(6)" title="6. Wire Rope Anchorage"></button>' .
-            '</div>' .
-            
             // Wire Rope Equalizer Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
             '<table class="min-w-full divide-y divide-slate-200 text-xs">' .
@@ -597,96 +435,444 @@ class Chapter5Seeder extends Seeder
 
         
 
-        Module::create([
+        $m1 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.1 Rotunda Assembly',
             'content' => $c_5_1_1,
             'order' => 1,
         ]);
 
-        Module::create([
+        $diag1 = \App\Models\Diagram::create([
+            'module_id' => $m1->id,
+            'title' => 'Rotunda Technical Drawing',
+            'image_path' => 'images/modules/technical_drawing.png',
+        ]);
+
+        $rotundaHotspots = [
+            ['label' => '1', 'x_percent' => 29.31, 'y_percent' => 45.93, 'popup_title' => '1. Barrel Rotunda Curtain Assembly (Left side)'],
+            ['label' => '3', 'x_percent' => 38.34, 'y_percent' => 56.00, 'popup_title' => '3. Guide Pipe Barrel'],
+            ['label' => '3', 'x_percent' => 45.71, 'y_percent' => 66.48, 'popup_title' => '3. Guide Pipe Barrel'],
+            ['label' => '4', 'x_percent' => 48.66, 'y_percent' => 50.62, 'popup_title' => '4. Tension Barrel Bearing'],
+            ['label' => '5', 'x_percent' => 5.53, 'y_percent' => 69.38, 'popup_title' => '5. Slat Curtain Assy (L/R)'],
+            ['label' => '6', 'x_percent' => 22.67, 'y_percent' => 57.52, 'popup_title' => '6. Tension Barrel'],
+            ['label' => '7', 'x_percent' => 53.27, 'y_percent' => 56.00, 'popup_title' => '7. Guide Pipe Barrel Bearing'],
+            ['label' => '8', 'x_percent' => 73.92, 'y_percent' => 6.21, 'popup_title' => '8. Roller Bearing Rotunda'],
+            ['label' => '9', 'x_percent' => 59.72, 'y_percent' => 5.52, 'popup_title' => '9. Plate Curtain Upper'],
+            ['label' => '9', 'x_percent' => 13.27, 'y_percent' => 46.76, 'popup_title' => '9. Plate Curtain Upper'],
+            ['label' => '10', 'x_percent' => 19.72, 'y_percent' => 28.55, 'popup_title' => '10. Potentiometer Rotunda Assy'],
+            ['label' => '11', 'x_percent' => 88.66, 'y_percent' => 30.62, 'popup_title' => '11. Hinge Pin'],
+            ['label' => '12', 'x_percent' => 45.71, 'y_percent' => 55.59, 'popup_title' => '12. Plate Seat Curtain (L/R)'],
+            ['label' => '13', 'x_percent' => 18.99, 'y_percent' => 45.66, 'popup_title' => '13. Worm Gear Assembly (L/R)'],
+        ];
+
+        foreach ($rotundaHotspots as $h) {
+            $diag1->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
+
+        $m2 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.2 Tunnel Roller',
             'content' => $c_5_1_2,
             'order' => 2,
         ]);
 
-        Module::create([
+        $diag2 = \App\Models\Diagram::create([
+            'module_id' => $m2->id,
+            'title' => 'Tunnel Roller Location Map',
+            'image_path' => 'images/modules/TunnelRoller/tunnel_roller.png',
+        ]);
+
+        $tunnelRollerHotspots = [
+            ['label' => '1', 'x_percent' => 42.85, 'y_percent' => 15.62, 'popup_title' => '1. Fixed Roller (B2 Tunnel A Upper Rear)'],
+            ['label' => '2', 'x_percent' => 63.51, 'y_percent' => 34.23, 'popup_title' => '2. Side Roller (B2 Tunnel A Lower Outer Front)'],
+            ['label' => '3', 'x_percent' => 55.38, 'y_percent' => 37.99, 'popup_title' => '3. Tandem Roller (B2 Tunnel A Lower Front)'],
+            ['label' => '4', 'x_percent' => 71.46, 'y_percent' => 29.13, 'popup_title' => '4. Nosing Ramp'],
+            ['label' => '5', 'x_percent' => 52.50, 'y_percent' => 12.76, 'popup_title' => '5. Fixed Roller (B2 Tunnel A Upper Front)'],
+            ['label' => '6', 'x_percent' => 41.49, 'y_percent' => 43.09, 'popup_title' => '6. Fixed Roller (B2 Tunnel A Lower Rear)'],
+            ['label' => '7', 'x_percent' => 30.14, 'y_percent' => 62.91, 'popup_title' => '7. Fixed Roller (B3 Tunnel A Upper Rear)'],
+            ['label' => '8', 'x_percent' => 36.75, 'y_percent' => 59.46, 'popup_title' => '8. Fixed Roller (B3 Tunnel A Upper Front)'],
+            ['label' => '9', 'x_percent' => 34.21, 'y_percent' => 87.84, 'popup_title' => '9. Fixed Roller (B3 Tunnel A Lower Rear)'],
+            ['label' => '10', 'x_percent' => 54.36, 'y_percent' => 50.60, 'popup_title' => '10. Fixed Roller (B3 Tunnel B Upper Rear)'],
+            ['label' => '11', 'x_percent' => 60.29, 'y_percent' => 46.55, 'popup_title' => '11. Fixed Roller (B3 Tunnel B Upper Front)'],
+            ['label' => '12', 'x_percent' => 57.41, 'y_percent' => 77.03, 'popup_title' => '12. Fixed Roller (B3 Tunnel B Lower Rear)'],
+            ['label' => '13', 'x_percent' => 44.88, 'y_percent' => 86.04, 'popup_title' => '13. Side Roller (B3 Tunnel A Lower Middle)'],
+            ['label' => '14', 'x_percent' => 74.68, 'y_percent' => 67.87, 'popup_title' => '14. Side Roller (B3 Tunnel B Lower Outer Front)'],
+            ['label' => '15', 'x_percent' => 50.80, 'y_percent' => 81.83, 'popup_title' => '15. Tandem Roller (B3 Tunnel A Lower Front)'],
+            ['label' => '16', 'x_percent' => 69.43, 'y_percent' => 75.08, 'popup_title' => '16. Tandem Roller (B3 Tunnel B Lower Front)'],
+            ['label' => '17', 'x_percent' => 60.97, 'y_percent' => 81.68, 'popup_title' => '17. Nosing Ramp'],
+            ['label' => '18', 'x_percent' => 81.29, 'y_percent' => 65.62, 'popup_title' => '18. Nosing Ramp'],
+        ];
+
+        foreach ($tunnelRollerHotspots as $h) {
+            $diag2->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
+
+        // 5.1.3 Cable carriage device
+        $m3 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.3 Cable carriage device',
             'content' => $c_5_1_3,
             'order' => 3,
         ]);
+        $diag3 = \App\Models\Diagram::create([
+            'module_id' => $m3->id,
+            'title' => 'Cable Carriage Device Technical Drawing',
+            'image_path' => 'images/modules/5.1.3.cable.png',
+        ]);
+        $diag3->hotspots()->create([
+            'label' => '1',
+            'action_type' => 'scroll_row',
+            'popup_title' => '1. Scissor Cable Assembly',
+            'x_percent' => 61.05,
+            'y_percent' => 59.88,
+        ]);
 
-        Module::create([
+        // 5.1.4 Vertical lift column
+        $m4 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.4 Vertical lift column',
             'content' => $c_5_1_4,
             'order' => 4,
         ]);
+        $diag4 = \App\Models\Diagram::create([
+            'module_id' => $m4->id,
+            'title' => 'Vertical Lift Column Technical Drawing',
+            'image_path' => 'images/modules/5.1.4Vertical_lift_column.png',
+        ]);
+        $verticalLiftHotspots = [
+            ['label' => '1', 'x_percent' => 90.97, 'y_percent' => 52.50, 'popup_title' => '1. Vertical Lift Column Assembly'],
+            ['label' => '2', 'x_percent' => 58.47, 'y_percent' => 5.39, 'popup_title' => '2. Motor Cover'],
+            ['label' => '3', 'x_percent' => 71.39, 'y_percent' => 22.50, 'popup_title' => '3. Horizontal Motor + Horizontal Motor Bracket + Chain Sprocket'],
+            ['label' => '4', 'x_percent' => 58.33, 'y_percent' => 93.98, 'popup_title' => '4. Pad Teflon Bearing Comp.'],
+            ['label' => '5', 'x_percent' => 13.47, 'y_percent' => 28.98, 'popup_title' => '5. Side Cover'],
+            ['label' => '6', 'x_percent' => 59.72, 'y_percent' => 26.09, 'popup_title' => '6. Proximity Switch'],
+            ['label' => '7', 'x_percent' => 58.47, 'y_percent' => 36.02, 'popup_title' => '7. Coupling system assy'],
+            ['label' => '8', 'x_percent' => 58.47, 'y_percent' => 39.77, 'popup_title' => '8. Upper Column Flange'],
+            ['label' => '9', 'x_percent' => 58.33, 'y_percent' => 51.25, 'popup_title' => '9. Bearing Thrust Assy /w Cup washer'],
+            ['label' => '10', 'x_percent' => 58.47, 'y_percent' => 65.08, 'popup_title' => '10. Ball Screw and Nut Assembly'],
+            ['label' => '11', 'x_percent' => 58.47, 'y_percent' => 81.95, 'popup_title' => '11. Nut Stopper'],
+        ];
+        foreach ($verticalLiftHotspots as $h) {
+            $diag4->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.5 Wheel Bogie Assembly
+        $m5 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.5 Wheel Bogie Assembly',
             'content' => $c_5_1_5,
             'order' => 5,
         ]);
+        $diag5 = \App\Models\Diagram::create([
+            'module_id' => $m5->id,
+            'title' => 'Wheel Bogie Assembly Technical Drawing',
+            'image_path' => 'images/modules/5.1.5.Wheel_Bogie_Assembly.png',
+        ]);
+        $bogieHotspots = [
+            ['label' => '1', 'x_percent' => 31.25, 'y_percent' => 86.28, 'popup_title' => '1. Potentiometer Assy /w Cover'],
+            ['label' => '2', 'x_percent' => 15.74, 'y_percent' => 71.98, 'popup_title' => '2. Boogie Frame'],
+            ['label' => '3', 'x_percent' => 18.75, 'y_percent' => 40.10, 'popup_title' => '3. Thrust Bearing /w Clamp'],
+            ['label' => '4', 'x_percent' => 37.50, 'y_percent' => 58.01, 'popup_title' => '4. Swiveling Column'],
+            ['label' => '5', 'x_percent' => 15.74, 'y_percent' => 34.02, 'popup_title' => '5. Tyre Complete'],
+            ['label' => '6', 'x_percent' => 61.81, 'y_percent' => 25.80, 'popup_title' => '6. Horizontal Motor'],
+            ['label' => '7', 'x_percent' => 63.43, 'y_percent' => 42.89, 'popup_title' => '7. Carriage Frame Shaft'],
+            ['label' => '8', 'x_percent' => 61.57, 'y_percent' => 48.48, 'popup_title' => '8. Carriage Frame'],
+            ['label' => '9', 'x_percent' => 54.65, 'y_percent' => 64.75, 'popup_title' => '9. Drive System (Chain and Sprocket)'],
+            ['label' => '10', 'x_percent' => 35.42, 'y_percent' => 1.48, 'popup_title' => '10. Chain Cover'],
+            ['label' => '11', 'x_percent' => 82.18, 'y_percent' => 69.35, 'popup_title' => '11. Solid Tyre'],
+            ['label' => '12', 'x_percent' => 86.81, 'y_percent' => 73.62, 'popup_title' => '12. Wheel Rim'],
+            ['label' => '13', 'x_percent' => 66.20, 'y_percent' => 53.25, 'popup_title' => '13. Oil Seal'],
+            ['label' => '14', 'x_percent' => 70.83, 'y_percent' => 53.57, 'popup_title' => '14. Bushing Oil Seal'],
+            ['label' => '15', 'x_percent' => 86.57, 'y_percent' => 61.79, 'popup_title' => '15. Wheel Hub /w Roller Bearing'],
+            ['label' => '16', 'x_percent' => 59.03, 'y_percent' => 94.66, 'popup_title' => '16. Wheel Cover'],
+            ['label' => '17', 'x_percent' => 62.96, 'y_percent' => 97.95, 'popup_title' => '17. Hub Cap'],
+            ['label' => '18', 'x_percent' => 52.78, 'y_percent' => 89.73, 'popup_title' => '18. Landing Gear'],
+        ];
+        foreach ($bogieHotspots as $h) {
+            $diag5->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.6 Landing Stair
+        $m6 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.6 Landing Stair',
             'content' => $c_5_1_6,
             'order' => 6,
         ]);
+        $diag6 = \App\Models\Diagram::create([
+            'module_id' => $m6->id,
+            'title' => 'Landing Stair Technical Drawing',
+            'image_path' => 'images/modules/5.1.6.Landing_Stair.png',
+        ]);
+        $stairHotspots = [
+            ['label' => '1', 'x_percent' => 88.40, 'y_percent' => 10.76, 'popup_title' => '1. Door Closer'],
+            ['label' => '2', 'x_percent' => 88.40, 'y_percent' => 17.11, 'popup_title' => '2. Service Door Assembly'],
+            ['label' => '3', 'x_percent' => 47.00, 'y_percent' => 3.51, 'popup_title' => '3. Roof Ladder 1'],
+            ['label' => '4', 'x_percent' => 88.40, 'y_percent' => 28.12, 'popup_title' => '4. Lock Unit & door handle'],
+            ['label' => '5', 'x_percent' => 51.92, 'y_percent' => 3.47, 'popup_title' => '5. Roof Ladder 2'],
+            ['label' => '6', 'x_percent' => 9.19, 'y_percent' => 90.14, 'popup_title' => '6. Castor Wheel'],
+            ['label' => '7', 'x_percent' => 37.38, 'y_percent' => 14.67, 'popup_title' => '7. Hand Rail 2'],
+            ['label' => '8', 'x_percent' => 57.57, 'y_percent' => 7.26, 'popup_title' => '8. Hand Rail 3'],
+            ['label' => '9', 'x_percent' => 18.39, 'y_percent' => 48.03, 'popup_title' => '9. Hand Rail 1'],
+            ['label' => '10', 'x_percent' => 26.38, 'y_percent' => 43.85, 'popup_title' => '10. Step Plate'],
+        ];
+        foreach ($stairHotspots as $h) {
+            $diag6->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.7 Cabin Rotation
+        $m7 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.7 Cabin Rotation',
             'content' => $c_5_1_7,
             'order' => 7,
         ]);
+        $diag7 = \App\Models\Diagram::create([
+            'module_id' => $m7->id,
+            'title' => 'Cabin Rotation Technical Drawing',
+            'image_path' => 'images/modules/5.1.7.Cabin_Rotation.png',
+        ]);
+        $rotationHotspots = [
+            ['label' => '1', 'x_percent' => 16.67, 'y_percent' => 31.62, 'popup_title' => '1. Rotation Drive System'],
+            ['label' => '2', 'x_percent' => 66.45, 'y_percent' => 55.41, 'popup_title' => '2. Bracket Mounting Motor'],
+            ['label' => '3', 'x_percent' => 80.37, 'y_percent' => 84.62, 'popup_title' => '3. Drive Unit Cabin Rotation'],
+            ['label' => '4', 'x_percent' => 89.47, 'y_percent' => 19.16, 'popup_title' => '4. Safety Door Shoe'],
+        ];
+        foreach ($rotationHotspots as $h) {
+            $diag7->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.8 Cabin Curtain Assembly
+        $m8 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.8 Cabin Curtain Assembly',
             'content' => $c_5_1_8,
             'order' => 8,
         ]);
+        $diag8 = \App\Models\Diagram::create([
+            'module_id' => $m8->id,
+            'title' => 'Cabin Curtain Assembly Technical Drawing',
+            'image_path' => 'images/modules/5.1.8.Cabin_Curtain_Assembly.png',
+        ]);
+        $curtainHotspots = [
+            ['label' => '1', 'x_percent' => 70.44, 'y_percent' => 75.00, 'popup_title' => '1. Roller I Cabin Rotation Ass\'y'],
+            ['label' => '2', 'x_percent' => 55.60, 'y_percent' => 97.31, 'popup_title' => '2. Roller Cabin Lateral'],
+            ['label' => '3', 'x_percent' => 82.55, 'y_percent' => 73.44, 'popup_title' => '3. Roller Cabin'],
+            ['label' => '4', 'x_percent' => 69.92, 'y_percent' => 9.46, 'popup_title' => '4. Slat Curtain (with Glass)'],
+            ['label' => '5', 'x_percent' => 18.88, 'y_percent' => 57.73, 'popup_title' => '5. Slat Curtain (without glass)'],
+            ['label' => '6', 'x_percent' => 55.21, 'y_percent' => 78.12, 'popup_title' => '6. Bearing Housing'],
+            ['label' => '7', 'x_percent' => 32.16, 'y_percent' => 56.94, 'popup_title' => '7. Barrel Curtain'],
+            ['label' => '8', 'x_percent' => 91.28, 'y_percent' => 16.15, 'popup_title' => '8. Cover Side Curtain R/L (Top)'],
+            ['label' => '8', 'x_percent' => 91.28, 'y_percent' => 58.77, 'popup_title' => '8. Cover Side Curtain R/L (Bottom)'],
+            ['label' => '9', 'x_percent' => 35.29, 'y_percent' => 2.26, 'popup_title' => '9. Worm Gear Assembly (Top)'],
+            ['label' => '9', 'x_percent' => 64.84, 'y_percent' => 66.93, 'popup_title' => '9. Worm Gear Assembly (Bottom)'],
+            ['label' => '10', 'x_percent' => 57.68, 'y_percent' => 2.26, 'popup_title' => '10. Roller (Top)'],
+            ['label' => '10', 'x_percent' => 57.42, 'y_percent' => 70.40, 'popup_title' => '10. Roller (Bottom)'],
+            ['label' => '11', 'x_percent' => 33.20, 'y_percent' => 67.10, 'popup_title' => '11. Plate Curtain Cabin'],
+        ];
+        foreach ($curtainHotspots as $h) {
+            $diag8->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.9 Auto Leveler Assembly
+        $m9 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.9 Auto Leveler Assembly',
             'content' => $c_5_1_9,
             'order' => 9,
         ]);
+        $diag9 = \App\Models\Diagram::create([
+            'module_id' => $m9->id,
+            'title' => 'Auto Leveler Assembly Technical Drawing',
+            'image_path' => 'images/modules/5.1.9.Auto_Leverel_Assembly.png',
+        ]);
+        $levelerHotspots = [
+            ['label' => '1', 'x_percent' => 67.30, 'y_percent' => 76.64, 'popup_title' => '1. Autolevel Assembly'],
+            ['label' => '2', 'x_percent' => 47.71, 'y_percent' => 24.89, 'popup_title' => '2. Actuator Motor 4"'],
+        ];
+        foreach ($levelerHotspots as $h) {
+            $diag9->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.10 Aircraft/Canopy Closure
+        $m10 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.10 Aircraft/Canopy Closure',
             'content' => $c_5_1_10,
             'order' => 10,
         ]);
+        $diag10 = \App\Models\Diagram::create([
+            'module_id' => $m10->id,
+            'title' => 'Aircraft/Canopy Closure Technical Drawing',
+            'image_path' => 'images/modules/5.1.10.Aircraft_Closure.png',
+        ]);
+        $closureHotspots = [
+            ['label' => '1', 'x_percent' => 4.04, 'y_percent' => 31.25, 'popup_title' => '1. Pad Closure'],
+            ['label' => '2', 'x_percent' => 9.93, 'y_percent' => 3.49, 'popup_title' => '2. Aircraft Closure Ass\'y'],
+            ['label' => '3', 'x_percent' => 86.89, 'y_percent' => 29.50, 'popup_title' => '3. Canopy Actuator'],
+            ['label' => '4', 'x_percent' => 37.38, 'y_percent' => 31.53, 'popup_title' => '4. Cover Aircraft Closure Right'],
+            ['label' => '5', 'x_percent' => 41.30, 'y_percent' => 31.53, 'popup_title' => '5. Cover Aircraft closure Left'],
+            ['label' => '6', 'x_percent' => 56.99, 'y_percent' => 97.52, 'popup_title' => '6. Closure Arm Ass\'y Right'],
+            ['label' => '7', 'x_percent' => 60.78, 'y_percent' => 97.52, 'popup_title' => '7. Closure Arm Ass\'y Left'],
+        ];
+        foreach ($closureHotspots as $h) {
+            $diag10->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.11 Swing Door and Window Assembly
+        $m11 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.11 Swing Door and Window Assembly',
             'content' => $c_5_1_11,
             'order' => 11,
         ]);
+        $diag11 = \App\Models\Diagram::create([
+            'module_id' => $m11->id,
+            'title' => 'Swing Door and Window Assembly Technical Drawing',
+            'image_path' => 'images/modules/5.1.11.Swing_door.png',
+        ]);
+        $swingHotspots = [
+            ['label' => '1', 'x_percent' => 79.29, 'y_percent' => 5.70, 'popup_title' => '1. Left Side Shield Glass'],
+            ['label' => '2', 'x_percent' => 60.60, 'y_percent' => 25.87, 'popup_title' => '2. Front Shield Glass'],
+            ['label' => '3', 'x_percent' => 59.38, 'y_percent' => 50.74, 'popup_title' => '3. Bumper'],
+            ['label' => '4', 'x_percent' => 36.50, 'y_percent' => 32.70, 'popup_title' => '4. Right Side Glass'],
+            ['label' => '5', 'x_percent' => 7.29, 'y_percent' => 62.36, 'popup_title' => '5. Door Leaf Assy'],
+            ['label' => '6', 'x_percent' => 7.29, 'y_percent' => 57.86, 'popup_title' => '6. Lock System'],
+            ['label' => '7', 'x_percent' => 84.07, 'y_percent' => 31.53, 'popup_title' => '7. Safety Rope'],
+            ['label' => '8', 'x_percent' => 36.34, 'y_percent' => 75.60, 'popup_title' => '8. Door Handle'],
+        ];
+        foreach ($swingHotspots as $h) {
+            $diag11->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.12 Rubber Weathering
+        $m12 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.12 Rubber Weathering',
             'content' => $c_5_1_12,
             'order' => 12,
         ]);
+        $diag12 = \App\Models\Diagram::create([
+            'module_id' => $m12->id,
+            'title' => 'Rubber Weathering Technical Drawing',
+            'image_path' => 'images/modules/5.1.12.Rubber_Weathering.png',
+        ]);
+        $weatheringHotspots = [
+            ['label' => '1', 'x_percent' => 14.52, 'y_percent' => 75.60, 'popup_title' => '1. Rigid Frame Weathering'],
+            ['label' => '2', 'x_percent' => 8.27, 'y_percent' => 88.28, 'popup_title' => '2. Weathering Corner Upper'],
+            ['label' => '3', 'x_percent' => 31.74, 'y_percent' => 95.82, 'popup_title' => '3. Rigid Frame Weathering'],
+            ['label' => '4', 'x_percent' => 58.64, 'y_percent' => 95.36, 'popup_title' => '4. Weathering Corner Lower'],
+            ['label' => '5', 'x_percent' => 49.69, 'y_percent' => 68.70, 'popup_title' => '5. Rigid Frame Weathering'],
+            ['label' => '6', 'x_percent' => 8.21, 'y_percent' => 71.92, 'popup_title' => '6. Weathering Corner Upper'],
+            ['label' => '7', 'x_percent' => 23.04, 'y_percent' => 56.11, 'popup_title' => '7. Rubber Black'],
+            ['label' => '8', 'x_percent' => 70.04, 'y_percent' => 92.23, 'popup_title' => '8. Upper Rotunda Weathering'],
+            ['label' => '9', 'x_percent' => 48.10, 'y_percent' => 24.13, 'popup_title' => '9. Inside Weathering'],
+            ['label' => '9', 'x_percent' => 77.63, 'y_percent' => 71.28, 'popup_title' => '9. Inside Weathering'],
+            ['label' => '10', 'x_percent' => 90.99, 'y_percent' => 52.25, 'popup_title' => '10. Inside Weathering'],
+            ['label' => '11', 'x_percent' => 77.88, 'y_percent' => 23.67, 'popup_title' => '11. Upper Bubble Weathering'],
+            ['label' => '12', 'x_percent' => 46.08, 'y_percent' => 16.68, 'popup_title' => '12. Inside Weathering'],
+        ];
+        foreach ($weatheringHotspots as $h) {
+            $diag12->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
-        Module::create([
+        // 5.1.13 Wire Rope Equalizer
+        $m13 = Module::create([
             'chapter_id' => $chapter->id,
             'title' => '5.1.13 Wire Rope Equalizer',
             'content' => $c_5_1_13,
             'order' => 13,
         ]);
+        $diag13 = \App\Models\Diagram::create([
+            'module_id' => $m13->id,
+            'title' => 'Wire Rope Equalizer Technical Drawing',
+            'image_path' => 'images/modules/5.1.13.Wire_Rope_Equalizer.png',
+        ]);
+        $equalizerHotspots = [
+            ['label' => '1', 'x_percent' => 91.00, 'y_percent' => 39.00, 'popup_title' => '1. Wire Rope 1'],
+            ['label' => '1', 'x_percent' => 38.30, 'y_percent' => 5.00, 'popup_title' => '1. Wire Rope 1'],
+            ['label' => '2', 'x_percent' => 93.90, 'y_percent' => 39.00, 'popup_title' => '2. Wire Rope 2'],
+            ['label' => '2', 'x_percent' => 65.90, 'y_percent' => 33.80, 'popup_title' => '2. Wire Rope 2'],
+            ['label' => '3', 'x_percent' => 3.70, 'y_percent' => 80.50, 'popup_title' => '3. Drum Tension Ass\'y'],
+            ['label' => '4', 'x_percent' => 44.00, 'y_percent' => 44.00, 'popup_title' => '4. Cable Sheave Ass\'y'],
+            ['label' => '5', 'x_percent' => 35.10, 'y_percent' => 63.10, 'popup_title' => '5. Cable Equalizer ass\'y, Detail B'],
+            ['label' => '6', 'x_percent' => 61.80, 'y_percent' => 38.20, 'popup_title' => '6. Wire Rope Anchorage'],
+        ];
+        foreach ($equalizerHotspots as $h) {
+            $diag13->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
 
         // 5.2 Electrical parts and others
         Module::create([

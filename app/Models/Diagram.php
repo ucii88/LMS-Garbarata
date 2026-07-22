@@ -13,6 +13,7 @@ class Diagram extends Model
 
     protected $fillable = [
         'chapter_id',
+        'module_id',
         'title',
         'image_path',
     ];
@@ -23,6 +24,14 @@ class Diagram extends Model
     public function chapter(): BelongsTo
     {
         return $this->belongsTo(Chapter::class);
+    }
+
+    /**
+     * Get the module that owns the diagram.
+     */
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
     }
 
     /**

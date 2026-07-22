@@ -63,6 +63,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'showChapter'])->name('courses.chapters.show');
     Route::post('/courses/{course}/chapters/{chapter}/modules/{module}/complete', [App\Http\Controllers\CourseController::class, 'completeModule'])->name('courses.modules.complete');
     Route::put('/courses/{course}/chapters/{chapter}/diagram/hotspots', [App\Http\Controllers\CourseController::class, 'updateHotspots'])->name('courses.diagram.hotspots.update');
+    Route::post('/courses/{course}/chapters/{chapter}/diagram', [App\Http\Controllers\CourseController::class, 'storeDiagram'])->name('courses.diagram.store');
+    Route::delete('/courses/{course}/chapters/{chapter}/diagram', [App\Http\Controllers\CourseController::class, 'destroyDiagram'])->name('courses.diagram.destroy');
+    Route::post('/courses/{course}/chapters/{chapter}/hotspots', [App\Http\Controllers\CourseController::class, 'storeHotspot'])->name('courses.diagram.hotspots.store');
+    Route::put('/courses/{course}/chapters/{chapter}/hotspots/{hotspot}', [App\Http\Controllers\CourseController::class, 'updateHotspotDetails'])->name('courses.diagram.hotspots.update-details');
+    Route::delete('/courses/{course}/chapters/{chapter}/hotspots/{hotspot}', [App\Http\Controllers\CourseController::class, 'destroyHotspot'])->name('courses.diagram.hotspots.destroy');
     Route::get('/courses/{course}/activities', [App\Http\Controllers\CourseController::class, 'activities'])->name('courses.activities');
     Route::get('/courses/{course}/quiz-ujian', [App\Http\Controllers\CourseController::class, 'quizActivities'])->name('courses.quizzes');
     Route::get('/courses/{course}/latihan', [App\Http\Controllers\CourseController::class, 'practiceActivities'])->name('courses.practices');
@@ -78,11 +83,24 @@ Route::middleware('auth')->group(function () {
 
     // Module management (exclusive to Instruktur)
     Route::middleware('role:instruktur')->group(function () {
+        // Chapter management
+        Route::post('/courses/{course}/chapters', [App\Http\Controllers\CourseController::class, 'storeChapter'])->name('courses.chapters.store');
+        Route::put('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'updateChapter'])->name('courses.chapters.update');
+        Route::delete('/courses/{course}/chapters/{chapter}', [App\Http\Controllers\CourseController::class, 'destroyChapter'])->name('courses.chapters.destroy');
+
         Route::get('/courses/{course}/chapters/{chapter}/modules/create', [App\Http\Controllers\ModuleController::class, 'create'])->name('modules.create');
         Route::post('/courses/{course}/chapters/{chapter}/modules', [App\Http\Controllers\ModuleController::class, 'store'])->name('modules.store');
         Route::get('/courses/{course}/chapters/{chapter}/modules/{module}/edit', [App\Http\Controllers\ModuleController::class, 'edit'])->name('modules.edit');
         Route::put('/courses/{course}/chapters/{chapter}/modules/{module}', [App\Http\Controllers\ModuleController::class, 'update'])->name('modules.update');
         Route::delete('/courses/{course}/chapters/{chapter}/modules/{module}', [App\Http\Controllers\ModuleController::class, 'destroy'])->name('modules.destroy');
+
+        // Module Diagram & Hotspots Management
+        Route::post('/courses/{course}/chapters/{chapter}/modules/{module}/diagram', [App\Http\Controllers\CourseController::class, 'storeModuleDiagram'])->name('courses.modules.diagram.store');
+        Route::delete('/courses/{course}/chapters/{chapter}/modules/{module}/diagram', [App\Http\Controllers\CourseController::class, 'destroyModuleDiagram'])->name('courses.modules.diagram.destroy');
+        Route::post('/courses/{course}/chapters/{chapter}/modules/{module}/hotspots', [App\Http\Controllers\CourseController::class, 'storeModuleHotspot'])->name('courses.modules.hotspots.store');
+        Route::put('/courses/{course}/chapters/{chapter}/modules/{module}/hotspots', [App\Http\Controllers\CourseController::class, 'updateModuleHotspots'])->name('courses.modules.hotspots.update');
+        Route::put('/courses/{course}/chapters/{chapter}/modules/{module}/hotspots/{hotspot}', [App\Http\Controllers\CourseController::class, 'updateModuleHotspotDetails'])->name('courses.modules.hotspots.update-details');
+        Route::delete('/courses/{course}/chapters/{chapter}/modules/{module}/hotspots/{hotspot}', [App\Http\Controllers\CourseController::class, 'destroyModuleHotspot'])->name('courses.modules.hotspots.destroy');
 
         // Bank Soal — dikelola per chapter
         Route::get('/courses/{course}/chapters/{chapter}/questions', [QuestionController::class, 'index'])->name('questions.index');

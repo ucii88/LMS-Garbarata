@@ -35,7 +35,9 @@
     {{-- Banner: ada esai yang butuh penilaian --}}
     @if(isset($pendingEssayCount) && $pendingEssayCount > 0)
         <div class="bg-orange-50 border border-orange-200 rounded-2xl p-4 flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-base shrink-0">✍️</div>
+            <div class="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </div>
             <div class="flex-1">
                 <p class="text-base font-bold text-orange-800">{{ $pendingEssayCount }} {{ __('percobaan menunggu penilaian esai') }}</p>
                 <p class="text-sm text-orange-700 mt-0.5">{{ __('Klik tombol "Nilai Jawaban" di bawah untuk mulai menilai jawaban peserta.') }}</p>
@@ -124,7 +126,7 @@
 
                                 {{-- Reset --}}
                                 <form action="{{ route($isPractice ? 'practices.attempts.destroy' : 'quizzes.attempts.destroy', [$course, $quiz, $attempt]) }}"
-                                      method="POST" onsubmit="return confirm('{{ __('Reset percobaan ini? Nilai & jawaban akan dihapus.') }}')">
+                                      method="POST" data-confirm="{{ __('Apakah Anda yakin ingin mereset percobaan ini? Nilai & jawaban akan dihapus.') }}">
                                     @csrf @method('DELETE')
                                     <button class="px-3 py-1.5 bg-red-50 text-red-600 text-sm font-bold rounded-lg border border-red-200 hover:bg-red-100 transition">
                                         {{ __('Reset') }}

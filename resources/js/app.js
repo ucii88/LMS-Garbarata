@@ -5,22 +5,28 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 
 window.scrollToPartRow = function(no) {
-	const row = document.getElementById("part-row-" + no);
+	const prefixes = [
+		"part-row-", "roller-row-", "cable-row-", "lift-row-", "bogie-row-",
+		"stair-row-", "rotation-row-", "curtain-row-", "leveler-row-", "closure-row-",
+		"swing-row-", "weathering-row-", "equalizer-row-", "row-"
+	];
+	let row = null;
+	for (const prefix of prefixes) {
+		row = document.getElementById(prefix + no);
+		if (row) break;
+	}
 	if (row) {
 		row.scrollIntoView({ behavior: "smooth", block: "center" });
 		
-		// Remove highlight class from all rows first
-		document.querySelectorAll('[id^="part-row-"]').forEach(r => {
-			r.classList.remove("bg-blue-50", "text-blue-900", "font-semibold");
+		document.querySelectorAll('tr').forEach(r => {
+			r.classList.remove("bg-blue-50", "text-blue-900", "font-semibold", "bg-blue-100", "ring-2", "ring-blue-400");
 		});
 		
-		// Add highlight class
-		row.classList.add("bg-blue-50", "text-blue-900", "font-semibold");
+		row.classList.add("bg-blue-100", "ring-2", "ring-blue-400", "font-semibold");
 		
-		// Remove highlight after 2 seconds
 		setTimeout(() => {
-			row.classList.remove("bg-blue-50", "text-blue-900", "font-semibold");
-		}, 2000);
+			row.classList.remove("bg-blue-100", "ring-2", "ring-blue-400", "font-semibold");
+		}, 2500);
 	}
 };
 
@@ -359,6 +365,34 @@ Alpine.data('studyPage', (modules = [], completeUrlTemplate = null) => ({
 		completeUrlTemplate,
 		csrfToken: document.querySelector('meta[name="csrf-token"]')?.content || '',
 		init() {
+			window.setStudyModule = (targetId) => {
+				if (!targetId) return;
+				const str = String(targetId).trim().toLowerCase();
+
+				// 1. Direct ID match
+				let found = this.modules.find(m => String(m.id) === str);
+
+				// 2. Title prefix / match
+				if (!found) {
+					found = this.modules.find(m => {
+						if (!m || !m.title) return false;
+						const t = m.title.trim().toLowerCase();
+						return t.startsWith(str + '.') || t.startsWith(str + ' ') || t.startsWith(str) || t.includes(str);
+					});
+				}
+
+				// 3. 1-based index match (if hotspot label is "1", pick 1st module; if "2", pick 2nd module)
+				if (!found) {
+					const num = parseInt(str, 10);
+					if (!isNaN(num) && num >= 1 && num <= this.modules.length) {
+						found = this.modules[num - 1];
+					}
+				}
+
+				if (found) {
+					this.setActiveModule(found.id);
+				}
+			};
 			this.markModuleComplete(this.activeModuleId);
 		},
 		setActiveModule(moduleId) {

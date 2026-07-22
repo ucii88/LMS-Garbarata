@@ -285,14 +285,14 @@
             const totalPoints = updateQuestionSummary();
             if (totalPoints !== 100) {
                 event.preventDefault();
-                alert('Total poin soal harus tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
+                showGlobalAlert('Poin Belum Sesuai', 'Total poin soal harus tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
             }
         });
         document.getElementById('quiz-config-form').addEventListener('submit', (event) => {
             const totalPoints = updateQuestionSummary();
             if (totalPoints !== 100) {
                 event.preventDefault();
-                alert('Quiz, ujian, atau latihan hanya dapat disimpan setelah total poin soal tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
+                showGlobalAlert('Poin Belum Sesuai', 'Quiz, ujian, atau latihan hanya dapat disimpan setelah total poin soal tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
             }
         });
 
