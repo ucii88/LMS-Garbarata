@@ -37,11 +37,11 @@
                     bg-blue-100 text-blue-700
                 @endif">
                 @if($chapterQuizAttempt?->is_passed)
-                    LULUS
+                    {{ __('LULUS') }}
                 @elseif($chapterQuizAttempt && !$chapterQuizAttempt->is_passed)
-                    GAGAL
+                    {{ __('GAGAL') }}
                 @else
-                    QUIZ
+                    {{ __('QUIZ') }}
                 @endif
             </div>
 
@@ -51,27 +51,27 @@
                         @if($chapterQuizAttempt?->is_passed) text-emerald-600
                         @elseif($chapterQuizAttempt) text-red-500
                         @else text-blue-600 @endif">
-                        Quiz Chapter
+                        {{ __('Quiz Chapter') }}
                     </span>
                     @if($chapterQuizAttempt?->is_passed)
                         <span class="text-sm px-2 py-0.5 bg-emerald-500 text-white rounded-full font-semibold">
-                            Lulus · {{ number_format($chapterQuizAttempt->score, 0) }}%
+                            {{ __('Lulus') }} · {{ number_format($chapterQuizAttempt->score, 0) }}%
                         </span>
                     @elseif($chapterQuizAttempt && !$chapterQuizAttempt->is_passed)
                         <span class="text-sm px-2 py-0.5 bg-red-400 text-white rounded-full font-semibold">
-                            Belum Lulus · {{ number_format($chapterQuizAttempt->score, 0) }}%
+                            {{ __('Belum Lulus') }} · {{ number_format($chapterQuizAttempt->score, 0) }}%
                         </span>
                     @else
                         <span class="text-sm px-2 py-0.5 bg-blue-100 text-blue-600 rounded-full font-semibold">
-                            Belum Dikerjakan
+                            {{ __('Belum Dikerjakan') }}
                         </span>
                     @endif
                 </div>
                 <h3 class="text-base font-bold text-slate-800 mt-0.5">{{ $chapterQuiz->title }}</h3>
                 <p class="text-sm text-slate-500">
-                    {{ $chapterQuiz->questions_count }} soal ·
-                    {{ $chapterQuiz->time_limit ? $chapterQuiz->time_limit . ' mnt' : 'Tanpa timer' }} ·
-                    Lulus: {{ $chapterQuiz->passing_score }}%
+                    {{ $chapterQuiz->questions_count }} {{ __('soal') }} ·
+                    {{ $chapterQuiz->time_limit ? $chapterQuiz->time_limit . ' ' . __('mnt') : __('Tanpa timer') }} ·
+                    {{ __('Lulus:') }} {{ $chapterQuiz->passing_score }}%
                 </p>
                 @if($chapterQuiz->start_time || $chapterQuiz->end_time)
                     <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
@@ -93,35 +93,35 @@
                     @if($chapterQuizAttempt?->is_passed)
                         <a href="{{ route('quiz.result', [$course, $chapterQuiz]) }}"
                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 rounded-xl transition">
-                            Lihat Hasil
+                            {{ __('Lihat Hasil') }}
                         </a>
                     @elseif($chapterQuiz->availability_status === 'upcoming')
                         <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
-                            Belum Dibuka
+                            {{ __('Belum Dibuka') }}
                         </span>
                     @elseif($chapterQuiz->availability_status === 'closed')
                         <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
-                            Sudah Ditutup
+                            {{ __('Sudah Ditutup') }}
                         </span>
                     @elseif($chapterQuiz->canAttempt(auth()->id()))
                         <a href="{{ route('quiz.start', [$course, $chapterQuiz]) }}"
                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                            {{ $chapterQuizAttempt ? 'Coba Lagi' : 'Mulai Quiz' }}
+                            {{ $chapterQuizAttempt ? __('Coba Lagi') : __('Mulai Quiz') }}
                         </a>
                     @else
                         <span class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-400 bg-slate-100 rounded-xl cursor-not-allowed">
-                            Habis
+                            {{ __('Habis') }}
                         </span>
                     @endif
                 @elseif(auth()->user()->isInstruktur())
                     <div class="flex items-center gap-2">
                         <a href="{{ route('quizzes.attempts', [$course, $chapterQuiz]) }}"
                            class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl transition">
-                            Hasil Peserta
+                            {{ __('Hasil Peserta') }}
                         </a>
                         <a href="{{ route('quizzes.edit', [$course, $chapterQuiz]) }}"
                            class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-bold text-blue-600 border border-blue-200 hover:bg-blue-50 rounded-xl transition">
-                            Edit
+                            {{ __('Edit') }}
                         </a>
                     </div>
                 @endif
@@ -138,7 +138,7 @@
         </div>
         <a href="{{ route('quizzes.create', $course) }}"
            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shrink-0">
-            + Buat Quiz Chapter
+            + {{ __('Buat Quiz Chapter') }}
         </a>
     </div>
 </div>

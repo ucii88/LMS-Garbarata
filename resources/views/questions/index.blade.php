@@ -62,7 +62,7 @@
                             <span class="text-sm text-slate-400">{{ $question->points }} {{ __('poin') }}</span>
                             @if($question->topic_tag)
                                 <span class="text-sm px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full">
-                                    {{ $question->topic_tag }}
+                                    {{ __($question->topic_tag) }}
                                 </span>
                             @endif
                         </div>

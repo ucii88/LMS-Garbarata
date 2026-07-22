@@ -1,10 +1,10 @@
-@section('topbar_title', 'Edit Pengguna')
+@section('topbar_title', __('Edit Pengguna'))
 
 <x-app-layout>
     <div class="max-w-2xl mx-auto space-y-6">
         {{-- Breadcrumb --}}
         <nav class="flex items-center gap-2 text-sm text-slate-400" aria-label="Breadcrumb">
-            <a href="{{ route('admin.users.index') }}" class="font-semibold hover:text-slate-600 transition">Kelola Pengguna</a>
+            <a href="{{ route('admin.users.index') }}" class="font-semibold hover:text-slate-600 transition">{{ __('Kelola Pengguna') }}</a>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             <span class="text-slate-600 font-semibold truncate max-w-[200px]">{{ $user->name }}</span>
         </nav>
@@ -18,10 +18,10 @@
                 </div>
                 <div>
                     <span class="inline-flex items-center rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-indigo-400 border border-indigo-500/20 mb-1">
-                        Edit Pengguna
+                        {{ __('Edit Pengguna') }}
                     </span>
                     <h1 class="text-xl font-extrabold tracking-tight text-white">{{ $user->name }}</h1>
-                    <p class="text-sm text-slate-400 mt-0.5">{{ $user->email }} · Terdaftar {{ $user->created_at->format('d M Y') }}</p>
+                    <p class="text-sm text-slate-400 mt-0.5">{{ $user->email }} · {{ __('Terdaftar') }} {{ $user->created_at->format('d M Y') }}</p>
                 </div>
             </div>
         </section>
@@ -29,8 +29,8 @@
         {{-- Edit Form --}}
         <section class="rounded-2xl border border-[#f0f0f0] bg-white shadow-sm overflow-hidden">
             <div class="border-b border-[#f0f0f0] px-6 py-4">
-                <h2 class="text-base font-bold text-slate-800">Informasi Pengguna</h2>
-                <p class="text-[10px] text-slate-400 mt-0.5">Perbarui nama, email, dan peran pengguna.</p>
+                <h2 class="text-base font-bold text-slate-800">{{ __('Informasi Pengguna') }}</h2>
+                <p class="text-[10px] text-slate-400 mt-0.5">{{ __('Perbarui nama, email, dan peran pengguna.') }}</p>
             </div>
 
             <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="px-6 py-5 space-y-5 text-sm text-slate-700">
@@ -40,15 +40,15 @@
                 {{-- Name --}}
                 <div class="space-y-1.5">
                     <label for="edit_name" class="block text-sm font-bold text-slate-700">
-                        Nama Lengkap
-                        <span class="font-medium text-slate-400">(opsional)</span>
+                        {{ __('Nama Lengkap') }}
+                        <span class="font-medium text-slate-400">{{ __('(opsional)') }}</span>
                     </label>
                     <input
                         type="text"
                         name="name"
                         id="edit_name"
                         value="{{ old('name', $user->name) }}"
-                        placeholder="Masukkan nama lengkap"
+                        placeholder="{{ __('Masukkan nama lengkap') }}"
                         class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('name') border-rose-300 focus:border-rose-500 focus:ring-rose-500 @enderror"
                     >
                     @error('name')
@@ -61,7 +61,7 @@
 
                 {{-- Email --}}
                 <div class="space-y-1.5">
-                    <label for="edit_email" class="block text-sm font-bold text-slate-700">Alamat Email</label>
+                    <label for="edit_email" class="block text-sm font-bold text-slate-700">{{ __('Alamat Email') }}</label>
                     <input
                         type="email"
                         name="email"
@@ -81,16 +81,16 @@
 
                 {{-- Role --}}
                 <div class="space-y-1.5">
-                    <label for="edit_role" class="block text-sm font-bold text-slate-700">Peran</label>
+                    <label for="edit_role" class="block text-sm font-bold text-slate-700">{{ __('Peran') }}</label>
                     <select
                         name="role"
                         id="edit_role"
                         required
                         class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('role') border-rose-300 @enderror"
                     >
-                        <option value="peserta"    @selected(old('role', $user->role) === 'peserta')>Peserta</option>
-                        <option value="instruktur" @selected(old('role', $user->role) === 'instruktur')>Instruktur</option>
-                        <option value="admin"      @selected(old('role', $user->role) === 'admin')>Admin</option>
+                        <option value="peserta"    @selected(old('role', $user->role) === 'peserta')>{{ __('Peserta') }}</option>
+                        <option value="instruktur" @selected(old('role', $user->role) === 'instruktur')>{{ __('Instruktur') }}</option>
+                        <option value="admin"      @selected(old('role', $user->role) === 'admin')>{{ __('Admin') }}</option>
                     </select>
                     @error('role')
                         <p class="text-[10px] font-semibold text-rose-600 flex items-center gap-1">
@@ -102,19 +102,19 @@
 
                 {{-- Divider --}}
                 <div class="border-t border-[#f0f0f0] pt-5 space-y-1">
-                    <h3 class="text-sm font-bold text-slate-800">Ganti Password</h3>
-                    <p class="text-[10px] text-slate-400">Kosongkan jika tidak ingin mengubah password.</p>
+                    <h3 class="text-sm font-bold text-slate-800">{{ __('Ganti Password') }}</h3>
+                    <p class="text-[10px] text-slate-400">{{ __('Kosongkan jika tidak ingin mengubah password.') }}</p>
                 </div>
 
                 {{-- New Password --}}
                 <div class="space-y-1.5" x-data="{ showPwd: false }">
-                    <label for="edit_password" class="block text-sm font-bold text-slate-700">Password Baru</label>
+                    <label for="edit_password" class="block text-sm font-bold text-slate-700">{{ __('Password Baru') }}</label>
                     <div class="relative">
                         <input
                             :type="showPwd ? 'text' : 'password'"
                             name="password"
                             id="edit_password"
-                            placeholder="Minimal 8 karakter"
+                            placeholder="{{ __('Minimal 8 karakter') }}"
                             autocomplete="new-password"
                             class="block w-full rounded-lg border-slate-200 pr-10 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('password') border-rose-300 focus:border-rose-500 focus:ring-rose-500 @enderror"
                         >
@@ -138,13 +138,13 @@
 
                 {{-- Confirm Password --}}
                 <div class="space-y-1.5" x-data="{ showConfirm: false }">
-                    <label for="edit_password_confirmation" class="block text-sm font-bold text-slate-700">Konfirmasi Password Baru</label>
+                    <label for="edit_password_confirmation" class="block text-sm font-bold text-slate-700">{{ __('Konfirmasi Password Baru') }}</label>
                     <div class="relative">
                         <input
                             :type="showConfirm ? 'text' : 'password'"
                             name="password_confirmation"
                             id="edit_password_confirmation"
-                            placeholder="Ulangi password baru"
+                            placeholder="{{ __('Ulangi password baru') }}"
                             autocomplete="new-password"
                             class="block w-full rounded-lg border-slate-200 pr-10 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         >
@@ -167,14 +167,14 @@
                         class="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-5 py-2.5 text-sm font-bold text-slate-600 transition"
                     >
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                        Kembali
+                        {{ __('Kembali') }}
                     </a>
                     <button
                         type="submit"
                         class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-2.5 text-sm font-bold text-white transition shadow-sm"
                     >
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        Simpan Perubahan
+                        {{ __('Simpan Perubahan') }}
                     </button>
                 </div>
             </form>

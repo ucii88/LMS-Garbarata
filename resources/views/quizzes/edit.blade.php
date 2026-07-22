@@ -1,15 +1,15 @@
-@section('topbar_title', 'Edit ' . ($isPractice ? 'Latihan' : ($quiz->isFinalQuiz() ? 'Ujian' : 'Quiz')) . ' — ' . $quiz->title)
+@section('topbar_title', __('Edit') . ' ' . ($isPractice ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Quiz'))) . ' — ' . $quiz->title)
 
 <x-app-layout>
     @php
-        $activityLabel = $isPractice ? 'Latihan' : ($quiz->isFinalQuiz() ? 'Ujian' : 'Quiz');
+        $activityLabel = $isPractice ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Quiz'));
     @endphp
 
     <div class="max-w-6xl mx-auto space-y-6">
         <div>
-            <a href="{{ route($isPractice ? 'practices.index' : 'quizzes.index', $course) }}" class="text-sm font-bold text-slate-500">← Kembali</a>
-            <h1 class="mt-2 text-xl font-bold text-slate-800">Edit {{ $activityLabel }}</h1>
-            <p class="text-sm text-slate-500">Konfigurasi dan pilih soal dari bank soal. Total poin wajib tepat 100.</p>
+            <a href="{{ route($isPractice ? 'practices.index' : 'quizzes.index', $course) }}" class="text-sm font-bold text-slate-500">{{ __('← Kembali') }}</a>
+            <h1 class="mt-2 text-xl font-bold text-slate-800">{{ __('Edit') }} {{ $activityLabel }}</h1>
+            <p class="text-sm text-slate-500">{{ __('Konfigurasi dan pilih soal dari bank soal. Total poin wajib tepat 100.') }}</p>
         </div>
 
         @if (session('success'))
@@ -26,42 +26,42 @@
             <form id="quiz-config-form" action="{{ route($isPractice ? 'practices.update' : 'quizzes.update', [$course, $quiz]) }}" method="POST" class="flex flex-col rounded-2xl border bg-white p-6" style="height: calc(100vh - 8rem); overflow-y: auto;">
                 @csrf @method('PUT')
                 <div class="flex-1 space-y-4">
-                    <h2 class="font-bold">Konfigurasi {{ $activityLabel }}</h2>
-                    <div><label class="mb-1 block text-xs font-semibold">Judul *</label><input name="title" required value="{{ old('title', $quiz->title) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
-                    <div><label class="mb-1 block text-xs font-semibold">Deskripsi</label><textarea name="description" rows="2" class="w-full rounded-xl border px-3 py-2.5 text-sm">{{ old('description', $quiz->description) }}</textarea></div>
-                    <div><label class="mb-1 block text-xs font-semibold">Chapter</label><select name="chapter_id" {{ $isPractice ? 'required' : '' }} class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="">{{ $isPractice ? '-- Pilih chapter --' : 'Ujian' }}</option>@foreach($chapters as $chapter)<option value="{{ $chapter->id }}" @selected($quiz->chapter_id == $chapter->id)>{{ $chapter->order }}. {{ $chapter->title }}</option>@endforeach</select></div>
+                    <h2 class="font-bold">{{ __('Konfigurasi') }} {{ $activityLabel }}</h2>
+                    <div><label class="mb-1 block text-xs font-semibold">{{ __('Judul *') }}</label><input name="title" required value="{{ old('title', $quiz->title) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
+                    <div><label class="mb-1 block text-xs font-semibold">{{ __('Deskripsi') }}</label><textarea name="description" rows="2" class="w-full rounded-xl border px-3 py-2.5 text-sm">{{ old('description', $quiz->description) }}</textarea></div>
+                    <div><label class="mb-1 block text-xs font-semibold">Chapter</label><select name="chapter_id" {{ $isPractice ? 'required' : '' }} class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="">{{ $isPractice ? __('-- Pilih chapter --') : __('Ujian (Akhir Course)') }}</option>@foreach($chapters as $chapter)<option value="{{ $chapter->id }}" @selected($quiz->chapter_id == $chapter->id)>{{ $chapter->order }}. {{ $chapter->title }}</option>@endforeach</select></div>
 
                     @if($isPractice)
                         <input type="hidden" name="review_policy" value="show_all">
-                        <div><label class="mb-1 block text-xs font-semibold">Maks. percobaan (kosong = tanpa batas)</label><input type="number" name="max_attempts" min="1" max="100" value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
+                        <div><label class="mb-1 block text-xs font-semibold">{{ __('Maks. percobaan (kosong = tanpa batas)') }}</label><input type="number" name="max_attempts" min="1" max="100" value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
                     @else
-                        <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">Dibuka pada</label><input type="datetime-local" name="start_time" value="{{ old('start_time', $quiz->start_time ? $quiz->start_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">Ditutup pada</label><input type="datetime-local" name="end_time" value="{{ old('end_time', $quiz->end_time ? $quiz->end_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
-                        <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">Timer (menit) <span class="text-gray-400 font-normal">— kosong = tanpa batas</span></label><input type="number" name="time_limit" min="1" placeholder="Contoh: 30" value="{{ old('time_limit', $quiz->time_limit) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">Nilai lulus *</label><input type="number" name="passing_score" required value="{{ old('passing_score', $quiz->passing_score) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
-                        <div><label class="mb-1 block text-xs font-semibold">Maks. percobaan *</label><input type="number" name="max_attempts" required value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
-                        <select name="review_policy" class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="show_all" @selected($quiz->review_policy === 'show_all')>Tampilkan semua</option><option value="points_only" @selected($quiz->review_policy === 'points_only')>Skor saja</option><option value="hide_all" @selected($quiz->review_policy === 'hide_all')>Sembunyikan detail</option></select>
-                        <div class="flex gap-4 text-xs -mt-2"><label><input type="checkbox" name="shuffle_questions" value="1" @checked($quiz->shuffle_questions)> Acak soal</label><label><input type="checkbox" name="shuffle_options" value="1" @checked($quiz->shuffle_options)> Acak pilihan</label></div>
+                        <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">{{ __('Dibuka pada') }}</label><input type="datetime-local" name="start_time" value="{{ old('start_time', $quiz->start_time ? $quiz->start_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">{{ __('Ditutup pada') }}</label><input type="datetime-local" name="end_time" value="{{ old('end_time', $quiz->end_time ? $quiz->end_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
+                        <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">{{ __('Timer (menit)') }} <span class="text-gray-400 font-normal">— {{ __('kosong = tanpa batas') }}</span></label><input type="number" name="time_limit" min="1" placeholder="Contoh: 30" value="{{ old('time_limit', $quiz->time_limit) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">{{ __('Nilai lulus *') }}</label><input type="number" name="passing_score" required value="{{ old('passing_score', $quiz->passing_score) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
+                        <div><label class="mb-1 block text-xs font-semibold">{{ __('Maks. percobaan *') }}</label><input type="number" name="max_attempts" required value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
+                        <select name="review_policy" class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="show_all" @selected($quiz->review_policy === 'show_all')>{{ __('Tampilkan semua') }}</option><option value="points_only" @selected($quiz->review_policy === 'points_only')>{{ __('Skor saja') }}</option><option value="hide_all" @selected($quiz->review_policy === 'hide_all')>{{ __('Sembunyikan detail') }}</option></select>
+                        <div class="flex gap-4 text-xs -mt-2"><label><input type="checkbox" name="shuffle_questions" value="1" @checked($quiz->shuffle_questions)> {{ __('Acak soal') }}</label><label><input type="checkbox" name="shuffle_options" value="1" @checked($quiz->shuffle_options)> {{ __('Acak pilihan') }}</label></div>
                     @endif
                 </div>
                 <!-- 2. PERUBAHAN DI SINI: mt-6 dikembalikan menjadi mt-auto -->
-                <button class="mt-auto w-full rounded-xl bg-blue-600 py-2.5 text-sm font-bold text-white">Simpan Perubahan</button>
+                <button class="mt-auto w-full rounded-xl bg-blue-600 py-2.5 text-sm font-bold text-white">{{ __('Simpan Perubahan') }}</button>
             </form>
 
             <!-- 3. PERUBAHAN DI SINI: max-height diganti menjadi height biasa -->
             <div id="question-selection-card" class="flex flex-col overflow-hidden rounded-2xl border bg-white p-6 lg:sticky lg:top-6" style="height: calc(100vh - 8rem);">
                 <div class="mb-4 flex items-start justify-between gap-4">
                     <div>
-                        <h2 class="font-bold">Soal dalam {{ $activityLabel }}</h2>
+                        <h2 class="font-bold">{{ __('Soal dalam') }} {{ $activityLabel }}</h2>
                         <p class="text-xs text-slate-500">
                             @if($quiz->isFinalQuiz())
-                                Soal dari semua bab · pilih hingga total 100 poin.
+                                {{ __('Soal dari semua bab · pilih hingga total 100 poin.') }}
                             @else
-                                Pilih dari bank soal terkait.
+                                {{ __('Pilih dari bank soal terkait.') }}
                             @endif
                         </p>
                     </div>
                     <p class="text-right text-xs font-semibold text-slate-600">
-                        <span id="selected-question-count">{{ count($selectedQuestionIds) }}</span> soal dipilih<br>
-                        <span id="selected-question-points" class="text-blue-600">0</span> / 100 poin
+                        <span id="selected-question-count">{{ count($selectedQuestionIds) }}</span> {{ __('soal dipilih') }}<br>
+                        <span id="selected-question-points" class="text-blue-600">0</span> / 100 {{ __('poin') }}
                     </p>
                 </div>
 
@@ -77,7 +77,7 @@
                                 class="chapter-tab-btn active-tab rounded-full px-3 py-1 text-xs font-semibold transition"
                                 data-tab="all"
                                 onclick="switchTab('all', this)">
-                                Semua
+                                {{ __('Semua') }}
                                 <span class="ml-1 rounded-full bg-white/60 px-1.5 text-[10px] font-bold" id="badge-all">{{ $availableQuestions->count() }}</span>
                             </button>
                             @foreach($groupedQuestions as $chapterId => $chapterQuestions)
@@ -86,7 +86,7 @@
                                     class="chapter-tab-btn rounded-full px-3 py-1 text-xs font-semibold transition"
                                     data-tab="{{ $chapterId }}"
                                     onclick="switchTab('{{ $chapterId }}', this)">
-                                    Bab {{ $ch->order ?? $loop->iteration }}
+                                    {{ __('Bab') }} {{ $ch->order ?? $loop->iteration }}
                                     <span class="ml-1 rounded-full bg-white/60 px-1.5 text-[10px] font-bold" id="badge-{{ $chapterId }}">{{ $chapterQuestions->count() }}</span>
                                 </button>
                             @endforeach
@@ -179,15 +179,15 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route($isPractice ? 'practices.edit' : 'quizzes.edit', [$course, $quiz])) }}" class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50" onclick="event.stopPropagation()">Lihat detail</a>
+                                    <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route($isPractice ? 'practices.edit' : 'quizzes.edit', [$course, $quiz])) }}" class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50" onclick="event.stopPropagation()">{{ __('Lihat detail') }}</a>
                                 </label>
                             @empty
-                                <div class="py-8 text-center text-sm text-slate-400">Belum ada soal.</div>
+                                <div class="py-8 text-center text-sm text-slate-400">{{ __('Belum ada soal.') }}</div>
                             @endforelse
                         </div>
                     @endif
 
-                        <button class="mt-4 w-full shrink-0 rounded-xl bg-emerald-600 py-2.5 text-sm font-bold text-white">Simpan Pilihan Soal</button>
+                        <button class="mt-4 w-full shrink-0 rounded-xl bg-emerald-600 py-2.5 text-sm font-bold text-white">{{ __('Simpan Pilihan Soal') }}</button>
             </div>{{-- end card kanan --}}
         </div>{{-- end grid --}}
     </div>{{-- end container --}}

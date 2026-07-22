@@ -110,6 +110,11 @@
     </style>
     <script>
         window.LmsTTS = (function () {
+            const _ttsT = {
+                playing: '{{ __('Sedang Dibaca...') }}',
+                resume: '{{ __('Lanjutkan') }}',
+                listen: '{{ __('Dengarkan') }}'
+            };
             const synth = window.speechSynthesis;
             let currentId          = null;   // Active module ID
             let currentUtt         = null;   // Active SpeechSynthesisUtterance
@@ -169,7 +174,6 @@
                 el.scrollIntoView({ block: 'center', behavior: 'smooth' });
             }
 
-            /* ── Update status tombol TTS di UI ── */
             function broadcastState(id, state /* 'idle'|'playing'|'paused' */) {
                 document.querySelectorAll('[data-tts-id]').forEach(btn => {
                     const btnId = btn.getAttribute('data-tts-id');
@@ -179,16 +183,16 @@
                         if (state === 'playing') {
                             btn.className = 'tts-btn tts-btn-playing';
                             if (icon)  icon.innerHTML   = SVG_PAUSE;
-                            if (label) label.textContent = 'Sedang Dibaca...';
+                            if (label) label.textContent = _ttsT.playing;
                         } else {
                             btn.className = 'tts-btn tts-btn-paused';
                             if (icon)  icon.innerHTML   = SVG_PLAY;
-                            if (label) label.textContent = 'Lanjutkan';
+                            if (label) label.textContent = _ttsT.resume;
                         }
                     } else {
                         btn.className = 'tts-btn tts-btn-idle';
                         if (icon)  icon.innerHTML   = SVG_SPEAKER;
-                        if (label) label.textContent = 'Dengarkan';
+                        if (label) label.textContent = _ttsT.listen;
                     }
                 });
             }
@@ -421,6 +425,32 @@
                     e.preventDefault();
                     window.LmsTTS.nextParagraph();
                 }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const locale = '{{ app()->getLocale() }}';
+            if (locale === 'en') {
+                document.querySelectorAll('[title="Dengarkan Suara Subab"]').forEach(el => {
+                    el.title = "Listen to Subsection Audio";
+                });
+                document.querySelectorAll('[title="Paragraf Sebelumnya"]').forEach(el => {
+                    el.title = "Previous Paragraph";
+                });
+                document.querySelectorAll('[title="Paragraf Selanjutnya"]').forEach(el => {
+                    el.title = "Next Paragraph";
+                });
+                document.querySelectorAll('[title="Klik untuk mengubah kecepatan suara"]').forEach(el => {
+                    el.title = "Click to change voice speed";
+                });
+                document.querySelectorAll('.tts-speed-btn').forEach(el => {
+                    el.title = "Click to change voice speed";
+                });
+                document.querySelectorAll('.tts-label').forEach(el => {
+                    if (el.textContent.trim() === 'Dengarkan') {
+                        el.textContent = 'Listen';
+                    }
+                });
             }
         });
     </script>

@@ -109,7 +109,7 @@ class AdminUserController extends Controller
 
         $users = $query->get();
 
-        $filename = 'Data_Pengguna_' . date('Y-m-d_His') . '.csv';
+        $filename = __('User_Data_') . date('Y-m-d_His') . '.csv';
 
         $headers = [
             'Content-type'        => 'text/csv',
@@ -125,7 +125,7 @@ class AdminUserController extends Controller
             // Output BOM to make sure Excel reads UTF-8 properly
             fputs($file, "\xEF\xBB\xBF");
             
-            fputcsv($file, ['No', 'Nama Lengkap', 'Email', 'Peran', 'Tanggal Daftar', 'Nilai Quiz', 'Nilai Ujian', 'Link Sertifikat'], ';');
+            fputcsv($file, ['No', __('Full Name'), __('Email'), __('Role'), __('Registration Date'), __('Quiz Score'), __('Exam Score'), __('Certificate Link')], ';');
 
             $no = 1;
             foreach ($users as $user) {
@@ -226,7 +226,7 @@ class AdminUserController extends Controller
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', "Data pengguna {$user->email} berhasil diperbarui.");
+            ->with('success', __('Data pengguna :email berhasil diperbarui.', ['email' => $user->email]));
     }
 
     /**
@@ -258,7 +258,7 @@ class AdminUserController extends Controller
                 ->route('admin.users.index')
                 ->withErrors($validator)
                 ->withInput($request->except('password'))
-                ->with('error', "Gagal menambahkan akun {$email}, sebagai {$roleLabel}.")
+                ->with('error', __('Gagal menambahkan akun :email, sebagai :role.', ['email' => $email, 'role' => $roleLabel]))
                 ->with('showModal', true);
         }
 
@@ -280,7 +280,7 @@ class AdminUserController extends Controller
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', "Berhasil menambahkan akun {$validated['email']}, sebagai {$roleLabels[$validated['role']]}.");
+            ->with('success', __('Berhasil menambahkan akun :email, sebagai :role.', ['email' => $validated['email'], 'role' => $roleLabels[$validated['role']]]));
     }
 
     /**
@@ -289,11 +289,11 @@ class AdminUserController extends Controller
     public function destroy(User $user)
     {
         if (auth()->id() === $user->id) {
-            return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+            return redirect()->route('admin.users.index')->with('error', __('Anda tidak dapat menghapus akun Anda sendiri.'));
         }
 
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
+        return redirect()->route('admin.users.index')->with('success', __('Pengguna berhasil dihapus.'));
     }
 }

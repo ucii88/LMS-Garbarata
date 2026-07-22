@@ -1,4 +1,4 @@
-@section('topbar_title', 'Kelola Pengguna')
+@section('topbar_title', __('Kelola Pengguna'))
 
 <x-app-layout>
     @php
@@ -38,17 +38,17 @@
             <div class="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div class="space-y-2">
                     <span class="inline-flex items-center rounded-full bg-indigo-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-400 border border-indigo-500/20">
-                        Admin Panel
+                        {{ __('Admin Panel') }}
                     </span>
-                    <h1 class="text-2xl font-extrabold tracking-tight text-white">Kelola Pengguna</h1>
-                    <p class="text-sm text-slate-300 leading-relaxed">Tambah, edit, dan hapus akun pengguna sistem LMS Garbarata.</p>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-white">{{ __('Kelola Pengguna') }}</h1>
+                    <p class="text-sm text-slate-300 leading-relaxed">{{ __('Tambah, edit, dan hapus akun pengguna sistem LMS Garbarata.') }}</p>
                 </div>
                 <button
                     @click="showModal = true"
                     class="shrink-0 inline-flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-slate-100 text-slate-900 px-5 py-3 text-sm font-bold transition-all shadow-sm border border-slate-200"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                    Tambah Pengguna
+                    {{ __('Tambah Pengguna') }}
                 </button>
             </div>
         </section>
@@ -56,10 +56,10 @@
         {{-- Stats Cards --}}
         <section class="grid grid-cols-2 gap-4 lg:grid-cols-4">
             @foreach ([
-                ['label' => 'Total Pengguna', 'value' => $counts['total'],      'color' => 'border-l-slate-400',   'icon' => 'text-slate-500',   'bg' => 'bg-slate-50'],
-                ['label' => 'Admin',           'value' => $counts['admin'],      'color' => 'border-l-rose-500',    'icon' => 'text-rose-600',    'bg' => 'bg-rose-50'],
-                ['label' => 'Instruktur',      'value' => $counts['instruktur'], 'color' => 'border-l-amber-500',   'icon' => 'text-amber-600',   'bg' => 'bg-amber-50'],
-                ['label' => 'Peserta',         'value' => $counts['peserta'],    'color' => 'border-l-blue-500',    'icon' => 'text-blue-600',    'bg' => 'bg-blue-50'],
+                ['label' => __('Total Pengguna'), 'value' => $counts['total'],      'color' => 'border-l-slate-400',   'icon' => 'text-slate-500',   'bg' => 'bg-slate-50'],
+                ['label' => __('Admin'),           'value' => $counts['admin'],      'color' => 'border-l-rose-500',    'icon' => 'text-rose-600',    'bg' => 'bg-rose-50'],
+                ['label' => __('Instruktur'),      'value' => $counts['instruktur'], 'color' => 'border-l-amber-500',   'icon' => 'text-amber-600',   'bg' => 'bg-amber-50'],
+                ['label' => __('Peserta'),         'value' => $counts['peserta'],    'color' => 'border-l-blue-500',    'icon' => 'text-blue-600',    'bg' => 'bg-blue-50'],
             ] as $card)
                 <article class="rounded-xl border border-[#f0f0f0] border-l-4 {{ $card['color'] }} bg-white p-5 shadow-sm hover:shadow-md transition duration-200">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">{{ $card['label'] }}</p>
@@ -77,28 +77,28 @@
                         type="text"
                         name="search"
                         value="{{ $search }}"
-                        placeholder="Cari nama atau email..."
+                        placeholder="{{ __('Cari nama atau email...') }}"
                         class="block w-full rounded-lg border-slate-200 pl-9 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     >
                 </div>
                 <select name="role" class="rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500 w-full sm:w-44">
-                    <option value="">Semua Peran</option>
-                    <option value="admin"      @selected($roleFilter === 'admin')>Admin</option>
-                    <option value="instruktur" @selected($roleFilter === 'instruktur')>Instruktur</option>
-                    <option value="peserta"    @selected($roleFilter === 'peserta')>Peserta</option>
+                    <option value="">{{ __('Semua Peran') }}</option>
+                    <option value="admin"      @selected($roleFilter === 'admin')>{{ __('Admin') }}</option>
+                    <option value="instruktur" @selected($roleFilter === 'instruktur')>{{ __('Instruktur') }}</option>
+                    <option value="peserta"    @selected($roleFilter === 'peserta')>{{ __('Peserta') }}</option>
                 </select>
                 <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-slate-900 hover:bg-slate-800 px-4 py-2 text-sm font-bold text-white transition shadow-sm w-full sm:w-auto">
-                    Filter
+                    {{ __('Filter') }}
                 </button>
                 @if($search || $roleFilter)
                     <a href="{{ route('admin.users.index') }}" class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600 transition w-full sm:w-auto">
-                        Reset
+                        {{ __('Reset') }}
                     </a>
                 @endif
                 
                 <a href="{{ route('admin.users.export', request()->query()) }}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-sm font-bold text-white transition shadow-sm w-full sm:w-auto ml-auto">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                    Export Excel
+                    {{ __('Export Excel') }}
                 </a>
             </form>
         </section>
@@ -107,9 +107,9 @@
         <section class="rounded-2xl border border-[#f0f0f0] bg-white shadow-sm overflow-hidden">
             <div class="flex items-center justify-between border-b border-[#f0f0f0] px-6 py-4">
                 <div>
-                    <h2 class="text-base font-bold text-slate-800">Daftar Pengguna</h2>
+                    <h2 class="text-base font-bold text-slate-800">{{ __('Daftar Pengguna') }}</h2>
                     <p class="text-[10px] text-slate-400 mt-0.5">
-                        Menampilkan {{ $users->firstItem() ?? 0 }}–{{ $users->lastItem() ?? 0 }} dari {{ $users->total() }} pengguna
+                        {{ __('Menampilkan') }} {{ $users->firstItem() ?? 0 }}–{{ $users->lastItem() ?? 0 }} {{ __('dari') }} {{ $users->total() }} {{ __('pengguna') }}
                     </p>
                 </div>
             </div>
@@ -118,11 +118,11 @@
                 <table class="min-w-full divide-y divide-[#f0f0f0] text-left text-sm">
                     <thead class="bg-gray-50">
                         <tr class="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                            <th class="px-5 py-3">Nama</th>
-                            <th class="px-5 py-3">Email</th>
-                            <th class="px-5 py-3">Peran</th>
-                            <th class="px-5 py-3">Terdaftar</th>
-                            <th class="px-5 py-3 text-right">Aksi</th>
+                            <th class="px-5 py-3">{{ __('Nama') }}</th>
+                            <th class="px-5 py-3">{{ __('Email') }}</th>
+                            <th class="px-5 py-3">{{ __('Peran') }}</th>
+                            <th class="px-5 py-3">{{ __('Terdaftar') }}</th>
+                            <th class="px-5 py-3 text-right">{{ __('Aksi') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-[#f0f0f0] bg-white text-slate-700">
@@ -139,14 +139,14 @@
                                         </div>
                                         <span>{{ $item->name }}</span>
                                         @if($isMe)
-                                            <span class="rounded-full bg-indigo-50 text-indigo-500 border border-indigo-100 px-1.5 py-0.5 text-[9px] font-bold">Anda</span>
+                                            <span class="rounded-full bg-indigo-50 text-indigo-500 border border-indigo-100 px-1.5 py-0.5 text-[9px] font-bold">{{ __('Anda') }}</span>
                                         @endif
                                     </div>
                                 </td>
                                 <td class="px-5 py-3.5 text-slate-500">{{ $item->email }}</td>
                                 <td class="px-5 py-3.5">
                                     <span class="inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold capitalize {{ $badgeStyle }}">
-                                        {{ $item->role }}
+                                        {{ __($item->role) }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-3.5 text-slate-400">{{ $item->created_at->format('d M Y') }}</td>
@@ -159,7 +159,7 @@
                                                 class="inline-flex items-center gap-1 rounded-lg border border-indigo-200 bg-white hover:bg-indigo-50 px-2.5 py-1 text-[10px] font-bold text-indigo-600 transition"
                                             >
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                                Detail
+                                                {{ __('Detail') }}
                                             </a>
                                         @endif
                                         {{-- Edit Button --}}
@@ -168,7 +168,7 @@
                                             class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 px-2.5 py-1 text-[10px] font-bold text-slate-600 transition"
                                         >
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                            Edit
+                                            {{ __('Edit') }}
                                         </a>
                                         {{-- Delete Button --}}
                                         @if (!$isMe)
@@ -178,7 +178,7 @@
                                                 class="inline-flex items-center gap-1 rounded-lg border border-rose-100 bg-rose-50 hover:bg-rose-100 px-2.5 py-1 text-[10px] font-bold text-rose-600 transition"
                                             >
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                                Hapus
+                                                {{ __('Hapus') }}
                                             </button>
                                         @else
                                             <span class="text-[10px] italic text-slate-400">—</span>
@@ -191,7 +191,7 @@
                                 <td colspan="5" class="px-5 py-10 text-center text-sm text-slate-400">
                                     <div class="flex flex-col items-center gap-2">
                                         <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                                        <span>Tidak ada pengguna ditemukan.</span>
+                                        <span>{{ __('Tidak ada pengguna ditemukan.') }}</span>
                                     </div>
                                 </td>
                             </tr>
@@ -220,8 +220,8 @@
                     <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 text-rose-500 mx-auto">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Hapus Pengguna</h3>
-                    <p class="text-sm text-slate-500">Anda akan menghapus akun <span class="font-bold text-slate-700" x-text="deleteUserName"></span>. Tindakan ini tidak dapat dibatalkan.</p>
+                    <h3 class="text-base font-bold text-slate-900">{{ __('Hapus Pengguna') }}</h3>
+                    <p class="text-sm text-slate-500">{{ __('Anda akan menghapus akun') }} <span class="font-bold text-slate-700" x-text="deleteUserName"></span>. {{ __('Tindakan ini tidak dapat dibatalkan.') }}</p>
                 </div>
                 <div class="flex gap-3 border-t border-slate-100 bg-slate-50 px-6 py-4">
                     <button
@@ -229,13 +229,13 @@
                         @click="deleteUserId = null"
                         class="flex-1 py-2 text-sm font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-100 transition"
                     >
-                        Batal
+                        {{ __('Batal') }}
                     </button>
                     <form :action="`/admin/users/${deleteUserId}`" method="POST" class="flex-1">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="w-full py-2 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition">
-                            Ya, Hapus
+                            {{ __('Ya, Hapus') }}
                         </button>
                     </form>
                 </div>
@@ -278,8 +278,8 @@
                 >
                     <div class="border-b border-slate-100 px-6 py-5 flex items-center justify-between">
                         <div>
-                            <h3 class="text-base font-bold text-slate-900" id="add-user-modal-title">Tambah Pengguna Baru</h3>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Buat akun admin, instruktur, atau peserta baru.</p>
+                            <h3 class="text-base font-bold text-slate-900" id="add-user-modal-title">{{ __('Tambah Pengguna Baru') }}</h3>
+                            <p class="text-[10px] text-slate-400 mt-0.5">{{ __('Buat akun admin, instruktur, atau peserta baru.') }}</p>
                         </div>
                         <button type="button" @click="showModal = false" class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -290,15 +290,15 @@
                         @csrf
 
                         <div class="space-y-1">
-                            <label for="name" class="block font-bold text-slate-700">Nama Lengkap <span class="font-medium text-slate-400">(opsional)</span></label>
-                            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Masukkan nama lengkap" class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <label for="name" class="block font-bold text-slate-700">{{ __('Nama Lengkap') }} <span class="font-medium text-slate-400">{{ __('(opsional)') }}</span></label>
+                            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="{{ __('Masukkan nama lengkap') }}" class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             @error('name')
                                 <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="space-y-1">
-                            <label for="email" class="block font-bold text-slate-700">Alamat Email</label>
+                            <label for="email" class="block font-bold text-slate-700">{{ __('Alamat Email') }}</label>
                             <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="nama@contoh.com" class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             @error('email')
                                 <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
@@ -306,19 +306,19 @@
                         </div>
 
                         <div class="space-y-1">
-                            <label for="password" class="block font-bold text-slate-700">Password</label>
-                            <input type="password" name="password" id="password" required placeholder="Minimal 8 karakter" class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <label for="password" class="block font-bold text-slate-700">{{ __('Password') }}</label>
+                            <input type="password" name="password" id="password" required placeholder="{{ __('Minimal 8 karakter') }}" class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             @error('password')
                                 <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="space-y-1">
-                            <label for="role" class="block font-bold text-slate-700">Peran</label>
+                            <label for="role" class="block font-bold text-slate-700">{{ __('Peran') }}</label>
                             <select name="role" id="role" required class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="peserta"    @selected(old('role') === 'peserta')>Peserta</option>
-                                <option value="instruktur" @selected(old('role') === 'instruktur')>Instruktur</option>
-                                <option value="admin"      @selected(old('role') === 'admin')>Admin</option>
+                                <option value="peserta"    @selected(old('role') === 'peserta')>{{ __('Peserta') }}</option>
+                                <option value="instruktur" @selected(old('role') === 'instruktur')>{{ __('Instruktur') }}</option>
+                                <option value="admin"      @selected(old('role') === 'admin')>{{ __('Admin') }}</option>
                             </select>
                             @error('role')
                                 <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
@@ -328,10 +328,10 @@
 
                     <div class="flex flex-col-reverse gap-2 border-t border-slate-100 bg-slate-50 px-6 py-4 sm:flex-row sm:justify-end text-sm">
                         <button type="button" @click="showModal = false" class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 font-bold text-slate-700 transition hover:bg-slate-50">
-                            Batal
+                            {{ __('Batal') }}
                         </button>
                         <button type="submit" form="addUserForm" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 font-bold text-white transition shadow-sm">
-                            Simpan Pengguna
+                            {{ __('Simpan Pengguna') }}
                         </button>
                     </div>
                 </div>
