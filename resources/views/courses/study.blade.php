@@ -267,18 +267,18 @@
                             @touchend.window="stopDrag"
                         >
                             <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
+                                <h3 class="text-base font-bold text-slate-700">{{ __('Diagram Interaktif') }}</h3>
                                 @if(auth()->user()->isInstruktur())
                                     <div class="flex items-center gap-2">
                                         <button x-show="!editMode" @click="editMode = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
-                                            ⚙️ Atur Posisi Hotspot
+                                            ⚙️ {{ __('Atur Posisi Hotspot') }}
                                         </button>
                                         <button x-show="editMode" @click="editMode = false" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition">
-                                            Batal
+                                            {{ __('Batal') }}
                                         </button>
                                         <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-bold transition">
-                                            <span x-show="!saving">💾 Simpan Posisi</span>
-                                            <span x-show="saving">Menyimpan...</span>
+                                            <span x-show="!saving">💾 {{ __('Simpan Posisi') }}</span>
+                                            <span x-show="saving">{{ __('Menyimpan...') }}</span>
                                         </button>
                                     </div>
                                 @endif

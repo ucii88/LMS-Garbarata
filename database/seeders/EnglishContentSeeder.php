@@ -6708,7 +6708,18 @@ technical specifications, capacity and unit dimensions.</p>
             '2.1 Power Supply' => '2.1 Power Supply',
             '2.2 Aktuator' => '2.2 Actuators',
             '2.3 Pencahayaan ' => '2.3 Lighting',
-            '2.4 Pencahayaan' => '2.4 Lighting',
+            '3. Mode Auto (Autolevel)' => '3. Auto Mode (Autolevel)',
+            '1.1 Deskripsi Detail Pengoperasian' => '1.1 Operation Details Description',
+            '2.1 Penggerak Horizontal' => '2.1 Horizontal Drive',
+            '2.2 Rotasi Kabin' => '2.2 Cabin Rotation',
+            '2.3 Penggerak Vertikal' => '2.3 Vertical Drive',
+            '2.4 Penggerak Canopy' => '2.4 Canopy Drive',
+            '4.1 Prosedur Pengoperasian Standar (Mode Manual)' => '4.1 Standard Operating Procedure (Manual Mode)',
+            '4.2 Prosedure Standar Operasi (Auto Mode)' => '4.2 Standard Operating Procedure (Auto Mode)',
+            '4.3 Prosedur Pengoperasian Darurat' => '4.3 Emergency Operating Procedure',
+            '4.4 Parkir' => '4.4 Parking',
+            '4.5 Penggunaan Jacking Stand' => '4.5 Use of Jacking Stand',
+            '4.6 Malfungsi Pergerakan atau Fault Power Garbarata' => '4.6 Movement Malfunction or Garbarata Power Fault',
             '4.1 Perawatan Garbarata' => '4.1 Garbarata Maintenance',
             '4.1.1 Karpet' => '4.1.1 Carpet',
             '4.1.2 Jendela' => '4.1.2 Windows',
@@ -6753,10 +6764,8 @@ technical specifications, capacity and unit dimensions.</p>
             $titleId = $chapter->getTranslation('title', 'id');
             $enTitle = $chapterTitles[$titleId] ?? $titleId;
 
-            if (empty($chapter->getTranslation('title', 'en')) || $chapter->getTranslation('title', 'en') === $titleId) {
-                $chapter->setTranslation('title', 'en', $enTitle);
-                $chapter->save();
-            }
+            $chapter->setTranslation('title', 'en', $enTitle);
+            $chapter->save();
         }
 
         // Update Module EN titles and content
@@ -6765,15 +6774,12 @@ technical specifications, capacity and unit dimensions.</p>
             $contentId = $module->getTranslation('content', 'id') ?? '';
 
             // Title: use override or fall back to the same as ID
-            // (module titles like "1.1 Rotunda" are already English/universal)
             $enTitle = $moduleTitleTranslations[$titleId] ?? $titleId;
             if (preg_match('/^(7\.(\d+)) Lembar Gambar \d+$/', $titleId, $matches)) {
                 $enTitle = $matches[1] . ' Drawing Sheet ' . $matches[2];
             }
 
-            if (empty($module->getTranslation('title', 'en')) || $module->getTranslation('title', 'en') === $titleId) {
-                $module->setTranslation('title', 'en', $enTitle);
-            }
+            $module->setTranslation('title', 'en', $enTitle);
 
             // Content: use real translation override if available, otherwise copy ID content
             $enContent = $englishContent[$titleId] ?? $contentId;
