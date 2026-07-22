@@ -48,7 +48,7 @@
                         @if(auth()->user()->isInstruktur())
                             <button @click="showCreateModal = true" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-blue-500/20 flex items-center gap-1.5 shrink-0">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                <span>{{ __('+ Tambah Bab Baru') }}</span>
+                                <span>{{ __('Tambah Bab Baru') }}</span>
                             </button>
                         @endif
                     </div>
@@ -112,7 +112,7 @@
                                                     title="{{ __('Edit nama / urutan bab ini') }}">
                                                 {{ __('Edit') }}
                                             </button>
-                                            <form action="{{ route('courses.chapters.destroy', [$course->id, $chapter->id]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus bab ini beserta seluruh modul di dalamnya?');" class="inline">
+                                            <form action="{{ route('courses.chapters.destroy', [$course->id, $chapter->id]) }}" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus bab ini beserta seluruh modul di dalamnya?') }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 px-3 py-2 text-sm font-bold text-rose-700 transition" title="{{ __('Hapus bab ini') }}">

@@ -82,29 +82,30 @@
                             this.showUploadModal = false;
                             window.location.reload();
                         } else {
-                            alert(data.message || 'Gagal mengunggah gambar.');
+                            showGlobalAlert('Gagal', data.message || 'Gagal mengunggah gambar.');
                         }
                     } catch (err) {
-                        alert('Terjadi kesalahan koneksi.');
+                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan koneksi.');
                     }
                     this.uploading = false;
                 },
                 async confirmDeleteDiagram() {
-                    if (!confirm('Apakah Anda yakin ingin menghapus diagram ini beserta seluruh hotspotnya?')) return;
-                    try {
-                        const res = await fetch(this.destroyDiagramUrl, {
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': this.csrfToken,
-                                'Accept': 'application/json'
+                    showGlobalConfirm('Hapus Diagram', 'Apakah Anda yakin ingin menghapus diagram ini beserta seluruh hotspotnya?', async () => {
+                        try {
+                            const res = await fetch(this.destroyDiagramUrl, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': this.csrfToken,
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            if (res.ok) {
+                                window.location.reload();
                             }
-                        });
-                        if (res.ok) {
-                            window.location.reload();
+                        } catch (err) {
+                            showGlobalAlert('Gagal', 'Gagal menghapus diagram.');
                         }
-                    } catch (err) {
-                        alert('Gagal menghapus diagram.');
-                    }
+                    });
                 },
                 onDiagramClick(e) {
                     if (!this.addHotspotMode) return;
@@ -238,31 +239,32 @@
                             }
                             this.showHotspotFormModal = false;
                         } else {
-                            alert(data.message || 'Gagal menyimpan hotspot.');
+                            showGlobalAlert('Gagal', data.message || 'Gagal menyimpan hotspot.');
                         }
                     } catch (e) {
-                        alert('Terjadi kesalahan saat menyimpan hotspot.');
+                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan saat menyimpan hotspot.');
                     }
                     this.savingHotspot = false;
                 },
                 async deleteHotspot(id) {
-                    if (!confirm('Apakah Anda yakin hanya ingin menghapus 1 hotspot ini?')) return;
-                    try {
-                        const res = await fetch(this.baseUrl + '/' + id, {
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': this.csrfToken,
-                                'Accept': 'application/json'
+                    showGlobalConfirm('Hapus Hotspot', 'Apakah Anda yakin hanya ingin menghapus 1 hotspot ini?', async () => {
+                        try {
+                            const res = await fetch(this.baseUrl + '/' + id, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': this.csrfToken,
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            if (res.ok) {
+                                this.hotspots = this.hotspots.filter(h => String(h.id) !== String(id));
+                                this.showHotspotFormModal = false;
+                                showGlobalAlert('Berhasil', 'Hotspot berhasil dihapus.');
                             }
-                        });
-                        if (res.ok) {
-                            this.hotspots = this.hotspots.filter(h => String(h.id) !== String(id));
-                            this.showHotspotFormModal = false;
-                            alert('Hotspot berhasil dihapus.');
+                        } catch (e) {
+                            showGlobalAlert('Gagal', 'Gagal menghapus hotspot.');
                         }
-                    } catch (e) {
-                        alert('Gagal menghapus hotspot.');
-                    }
+                    });
                 },
                 startDrag(e, id) {
                     if (!this.editMode) return;
@@ -322,12 +324,12 @@
                         if (res.ok) {
                             this.originalHotspots = (this.hotspots || []).map(h => Object.assign({}, h));
                             this.editMode = false;
-                            alert('Posisi Hotspot berhasil disimpan.');
+                            showGlobalAlert('Berhasil', 'Posisi Hotspot berhasil disimpan.');
                         } else {
-                            alert('Gagal menyimpan posisi.');
+                            showGlobalAlert('Gagal', 'Gagal menyimpan posisi.');
                         }
                     } catch (e) {
-                        alert('Terjadi kesalahan jaringan.');
+                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan jaringan.');
                     }
                     this.saving = false;
                 }

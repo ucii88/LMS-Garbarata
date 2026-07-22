@@ -128,7 +128,7 @@
                         @elseif($question->type === 'essay')
                             <div class="space-y-2">
                                 <div class="flex items-center gap-2 text-sm text-orange-700 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
-                                    <span>✍️</span>
+                                    <svg class="w-4 h-4 text-orange-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     <span>Tulis jawaban esai kamu di bawah ini. Jawaban akan dinilai oleh instruktur.</span>
                                 </div>
                                 <textarea name="answers[{{ $question->id }}]"
@@ -281,8 +281,8 @@
 <div id="cheat-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-red-200">
         <div class="text-center mb-4 space-y-2">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-50 text-red-600 text-2xl font-bold mb-1">
-                ⚠
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-50 text-red-600 font-bold mb-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <h3 class="text-base font-bold text-red-600">Peringatan Keamanan!</h3>
             <p class="text-sm text-slate-700 font-semibold">Anda terdeteksi meninggalkan halaman quiz.</p>
@@ -316,7 +316,7 @@ function handleFocusLoss() {
     
     if (focusLossCount >= MAX_FOCUS_LOSS) {
         window.isSubmittingQuiz = true;
-        alert('Quiz Anda otomatis dikirim karena melanggar aturan fokus halaman quiz sebanyak 3 kali.');
+        showGlobalAlert('Pelanggaran Keamanan', 'Quiz Anda otomatis dikirim karena melanggar aturan fokus halaman quiz sebanyak 3 kali.');
         document.getElementById('quiz-form').submit();
     } else {
         const remaining = MAX_FOCUS_LOSS - focusLossCount;
@@ -363,7 +363,7 @@ function showConnectionStatus(isOnline) {
             }
         }, 2500);
     } else {
-        text.textContent = '⚠️ Koneksi Internet Terputus! Harap jangan menutup halaman quiz ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.';
+        text.textContent = 'Koneksi Internet Terputus! Harap jangan menutup halaman quiz ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.';
         banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-sm font-bold bg-red-600 text-white shadow-md animate-pulse transition-all duration-300';
         
         // Nonaktifkan tombol submit

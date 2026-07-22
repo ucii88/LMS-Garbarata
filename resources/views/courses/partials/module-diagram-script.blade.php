@@ -82,29 +82,37 @@
                             this.showUploadModal = false;
                             window.location.reload();
                         } else {
-                            alert(data.message || 'Gagal mengunggah gambar.');
+                            showGlobalAlert('Gagal', data.message || 'Gagal mengunggah gambar.');
+                        }
+                            showGlobalAlert('Gagal', data.message || 'Gagal mengunggah gambar.');
                         }
                     } catch (err) {
-                        alert('Terjadi kesalahan koneksi.');
+                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan koneksi.');
                     }
                     this.uploading = false;
                 },
                 async confirmDeleteDiagram() {
-                    if (!confirm('Apakah Anda yakin ingin menghapus diagram modul ini beserta seluruh hotspotnya?')) return;
-                    try {
-                        const res = await fetch(this.destroyDiagramUrl, {
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': this.csrfToken,
-                                'Accept': 'application/json'
+                    showGlobalConfirm('Hapus Diagram', 'Apakah Anda yakin ingin menghapus diagram modul ini beserta seluruh hotspotnya?', async () => {
+                        try {
+                            const res = await fetch(this.destroyDiagramUrl, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': this.csrfToken,
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                this.diagram = null;
+                                this.hotspots = [];
+                                showGlobalAlert('Berhasil', 'Diagram berhasil dihapus.');
+                            } else {
+                                showGlobalAlert('Gagal', data.message || 'Gagal menghapus diagram.');
                             }
-                        });
-                        if (res.ok) {
-                            window.location.reload();
+                        } catch (err) {
+                            showGlobalAlert('Kesalahan', 'Terjadi kesalahan koneksi.');
                         }
-                    } catch (err) {
-                        alert('Gagal menghapus diagram.');
-                    }
+                    });
                 },
                 onDiagramClick(e) {
                     if (!this.addHotspotMode) return;
@@ -231,31 +239,37 @@
                             }
                             this.showHotspotFormModal = false;
                         } else {
-                            alert(data.message || 'Gagal menyimpan hotspot.');
+                            showGlobalAlert('Gagal', data.message || 'Gagal menyimpan hotspot.');
                         }
                     } catch (e) {
-                        alert('Terjadi kesalahan saat menyimpan hotspot.');
+                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan saat menyimpan hotspot.');
                     }
                     this.savingHotspot = false;
                 },
                 async deleteHotspot(id) {
-                    if (!confirm('Apakah Anda yakin hanya ingin menghapus 1 hotspot ini?')) return;
-                    try {
-                        const res = await fetch(this.baseUrl + '/' + id, {
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': this.csrfToken,
-                                'Accept': 'application/json'
+                    showGlobalConfirm('Hapus Hotspot', 'Apakah Anda yakin hanya ingin menghapus 1 hotspot ini?', async () => {
+                        try {
+                            const res = await fetch(this.baseUrl + '/' + id, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': this.csrfToken,
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.success) {
+                                this.hotspots = this.hotspots.filter(h => h.id !== id);
+                                if (this.activeHotspot && this.activeHotspot.id === id) {
+                                    this.activeHotspot = null;
+                                }
+                                this.showHotspotFormModal = false;
+                            } else {
+                                showGlobalAlert('Gagal', data.message || 'Gagal menghapus hotspot.');
                             }
-                        });
-                        if (res.ok) {
-                            this.hotspots = this.hotspots.filter(h => String(h.id) !== String(id));
-                            this.showHotspotFormModal = false;
-                            alert('Hotspot berhasil dihapus.');
+                        } catch (e) {
+                            showGlobalAlert('Kesalahan', 'Terjadi kesalahan koneksi.');
                         }
-                    } catch (e) {
-                        alert('Gagal menghapus hotspot.');
-                    }
+                    });
                 },
                 startDrag(e, id) {
                     if (!this.editMode) return;
@@ -314,12 +328,12 @@
                         });
                         if (res.ok) {
                             this.editMode = false;
-                            alert('Posisi Hotspot berhasil disimpan.');
+                            showGlobalAlert('Berhasil', 'Posisi Hotspot berhasil disimpan.');
                         } else {
-                            alert('Gagal menyimpan posisi.');
+                            showGlobalAlert('Gagal', 'Gagal menyimpan posisi.');
                         }
-                    } catch (e) {
-                        alert('Terjadi kesalahan jaringan.');
+                    } catch (err) {
+                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan jaringan.');
                     }
                     this.saving = false;
                 }

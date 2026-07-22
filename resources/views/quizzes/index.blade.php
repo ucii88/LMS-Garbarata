@@ -1,4 +1,4 @@
-﻿@section('topbar_title', __('Manajemen') . ' ' . ($isPractice ? __('Latihan') : __('Quiz')))
+@section('topbar_title', __('Manajemen') . ' ' . ($isPractice ? __('Latihan') : __('Quiz')))
 
 <x-app-layout>
 <div class="max-w-5xl mx-auto space-y-6">
@@ -88,7 +88,7 @@
                          {{ __('Edit & Kelola Soal') }}
                     </a>
                     <form action="{{ route($isPractice ? 'practices.destroy' : 'quizzes.destroy', [$course, $quiz]) }}" method="POST"
-                          onsubmit="return confirm('{{ $isPractice ? __('Hapus latihan ini?') : __('Hapus quiz ini?') }}')">
+                          data-confirm="{{ $isPractice ? __('Apakah Anda yakin ingin menghapus latihan ini?') : __('Apakah Anda yakin ingin menghapus quiz ini?') }}">
                         @csrf @method('DELETE')
                         <button class="px-3 py-2 text-sm font-semibold text-red-500 hover:bg-red-50 border border-red-200 rounded-xl transition">
                              {{ __('Hapus') }}

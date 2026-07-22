@@ -35,7 +35,9 @@
     {{-- Daftar Soal --}}
     @if($questions->isEmpty())
         <div class="bg-white border border-dashed border-slate-200 rounded-2xl p-12 text-center">
-            <div class="text-4xl mb-3">📝</div>
+            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
             <h3 class="font-semibold text-slate-700">Belum ada soal</h3>
             <p class="text-base text-slate-500 mt-1">Klik "Tambah Soal" untuk mulai mengisi bank soal chapter ini.</p>
         </div>
@@ -100,14 +102,14 @@
                     {{-- Actions --}}
                     <div class="flex items-center gap-1 shrink-0">
                         <button onclick="openEditModal({{ $question->id }})"
-                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-sm">
-                            ✏️
+                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-sm" title="Edit Soal">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
                         <form action="{{ route('questions.destroy', [$course, $chapter, $question]) }}"
-                              method="POST" onsubmit="return confirm('Hapus soal ini dari bank soal?')">
+                              method="POST" data-confirm="Apakah Anda yakin ingin menghapus soal ini dari bank soal?">
                             @csrf @method('DELETE')
-                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-sm">
-                                🗑️
+                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-sm" title="Hapus Soal">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </form>
                     </div>
@@ -333,7 +335,7 @@ function buildEssayInfo() {
     const wrap = document.createElement('div');
     wrap.innerHTML = `
         <div class="flex items-start gap-3 p-4 bg-orange-50 border border-orange-200 rounded-xl">
-            <span class="text-2xl">✍️</span>
+            <svg class="w-6 h-6 text-orange-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
             <div>
                 <p class="text-base font-semibold text-orange-800">Soal Esai — Dinilai Manual</p>
                 <p class="text-sm text-orange-700 mt-1">Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.</p>
@@ -402,7 +404,7 @@ function removeOptionRow(btn, type) {
     if (!row) return;
     const wrap = row.parentNode;
     if (wrap.children.length <= 1) {
-        alert('Minimal harus ada 1 opsi jawaban.');
+        showGlobalAlert('Pemberitahuan', 'Minimal harus ada 1 opsi jawaban.');
         return;
     }
     row.remove();
@@ -607,7 +609,7 @@ document.querySelector('input[name="question_image"]').addEventListener('change'
         const file = this.files[0];
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            alert('File gambar terlalu besar! Maksimal ukuran file adalah 5MB.\nFile yang Anda pilih berukuran ' + (file.size / (1024 * 1024)).toFixed(2) + 'MB.\n\nSilakan kompres gambar atau pilih gambar lain.');
+            showGlobalAlert('Ukuran File Terlalu Besar', 'File gambar terlalu besar! Maksimal ukuran file adalah 5MB.\nFile yang Anda pilih berukuran ' + (file.size / (1024 * 1024)).toFixed(2) + 'MB. Silakan pilih gambar lain.');
             this.value = ''; // Reset file input
         }
     }

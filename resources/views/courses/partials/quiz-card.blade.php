@@ -75,7 +75,7 @@
                 </p>
                 @if($chapterQuiz->start_time || $chapterQuiz->end_time)
                     <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
-                        <span>📅</span>
+                        <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         @if($chapterQuiz->availability_status === 'upcoming')
                             <span class="text-amber-600 font-semibold">{{ __('Dibuka:') }} {{ $chapterQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
                         @elseif($chapterQuiz->availability_status === 'closed')
@@ -187,7 +187,7 @@
                 </p>
                 @if($finalQuiz->start_time || $finalQuiz->end_time)
                     <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
-                        <span>📅</span>
+                        <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         @if($finalQuiz->availability_status === 'upcoming')
                             <span class="text-amber-600 font-semibold">{{ __('Dibuka:') }} {{ $finalQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
                         @elseif($finalQuiz->availability_status === 'closed')
