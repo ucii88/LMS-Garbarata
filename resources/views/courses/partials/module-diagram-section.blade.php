@@ -150,20 +150,65 @@
                                 }
                             }
 
-                            // Try scrolling to row by numeric label or target_module_id
                             const num = parseInt(hotspot.label, 10);
-                            if (!isNaN(num) && typeof window.scrollToPartRow === 'function') {
+                            const targetId = String(hotspot.label || '').trim();
+
+                            // Walk up from current diagram element to find containing module panel
+                            let container = this.$el ? this.$el.parentElement : null;
+                            while (container && container !== document.body && !container.querySelector('table')) {
+                                container = container.parentElement;
+                            }
+                            if (!container) container = document;
+
+                            // Custom scroll handlers for specific sub-modules
+                            if (!isNaN(num) && typeof window.scrollToRollerRow === 'function' && container.querySelector('#roller-row-1')) {
+                                window.scrollToRollerRow(num);
+                                return;
+                            }
+                            if (!isNaN(num) && typeof window.scrollToPartRow === 'function' && container.querySelector('#part-row-1')) {
                                 window.scrollToPartRow(num);
-                            } else {
-                                const targetId = hotspot.label;
-                                const row = document.getElementById('part-row-' + targetId) 
-                                         || document.getElementById('row-' + targetId)
-                                         || document.querySelector(`[data-part-row="${targetId}"]`);
-                                if (row) {
-                                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                    row.classList.add('bg-blue-100', 'ring-2', 'ring-blue-400');
-                                    setTimeout(() => row.classList.remove('bg-blue-100', 'ring-2', 'ring-blue-400'), 2500);
+                                return;
+                            }
+
+                            // Try finding row inside container with any prefix or selector
+                            let row = container.querySelector(`[id$="-row-${targetId}"]`)
+                                   || container.querySelector(`[id*="-row-${targetId}"]`)
+                                   || container.querySelector(`[data-part-row="${targetId}"]`);
+
+                            if (!row) {
+                                const prefixes = [
+                                    'part-row-', 'roller-row-', 'cable-row-', 'lift-row-', 'bogie-row-',
+                                    'stair-row-', 'cabin-row-', 'curtain-row-', 'auto-row-', 'canopy-row-',
+                                    'door-row-', 'rubber-row-', 'wire-row-', 'row-'
+                                ];
+                                for (const prefix of prefixes) {
+                                    const candidate = document.getElementById(prefix + targetId);
+                                    if (candidate) {
+                                        row = candidate;
+                                        break;
+                                    }
                                 }
+                            }
+
+                            // Fallback: search row by matching first <td> content
+                            if (!row && !isNaN(num)) {
+                                const allTrs = container.querySelectorAll('table tbody tr');
+                                for (const tr of allTrs) {
+                                    const firstTd = tr.querySelector('td');
+                                    if (firstTd && firstTd.textContent.trim() === String(num)) {
+                                        row = tr;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (row) {
+                                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                                document.querySelectorAll('tr').forEach(r => r.classList.remove('bg-blue-100', 'ring-2', 'ring-blue-400', 'bg-blue-50', 'text-blue-900', 'font-semibold'));
+
+                                row.classList.add('bg-blue-100', 'ring-2', 'ring-blue-400', 'font-semibold');
+                                setTimeout(() => row.classList.remove('bg-blue-100', 'ring-2', 'ring-blue-400', 'font-semibold'), 2500);
                             }
                         }
                     }
@@ -296,19 +341,16 @@
 <div
     x-show="diagramObj && diagramObj.image_path"
     x-cloak
-    @mousemove.window="onDrag"
-    @mouseup.window="stopDrag"
-    @touchmove.window="onDrag"
-    @touchend.window="stopDrag"
+    @mousemove.window="editMode && onDrag($event)"
+    @mouseup.window="editMode && stopDrag()"
+    @touchmove.window="editMode && onDrag($event)"
+    @touchend.window="editMode && stopDrag()"
 >
     <!-- Top toolbar for Instructor (only when diagram exists) -->
     <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
         <div class="flex items-center gap-2">
             <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
-            <template x-if="diagramObj">
-                <span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
-            </template>
-
+        <span x-show="diagramObj" class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
             <!-- Controls Ukuran Bulatan Hotspot -->
             <div x-show="hotspots.length > 0" class="flex items-center gap-1 border-l border-slate-200 pl-2">
                 <span class="text-[10px] text-slate-500 font-semibold mr-1">Ukuran Dot:</span>
@@ -321,8 +363,7 @@
 
         @if(auth()->user()->isInstruktur())
             <div class="flex flex-wrap items-center gap-2">
-                <template x-if="diagramObj">
-                    <div class="flex flex-wrap items-center gap-2">
+                    <div x-show="diagramObj" class="flex flex-wrap items-center gap-2">
                         <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             <span>Ganti Gambar</span>
@@ -360,7 +401,6 @@
                             <span x-show="saving">Menyimpan...</span>
                         </button>
                     </div>
-                </template>
             </div>
         @endif
     </div>
@@ -374,12 +414,10 @@
     <!-- Technical Drawing Display Container -->
     <div x-ref="diagramContainer" 
          @click="onDiagramClick($event)"
-         class="relative bg-slate-50 rounded-xl overflow-hidden w-full max-w-xl mx-auto border border-gray-200 flex items-center justify-center shadow-sm select-none"
+         class="relative bg-slate-50 rounded-xl w-full max-w-xl mx-auto border border-gray-200 shadow-sm select-none min-h-[150px]"
          :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
         
-        <template x-if="diagramObj && diagramObj.image_path">
-            <img :src="'{{ asset('') }}' + diagramObj.image_path" class="w-full h-auto block select-none pointer-events-none" alt="Technical Drawing" draggable="false">
-        </template>
+        <img x-show="diagramObj && diagramObj.image_path" :src="diagramObj && diagramObj.image_path ? (diagramObj.image_path.startsWith('/') ? diagramObj.image_path : '/' + diagramObj.image_path) : ''" class="w-full h-auto block select-none pointer-events-none rounded-xl" alt="Technical Drawing" draggable="false">
 
         <!-- Overlay Hotspot Dots -->
         <template x-for="(hotspot, index) in hotspots" :key="hotspot.id">
@@ -391,7 +429,6 @@
                 class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
                 :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
                 :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
-                :title="hotspot.label || ('Hotspot ' + (index + 1))"
             >
                 <!-- Pinging ring for non-edit mode -->
                 <span x-show="!editMode" class="absolute inline-flex h-8 w-8 rounded-full opacity-40 animate-ping -left-[4px] -top-[4px]"
@@ -407,8 +444,12 @@
                 </span>
 
                 <!-- Hover preview tooltip -->
-                <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-slate-900/90 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-1 rounded-lg shadow-xl transition-all duration-150 opacity-0 transform translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 whitespace-nowrap z-30 pointer-events-none flex items-center gap-1.5">
-                    <span x-text="hotspot.popup_title || ('Part No. ' + hotspot.label)"></span>
+                <span x-show="!editMode" 
+                      class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2.5 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-2xl transition-all duration-150 opacity-0 transform translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 whitespace-nowrap z-50 pointer-events-none border border-slate-700/80 flex items-center gap-1.5"
+                      style="background-color: #0f172a; color: #ffffff;"
+                >
+                    <span x-text="hotspot.popup_title || (hotspot.label ? 'Part No. ' + hotspot.label : '')"></span>
+                    <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style="border-top-color: #0f172a;"></span>
                 </span>
             </button>
         </template>

@@ -179,23 +179,35 @@
                                 return;
                             }
 
-                            // Locate table row inside THIS module's container
+                             // Locate table row inside THIS module's container
                             let row = container.querySelector(`[id$="-row-${targetId}"]`)
                                    || container.querySelector(`[id="part-row-${targetId}"]`)
-                                   || container.querySelector(`[id*="-row-${targetId}"]`)
-                                   || container.querySelector(`tr:nth-child(${targetId})`);
+                                   || container.querySelector(`[id*="-row-${targetId}"]`);
 
                             // Fallback to global document search if not found in container
                             if (!row) {
                                 const prefixes = [
                                     'part-row-', 'roller-row-', 'cable-row-', 'lift-row-', 'bogie-row-',
                                     'stair-row-', 'rotation-row-', 'curtain-row-', 'leveler-row-', 'closure-row-',
-                                    'swing-row-', 'weathering-row-', 'equalizer-row-', 'row-'
+                                    'swing-row-', 'weathering-row-', 'equalizer-row-', 'auto-row-', 'canopy-row-',
+                                    'door-row-', 'rubber-row-', 'wire-row-', 'row-'
                                 ];
                                 for (const prefix of prefixes) {
                                     const candidate = document.getElementById(prefix + targetId);
                                     if (candidate) {
                                         row = candidate;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Fallback: match row by first <td> content
+                            if (!row && !isNaN(num)) {
+                                const allTrs = container.querySelectorAll('table tbody tr');
+                                for (const tr of allTrs) {
+                                    const firstTd = tr.querySelector('td');
+                                    if (firstTd && firstTd.textContent.trim() === String(num)) {
+                                        row = tr;
                                         break;
                                     }
                                 }

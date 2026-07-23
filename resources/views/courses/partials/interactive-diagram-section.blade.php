@@ -351,19 +351,16 @@
         @js(csrf_token()),
         @js(isset($modules) ? $modules->values() : [])
     )"
-    @mousemove.window="onDrag"
-    @mouseup.window="stopDrag"
-    @touchmove.window="onDrag"
-    @touchend.window="stopDrag"
+    @mousemove.window="editMode && onDrag($event)"
+    @mouseup.window="editMode && stopDrag()"
+    @touchmove.window="editMode && onDrag($event)"
+    @touchend.window="editMode && stopDrag()"
 >
     <div x-show="diagramObj && diagramObj.image_path" x-cloak class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full mb-6">
     <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
         <div class="flex items-center gap-2">
             <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
-            <template x-if="diagramObj">
-                <span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
-            </template>
-
+        <span x-show="diagramObj" class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
             <!-- Controls Ukuran Bulatan Hotspot -->
             <div x-show="hotspots.length > 0" class="flex items-center gap-1 border-l border-slate-200 pl-2">
                 <span class="text-[10px] text-slate-500 font-semibold mr-1">Ukuran Dot:</span>
@@ -376,8 +373,7 @@
 
         @if(auth()->user()->isInstruktur())
             <div class="flex flex-wrap items-center gap-2">
-                <template x-if="diagramObj">
-                    <div class="flex flex-wrap items-center gap-2">
+                    <div x-show="diagramObj" class="flex flex-wrap items-center gap-2">
                         <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             <span>Ganti Gambar</span>
@@ -415,7 +411,6 @@
                             <span x-show="saving">Menyimpan...</span>
                         </button>
                     </div>
-                </template>
             </div>
         @endif
     </div>
@@ -429,25 +424,23 @@
     <!-- Diagram Display Container -->
     <div x-ref="diagramContainer" 
          @click="onDiagramClick($event)"
-         class="relative bg-slate-50 rounded-xl overflow-hidden w-full max-w-xl mx-auto border border-gray-200 flex items-center justify-center shadow-sm select-none"
+         class="relative bg-slate-50 rounded-xl w-full max-w-xl mx-auto border border-gray-200 shadow-sm select-none min-h-[150px]"
          :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
         
-        <template x-if="diagramObj && diagramObj.image_path">
-            <img :src="'{{ asset('') }}' + diagramObj.image_path" class="w-full h-auto block select-none pointer-events-none" :alt="'Diagram ' + '{{ $chapter->title }}'" draggable="false">
-        </template>
+        <img x-show="diagramObj && diagramObj.image_path" :src="diagramObj && diagramObj.image_path ? (diagramObj.image_path.startsWith('/') ? diagramObj.image_path : '/' + diagramObj.image_path) : ''" class="w-full h-auto block select-none pointer-events-none rounded-xl" :alt="'Diagram ' + '{{ $chapter->title }}'" draggable="false">
 
 
 
         <!-- Overlay Hotspots -->
         <template x-for="(hotspot, index) in hotspots" :key="hotspot.id">
             <button
+                type="button"
                 @click.stop="clickHotspot(hotspot)"
                 @mousedown="startDrag($event, hotspot.id)"
                 @touchstart="startDrag($event, hotspot.id)"
                 class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
                 :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
                 :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
-                :title="hotspot.label || ('Hotspot ' + (index + 1))"
             >
                 <!-- Pinging ring for non-edit mode -->
                 <span x-show="!editMode" class="absolute inline-flex h-8 w-8 rounded-full opacity-40 animate-ping -left-[4px] -top-[4px]"
@@ -465,14 +458,18 @@
                 </span>
 
                 <!-- Tooltip Hover Preview -->
-                <span x-show="!editMode" class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-slate-900/90 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-1 rounded-lg shadow-xl transition-all duration-150 opacity-0 transform translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 whitespace-nowrap z-30 pointer-events-none flex items-center gap-1.5">
+                <span x-show="!editMode" 
+                      class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2.5 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-2xl transition-all duration-150 opacity-0 transform translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 whitespace-nowrap z-50 pointer-events-none border border-slate-700/80 flex items-center gap-1.5"
+                      style="background-color: #0f172a; color: #ffffff;"
+                >
                     <template x-if="hotspot.action_type === 'popup'">
-                        <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                     </template>
                     <template x-if="hotspot.action_type !== 'popup'">
-                        <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                        <svg class="w-3.5 h-3.5 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                     </template>
-                    <span x-text="hotspot.label"></span>
+                    <span x-text="hotspot.popup_title || (hotspot.label ? 'Part No. ' + hotspot.label : '')"></span>
+                    <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style="border-top-color: #0f172a;"></span>
                 </span>
             </button>
         </template>
