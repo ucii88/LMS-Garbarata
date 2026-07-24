@@ -95,14 +95,14 @@
                         {{-- Semua soal (semua tab) --}}
                         <div class="min-h-0 flex-1 overflow-y-auto pr-1 space-y-1.5" id="tab-panel-all">
                             @forelse($availableQuestions as $question)
-                                <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
-                                    <input class="question-checkbox mt-0.5" type="checkbox"
+                                <div class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
+                                    <input class="question-checkbox mt-0.5 shrink-0 cursor-pointer" type="checkbox"
                                         name="question_ids[]" value="{{ $question->id }}"
                                         data-question-id="{{ $question->id }}"
                                         data-chapter="{{ $question->chapter_id }}"
                                         data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}"
                                         @checked(in_array($question->id, $selectedQuestionIds))>
-                                    <div class="min-w-0 flex-1">
+                                    <div class="min-w-0 flex-1 cursor-pointer" onclick="toggleQuestionCheckbox('{{ $question->id }}')">
                                         <p class="text-xs font-semibold leading-relaxed text-slate-800">{{ $question->question_text }}</p>
                                         <p class="mt-1 text-[10px] text-slate-400">
                                             <span class="mr-1 rounded bg-blue-50 px-1.5 py-0.5 text-blue-600 font-semibold">Bab {{ $question->chapter->order }}</span>
@@ -114,10 +114,11 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route('quizzes.edit', [$course, $quiz])) }}"
-                                       class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50"
-                                       onclick="event.stopPropagation()">Lihat detail</a>
-                                </label>
+                                    <a href="{{ route('questions.index', [$course, $question->chapter_id]) }}?question={{ $question->id }}&return_to={{ urlencode(url()->current()) }}" class="shrink-0 self-center inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50 border border-blue-100 transition">
+                                        <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        <span>Lihat detail</span>
+                                    </a>
+                                </div>
                             @empty
                                 <div class="py-8 text-center text-sm text-slate-400">Belum ada soal di bank soal.</div>
                             @endforelse
@@ -135,14 +136,14 @@
                                 </div>
                                 <div data-chapter-group="{{ $chapterId }}" class="space-y-1.5">
                                     @foreach($chapterQuestions as $question)
-                                        <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
-                                            <input class="question-checkbox mt-0.5" type="checkbox"
+                                        <div class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
+                                            <input class="question-checkbox mt-0.5 shrink-0 cursor-pointer" type="checkbox"
                                                 name="question_ids[]" value="{{ $question->id }}"
                                                 data-question-id="{{ $question->id }}"
                                                 data-chapter="{{ $chapterId }}"
                                                 data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}"
                                                 @checked(in_array($question->id, $selectedQuestionIds))>
-                                            <div class="min-w-0 flex-1">
+                                            <div class="min-w-0 flex-1 cursor-pointer" onclick="toggleQuestionCheckbox('{{ $question->id }}')">
                                                 <p class="text-xs font-semibold leading-relaxed text-slate-800">{{ $question->question_text }}</p>
                                                 <p class="mt-1 text-[10px] text-slate-400">
                                                     {{ $question->type_label }} ·
@@ -153,10 +154,11 @@
                                                     @endif
                                                 </p>
                                             </div>
-                                            <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route('quizzes.edit', [$course, $quiz])) }}"
-                                               class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50"
-                                               onclick="event.stopPropagation()">Lihat detail</a>
-                                        </label>
+                                            <a href="{{ route('questions.index', [$course, $question->chapter_id]) }}?question={{ $question->id }}&return_to={{ urlencode(url()->current()) }}" class="shrink-0 self-center inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50 border border-blue-100 transition">
+                                                <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                <span>Lihat detail</span>
+                                            </a>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
@@ -166,9 +168,9 @@
                         {{-- Quiz / Latihan: list biasa --}}
                         <div class="max-h-96 space-y-2 overflow-y-auto pr-1">
                             @forelse($availableQuestions as $question)
-                                <label class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
-                                    <input class="question-checkbox mt-0.5" type="checkbox" name="question_ids[]" value="{{ $question->id }}" data-question-id="{{ $question->id }}" data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}" @checked(in_array($question->id, $selectedQuestionIds))>
-                                    <div class="min-w-0 flex-1">
+                                <div class="flex gap-3 rounded-xl border p-3 transition hover:border-blue-200 hover:bg-blue-50/30">
+                                    <input class="question-checkbox mt-0.5 shrink-0 cursor-pointer" type="checkbox" name="question_ids[]" value="{{ $question->id }}" data-question-id="{{ $question->id }}" data-points="{{ ($question->type === 'matching' || $question->type === 'ordering') ? $question->points * $question->options->count() : $question->points }}" @checked(in_array($question->id, $selectedQuestionIds))>
+                                    <div class="min-w-0 flex-1 cursor-pointer" onclick="toggleQuestionCheckbox('{{ $question->id }}')">
                                         <p class="text-xs font-semibold leading-relaxed text-slate-800">{{ $question->question_text }}</p>
                                         <p class="mt-1 text-[10px] text-slate-400">
                                             {{ $question->type_label }} ·
@@ -179,8 +181,11 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route($isPractice ? 'practices.edit' : 'quizzes.edit', [$course, $quiz])) }}" class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50" onclick="event.stopPropagation()">Lihat detail</a>
-                                </label>
+                                    <a href="{{ route('questions.index', [$course, $question->chapter_id]) }}?question={{ $question->id }}&return_to={{ urlencode(url()->current()) }}" class="shrink-0 self-center inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50 border border-blue-100 transition">
+                                        <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        <span>Lihat detail</span>
+                                    </a>
+                                </div>
                             @empty
                                 <div class="py-8 text-center text-sm text-slate-400">Belum ada soal.</div>
                             @endforelse
@@ -188,6 +193,7 @@
                     @endif
 
                         <button class="mt-4 w-full shrink-0 rounded-xl bg-emerald-600 py-2.5 text-sm font-bold text-white">Simpan Pilihan Soal</button>
+                </form>
             </div>{{-- end card kanan --}}
         </div>{{-- end grid --}}
     </div>{{-- end container --}}
@@ -209,10 +215,36 @@
         }
     </style>
 
+
+
     <script>
         let questionCheckboxes = [];
         const countElement = document.getElementById('selected-question-count');
         const pointsElement = document.getElementById('selected-question-points');
+        const DRAFT_KEY = 'quiz_draft_selected_{{ $quiz->id }}';
+
+        // Pulihkan centang draf dari sessionStorage jika ada
+        function restoreDraftSelections() {
+            const saved = sessionStorage.getItem(DRAFT_KEY);
+            if (saved) {
+                try {
+                    const ids = JSON.parse(saved);
+                    if (Array.isArray(ids)) {
+                        document.querySelectorAll('.question-checkbox').forEach(cb => {
+                            const qId = cb.dataset.questionId || cb.value;
+                            cb.checked = ids.includes(qId) || ids.includes(Number(qId));
+                        });
+                    }
+                } catch (e) {
+                    console.error('Failed to parse draft selections', e);
+                }
+            }
+        }
+
+        // Simpan centang draf saat ini ke sessionStorage
+        function saveDraftSelections(selectedIds) {
+            sessionStorage.setItem(DRAFT_KEY, JSON.stringify(selectedIds));
+        }
 
         // Hitung total poin yang dipilih
         function updateQuestionSummary() {
@@ -227,6 +259,9 @@
             });
 
             const selected = Array.from(selectedById.values());
+            const selectedIds = Array.from(selectedById.keys());
+            saveDraftSelections(selectedIds);
+
             const totalPoints = selected.reduce((sum, cb) => sum + Number(cb.dataset.points), 0);
             countElement.textContent = selected.length;
             pointsElement.textContent = totalPoints;
@@ -240,20 +275,25 @@
             });
         }
 
+        function toggleQuestionCheckbox(questionId) {
+            const cb = document.querySelector('.question-checkbox[data-question-id="' + questionId + '"]');
+            if (!cb) return;
+            const nextState = !cb.checked;
+            setQuestionChecked(questionId, nextState);
+            updateQuestionSummary();
+        }
+
         function syncQuestionCardHeight() {
             // Height now controlled via CSS; nothing to do here.
         }
 
         // Switch tab filter
         function switchTab(tabId, btn) {
-            // Update tombol aktif
             document.querySelectorAll('.chapter-tab-btn').forEach(b => b.classList.remove('active-tab'));
             btn.classList.add('active-tab');
 
-            // Sembunyikan semua panel
             document.querySelectorAll('[id^="tab-panel-"]').forEach(p => p.classList.add('hidden'));
 
-            // Tampilkan panel yang dipilih
             const panel = document.getElementById('tab-panel-' + tabId);
             if (panel) panel.classList.remove('hidden');
         }
@@ -272,7 +312,7 @@
             updateQuestionSummary();
         }
 
-        // Sync checkbox di panel "Semua" & panel bab (karena soal muncul di dua tempat)
+        // Sync checkbox di panel "Semua" & panel bab
         document.addEventListener('change', function(e) {
             if (!e.target.classList.contains('question-checkbox')) return;
             const questionId = e.target.dataset.questionId || e.target.value;
@@ -282,22 +322,12 @@
         });
 
         document.getElementById('question-selection-form').addEventListener('submit', (event) => {
-            const totalPoints = updateQuestionSummary();
-            if (totalPoints !== 100) {
-                event.preventDefault();
-                showGlobalAlert('Poin Belum Sesuai', 'Total poin soal harus tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
-            }
-        });
-        document.getElementById('quiz-config-form').addEventListener('submit', (event) => {
-            const totalPoints = updateQuestionSummary();
-            if (totalPoints !== 100) {
-                event.preventDefault();
-                showGlobalAlert('Poin Belum Sesuai', 'Quiz, ujian, atau latihan hanya dapat disimpan setelah total poin soal tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
-            }
+            sessionStorage.removeItem(DRAFT_KEY);
         });
 
         window.addEventListener('load', syncQuestionCardHeight);
         window.addEventListener('resize', syncQuestionCardHeight);
+        restoreDraftSelections();
         updateQuestionSummary();
         syncQuestionCardHeight();
     </script>

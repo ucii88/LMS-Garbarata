@@ -57,9 +57,10 @@ class Certificate extends Model
 
         if ($totalQuizzes === 0) return null;
 
-        // Hitung quiz yang sudah lulus oleh user ini
+        // Hitung quiz yang sudah lulus dan selesai dinilai oleh user ini
         $passedQuizzes = QuizAttempt::where('user_id', $userId)
             ->where('is_passed', true)
+            ->where('grading_status', '!=', 'pending_essay')
             ->whereHas('quiz', fn ($q) => $q->where('course_id', $courseId)->where('activity_type', 'quiz')->where('is_active', true))
             ->distinct('quiz_id')
             ->count('quiz_id');
@@ -69,6 +70,7 @@ class Certificate extends Model
         // Hitung rata-rata skor semua quiz yang lulus
         $avgScore = QuizAttempt::where('user_id', $userId)
             ->where('is_passed', true)
+            ->where('grading_status', '!=', 'pending_essay')
             ->whereHas('quiz', fn ($q) => $q->where('course_id', $courseId)->where('activity_type', 'quiz'))
             ->selectRaw('AVG(score) as avg_score')
             ->value('avg_score') ?? 0;

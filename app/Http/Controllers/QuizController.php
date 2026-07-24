@@ -153,8 +153,8 @@ class QuizController extends Controller
                 : $q->points;
         });
 
-        if ($totalPoints !== 100) {
-            return back()->withErrors(['question_ids' => 'Konfigurasi hanya dapat disimpan setelah total poin soal tepat 100/100.']);
+        if ($quiz->is_active && $totalPoints !== 100) {
+            return back()->withErrors(['question_ids' => 'Konfigurasi hanya dapat disimpan saat aktif jika total poin soal tepat 100/100.']);
         }
 
         $validated = $request->validate([
@@ -268,9 +268,6 @@ class QuizController extends Controller
                 ? $q->points * $q->options_count 
                 : $q->points;
         });
-        if ($totalPoints !== 100) {
-            return back()->withErrors(['question_ids' => "Total poin soal harus tepat 100/100. Total pilihan saat ini: {$totalPoints} poin."]);
-        }
 
         // Sync dengan urutan
         $syncData = [];
@@ -280,7 +277,17 @@ class QuizController extends Controller
 
         $quiz->questions()->sync($syncData);
 
-        return back()->with('success', count($questionIds) . ' soal berhasil disinkronkan ke quiz.');
+        // Jika poin belum 100, kembalikan ke draft (non-aktif)
+        if ($totalPoints !== 100 && $quiz->is_active) {
+            $quiz->update(['is_active' => false]);
+        }
+
+        $msg = count($questionIds) . " soal berhasil disimpan ({$totalPoints}/100 poin).";
+        if ($totalPoints !== 100) {
+            $msg .= " Status quiz disimpan sebagai Draft sampai total poin tepat 100/100.";
+        }
+
+        return back()->with('success', $msg);
     }
 
     /**

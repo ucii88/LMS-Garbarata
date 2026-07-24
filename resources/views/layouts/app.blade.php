@@ -35,7 +35,8 @@
 
                 <!-- Main Page Content -->
                 <main class="flex-1 py-8 px-8 w-full">
-                    {{ $slot }}
+                    {{ $slot ?? '' }}
+                    @yield('content')
                 </main>
             </div>
         </div>

@@ -134,25 +134,63 @@ class QuestionController extends Controller
                 'question_image' => $question->question_image,
             ]);
 
-            // Hapus opsi lama, buat ulang (tidak untuk tipe essay)
-            $question->options()->delete();
-
+            // Update atau buat opsi jawaban (tidak untuk tipe essay)
             if ($validated['type'] !== 'essay') {
+                $keptOptionIds = [];
+
                 foreach ($validated['options'] ?? [] as $i => $opt) {
+                    $optionId = isset($opt['id']) ? (int) $opt['id'] : null;
+
                     $optImagePath = null;
                     if ($request->hasFile("options.{$i}.image")) {
                         $optImagePath = $request->file("options.{$i}.image")->store('question-options', 'public');
                     }
 
-                    QuestionOption::create([
-                        'question_id' => $question->id,
-                        'option_text' => $opt['text'],
+                    if ($optionId) {
+                        $existingOpt = QuestionOption::where('id', $optionId)
+                            ->where('question_id', $question->id)
+                            ->first();
+
+                        if ($existingOpt) {
+                            $updateData = [
+                                'option_text' => $opt['text'],
+                                'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
+                                'match_label' => $opt['match_label'] ?? null,
+                                'order'       => $i,
+                            ];
+
+                            if ($optImagePath) {
+                                if ($existingOpt->option_image) {
+                                    Storage::disk('public')->delete($existingOpt->option_image);
+                                }
+                                $updateData['option_image'] = $optImagePath;
+                            }
+
+                            $existingOpt->update($updateData);
+                            $keptOptionIds[] = $existingOpt->id;
+                            continue;
+                        }
+                    }
+
+                    // Buat opsi baru jika tidak ada ID lama
+                    $newOpt = QuestionOption::create([
+                        'question_id'  => $question->id,
+                        'option_text'  => $opt['text'],
                         'option_image' => $optImagePath,
-                        'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
-                        'match_label' => $opt['match_label'] ?? null,
-                        'order'       => $i,
+                        'is_correct'   => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
+                        'match_label'  => $opt['match_label'] ?? null,
+                        'order'        => $i,
                     ]);
+                    $keptOptionIds[] = $newOpt->id;
                 }
+
+                // Hapus hanya opsi yang sengaja dibuang/dihapus oleh instruktur saat edit
+                if (!empty($keptOptionIds)) {
+                    $question->options()->whereNotIn('id', $keptOptionIds)->delete();
+                }
+            } else {
+                // Jika jenis soal diubah ke essay, hapus semua opsi
+                $question->options()->delete();
             }
         });
 

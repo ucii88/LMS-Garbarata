@@ -134,7 +134,8 @@ class Chapter5Seeder extends Seeder
             '      </button>' .
             '    </div>';
 
-        $c_5_1_2 .= '    <div>' .
+        $c_5_1_2 .= '    @if(auth()->check() && auth()->user()->isInstruktur())' .
+            '    <div>' .
             '      <button type="button" x-show="!editMode" @click="editMode = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">' .
             '        <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>' .
             '        <span>Atur Posisi / Edit Hotspot Detail</span>' .
@@ -147,6 +148,7 @@ class Chapter5Seeder extends Seeder
             '        </button>' .
             '      </div>' .
             '    </div>' .
+            '    @endif' .
             '  </div>' .
             
             '  <!-- Tab Contents -->' .

@@ -31,11 +31,20 @@
             </div>
 
             {{-- Timer --}}
-            @if($quiz->time_limit)
+            @if(!is_null($timeRemainingSeconds))
                 <div id="timer"
                      class="flex items-center gap-1.5 text-base font-bold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700"
                      data-seconds="{{ $timeRemainingSeconds }}">
-                    ⏱ <span id="timer-display">{{ gmdate('i:s', $timeRemainingSeconds) }}</span>
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span id="timer-display">
+                        @if($timeRemainingSeconds >= 3600)
+                            {{ sprintf('%02d:%02d:%02d', floor($timeRemainingSeconds / 3600), floor(($timeRemainingSeconds % 3600) / 60), $timeRemainingSeconds % 60) }}
+                        @else
+                            {{ sprintf('%02d:%02d', floor($timeRemainingSeconds / 60), $timeRemainingSeconds % 60) }}
+                        @endif
+                    </span>
                 </div>
             @endif
 
@@ -299,14 +308,11 @@
 let focusLossCount = 0;
 const MAX_FOCUS_LOSS = 3;
 
+// Deteksi perpindahan tab / keluar halaman (Anti-Cheat)
 document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
         handleFocusLoss();
     }
-});
-
-window.addEventListener('blur', function() {
-    handleFocusLoss();
 });
 
 function handleFocusLoss() {
@@ -559,24 +565,28 @@ function submitQuiz() {
 }
 
 // Timer countdown
-@if($quiz->time_limit)
-let secondsLeft = {{ $timeRemainingSeconds ?? ($quiz->time_limit * 60) }};
+@if(!is_null($timeRemainingSeconds))
+let secondsLeft = {{ $timeRemainingSeconds }};
 const timerEl = document.getElementById('timer-display');
 const timerWrap = document.getElementById('timer');
 
 function tick() {
     if (secondsLeft <= 0) {
-        timerEl.textContent = '00:00';
+        if (timerEl) timerEl.textContent = '00:00';
         // Auto submit
         submitQuiz();
         return;
     }
     secondsLeft--;
-    const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
+    const h = Math.floor(secondsLeft / 3600);
+    const m = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, '0');
     const s = String(secondsLeft % 60).padStart(2, '0');
-    timerEl.textContent = `${m}:${s}`;
 
-    if (secondsLeft <= 120) { // merah jika <= 2 menit
+    if (timerEl) {
+        timerEl.textContent = h > 0 ? `${h}:${m}:${s}` : `${m}:${s}`;
+    }
+
+    if (secondsLeft <= 120 && timerWrap) { // merah jika <= 2 menit
         timerWrap.classList.remove('bg-slate-100', 'text-slate-700');
         timerWrap.classList.add('bg-red-100', 'text-red-600');
     }

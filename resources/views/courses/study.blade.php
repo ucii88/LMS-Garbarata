@@ -1,4 +1,17 @@
 <x-app-layout>
+    @php
+        if (isset($modules) && (!auth()->check() || !auth()->user()->isInstruktur())) {
+            $modules = $modules->map(function($m) {
+                if (isset($m->content)) {
+                    $m->content = preg_replace('/@if\(auth\(\)->check\(\) && auth\(\)->user\(\)->isInstruktur\(\)\).*?@endif/s', '', $m->content);
+                    $m->content = preg_replace('/<button[^>]*@click="editMode\s*=\s*true"[^>]*>.*?<\/button>/s', '', $m->content);
+                    $m->content = preg_replace('/<div x-show="editMode"[^>]*>.*?<\/div>/s', '', $m->content);
+                }
+                return $m;
+            });
+        }
+    @endphp
+
     <style>
         /* Force text inside study rooms to be 14px instead of 12px due to database HTML having hardcoded class="text-xs" */
         .prose p.text-xs,

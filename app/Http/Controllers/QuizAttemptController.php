@@ -127,11 +127,19 @@ class QuizAttemptController extends Controller
         // Jawaban yang sudah diisi (untuk auto-save/resume)
         $savedAnswers = $attempt->answers()->get()->keyBy('question_id');
 
-        // Hitung sisa waktu jika ada timer
+        // Hitung sisa waktu efektif (kombinasi time_limit dan end_time)
         $timeRemainingSeconds = null;
-        if ($quiz->time_limit) {
-            $elapsed = (int) abs(now()->diffInSeconds($attempt->started_at, true));
-            $timeRemainingSeconds = max(0, ($quiz->time_limit * 60) - $elapsed);
+        $elapsed = (int) abs(now()->diffInSeconds($attempt->started_at, true));
+
+        $timerSeconds = $quiz->time_limit ? max(0, ($quiz->time_limit * 60) - $elapsed) : null;
+        $endTimeSeconds = $quiz->end_time ? max(0, (int) now()->diffInSeconds($quiz->end_time, false)) : null;
+
+        if (!is_null($timerSeconds) && !is_null($endTimeSeconds)) {
+            $timeRemainingSeconds = min($timerSeconds, $endTimeSeconds);
+        } elseif (!is_null($timerSeconds)) {
+            $timeRemainingSeconds = $timerSeconds;
+        } elseif (!is_null($endTimeSeconds)) {
+            $timeRemainingSeconds = $endTimeSeconds;
         }
 
         return view('quiz-attempt.attempt', compact(
@@ -161,13 +169,16 @@ class QuizAttemptController extends Controller
             'order_answer'       => 'nullable|array',
         ]);
 
+        $question = \App\Models\Question::find($validated['question_id']);
+        $isEssay = $question?->type === 'essay';
+
         QuizAnswer::updateOrCreate(
             ['attempt_id' => $attempt->id, 'question_id' => $validated['question_id']],
             [
                 'selected_option_id' => $validated['selected_option_id'] ?? null,
                 'text_answer'        => $validated['text_answer'] ?? null,
                 'order_answer'       => $validated['order_answer'] ?? null,
-                'is_correct'         => false,
+                'is_correct'         => $isEssay ? null : false,
                 'points_earned'      => 0,
             ]
         );
@@ -202,7 +213,7 @@ class QuizAttemptController extends Controller
         DB::transaction(function () use ($request, $quiz, $attempt, $user, $course) {
             $questions     = $quiz->questions()->with('options', 'correctOptions')->get();
             $totalPoints = 0;
-            $hasEssay    = false;
+            $hasEssay    = $questions->contains('type', 'essay');
             foreach ($questions as $question) {
                 if ($question->type === 'matching' || $question->type === 'ordering') {
                     $totalPoints += $question->options->count() * $question->points;
@@ -291,9 +302,11 @@ class QuizAttemptController extends Controller
                         break;
                 }
 
-                $answerData['is_correct']    = $isCorrect;
-                $answerData['points_earned'] = $pointsEarned;
-                $earnedPoints += $pointsEarned;
+                if ($question->type !== 'essay') {
+                    $answerData['is_correct']    = $isCorrect;
+                    $answerData['points_earned'] = $pointsEarned;
+                    $earnedPoints += $pointsEarned;
+                }
 
                 QuizAnswer::updateOrCreate(
                     ['attempt_id' => $attempt->id, 'question_id' => $question->id],

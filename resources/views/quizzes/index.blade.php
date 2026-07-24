@@ -8,7 +8,7 @@
         <div>
             <h1 class="text-xl font-bold text-slate-800">{{ __('Manajemen') }} {{ $isPractice ? __('Latihan') : __('Quiz') }}</h1>
             <p class="text-sm text-slate-500 mt-0.5">
-                {{ __('Course:') }} <span class="font-semibold text-blue-600">{{ $course->title }}</span> â€”
+                {{ __('Course:') }} <span class="font-semibold text-blue-600">{{ $course->title }}</span> &mdash;
                 {{ $quizzes->count() }} {{ $isPractice ? __('latihan') : __('quiz') }}
             </p>
         </div>
@@ -61,11 +61,11 @@
                         </p>
                         <div class="flex items-center gap-3 mt-1.5 text-sm text-slate-400">
                             <span>{{ $quiz->questions_count }} {{ __('soal') }}</span>
-                            <span>Â·</span>
+                            <span>&middot;</span>
                             @if($isPractice)
-                                <span>{{ __('Tanpa timer') }} Â· {{ $quiz->max_attempts ? __('Maks.') . ' ' . $quiz->max_attempts . ' ' . __('percobaan') : __('Tanpa batas percobaan') }}</span>
+                                <span>{{ __('Tanpa timer') }} &middot; {{ $quiz->max_attempts ? __('Maks.') . ' ' . $quiz->max_attempts . ' ' . __('percobaan') : __('Tanpa batas percobaan') }}</span>
                             @else
-                                <span>{{ __('Lulus:') }} {{ $quiz->passing_score }}% Â· {{ $quiz->time_limit ? $quiz->time_limit . ' ' . __('mnt') : __('Tanpa timer') }} Â· {{ __('Maks.') }} {{ $quiz->max_attempts }} {{ __('percobaan') }}</span>
+                                <span>{{ __('Lulus:') }} {{ $quiz->passing_score }}% &middot; {{ $quiz->time_limit ? $quiz->time_limit . ' ' . __('mnt') : __('Tanpa timer') }} &middot; {{ __('Maks.') }} {{ $quiz->max_attempts }} {{ __('percobaan') }}</span>
                             @endif
                         </div>
                     </div>

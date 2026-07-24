@@ -454,10 +454,10 @@
                     </div>
 
                     <!-- Bottom Action Button -->
-                    <button type="button" onclick="showGlobalAlert('Informasi', 'Fitur kalender lengkap akan segera hadir!')"
-                            class="w-full py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-bold rounded-xl transition border border-slate-200/50 shadow-2xs">
+                    <a href="{{ route('calendar.index') }}"
+                       class="block w-full text-center py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-bold rounded-xl transition border border-slate-200/50 shadow-2xs">
                         {{ __('Lihat Kalender Lengkap') }}
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

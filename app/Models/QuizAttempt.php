@@ -101,17 +101,24 @@ class QuizAttempt extends Model
             $earnedPoints += (float) $answer->points_earned;
         }
 
-        $score    = $totalPoints > 0 ? round(($earnedPoints / $totalPoints) * 100, 2) : 0;
-        $isPassed = !$quiz->isPractice() && $score >= $quiz->passing_score;
+        // Cek apakah masih ada soal esai yang belum dinilai instruktur
+        $hasUngradedEssay = $this->answers()
+            ->whereHas('question', fn ($q) => $q->where('type', 'essay'))
+            ->whereNull('essay_graded_at')
+            ->exists();
+
+        $score          = $totalPoints > 0 ? round(($earnedPoints / $totalPoints) * 100, 2) : 0;
+        $isPassed       = !$hasUngradedEssay && !$quiz->isPractice() && $score >= $quiz->passing_score;
+        $gradingStatus  = $hasUngradedEssay ? 'pending_essay' : 'graded';
 
         $this->update([
             'score'          => $score,
             'is_passed'      => $isPassed,
-            'grading_status' => 'graded',
+            'grading_status' => $gradingStatus,
         ]);
 
-        // Terbitkan sertifikat jika sudah lulus
-        if ($isPassed && !$quiz->isPractice()) {
+        // Terbitkan sertifikat jika sudah lulus dan tidak ada esai pending
+        if ($isPassed && !$hasUngradedEssay && !$quiz->isPractice()) {
             Certificate::tryIssue($this->user_id, $quiz->course_id);
         }
     }

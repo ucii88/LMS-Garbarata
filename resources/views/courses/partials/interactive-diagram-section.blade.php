@@ -361,7 +361,8 @@
         <div class="flex items-center gap-2">
             <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
         <span x-show="diagramObj" class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
-            <!-- Controls Ukuran Bulatan Hotspot -->
+            <!-- Controls Ukuran Bulatan Hotspot - Instruktur only -->
+            @if(auth()->user()->isInstruktur())
             <div x-show="hotspots.length > 0" class="flex items-center gap-1 border-l border-slate-200 pl-2">
                 <span class="text-[10px] text-slate-500 font-semibold mr-1">Ukuran Dot:</span>
                 <button type="button" @click="setDotSize('sm')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">S</button>
@@ -369,6 +370,7 @@
                 <button type="button" @click="setDotSize('lg')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">L</button>
                 <button type="button" @click="setDotSize('xl')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">XL</button>
             </div>
+            @endif
         </div>
 
         @if(auth()->user()->isInstruktur())

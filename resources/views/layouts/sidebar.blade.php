@@ -35,6 +35,16 @@
                 </a>
 
                 <a
+                    href="{{ route('calendar.index') }}"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 {{ request()->routeIs('calendar.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
+                >
+                    <svg class="w-5 h-5 {{ request()->routeIs('calendar.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>{{ __('Kalender') }}</span>
+                </a>
+
+                <a
                     href="{{ route('admin.users.index') }}"
                     class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 {{ request()->routeIs('admin.users.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
                 >
@@ -55,6 +65,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
                     <span>{{ __('Dashboard') }}</span>
+                </a>
+
+                <a
+                    href="{{ route('calendar.index') }}"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 {{ request()->routeIs('calendar.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
+                >
+                    <svg class="w-5 h-5 {{ request()->routeIs('calendar.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>{{ __('Kalender') }}</span>
                 </a>
 
                 <a
@@ -100,6 +120,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
                     <span>{{ __('Dashboard') }}</span>
+                </a>
+
+                <a
+                    href="{{ route('calendar.index') }}"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 {{ request()->routeIs('calendar.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
+                >
+                    <svg class="w-5 h-5 {{ request()->routeIs('calendar.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>{{ __('Kalender') }}</span>
                 </a>
 
                 <!-- Materi Garbarata Link -->

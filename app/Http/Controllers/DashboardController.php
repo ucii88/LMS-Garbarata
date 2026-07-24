@@ -151,25 +151,37 @@ class DashboardController extends Controller
             ->get();
 
         foreach ($timedQuizzes as $q) {
-            if ($q->start_time) {
-                $start = \Carbon\Carbon::parse($q->start_time)->timezone('Asia/Jakarta');
+            $start = $q->start_time ? \Carbon\Carbon::parse($q->start_time)->timezone('Asia/Jakarta') : null;
+            $end = $q->end_time ? \Carbon\Carbon::parse($q->end_time)->timezone('Asia/Jakarta') : null;
+            $prefix = $q->isFinalQuiz() ? __('Final Exam:') . ' ' : ($q->isPractice() ? __('Latihan:') . ' ' : __('Quiz:') . ' ');
+
+            if ($start && $end && $start->toDateString() === $end->toDateString()) {
                 $scheduleEvents[] = [
                     'day_num' => $start->day,
                     'month_name' => strtoupper($start->translatedFormat('M')),
-                    'title' => ($q->isFinalQuiz() ? __('Final Exam:') . ' ' : __('Quiz:') . ' ') . $q->title . ' ' . __('(Opened)'),
-                    'time_or_loc' => $start->format('H:i') . ' WIB · Online LMS',
+                    'title' => $prefix . $q->title,
+                    'time_or_loc' => $start->format('H:i') . ' - ' . $end->format('H:i') . ' WIB · Online LMS',
                     'icon' => 'lock-open'
                 ];
-            }
-            if ($q->end_time) {
-                $end = \Carbon\Carbon::parse($q->end_time)->timezone('Asia/Jakarta');
-                $scheduleEvents[] = [
-                    'day_num' => $end->day,
-                    'month_name' => strtoupper($end->translatedFormat('M')),
-                    'title' => ($q->isFinalQuiz() ? __('Final Exam:') . ' ' : __('Quiz:') . ' ') . $q->title . ' ' . __('(Deadline)'),
-                    'time_or_loc' => $end->format('H:i') . ' WIB · Online LMS',
-                    'icon' => 'lock'
-                ];
+            } else {
+                if ($start) {
+                    $scheduleEvents[] = [
+                        'day_num' => $start->day,
+                        'month_name' => strtoupper($start->translatedFormat('M')),
+                        'title' => $prefix . $q->title . ' ' . __('(Opened)'),
+                        'time_or_loc' => $start->format('H:i') . ' WIB · Online LMS',
+                        'icon' => 'lock-open'
+                    ];
+                }
+                if ($end) {
+                    $scheduleEvents[] = [
+                        'day_num' => $end->day,
+                        'month_name' => strtoupper($end->translatedFormat('M')),
+                        'title' => $prefix . $q->title . ' ' . __('(Deadline)'),
+                        'time_or_loc' => $end->format('H:i') . ' WIB · Online LMS',
+                        'icon' => 'lock'
+                    ];
+                }
             }
         }
 

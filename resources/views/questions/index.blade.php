@@ -551,6 +551,11 @@ function openEditModal(id) {
         const letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         question.options.forEach((opt, idx) => {
             const row = mcOptionRow(idx, letters[idx]);
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = `options[${idx}][id]`;
+            idInput.value = opt.id;
+            row.appendChild(idInput);
             row.querySelector('input[type=text]').value = opt.option_text;
             if (opt.is_correct) {
                 row.querySelector('input[type=radio]').checked = true;
@@ -559,9 +564,23 @@ function openEditModal(id) {
             wrap.appendChild(row);
         });
     } else if (question.type === 'true_false') {
-        const isTrueCorrect = question.options[0].is_correct;
+        const isTrueCorrect = question.options[0] ? question.options[0].is_correct : true;
         document.querySelector(`input[name="correct_tf"][value="${isTrueCorrect ? '0' : '1'}"]`).checked = true;
         setTFCorrect(isTrueCorrect ? 0 : 1);
+        if (question.options[0]) {
+            const id0 = document.createElement('input');
+            id0.type = 'hidden';
+            id0.name = 'options[0][id]';
+            id0.value = question.options[0].id;
+            document.getElementById('options-container').appendChild(id0);
+        }
+        if (question.options[1]) {
+            const id1 = document.createElement('input');
+            id1.type = 'hidden';
+            id1.name = 'options[1][id]';
+            id1.value = question.options[1].id;
+            document.getElementById('options-container').appendChild(id1);
+        }
     } else if (question.type === 'essay') {
         // Soal esai tidak punya opsi, tampilkan info saja
         const wrap = document.getElementById('options-container');
@@ -572,6 +591,11 @@ function openEditModal(id) {
         const letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         question.options.forEach((opt, idx) => {
             const row = matchingRow(idx, letters[idx]);
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = `options[${idx}][id]`;
+            idInput.value = opt.id;
+            row.appendChild(idInput);
             row.querySelector('[placeholder="Item kiri (soal)"]').value = opt.option_text;
             row.querySelector('[placeholder="Item kanan (pasangan)"]').value = opt.match_label;
             wrap.appendChild(row);
@@ -581,6 +605,11 @@ function openEditModal(id) {
         wrap.innerHTML = '';
         question.options.forEach((opt, idx) => {
             const row = orderingRow(idx);
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = `options[${idx}][id]`;
+            idInput.value = opt.id;
+            row.appendChild(idInput);
             row.querySelector('input[type=text]').value = opt.option_text;
             wrap.appendChild(row);
         });
