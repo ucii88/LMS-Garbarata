@@ -69,7 +69,7 @@
                             @endif
                         </div>
                         <p class="text-base text-slate-800 font-medium leading-relaxed">
-                            {!! nl2br(e($question->question_text)) !!}
+                            {!! nl2br(e($question->getTranslation('question_text', app()->getLocale()))) !!}
                         </p>
                         @if($question->question_image)
                             <img src="{{ Storage::url($question->question_image) }}"
@@ -84,17 +84,17 @@
                                         {{ $opt->is_correct ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300' }}">
                                         {{ $opt->is_correct ? '✓' : '' }}
                                     </span>
-                                    @if($opt->match_label)
-                                        <span class="font-bold">{{ $opt->match_label }}.</span>
+                                    @if($opt->getTranslation('match_label', app()->getLocale()))
+                                        <span class="font-bold">{{ $opt->getTranslation('match_label', app()->getLocale()) }}.</span>
                                     @endif
-                                    {{ $opt->option_text === 'Benar' ? __('Benar') : ($opt->option_text === 'Salah' ? __('Salah') : $opt->option_text) }}
+                                    {{ $opt->getTranslation('option_text', app()->getLocale()) }}
                                 </div>
                             @endforeach
                         </div>
 
-                        @if($question->explanation)
+                        @if($question->getTranslation('explanation', app()->getLocale()))
                             <div class="mt-3 text-sm bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-blue-700">
-                                <span class="font-semibold">{{ __('Penjelasan:') }}</span> {{ $question->explanation }}
+                                <span class="font-semibold">{{ __('Penjelasan:') }}</span> {{ $question->getTranslation('explanation', app()->getLocale()) }}
                             </div>
                         @endif
                     </div>
@@ -102,13 +102,13 @@
                     {{-- Actions --}}
                     <div class="flex items-center gap-1 shrink-0">
                         <button onclick="openEditModal({{ $question->id }})"
-                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-sm" title="Edit Soal">
+                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-sm" title="{{ __('Edit Soal') }}">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
                         <form action="{{ route('questions.destroy', [$course, $chapter, $question]) }}"
                               method="POST" data-confirm="{{ __('Hapus soal ini dari bank soal?') }}">
                             @csrf @method('DELETE')
-                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-sm" title="Hapus Soal">
+                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-sm" title="{{ __('Hapus Soal') }}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </form>
@@ -148,11 +148,28 @@
             </div>
 
             {{-- Pertanyaan --}}
-            <div>
+            <div class="space-y-3">
                 <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Pertanyaan') }} <span class="text-red-500">*</span></label>
-                <textarea name="question_text" rows="3" required
-                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
-                          placeholder="{{ __('Tulis pertanyaan di sini...') }}"></textarea>
+                <div class="grid gap-3 md:grid-cols-2">
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Indonesia') }}</span>
+                        <textarea name="question_text[id]" rows="3" required
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Tulis pertanyaan di sini...') }}"></textarea>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Inggris') }}</span>
+                        <textarea name="question_text[en]" rows="3"
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Write the question here...') }}"></textarea>
+                    </div>
+                </div>
+                @error('question_text.id')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
+                @error('question_text.en')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Gambar Soal (opsional) --}}
@@ -190,11 +207,28 @@
             </div>
 
             {{-- Penjelasan --}}
-            <div>
+            <div class="space-y-3">
                 <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Penjelasan Jawaban') }} <span class="text-slate-400">({{ __('opsional') }})</span></label>
-                <textarea name="explanation" rows="2"
-                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-none"
-                          placeholder="{{ __('Penjelasan mengapa jawaban ini benar...') }}"></textarea>
+                <div class="grid gap-3 md:grid-cols-2">
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Indonesia') }}</span>
+                        <textarea name="explanation[id]" rows="2"
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Penjelasan mengapa jawaban ini benar...') }}"></textarea>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Inggris') }}</span>
+                        <textarea name="explanation[en]" rows="2"
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Explain why this answer is correct...') }}"></textarea>
+                    </div>
+                </div>
+                @error('explanation.id')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
+                @error('explanation.en')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             @if($errors->any())
@@ -244,19 +278,23 @@ const _t = {
     essayDesc: '{{ __('Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.') }}',
     trueFalseTrue: '{{ __('Benar') }}',
     trueFalseFalse: '{{ __('Salah') }}',
+    trueFalseTrueId: 'Benar',
+    trueFalseTrueEn: 'Correct',
+    trueFalseFalseId: 'Salah',
+    trueFalseFalseEn: 'False',
     trueFalseHint: '{{ __('Pilih mana yang merupakan jawaban benar.') }}',
     addModalTitle: '{{ __('Tambah Soal ke Bank Soal') }}',
     editModalTitle: '{{ __('Edit Soal') }}',
     imageTooBig: '{{ __('File gambar terlalu besar! Maksimal ukuran file adalah 5MB.') }}',
 };
 
-function closeQuestionModal() {
+function renderOptionsUI(type) {
     const container = document.getElementById('options-container');
     container.innerHTML = '';
 
     const label = document.createElement('label');
     label.className = 'block text-sm font-semibold text-slate-700 mb-2';
-    label.textContent = 'Pilihan Jawaban *';
+    label.textContent = _t.answerOptions;
     container.appendChild(label);
 
     if (type === 'multiple_choice') {
@@ -275,6 +313,34 @@ function closeQuestionModal() {
     }
 }
 
+function localeInputName(base, locale) {
+    return `${base}[${locale}]`;
+}
+
+function localeValue(value, locale) {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    return value[locale] ?? value.id ?? value.en ?? '';
+}
+
+function setLocalizedField(form, base, value) {
+    ['id', 'en'].forEach(locale => {
+        const field = form.querySelector(`[name="${base}[${locale}]"]`);
+        if (field) {
+            field.value = localeValue(value, locale);
+        }
+    });
+}
+
+function setLocalizedRowValues(row, field, value) {
+    ['id', 'en'].forEach(locale => {
+        const input = row.querySelector(`[data-field="${field}"][data-locale="${locale}"]`);
+        if (input) {
+            input.value = localeValue(value, locale);
+        }
+    });
+}
+
 function buildMCOptions(count) {
     const wrap = document.createElement('div');
     wrap.id = 'mc-options';
@@ -288,44 +354,54 @@ function buildMCOptions(count) {
 
 function mcOptionRow(i, label) {
     const row = document.createElement('div');
-    row.className = 'flex items-center gap-2';
+    row.className = 'flex flex-col gap-2 rounded-xl border border-slate-100 p-3 md:flex-row md:items-start md:gap-3';
     row.innerHTML = `
-        <span class="opt-label text-sm font-bold text-slate-500 w-5">${label}.</span>
-        <input type="text" name="options[${i}][text]" placeholder="${_t.optionPlaceholder} ${label}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <label class="flex items-center gap-1 text-sm text-emerald-600 font-semibold cursor-pointer shrink-0">
-            <input type="radio" name="correct_mc" value="${i}">
-            ${_t.correct}
-        </label>
-        <input type="hidden" name="options[${i}][is_correct]" value="0">
-        <button type="button" onclick="removeOptionRow(this, 'multiple_choice')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
-            ${_t.delete}
-        </button>
+        <div class="flex items-center gap-2 shrink-0">
+            <span class="opt-label text-sm font-bold text-slate-500 w-5">${label}.</span>
+            <label class="flex items-center gap-1 text-sm text-emerald-600 font-semibold cursor-pointer shrink-0">
+                <input type="radio" name="correct_mc" value="${i}">
+                ${_t.correct}
+            </label>
+        </div>
+        <div class="grid gap-2 flex-1 md:grid-cols-2">
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.optionPlaceholder} ${label} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.optionPlaceholder} ${label} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <input type="hidden" name="options[${i}][is_correct]" data-field="is_correct" value="0">
+        <div class="flex justify-end">
+            <button type="button" onclick="removeOptionRow(this, 'multiple_choice')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
+                ${_t.delete}
+            </button>
+        </div>
     `;
     // Simpler approach using a radio
     row.querySelector('input[type=radio]').addEventListener('change', function() {
         document.querySelectorAll('.mc-correct').forEach(h => h.value = 0);
         row.querySelector('.mc-correct').value = 1;
     });
-    const hidden = row.querySelector('input[type=hidden]');
+    const hidden = row.querySelector('[data-field="is_correct"]');
     hidden.className = 'mc-correct';
     return row;
 }
 
 function buildTrueFalseOptions() {
     const wrap = document.createElement('div');
-    wrap.className = 'space-y-2';
+    wrap.className = 'space-y-3';
     wrap.innerHTML = `
-        <div class="flex items-center gap-4">
-            <label class="flex items-center gap-2 text-base cursor-pointer">
+        <div class="grid gap-3 md:grid-cols-2">
+            <label class="flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-base cursor-pointer">
                 <input type="radio" name="correct_tf" value="0" checked onchange="setTFCorrect(0)">
-                <input type="hidden" name="options[0][text]" value="${_t.trueFalseTrue}">
+                <input type="hidden" name="options[0][text][id]" value="${_t.trueFalseTrueId}">
+                <input type="hidden" name="options[0][text][en]" value="${_t.trueFalseTrueEn}">
                 <input type="hidden" name="options[0][is_correct]" id="tf-correct-0" value="1">
                 <span class="font-semibold text-emerald-600">✓ ${_t.trueFalseTrue}</span>
             </label>
-            <label class="flex items-center gap-2 text-base cursor-pointer">
+            <label class="flex items-center gap-2 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-base cursor-pointer">
                 <input type="radio" name="correct_tf" value="1" onchange="setTFCorrect(1)">
-                <input type="hidden" name="options[1][text]" value="${_t.trueFalseFalse}">
+                <input type="hidden" name="options[1][text][id]" value="${_t.trueFalseFalseId}">
+                <input type="hidden" name="options[1][text][en]" value="${_t.trueFalseFalseEn}">
                 <input type="hidden" name="options[1][is_correct]" id="tf-correct-1" value="0">
                 <span class="font-semibold text-red-500">✗ ${_t.trueFalseFalse}</span>
             </label>
@@ -344,8 +420,12 @@ function buildFillBlankOption() {
     const wrap = document.createElement('div');
     wrap.innerHTML = `
         <input type="hidden" name="options[0][is_correct]" value="1">
-        <input type="text" name="options[0][text]" required placeholder="Ketik jawaban yang benar (case-insensitive)"
-               class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        <div class="grid gap-2 md:grid-cols-2">
+            <input type="text" name="options[0][text][id]" required placeholder="Ketik jawaban yang benar (ID)"
+                   class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[0][text][en]" placeholder="Type the correct answer (EN)"
+                   class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
         <p class="text-sm text-slate-400 mt-1">Jawaban dicocokkan secara case-insensitive.</p>
     `;
     return wrap;
@@ -378,18 +458,28 @@ function buildMatchingOptions(count) {
 
 function matchingRow(i, letter) {
     const row = document.createElement('div');
-    row.className = 'flex items-center gap-2';
+    row.className = 'grid gap-2 rounded-xl border border-slate-100 p-3 md:grid-cols-[auto_1fr_auto_1fr_auto] md:items-center';
     row.innerHTML = `
         <span class="opt-label text-sm font-bold text-slate-500 w-6">${letter}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
-        <input type="text" name="options[${i}][text]" placeholder="${_t.leftItem}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <span class="text-slate-400">→</span>
-        <input type="text" name="options[${i}][match_label]" placeholder="${_t.rightItem}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <button type="button" onclick="removeOptionRow(this, 'matching')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
-            ${_t.delete}
-        </button>
+        <div class="grid gap-2 md:grid-cols-2">
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.leftItem} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.leftItem} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <span class="hidden md:block text-slate-400 text-center">→</span>
+        <div class="grid gap-2 md:grid-cols-2">
+            <input type="text" name="options[${i}][match_label][id]" data-field="match_label" data-locale="id" placeholder="${_t.rightItem} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][match_label][en]" data-field="match_label" data-locale="en" placeholder="${_t.rightItem} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div class="flex justify-end md:justify-start">
+            <button type="button" onclick="removeOptionRow(this, 'matching')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
+                ${_t.delete}
+            </button>
+        </div>
     `;
     return row;
 }
@@ -406,21 +496,27 @@ function buildOrderingOptions(count) {
 
 function orderingRow(i) {
     const row = document.createElement('div');
-    row.className = 'flex items-center gap-2';
+    row.className = 'flex flex-col gap-2 rounded-xl border border-slate-100 p-3 md:flex-row md:items-center md:gap-3';
     row.innerHTML = `
         <span class="opt-label text-sm font-bold text-slate-500 w-6">${i+1}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
-        <input type="text" name="options[${i}][text]" placeholder="${_t.stepPlaceholder}${i+1}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <button type="button" onclick="removeOptionRow(this, 'ordering')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
-            ${_t.delete}
-        </button>
+        <div class="grid gap-2 flex-1 md:grid-cols-2">
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.stepPlaceholder}${i+1} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.stepPlaceholder}${i+1} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div class="flex justify-end">
+            <button type="button" onclick="removeOptionRow(this, 'ordering')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
+                ${_t.delete}
+            </button>
+        </div>
     `;
     return row;
 }
 
 function removeOptionRow(btn, type) {
-    const row = btn.closest('.flex');
+    const row = btn.closest('.rounded-xl');
     if (!row) return;
     const wrap = row.parentNode;
     if (wrap.children.length <= 1) {
@@ -447,18 +543,24 @@ function reindexOptions(type) {
             }
         }
         
-        const textInputs = row.querySelectorAll('input[type=text]');
-        if (textInputs.length > 0) {
-            if (type === 'matching') {
-                textInputs[0].name = `options[${idx}][text]`;
-                textInputs[1].name = `options[${idx}][match_label]`;
-            } else {
-                textInputs[0].name = `options[${idx}][text]`;
-                if (type === 'multiple_choice') textInputs[0].placeholder = `${_t.optionPlaceholder} ${letters[idx]}`;
-                else if (type === 'ordering') textInputs[0].placeholder = `${_t.stepPlaceholder}${idx + 1}`;
+        row.querySelectorAll('[data-field]').forEach(input => {
+            const field = input.dataset.field;
+            const locale = input.dataset.locale;
+            input.name = locale ? `options[${idx}][${field}][${locale}]` : `options[${idx}][${field}]`;
+            if (type === 'multiple_choice' && field === 'text' && locale === 'id') {
+                input.placeholder = `${_t.optionPlaceholder} ${letters[idx]} (ID)`;
             }
-        }
-        
+            if (type === 'multiple_choice' && field === 'text' && locale === 'en') {
+                input.placeholder = `${_t.optionPlaceholder} ${letters[idx]} (EN)`;
+            }
+            if (type === 'ordering' && field === 'text' && locale === 'id') {
+                input.placeholder = `${_t.stepPlaceholder}${idx + 1} (ID)`;
+            }
+            if (type === 'ordering' && field === 'text' && locale === 'en') {
+                input.placeholder = `${_t.stepPlaceholder}${idx + 1} (EN)`;
+            }
+        });
+
         const correctInput = row.querySelector('.mc-correct');
         if (correctInput) {
             correctInput.name = `options[${idx}][is_correct]`;
@@ -469,14 +571,9 @@ function reindexOptions(type) {
             radioInput.value = idx;
         }
 
-        const idInput = row.querySelector('input[name*="[id]"]');
-        if (idInput) {
-            idInput.name = `options[${idx}][id]`;
-        }
-
-        const isCorrectHidden = row.querySelector('input[name$="[is_correct]"]:not(.mc-correct)');
-        if (isCorrectHidden) {
-            isCorrectHidden.name = `options[${idx}][is_correct]`;
+        const hiddenCorrect = row.querySelector('input[type=hidden][name*="[is_correct]"]');
+        if (hiddenCorrect && !hiddenCorrect.classList.contains('mc-correct')) {
+            hiddenCorrect.name = `options[${idx}][is_correct]`;
         }
     });
 }
@@ -498,7 +595,24 @@ function addOptionBtn(container, type) {
 }
 
 // Data quiz untuk keperluan Edit Modal
-const questionsData = @js($questions->keyBy('id'));
+const questionsData = @js($questions->mapWithKeys(function ($question) {
+    return [$question->id => [
+        'type' => $question->type,
+        'points' => $question->points,
+        'topic_tag' => $question->topic_tag,
+        'question_image' => $question->question_image,
+        'question_text' => $question->getTranslations('question_text'),
+        'explanation' => $question->getTranslations('explanation'),
+        'options' => $question->options->map(function ($option) {
+            return [
+                'id' => $option->id,
+                'is_correct' => $option->is_correct,
+                'option_text' => $option->getTranslations('option_text'),
+                'match_label' => $option->getTranslations('match_label'),
+            ];
+        })->values(),
+    ]];
+}));
 
 function openAddModal() {
     const modal = document.getElementById('modal-add-question');
@@ -541,11 +655,13 @@ function openEditModal(id) {
         methodInput.value = 'PUT';
         form.appendChild(methodInput);
     }
+    form.reset();
+    methodInput.value = 'PUT';
 
     form.querySelector('[name=type]').value = question.type;
-    form.querySelector('[name=question_text]').value = question.question_text;
+    setLocalizedField(form, 'question_text', question.question_text);
     form.querySelector('[name=points]').value = question.points;
-    form.querySelector('[name=explanation]').value = question.explanation || '';
+    setLocalizedField(form, 'explanation', question.explanation || {});
     form.querySelector('[name=topic_tag]').value = question.topic_tag || '';
 
     // Kelola preview gambar lama
@@ -571,7 +687,7 @@ function openEditModal(id) {
         const letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         question.options.forEach((opt, idx) => {
             const row = mcOptionRow(idx, letters[idx]);
-            row.querySelector('input[type=text]').value = opt.option_text;
+            setLocalizedRowValues(row, 'text', opt.option_text);
             if (opt.is_correct) {
                 row.querySelector('input[type=radio]').checked = true;
                 row.querySelector('.mc-correct').value = 1;
@@ -592,8 +708,8 @@ function openEditModal(id) {
         const letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         question.options.forEach((opt, idx) => {
             const row = matchingRow(idx, letters[idx]);
-            row.querySelector('[placeholder="' + _t.leftItem + '"]').value = opt.option_text;
-            row.querySelector('[placeholder="' + _t.rightItem + '"]').value = opt.match_label;
+            setLocalizedRowValues(row, 'text', opt.option_text);
+            setLocalizedRowValues(row, 'match_label', opt.match_label || {});
             wrap.appendChild(row);
         });
     } else if (question.type === 'ordering') {
@@ -601,7 +717,7 @@ function openEditModal(id) {
         wrap.innerHTML = '';
         question.options.forEach((opt, idx) => {
             const row = orderingRow(idx);
-            row.querySelector('input[type=text]').value = opt.option_text;
+            setLocalizedRowValues(row, 'text', opt.option_text);
             wrap.appendChild(row);
         });
     }

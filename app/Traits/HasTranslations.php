@@ -45,31 +45,29 @@ trait HasTranslations
      */
     public function getAttributeValue($key)
     {
-        // Get the raw value from attributes (already decoded by 'array' cast via parent)
-        $value = parent::getAttributeValue($key);
-
         if ($this->isTranslatableAttribute($key)) {
-            // If it's an array (decoded JSON), pick the correct locale
-            if (is_array($value)) {
+            // Read the original value directly so legacy plain-text values and
+            // JSON values are handled consistently. Relying on the array cast
+            // first turns malformed/legacy values into null on some drivers.
+            $translations = $this->getTranslations($key);
+            if ($translations !== []) {
                 $locale = App::getLocale();
                 $fallback = config('app.fallback_locale', 'id');
-                
-                if (!empty($value[$locale])) {
-                    return $value[$locale];
+
+                if (!empty($translations[$locale])) {
+                    return $translations[$locale];
                 }
-                if (!empty($value[$fallback])) {
-                    return $value[$fallback];
+                if (!empty($translations[$fallback])) {
+                    return $translations[$fallback];
                 }
-                return reset($value) ?: null;
+
+                return reset($translations) ?: null;
             }
 
-            // If still a string (e.g., old data not yet migrated), return as-is
-            if (is_string($value)) {
-                return $value;
-            }
+            return null;
         }
 
-        return $value;
+        return parent::getAttributeValue($key);
     }
 
     /**
@@ -79,7 +77,12 @@ trait HasTranslations
     {
         $raw = $this->getRawOriginal($key);
         if (is_string($raw)) {
-            return json_decode($raw, true) ?? [];
+            $decoded = json_decode($raw, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+
+            return ['id' => $raw, 'en' => ''];
         }
         return is_array($raw) ? $raw : [];
     }
@@ -90,7 +93,19 @@ trait HasTranslations
     public function getTranslation($key, $locale)
     {
         $translations = $this->getTranslations($key);
-        return $translations[$locale] ?? null;
+        $fallback = config('app.fallback_locale', 'id');
+
+        // Empty strings are not valid translations. Fall back to the configured
+        // locale and finally to the first available value (usually Indonesian)
+        // so EN pages never render a blank question or answer.
+        if (!empty($translations[$locale])) {
+            return $translations[$locale];
+        }
+        if (!empty($translations[$fallback])) {
+            return $translations[$fallback];
+        }
+
+        return reset($translations) ?: null;
     }
 
     /**
@@ -119,4 +134,3 @@ trait HasTranslations
         return $attributes;
     }
 }
-

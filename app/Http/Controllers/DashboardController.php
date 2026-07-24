@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $stats = [];
         $cards = [];
         $items = collect();
-        $badgeLabel = __('Dashboard');
+        $badgeLabel = __('Beranda');
         $headline = __('Ringkasan aktivitas belajar');
         $description = __('Pantau aktivitas utama sesuai peran Anda dalam satu tampilan yang konsisten.');
         $primaryAction = null;
@@ -225,3 +225,4 @@ class DashboardController extends Controller
         ];
     }
 }
+

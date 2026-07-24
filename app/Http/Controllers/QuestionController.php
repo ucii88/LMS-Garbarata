@@ -13,6 +13,26 @@ use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
+    private function normalizeLocalePayload(?array $value, string $fallback = ''): array
+    {
+        $value = is_array($value) ? $value : [];
+        $id = trim((string) ($value['id'] ?? ''));
+        $en = trim((string) ($value['en'] ?? ''));
+
+        if ($id === '' && $en !== '') {
+            $id = $en;
+        }
+
+        if ($en === '' && $id !== '') {
+            $en = $fallback !== '' ? $fallback : $id;
+        }
+
+        return [
+            'id' => $id,
+            'en' => $en,
+        ];
+    }
+
     /**
      * Halaman kelola bank soal per chapter.
      */
@@ -32,18 +52,22 @@ class QuestionController extends Controller
     public function store(Request $request, Course $course, Chapter $chapter)
     {
         $validated = $request->validate([
-            'question_text'         => 'required|string',
+            'question_text.id'      => 'required|string',
+            'question_text.en'      => 'nullable|string',
             'question_image'        => 'nullable|image|max:5120',
             'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
             'points'                => 'required|integer|min:1',
-            'explanation'           => 'nullable|string',
+            'explanation.id'        => 'nullable|string',
+            'explanation.en'        => 'nullable|string',
             'topic_tag'             => 'nullable|string|max:100',
             // Pilihan jawaban (tidak diperlukan untuk tipe essay)
             'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
-            'options.*.text'        => 'required_unless:type,essay|string',
+            'options.*.text.id'     => 'required_unless:type,essay|string',
+            'options.*.text.en'     => 'nullable|string',
             'options.*.image'       => 'nullable|image|max:5120',
             'options.*.is_correct'  => 'nullable|boolean',
-            'options.*.match_label' => 'nullable|string|max:255',
+            'options.*.match_label.id' => 'nullable|string|max:255',
+            'options.*.match_label.en' => 'nullable|string|max:255',
         ]);
 
         DB::transaction(function () use ($validated, $request, $course, $chapter) {
@@ -58,11 +82,11 @@ class QuestionController extends Controller
             $question = Question::create([
                 'course_id'      => $course->id,
                 'chapter_id'     => $chapter->id,
-                'question_text'  => $validated['question_text'],
+                'question_text'  => $this->normalizeLocalePayload($validated['question_text']),
                 'question_image' => $imagePath,
                 'type'           => $validated['type'],
                 'points'         => $validated['points'],
-                'explanation'    => $validated['explanation'] ?? null,
+                'explanation'    => $this->normalizeLocalePayload($validated['explanation'] ?? null),
                 'topic_tag'      => $validated['topic_tag'] ?? null,
                 'order'          => $maxOrder + 1,
             ]);
@@ -77,17 +101,17 @@ class QuestionController extends Controller
 
                     QuestionOption::create([
                         'question_id' => $question->id,
-                        'option_text' => $opt['text'],
+                        'option_text' => $this->normalizeLocalePayload($opt['text'] ?? null),
                         'option_image' => $optImagePath,
                         'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
-                        'match_label' => $opt['match_label'] ?? null,
+                        'match_label' => $this->normalizeLocalePayload($opt['match_label'] ?? null),
                         'order'       => $i,
                     ]);
                 }
             }
         });
 
-        return back()->with('success', 'Soal berhasil ditambahkan ke bank soal.');
+        return back()->with('success', __('Soal berhasil ditambahkan ke bank soal.'));
     }
 
     /**
@@ -96,19 +120,23 @@ class QuestionController extends Controller
     public function update(Request $request, Course $course, Chapter $chapter, Question $question)
     {
         $validated = $request->validate([
-            'question_text'         => 'required|string',
+            'question_text.id'      => 'required|string',
+            'question_text.en'      => 'nullable|string',
             'question_image'        => 'nullable|image|max:5120',
             'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
             'points'                => 'required|integer|min:1',
-            'explanation'           => 'nullable|string',
+            'explanation.id'        => 'nullable|string',
+            'explanation.en'        => 'nullable|string',
             'topic_tag'             => 'nullable|string|max:100',
             // Pilihan jawaban (tidak diperlukan untuk tipe essay)
             'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
             'options.*.id'          => 'nullable|integer|exists:question_options,id',
-            'options.*.text'        => 'required_unless:type,essay|string',
+            'options.*.text.id'     => 'required_unless:type,essay|string',
+            'options.*.text.en'     => 'nullable|string',
             'options.*.image'       => 'nullable|image|max:5120',
             'options.*.is_correct'  => 'nullable|boolean',
-            'options.*.match_label' => 'nullable|string|max:255',
+            'options.*.match_label.id' => 'nullable|string|max:255',
+            'options.*.match_label.en' => 'nullable|string|max:255',
         ]);
 
         DB::transaction(function () use ($validated, $request, $question) {
@@ -126,10 +154,10 @@ class QuestionController extends Controller
             }
 
             $question->update([
-                'question_text' => $validated['question_text'],
+                'question_text' => $this->normalizeLocalePayload($validated['question_text']),
                 'type'          => $validated['type'],
                 'points'        => $validated['points'],
-                'explanation'   => $validated['explanation'] ?? null,
+                'explanation'   => $this->normalizeLocalePayload($validated['explanation'] ?? null),
                 'topic_tag'     => $validated['topic_tag'] ?? null,
                 'question_image' => $question->question_image,
             ]);
@@ -146,10 +174,10 @@ class QuestionController extends Controller
 
                     QuestionOption::create([
                         'question_id' => $question->id,
-                        'option_text' => $opt['text'],
+                        'option_text' => $this->normalizeLocalePayload($opt['text'] ?? null),
                         'option_image' => $optImagePath,
                         'is_correct'  => isset($opt['is_correct']) ? (bool) $opt['is_correct'] : false,
-                        'match_label' => $opt['match_label'] ?? null,
+                        'match_label' => $this->normalizeLocalePayload($opt['match_label'] ?? null),
                         'order'       => $i,
                     ]);
                 }
@@ -174,10 +202,10 @@ class QuestionController extends Controller
 
         $returnTo = $request->input('return_to');
         if ($returnTo && str_starts_with($returnTo, url('/courses/' . $course->id))) {
-            return redirect()->to($returnTo)->with('success', 'Soal berhasil diperbarui.');
+            return redirect()->to($returnTo)->with('success', __('Soal berhasil diperbarui.'));
         }
 
-        return back()->with('success', 'Soal berhasil diperbarui.');
+        return back()->with('success', __('Soal berhasil diperbarui.'));
     }
 
     /**
@@ -192,6 +220,6 @@ class QuestionController extends Controller
 
         $question->delete();
 
-        return back()->with('success', 'Soal berhasil dihapus dari bank soal.');
+        return back()->with('success', __('Soal berhasil dihapus dari bank soal.'));
     }
 }

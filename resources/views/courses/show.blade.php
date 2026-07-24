@@ -165,7 +165,7 @@
                     <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 overflow-hidden">
                         <div class="p-6 border-b border-indigo-50">
                             <h3 class="text-base font-bold text-slate-800">{{ __('Manajemen Quiz') }}</h3>
-                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">{{ __('Kelola kuis dan ujian evaluasi pembelajaran.') }}</p>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">{{ __('Kelola Quiz dan Ujian Evaluasi Pembelajaran.') }}</p>
                         </div>
                         <div class="p-6 space-y-2">
                             <a href="{{ route('quizzes.index', $course) }}"
@@ -218,7 +218,7 @@
                             @csrf
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">{{ __('Judul Bab') }} <span class="text-rose-500">*</span></label>
-                                <input type="text" name="title" required placeholder="Contoh: BAB 8: Pemeliharaan dan Perawatan Berkala" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition">
+                                <input type="text" name="title" required placeholder="{{ __('Contoh: BAB 8: Pemeliharaan dan Perawatan Berkala') }}" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition">
                                 <p class="text-[11px] text-slate-400 mt-1">{{ __('Tuliskan judul bab secara lengkap beserta nomor bab.') }}</p>
                             </div>
 

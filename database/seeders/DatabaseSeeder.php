@@ -19,15 +19,23 @@ class DatabaseSeeder extends Seeder
             CourseSeeder::class,
             ChapterSeeder::class,
             Chapter1Seeder::class,
+            Chapter1QuestionSeeder::class,
             Chapter2Seeder::class,
+            Chapter2QuestionSeeder::class,
             Chapter3Seeder::class,
+            Chapter3QuestionSeeder::class,
             Chapter4Seeder::class,
             Chapter4QuestionSeeder::class,
             Chapter5Seeder::class,
             Chapter5QuestionSeeder::class,
             Chapter6Seeder::class,
+            Chapter6QuestionSeeder::class,
             Chapter7Seeder::class,
+            Chapter7QuestionSeeder::class,
             EnglishContentSeeder::class,
+            QuestionTranslationSeeder::class,
         ]);
     }
 }
+
+

@@ -29,7 +29,7 @@
                     <h2 class="font-bold">{{ __('Konfigurasi') }} {{ $activityLabel }}</h2>
                     <div><label class="mb-1 block text-xs font-semibold">{{ __('Judul *') }}</label><input name="title" required value="{{ old('title', $quiz->title) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
                     <div><label class="mb-1 block text-xs font-semibold">{{ __('Deskripsi') }}</label><textarea name="description" rows="2" class="w-full rounded-xl border px-3 py-2.5 text-sm">{{ old('description', $quiz->description) }}</textarea></div>
-                    <div><label class="mb-1 block text-xs font-semibold">Chapter</label><select name="chapter_id" {{ $isPractice ? 'required' : '' }} class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="">{{ $isPractice ? __('-- Pilih chapter --') : __('Ujian (Akhir Course)') }}</option>@foreach($chapters as $chapter)<option value="{{ $chapter->id }}" @selected($quiz->chapter_id == $chapter->id)>{{ $chapter->order }}. {{ $chapter->title }}</option>@endforeach</select></div>
+                    <div><label class="mb-1 block text-xs font-semibold">{{ __('Chapter') }}</label><select name="chapter_id" {{ $isPractice ? 'required' : '' }} class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="">{{ $isPractice ? __('-- Pilih chapter --') : __('Ujian (Akhir Course)') }}</option>@foreach($chapters as $chapter)<option value="{{ $chapter->id }}" @selected($quiz->chapter_id == $chapter->id)>{{ $chapter->order }}. {{ $chapter->title }}</option>@endforeach</select></div>
 
                     @if($isPractice)
                         <input type="hidden" name="review_policy" value="show_all">
@@ -105,21 +105,21 @@
                                     <div class="min-w-0 flex-1">
                                         <p class="text-xs font-semibold leading-relaxed text-slate-800">{{ $question->question_text }}</p>
                                         <p class="mt-1 text-[10px] text-slate-400">
-                                            <span class="mr-1 rounded bg-blue-50 px-1.5 py-0.5 text-blue-600 font-semibold">Bab {{ $question->chapter->order }}</span>
+                                            <span class="mr-1 rounded bg-blue-50 px-1.5 py-0.5 text-blue-600 font-semibold">{{ __('Bab') }} {{ $question->chapter->order }}</span>
                                             {{ $question->type_label }} ·
                                             @if($question->type === 'matching' || $question->type === 'ordering')
-                                                {{ $question->points * $question->options->count() }} poin
+                                                {{ $question->points * $question->options->count() }} {{ __('poin') }}
                                             @else
-                                                {{ $question->points }} poin
+                                                {{ $question->points }} {{ __('poin') }}
                                             @endif
                                         </p>
                                     </div>
                                     <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route('quizzes.edit', [$course, $quiz])) }}"
                                        class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50"
-                                       onclick="event.stopPropagation()">Lihat detail</a>
+                                       onclick="event.stopPropagation()">{{ __('Lihat detail') }}</a>
                                 </label>
                             @empty
-                                <div class="py-8 text-center text-sm text-slate-400">Belum ada soal di bank soal.</div>
+                                <div class="py-8 text-center text-sm text-slate-400">{{ __('Belum ada soal di bank soal.') }}</div>
                             @endforelse
                         </div>
 
@@ -131,7 +131,7 @@
                                     <span class="text-[11px] font-bold text-slate-600">{{ $ch->title ?? 'Bab '.$chapterId }}</span>
                                     <button type="button"
                                         class="text-[10px] font-semibold text-blue-500 hover:text-blue-700"
-                                        onclick="toggleChapter({{ $chapterId }}, this)">Pilih Semua</button>
+                                        onclick="toggleChapter({{ $chapterId }}, this)">{{ __('Pilih Semua') }}</button>
                                 </div>
                                 <div data-chapter-group="{{ $chapterId }}" class="space-y-1.5">
                                     @foreach($chapterQuestions as $question)
@@ -147,15 +147,15 @@
                                                 <p class="mt-1 text-[10px] text-slate-400">
                                                     {{ $question->type_label }} ·
                                                     @if($question->type === 'matching' || $question->type === 'ordering')
-                                                        {{ $question->points * $question->options->count() }} poin
+                                                        {{ $question->points * $question->options->count() }} {{ __('poin') }}
                                                     @else
-                                                        {{ $question->points }} poin
+                                                        {{ $question->points }} {{ __('poin') }}
                                                     @endif
                                                 </p>
                                             </div>
                                             <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route('quizzes.edit', [$course, $quiz])) }}"
                                                class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50"
-                                               onclick="event.stopPropagation()">Lihat detail</a>
+                                               onclick="event.stopPropagation()">{{ __('Lihat detail') }}</a>
                                         </label>
                                     @endforeach
                                 </div>
@@ -173,9 +173,9 @@
                                         <p class="mt-1 text-[10px] text-slate-400">
                                             {{ $question->type_label }} ·
                                             @if($question->type === 'matching' || $question->type === 'ordering')
-                                                {{ $question->points * $question->options->count() }} poin ({{ $question->options->count() }} x {{ $question->points }} poin)
+                                                {{ $question->points * $question->options->count() }} {{ __('poin') }} ({{ $question->options->count() }} x {{ $question->points }} {{ __('poin') }})
                                             @else
-                                                {{ $question->points }} poin
+                                                {{ $question->points }} {{ __('poin') }}
                                             @endif
                                         </p>
                                     </div>
@@ -268,7 +268,7 @@
             boxes.forEach(cb => {
                 setQuestionChecked(cb.dataset.questionId || cb.value, nextState);
             });
-            btn.textContent = allChecked ? 'Pilih Semua' : 'Batal Pilih';
+            btn.textContent = allChecked ? '{{ __('Pilih Semua') }}' : '{{ __('Batal Pilih') }}';
             updateQuestionSummary();
         }
 
@@ -285,14 +285,14 @@
             const totalPoints = updateQuestionSummary();
             if (totalPoints !== 100) {
                 event.preventDefault();
-                showGlobalAlert('Poin Belum Sesuai', 'Total poin soal harus tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
+                showGlobalAlert('{{ __('Poin Belum Sesuai') }}', '{{ __('Total poin soal harus tepat 100/100. Saat ini:') }} ' + totalPoints + ' {{ __('poin.') }}');
             }
         });
         document.getElementById('quiz-config-form').addEventListener('submit', (event) => {
             const totalPoints = updateQuestionSummary();
             if (totalPoints !== 100) {
                 event.preventDefault();
-                showGlobalAlert('Poin Belum Sesuai', 'Quiz, ujian, atau latihan hanya dapat disimpan setelah total poin soal tepat 100/100. Saat ini: ' + totalPoints + ' poin.');
+                showGlobalAlert('{{ __('Poin Belum Sesuai') }}', '{{ __('Quiz, ujian, atau latihan hanya dapat disimpan setelah total poin soal tepat 100/100. Saat ini:') }} ' + totalPoints + ' {{ __('poin.') }}');
             }
         });
 
