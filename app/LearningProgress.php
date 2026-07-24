@@ -90,4 +90,90 @@ class LearningProgress
     {
         return $chapters->firstWhere('id', $chapterId);
     }
+
+    /**
+     * Versi forUser() yang tidak membuat query DB sama sekali.
+     * Dipakai ketika caller sudah pre-load completedModuleIds dari luar
+     * (misalnya DashboardController yang batch-load semua peserta sekaligus).
+     *
+     * @param User       $user
+     * @param Collection $completedModuleIds  Collection of module_id yang sudah diselesaikan
+     * @param Course|null $course
+     */
+    public static function forUserPreloaded(User $user, Collection $completedModuleIds, ?Course $course = null): array
+    {
+        $course ??= Course::with(['chapters.modules'])->orderBy('id')->first();
+
+        if (!$course) {
+            return ['percent' => 0, 'completedModules' => collect(), 'chapters' => collect(), 'notes' => collect()];
+        }
+
+        $course->loadMissing(['chapters.modules']);
+
+        $totalModules   = $course->chapters->flatMap->modules->count();
+        $completedCount = $course->chapters->flatMap->modules->whereIn('id', $completedModuleIds)->count();
+
+        // Gunakan query minimal: Quiz & QuizAttempt masih diperlukan untuk chapter gate
+        $activeChapterQuizIds = Quiz::where('course_id', $course->id)
+            ->where('activity_type', 'quiz')
+            ->whereNotNull('chapter_id')
+            ->where('is_active', true)
+            ->pluck('id', 'chapter_id');
+
+        $passedQuizIds = QuizAttempt::where('user_id', $user->id)
+            ->where('is_passed', true)
+            ->whereIn('quiz_id', $activeChapterQuizIds->values())
+            ->pluck('quiz_id');
+
+        $previousComplete = true;
+        $notes = collect();
+
+        $chapters = $course->chapters->map(function ($chapter) use (
+            $completedModuleIds, $activeChapterQuizIds, $passedQuizIds, &$previousComplete, $notes
+        ) {
+            $modules         = $chapter->modules;
+            $completedModules = $modules->whereIn('id', $completedModuleIds)->count();
+            $missingModules  = $modules->whereNotIn('id', $completedModuleIds)->values();
+            $isUnlocked      = $previousComplete;
+            $materialComplete = $modules->count() > 0 && $missingModules->isEmpty();
+            $chapterQuizId   = $activeChapterQuizIds->get($chapter->id);
+            $hasChapterQuiz  = !is_null($chapterQuizId);
+            $quizPassed      = !$hasChapterQuiz || $passedQuizIds->contains($chapterQuizId);
+            $isComplete      = $isUnlocked && $materialComplete && $quizPassed;
+
+            foreach ($missingModules as $module) {
+                $notes->push(__('Lengkapi pembelajaran BAB :order untuk module :module.', [
+                    'order'  => $chapter->order,
+                    'module' => $module->title,
+                ]));
+            }
+            if ($materialComplete && $hasChapterQuiz && !$quizPassed) {
+                $notes->push(__('Selesaikan Quiz Chapter BAB :order untuk membuka bab berikutnya.', ['order' => $chapter->order]));
+            }
+
+            $previousComplete = $isComplete;
+
+            return [
+                'id'               => $chapter->id,
+                'order'            => $chapter->order,
+                'title'            => $chapter->title,
+                'total_modules'    => $modules->count(),
+                'completed_modules'=> $completedModules,
+                'missing_modules'  => $missingModules,
+                'is_unlocked'      => $isUnlocked,
+                'is_complete'      => $isComplete,
+                'material_complete'=> $materialComplete,
+                'has_chapter_quiz' => $hasChapterQuiz,
+                'quiz_passed'      => $quizPassed,
+                'percent'          => $modules->count() > 0 ? (int) round(($completedModules / $modules->count()) * 100) : 0,
+            ];
+        });
+
+        return [
+            'percent'          => $totalModules > 0 ? (int) round(($completedCount / $totalModules) * 100) : 0,
+            'completedModules' => $completedModuleIds,
+            'chapters'         => $chapters,
+            'notes'            => $notes,
+        ];
+    }
 }

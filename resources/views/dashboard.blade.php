@@ -36,7 +36,7 @@
         ];
     @endphp
 
-    <div class="space-y-8 select-none" x-data="{ showModal: {{ $errors->any() ? 'true' : 'false' }}, selectedUserProgress: null, userProgress: @js($adminUserProgress ?? []), participantTab: 'materi' }">
+    <div class="space-y-8 select-none" x-data="{ showModal: {{ $errors->any() ? 'true' : 'false' }}, selectedUserProgress: null, userProgress: @js($adminUserProgress ?? []), participantTab: 'materi', upcomingModal: null }">
         <!-- Flash Messages -->
         @if (session('success'))
             <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-800 shadow-sm flex items-center space-x-2">
@@ -123,8 +123,12 @@
         @endif
 
         <div class="grid gap-6 lg:grid-cols-12">
-            <!-- Left Side: Role Specific Main Section (span 8) -->
-            <div class="lg:col-span-8 space-y-6">
+            <!-- Left Side: Role Specific Main Section -->
+            @if ($isAdmin)
+                <div style="grid-column: 1 / -1; width: 100%;" class="space-y-6">
+            @else
+                <div class="lg:col-span-8 space-y-6">
+            @endif
                 <!-- 1. DASHBOARD ADMIN: USER MANAGEMENT -->
                 @if ($isAdmin)
                     <section id="manajemen-user" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
@@ -363,8 +367,9 @@
                 @endif
             </div>
 
-            <!-- Right Side: Jadwal Mendatang Calendar (span 4) -->
-            <div class="lg:col-span-4 space-y-6">
+            @if (!$isAdmin)
+                <!-- Right Side: Jadwal Mendatang Calendar (span 4) -->
+                <div class="lg:col-span-4 space-y-6">
                 <div class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm space-y-5">
                     <!-- Title Area -->
                     <div class="flex items-center justify-between">
@@ -400,7 +405,13 @@
                                     $borderColor = 'border-l-amber-500';
                                 }
                             @endphp
-                            <article class="rounded-xl border border-l-4 {{ $borderColor }} border-slate-200 bg-slate-50/50 p-4 flex gap-4 hover:border-gray-300 transition duration-150">
+                            @if (!empty($event['is_modal']))
+                                <div @click="upcomingModal = { title: @js($event['quiz_title']), course: @js($event['course_title']), start: @js($event['start_fmt']), end: @js($event['end_fmt']) }"
+                                     class="rounded-xl border border-l-4 {{ $borderColor }} border-slate-200 bg-slate-50/50 p-4 flex gap-4 hover:border-blue-300 hover:bg-blue-50/30 transition duration-150 cursor-pointer group shadow-2xs">
+                            @else
+                                <a href="{{ $event['url'] ?? '#' }}"
+                                   class="rounded-xl border border-l-4 {{ $borderColor }} border-slate-200 bg-slate-50/50 p-4 flex gap-4 hover:border-blue-300 hover:bg-blue-50/30 transition duration-150 group shadow-2xs block">
+                            @endif
                                 <!-- Left side Date Badge -->
                                 <div class="flex flex-col items-center justify-center shrink-0 w-12 text-center border-r border-slate-200/60 pr-4">
                                     <span class="text-[9px] font-bold text-blue-800 tracking-wider">{{ $event['month_name'] }}</span>
@@ -409,7 +420,16 @@
 
                                 <!-- Right side Event Details -->
                                 <div class="flex-1 space-y-1 min-w-0">
-                                    <h3 class="text-sm font-bold text-slate-800 leading-snug truncate">{{ $event['title'] }}</h3>
+                                    <div class="flex items-center justify-between gap-2">
+                                        <h3 class="text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-blue-600 transition">{{ $event['title'] }}</h3>
+                                        @if(!empty($event['is_modal']))
+                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Belum Dibuka</span>
+                                        @elseif(($event['status'] ?? '') === 'closed')
+                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Selesai/Tutup</span>
+                                        @else
+                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Aktif</span>
+                                        @endif
+                                    </div>
                                     <div class="flex items-center gap-1.5 text-[10px] text-slate-500">
                                         @switch($event['icon'] ?? '')
                                             @case('shield')
@@ -445,7 +465,11 @@
                                         <span class="truncate">{{ $event['time_or_loc'] }}</span>
                                     </div>
                                 </div>
-                            </article>
+                            @if (!empty($event['is_modal']))
+                                </div>
+                            @else
+                                </a>
+                            @endif
                         @empty
                             <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400 select-none">
                                 {{ __('Tidak ada jadwal mendatang untuk minggu ini.') }}
@@ -460,6 +484,7 @@
                     </a>
                 </div>
             </div>
+            @endif
         </div>
 
         <!-- Progress Detail Modal -->
@@ -608,5 +633,56 @@
                 </div>
             </div>
         @endif
+
+        <!-- Upcoming Quiz Information Modal -->
+        <div x-show="upcomingModal" class="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true" style="display: none;">
+            <div class="flex min-h-screen items-center justify-center px-4 py-10">
+                <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" @click="upcomingModal = null"></div>
+                <div class="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-slate-100 bg-white text-left shadow-2xl p-6 space-y-4">
+                    <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-800">Quiz Belum Dibuka</h3>
+                            <p class="text-xs text-slate-400">Jadwal pengerjaan quiz mendatang</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs">
+                        <div>
+                            <span class="text-slate-400 font-semibold block mb-0.5">Judul Quiz</span>
+                            <p class="font-bold text-slate-800 text-sm" x-text="upcomingModal?.title"></p>
+                        </div>
+                        <template x-if="upcomingModal?.course">
+                            <div>
+                                <span class="text-slate-400 font-semibold block mb-0.5">Mata Pelajaran / Kursus</span>
+                                <p class="font-medium text-slate-700" x-text="upcomingModal?.course"></p>
+                            </div>
+                        </template>
+                        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/60">
+                            <div>
+                                <span class="text-slate-400 font-semibold block mb-0.5">Waktu Dibuka</span>
+                                <p class="font-bold text-blue-600" x-text="upcomingModal?.start"></p>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 font-semibold block mb-0.5">Waktu Ditutup</span>
+                                <p class="font-bold text-slate-600" x-text="upcomingModal?.end"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center text-xs text-slate-500 italic">
+                        Tombol pengerjaan akan otomatis tersedia saat jadwal pengerjaan quiz telah dibuka.
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="button" @click="upcomingModal = null" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
+                            Saya Mengerti
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </x-app-layout>

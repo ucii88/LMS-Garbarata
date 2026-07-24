@@ -18,6 +18,10 @@ class CalendarController extends Controller
     {
         $user = Auth::user();
 
+        if ($user->isAdmin()) {
+            return redirect()->route('dashboard')->with('error', __('Halaman Kalender hanya tersedia untuk Instruktur dan Peserta.'));
+        }
+
         // Get requested month & year, default to current month & year (Asia/Jakarta timezone)
         $now = Carbon::now('Asia/Jakarta');
         $month = (int) $request->input('month', $now->month);

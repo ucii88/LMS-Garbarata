@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\LearningProgress;
 use App\Models\Course;
+use App\Models\ModuleProgress;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 class DashboardController extends Controller
 {
@@ -48,9 +50,44 @@ class DashboardController extends Controller
             ];
 
             $items = User::orderBy('id', 'desc')->limit(6)->get();
-            $adminUserProgress = $items
-                ->where('role', 'peserta')
-                ->mapWithKeys(fn (User $participant) => [$participant->id => $this->participantProgress($participant)]);
+
+            // ── Pre-load data untuk peserta yang muncul di recent users ──
+            $pesertaItems   = $items->where('role', 'peserta');
+            $pesertaIds     = $pesertaItems->pluck('id')->all();
+
+            if (!empty($pesertaIds)) {
+                $allActivities = Quiz::query()
+                    ->with(['course', 'chapter'])
+                    ->where('is_active', true)
+                    ->orderBy('course_id')->orderBy('chapter_id')->orderBy('order')
+                    ->get();
+
+                $activityIds = $allActivities->pluck('id')->all();
+
+                $allAttemptsByUser = QuizAttempt::query()
+                    ->whereIn('user_id', $pesertaIds)
+                    ->whereIn('quiz_id', $activityIds)
+                    ->whereNotNull('submitted_at')
+                    ->orderByDesc('submitted_at')
+                    ->get()
+                    ->groupBy('user_id');
+
+                $allModuleProgressByUser = ModuleProgress::whereIn('user_id', $pesertaIds)
+                    ->get(['user_id', 'module_id'])
+                    ->groupBy('user_id')
+                    ->map(fn ($rows) => $rows->pluck('module_id'));
+
+                $adminUserProgress = $pesertaItems->mapWithKeys(
+                    fn (User $participant) => [
+                        $participant->id => $this->participantProgress(
+                            $participant,
+                            $allActivities,
+                            $allAttemptsByUser->get($participant->id, collect()),
+                            $allModuleProgressByUser->get($participant->id, collect()),
+                        ),
+                    ]
+                );
+            }
             $badgeLabel = __('Admin Control Center');
             $headline = __('Selamat datang, Administrator');
             $description = __('Kendalikan pengguna, status kursus, dan struktur materi dari dashboard yang konsisten dan bersih.');
@@ -71,7 +108,48 @@ class DashboardController extends Controller
             ];
             
             $participants = User::where('role', 'peserta')->orderBy('id', 'desc')->get();
-            $adminUserProgress = $participants->mapWithKeys(fn (User $participant) => [$participant->id => $this->participantProgress($participant)]);
+
+            // ── Pre-load semua data yang dibutuhkan participantProgress() dalam SATU set query ──
+            $participantIds = $participants->pluck('id')->all();
+
+            // 1. Semua aktivitas quiz (satu query, di-share ke semua peserta)
+            $allActivities = Quiz::query()
+                ->with(['course', 'chapter'])
+                ->where('is_active', true)
+                ->orderBy('course_id')->orderBy('chapter_id')->orderBy('order')
+                ->get();
+
+            $activityIds = $allActivities->pluck('id')->all();
+
+            // 2. Semua QuizAttempt peserta (satu query)
+            $allAttemptsByUser = QuizAttempt::query()
+                ->whereIn('user_id', $participantIds)
+                ->whereIn('quiz_id', $activityIds)
+                ->whereNotNull('submitted_at')
+                ->orderByDesc('submitted_at')
+                ->get()
+                ->groupBy('user_id');  // [ user_id => Collection<QuizAttempt> ]
+
+            // 3. Semua module progress peserta (satu query)
+            $allModuleProgressByUser = ModuleProgress::whereIn('user_id', $participantIds)
+                ->pluck('module_id', 'user_id')  // hanya pluck id
+                ->groupBy(fn ($moduleId, $userId) => $userId);
+            // Gunakan groupBy dengan key agar tetap bisa di-lookup per user
+            $allModuleProgressByUser = ModuleProgress::whereIn('user_id', $participantIds)
+                ->get(['user_id', 'module_id'])
+                ->groupBy('user_id')  // [ user_id => Collection<ModuleProgress> ]
+                ->map(fn ($rows) => $rows->pluck('module_id'));
+
+            $adminUserProgress = $participants->mapWithKeys(
+                fn (User $participant) => [
+                    $participant->id => $this->participantProgress(
+                        $participant,
+                        $allActivities,
+                        $allAttemptsByUser->get($participant->id, collect()),
+                        $allModuleProgressByUser->get($participant->id, collect()),
+                    ),
+                ]
+            );
 
             $badgeLabel = __('Instructor Workspace');
             $headline = __('Selamat datang, Instruktur');
@@ -147,13 +225,61 @@ class DashboardController extends Controller
                 $query->whereNotNull('start_time')->orWhereNotNull('end_time');
             })
             ->where('is_active', true)
-            ->with('course')
+            ->with(['course'])
             ->get();
+
+        $userQuizAttempts = collect();
+        if ($isPeserta && $timedQuizzes->isNotEmpty()) {
+            $userQuizAttempts = QuizAttempt::where('user_id', $user->id)
+                ->whereIn('quiz_id', $timedQuizzes->pluck('id'))
+                ->whereNotNull('submitted_at')
+                ->get(['quiz_id', 'is_passed', 'score'])
+                ->keyBy('quiz_id');
+        }
+
+        $now = \Carbon\Carbon::now('Asia/Jakarta');
 
         foreach ($timedQuizzes as $q) {
             $start = $q->start_time ? \Carbon\Carbon::parse($q->start_time)->timezone('Asia/Jakarta') : null;
             $end = $q->end_time ? \Carbon\Carbon::parse($q->end_time)->timezone('Asia/Jakarta') : null;
             $prefix = $q->isFinalQuiz() ? __('Final Exam:') . ' ' : ($q->isPractice() ? __('Latihan:') . ' ' : __('Quiz:') . ' ');
+            $quizTitle = $q->title;
+            $courseTitle = $q->course?->title ?? '';
+
+            // Tentukan status quiz berdasarkan waktu
+            if ($start && $now->lt($start)) {
+                $status = 'upcoming'; // Belum dibuka
+            } elseif ($end && $now->gt($end)) {
+                $status = 'closed';   // Sudah ditutup
+            } else {
+                $status = 'open';     // Sedang dibuka
+            }
+
+            $hasSubmitted = $userQuizAttempts->has($q->id);
+
+            // Tentukan URL & Modal Aksi berdasarkan Role & Status
+            $url = null;
+            $isModal = false;
+
+            if ($isPeserta) {
+                if ($status === 'upcoming') {
+                    $url = '#';
+                    $isModal = true;
+                } elseif ($status === 'closed' || $hasSubmitted) {
+                    $url = route($q->isPractice() ? 'practice.result' : 'quiz.result', [$q->course_id, $q->id]);
+                } else { // open and not submitted
+                    $url = route($q->isPractice() ? 'practice.start' : 'quiz.start', [$q->course_id, $q->id]);
+                }
+            } else { // Instruktur & Admin
+                if ($status === 'closed') {
+                    $url = route($q->isPractice() ? 'practices.attempts' : 'quizzes.attempts', [$q->course_id, $q->id]);
+                } else { // open or upcoming
+                    $url = route($q->isPractice() ? 'practices.edit' : 'quizzes.edit', [$q->course_id, $q->id]);
+                }
+            }
+
+            $startFmt = $start ? $start->translatedFormat('d M Y H:i') . ' WIB' : '-';
+            $endFmt = $end ? $end->translatedFormat('d M Y H:i') . ' WIB' : '-';
 
             if ($start && $end && $start->toDateString() === $end->toDateString()) {
                 $scheduleEvents[] = [
@@ -161,7 +287,14 @@ class DashboardController extends Controller
                     'month_name' => strtoupper($start->translatedFormat('M')),
                     'title' => $prefix . $q->title,
                     'time_or_loc' => $start->format('H:i') . ' - ' . $end->format('H:i') . ' WIB · Online LMS',
-                    'icon' => 'lock-open'
+                    'icon' => $status === 'closed' ? 'lock' : 'lock-open',
+                    'url' => $url,
+                    'is_modal' => $isModal,
+                    'quiz_title' => $quizTitle,
+                    'course_title' => $courseTitle,
+                    'start_fmt' => $startFmt,
+                    'end_fmt' => $endFmt,
+                    'status' => $status,
                 ];
             } else {
                 if ($start) {
@@ -170,7 +303,14 @@ class DashboardController extends Controller
                         'month_name' => strtoupper($start->translatedFormat('M')),
                         'title' => $prefix . $q->title . ' ' . __('(Opened)'),
                         'time_or_loc' => $start->format('H:i') . ' WIB · Online LMS',
-                        'icon' => 'lock-open'
+                        'icon' => 'lock-open',
+                        'url' => $url,
+                        'is_modal' => $isModal,
+                        'quiz_title' => $quizTitle,
+                        'course_title' => $courseTitle,
+                        'start_fmt' => $startFmt,
+                        'end_fmt' => $endFmt,
+                        'status' => $status,
                     ];
                 }
                 if ($end) {
@@ -179,7 +319,14 @@ class DashboardController extends Controller
                         'month_name' => strtoupper($end->translatedFormat('M')),
                         'title' => $prefix . $q->title . ' ' . __('(Deadline)'),
                         'time_or_loc' => $end->format('H:i') . ' WIB · Online LMS',
-                        'icon' => 'lock'
+                        'icon' => 'lock',
+                        'url' => $url,
+                        'is_modal' => $isModal,
+                        'quiz_title' => $quizTitle,
+                        'course_title' => $courseTitle,
+                        'start_fmt' => $startFmt,
+                        'end_fmt' => $endFmt,
+                        'status' => $status,
                     ];
                 }
             }
@@ -193,47 +340,56 @@ class DashboardController extends Controller
         return view('dashboard', compact('user', 'isAdmin', 'isInstruktur', 'isPeserta', 'stats', 'cards', 'items', 'badgeLabel', 'description', 'headline', 'primaryAction', 'adminUserProgress', 'participants', 'participantQuizzes', 'participantPractices', 'weekDays', 'scheduleEvents'));
     }
 
-    private function participantProgress(User $participant): array
-    {
-        $progress = LearningProgress::forUser($participant);
-        $activities = Quiz::query()
-            ->with(['course', 'chapter'])
-            ->where('is_active', true)
-            ->orderBy('course_id')
-            ->orderBy('chapter_id')
-            ->orderBy('order')
-            ->get();
-        $attempts = QuizAttempt::query()
-            ->where('user_id', $participant->id)
-            ->whereIn('quiz_id', $activities->pluck('id'))
-            ->whereNotNull('submitted_at')
-            ->orderByDesc('submitted_at')
-            ->get()
+    /**
+     * Hitung progress belajar seorang peserta.
+     *
+     * Semua data diterima sebagai parameter (sudah di-preload di __invoke)
+     * sehingga method ini TIDAK membuat query DB sama sekali.
+     *
+     * @param User       $participant
+     * @param Collection $allActivities          Semua Quiz aktif (sudah eager-loaded)
+     * @param Collection $userAttempts           QuizAttempt peserta ini (sudah di-filter dari luar)
+     * @param Collection $completedModuleIds     module_id yang sudah diselesaikan peserta ini
+     */
+    private function participantProgress(
+        User $participant,
+        Collection $allActivities,
+        Collection $userAttempts,
+        Collection $completedModuleIds,
+    ): array {
+        // ── Progress materi (dari collection in-memory, 0 query) ──
+        $progress = LearningProgress::forUserPreloaded($participant, $completedModuleIds);
+
+        // ── Attempts: ambil 1 per quiz (latest submitted) ── (0 query)
+        $attemptsByQuiz = $userAttempts
             ->unique('quiz_id')
             ->keyBy('quiz_id');
+
         $activityData = fn (Quiz $activity) => [
-            'id' => $activity->id,
-            'title' => $activity->title,
-            'course' => $activity->course?->title,
-            'chapter' => $activity->chapter?->title,
-            'is_completed' => $attempts->has($activity->id),
-            'score' => $attempts->has($activity->id) ? round((float) $attempts[$activity->id]->score, 1) : null,
+            'id'           => $activity->id,
+            'title'        => $activity->title,
+            'course'       => $activity->course?->title,
+            'chapter'      => $activity->chapter?->title,
+            'is_completed' => $attemptsByQuiz->has($activity->id),
+            'score'        => $attemptsByQuiz->has($activity->id)
+                ? round((float) $attemptsByQuiz[$activity->id]->score, 1)
+                : null,
         ];
 
         return [
-            'name' => $participant->name,
-            'email' => $participant->email,
+            'name'             => $participant->name,
+            'email'            => $participant->email,
             'material_percent' => $progress['percent'],
-            'chapters' => $progress['chapters']->map(fn (array $chapter) => [
-                'order' => $chapter['order'],
-                'title' => $chapter['title'],
-                'percent' => $chapter['percent'],
-                'is_complete' => $chapter['is_complete'],
+            'chapters'         => $progress['chapters']->map(fn (array $chapter) => [
+                'order'           => $chapter['order'],
+                'title'           => $chapter['title'],
+                'percent'         => $chapter['percent'],
+                'is_complete'     => $chapter['is_complete'],
                 'missing_modules' => $chapter['missing_modules']->map(fn ($module) => $module->title)->values(),
             ])->values(),
-            'quizzes' => $activities->filter(fn (Quiz $activity) => ! $activity->isPractice() && ! $activity->isFinalQuiz())->map($activityData)->values(),
-            'exams' => $activities->filter(fn (Quiz $activity) => ! $activity->isPractice() && $activity->isFinalQuiz())->map($activityData)->values(),
-            'practices' => $activities->filter(fn (Quiz $activity) => $activity->isPractice())->map($activityData)->values(),
+            'quizzes'   => $allActivities->filter(fn (Quiz $a) => !$a->isPractice() && !$a->isFinalQuiz())->map($activityData)->values(),
+            'exams'     => $allActivities->filter(fn (Quiz $a) => !$a->isPractice() && $a->isFinalQuiz())->map($activityData)->values(),
+            'practices' => $allActivities->filter(fn (Quiz $a) => $a->isPractice())->map($activityData)->values(),
         ];
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
 use App\Models\Notification;
 use App\Models\QuizAttempt;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
@@ -16,41 +16,6 @@ class AdminUserController extends Controller
     private function formatScore($score): string
     {
         return rtrim(rtrim(number_format((float) $score, 2, '.', ''), '0'), '.');
-    }
-
-    private function formatQuizScores(int $userId): string
-    {
-        $attemptGroups = QuizAttempt::query()
-            ->where('user_id', $userId)
-            ->whereHas('quiz', fn ($query) => $query->whereNotNull('chapter_id')->where('activity_type', 'quiz'))
-            ->with(['quiz.chapter'])
-            ->get()
-            ->groupBy('quiz_id');
-
-        if ($attemptGroups->isEmpty()) {
-            return '-';
-        }
-
-        return $attemptGroups
-            ->map(function ($attempts) {
-                $bestAttempt = $attempts->sortByDesc('score')->first();
-                $quiz = $bestAttempt->quiz;
-                $label = $quiz?->title ?: ('Quiz ' . ($quiz?->chapter?->order ?? $quiz?->order ?? $quiz?->id));
-
-                return $label . ': ' . $this->formatScore($bestAttempt->score);
-            })
-            ->implode(', ');
-    }
-
-    private function formatExamScore(int $userId): string
-    {
-        $bestAttempt = QuizAttempt::query()
-            ->where('user_id', $userId)
-            ->whereHas('quiz', fn ($query) => $query->whereNull('chapter_id')->where('activity_type', 'quiz'))
-            ->orderByDesc('score')
-            ->first();
-
-        return $bestAttempt ? $this->formatScore($bestAttempt->score) : '-';
     }
 
     /**
@@ -91,10 +56,10 @@ class AdminUserController extends Controller
      */
     public function export(Request $request)
     {
-        $search = $request->input('search', '');
+        $search     = $request->input('search', '');
         $roleFilter = $request->input('role', '');
 
-        $query = User::query()->latest()->with(['moduleProgress', 'moduleProgress.module']);
+        $query = User::query()->latest();
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -107,7 +72,20 @@ class AdminUserController extends Controller
             $query->where('role', $roleFilter);
         }
 
-        $users = $query->get();
+        $users   = $query->get();
+        $userIds = $users->pluck('id')->all();
+
+        // ── Pre-load 1: Semua QuizAttempt yang relevan (quiz + chapter) dalam 1 query ──
+        $allAttempts = QuizAttempt::query()
+            ->whereIn('user_id', $userIds)
+            ->with(['quiz.chapter'])
+            ->get()
+            ->groupBy('user_id');   // [ user_id => Collection<QuizAttempt> ]
+
+        // ── Pre-load 2: Semua sertifikat dalam 1 query ──
+        $allCertificates = Certificate::whereIn('user_id', $userIds)
+            ->get()
+            ->groupBy('user_id');   // [ user_id => Collection<Certificate> ]
 
         $filename = 'Data_Pengguna_' . date('Y-m-d_His') . '.csv';
 
@@ -119,25 +97,41 @@ class AdminUserController extends Controller
             'Expires'             => '0',
         ];
 
-        $callback = function () use ($users) {
+        $callback = function () use ($users, $allAttempts, $allCertificates) {
             $file = fopen('php://output', 'w');
-            
-            // Output BOM to make sure Excel reads UTF-8 properly
             fputs($file, "\xEF\xBB\xBF");
-            
             fputcsv($file, ['No', 'Nama Lengkap', 'Email', 'Peran', 'Tanggal Daftar', 'Nilai Quiz', 'Nilai Ujian', 'Link Sertifikat'], ';');
 
             $no = 1;
             foreach ($users as $user) {
-                $quizScore = $this->formatQuizScores($user->id);
-                $examScore = $this->formatExamScore($user->id);
+                $userAttempts = $allAttempts->get($user->id, collect());
 
-                $certificates = \App\Models\Certificate::where('user_id', $user->id)->get();
-                $certLinks = [];
-                foreach ($certificates as $cert) {
-                    $certLinks[] = route('admin.certificates.download', $cert->id);
-                }
-                $certLinksStr = implode(', ', $certLinks) ?: '-';
+                // ── Nilai Quiz (chapter quiz, best score per quiz) ── (0 query baru)
+                $chapterAttempts = $userAttempts
+                    ->filter(fn ($a) => $a->quiz && !is_null($a->quiz->chapter_id))
+                    ->groupBy('quiz_id');
+
+                $quizScore = $chapterAttempts->isEmpty() ? '-' : $chapterAttempts
+                    ->map(function ($attempts) {
+                        $best  = $attempts->sortByDesc('score')->first();
+                        $quiz  = $best->quiz;
+                        $label = $quiz?->title ?: ('Quiz ' . ($quiz?->chapter?->order ?? $quiz?->id));
+                        return $label . ': ' . $this->formatScore($best->score);
+                    })
+                    ->implode(', ');
+
+                // ── Nilai Ujian (final quiz, best score) ── (0 query baru)
+                $examBest = $userAttempts
+                    ->filter(fn ($a) => $a->quiz && is_null($a->quiz->chapter_id))
+                    ->sortByDesc('score')
+                    ->first();
+                $examScore = $examBest ? $this->formatScore($examBest->score) : '-';
+
+                // ── Sertifikat ── (0 query baru)
+                $certLinks = $allCertificates
+                    ->get($user->id, collect())
+                    ->map(fn ($cert) => route('admin.certificates.download', $cert->id))
+                    ->implode(', ');
 
                 fputcsv($file, [
                     $no++,
@@ -147,7 +141,7 @@ class AdminUserController extends Controller
                     $user->created_at->format('d M Y H:i:s'),
                     $quizScore,
                     $examScore,
-                    $certLinksStr
+                    $certLinks ?: '-',
                 ], ';');
             }
 
