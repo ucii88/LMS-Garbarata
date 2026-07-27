@@ -87,7 +87,7 @@
                                     @if($opt->getTranslation('match_label', app()->getLocale()))
                                         <span class="font-bold">{{ $opt->getTranslation('match_label', app()->getLocale()) }}.</span>
                                     @endif
-                                    {{ $opt->getTranslation('option_text', app()->getLocale()) }}
+                                    {{ $question->type === 'true_false' ? __($opt->getTranslation('option_text', 'id') === 'Benar' ? 'True' : 'False') : $opt->getTranslation('option_text', app()->getLocale()) }}
                                 </div>
                             @endforeach
                         </div>
@@ -276,10 +276,10 @@ const _t = {
     minOption: '{{ __('Minimal harus ada 1 opsi jawaban.') }}',
     essayTitle: '{{ __('Soal Esai — Dinilai Manual') }}',
     essayDesc: '{{ __('Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.') }}',
-    trueFalseTrue: '{{ __('Benar') }}',
+    trueFalseTrue: '{{ __('True') }}',
     trueFalseFalse: '{{ __('Salah') }}',
     trueFalseTrueId: 'Benar',
-    trueFalseTrueEn: 'Correct',
+    trueFalseTrueEn: 'True',
     trueFalseFalseId: 'Salah',
     trueFalseFalseEn: 'False',
     trueFalseHint: '{{ __('Pilih mana yang merupakan jawaban benar.') }}',
