@@ -117,7 +117,7 @@
                                     <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route('quizzes.edit', [$course, $quiz])) }}"
                                        class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50"
                                        onclick="event.stopPropagation()">{{ __('Lihat detail') }}</a>
-                                </label>
+                                </div>
                             @empty
                                 <div class="py-8 text-center text-sm text-slate-400">{{ __('Belum ada soal di bank soal.') }}</div>
                             @endforelse
@@ -156,7 +156,7 @@
                                             <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route('quizzes.edit', [$course, $quiz])) }}"
                                                class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50"
                                                onclick="event.stopPropagation()">{{ __('Lihat detail') }}</a>
-                                        </label>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
@@ -180,7 +180,7 @@
                                         </p>
                                     </div>
                                     <a href="{{ route('questions.index', [$course, $question->chapter]) }}?question={{ $question->id }}&return_to={{ urlencode(route($isPractice ? 'practices.edit' : 'quizzes.edit', [$course, $quiz])) }}" class="shrink-0 self-center rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50" onclick="event.stopPropagation()">{{ __('Lihat detail') }}</a>
-                                </label>
+                                </div>
                             @empty
                                 <div class="py-8 text-center text-sm text-slate-400">{{ __('Belum ada soal.') }}</div>
                             @endforelse
