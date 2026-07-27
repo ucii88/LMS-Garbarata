@@ -153,7 +153,7 @@
                         @if($question->type === 'multiple_choice' || $question->type === 'true_false')
                             <span class="text-sm font-semibold text-slate-500">{{ __('Jawabanmu:') }} </span>
                             <span class="text-slate-700 font-medium">
-                                {{ $answer->selectedOption?->option_text ?? __('Tidak dijawab') }}
+                                {{ $question->type === 'true_false' && $answer->selectedOption ? __($answer->selectedOption->getTranslation('option_text', 'id') === 'Benar' ? 'True' : 'False') : ($answer->selectedOption?->option_text ?? 'Tidak dijawab') }}
                             </span>
                         @elseif($question->type === 'essay')
                             <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu:') }}</span>
@@ -257,7 +257,7 @@
                         @if($question->type === 'multiple_choice' || $question->type === 'true_false')
                             <span class="text-sm font-semibold text-slate-500">{{ __('Jawabanmu:') }} </span>
                             <span class="{{ $answer->is_correct ? 'text-emerald-700 font-semibold' : 'text-red-500 line-through' }}">
-                                {{ $answer->selectedOption?->option_text ?? __('Tidak dijawab') }}
+                                {{ $question->type === 'true_false' && $answer->selectedOption ? __($answer->selectedOption->getTranslation('option_text', 'id') === 'Benar' ? 'True' : 'False') : ($answer->selectedOption?->option_text ?? 'Tidak dijawab') }}
                             </span>
                         @elseif($question->type === 'essay')
                             <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu:') }}</span>

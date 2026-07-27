@@ -128,8 +128,8 @@
                                            class="w-4 h-4 text-blue-600"
                                            {{ isset($savedAnswers[$question->id]) && $savedAnswers[$question->id]->selected_option_id == $option->id ? 'checked' : '' }}
                                            onchange="autoSave({{ $question->id }}, {{ $option->id }}, 'radio')">
-                                    <span class="text-base font-semibold {{ $option->option_text === 'Benar' ? 'text-emerald-600' : 'text-red-500' }}">
-                                        {{ $option->option_text === 'Benar' ? '✓ ' . __('Benar') : '✗ ' . __('Salah') }}
+                                    <span class="text-base font-semibold {{ $option->getTranslation('option_text', 'id') === 'Benar' ? 'text-emerald-600' : 'text-red-500' }}">
+                                        {{ __($option->getTranslation('option_text', 'id') === 'Benar' ? 'True' : 'False') }}
                                     </span>
                                 </label>
                             @endforeach

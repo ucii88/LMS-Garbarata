@@ -33,6 +33,15 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'email.required' => __('Email wajib diisi.'),
+            'email.email' => __('Masukkan alamat email yang valid.'),
+            'password.required' => __('Kata sandi wajib diisi.'),
+        ];
+    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -46,7 +55,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => __('auth.failed'),
             ]);
         }
 
@@ -69,7 +78,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'email' => __('Terlalu banyak percobaan login. Coba lagi dalam :minutes menit.', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),

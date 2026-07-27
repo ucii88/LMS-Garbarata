@@ -1426,8 +1426,8 @@ according to the following main components:</p>
         exterior, as well as Garbarata obstruction.
     </p>
 <p>
-<strong>c. Emergency Stop</strong>
-</p>button
+<strong>c. Emergency Stop Button</strong>
+</p>
 
 <p>
         The Emergency stop button is on the control console and boogie wheel
@@ -1436,14 +1436,14 @@ according to the following main components:</p>
         stops operating and is accompanied by a horn and buzzer sound.
     </p>
 <p>
-<strong>d. Power on and off button</strong>
+<strong>d. Power On and Off Button</strong>
 </p>
 <div class="overflow-x-auto my-6">
 <table class="w-full border border-gray-500 border-collapse text-sm">
 <tbody>
 <tr class="border-b border-gray-500">
 <td class="border border-gray-500 px-4 py-3 font-semibold w-1/4">
-                On button
+                On Button
             </td>
 <td class="border border-gray-500 px-4 py-3">
                 The power ON button activates all stand-by power for all motor controls and lights on the power indicator. Make sure the keyswitch is in the "OFF" position
@@ -1451,7 +1451,7 @@ according to the following main components:</p>
 </tr>
 <tr>
 <td class="border border-gray-500 px-4 py-3 font-semibold">
-                Off button
+                Off Button
             </td>
 <td class="border border-gray-500 px-4 py-3">
 <p>i. After normal operation and the Garbarata returns to the predetermined/parked position, the power
@@ -1517,16 +1517,16 @@ electricity, except the lights.</p>
         forward because there is an interlock.
     </p>
 <p>
-<strong>g. Cabin Rotation</strong>
-</p>button
+<strong>g. Cabin Rotation Button</strong>
+</p>
 
 <p>
         Two dead man type buttons are also used to control the rotary movement
         cabin to the right or left.
     </p>
 <p>
-<strong>h. Cabin Floor</strong>
-</p>button
+<strong>h. Cabin Floor Button</strong>
+</p>
 
 <p>
         The boarding bridge is equipped with a floor cabin that can be moved accordingly
@@ -1534,8 +1534,8 @@ electricity, except the lights.</p>
         lowered.
     </p>
 <p>
-<strong>i. Vertical Movement</strong>
-</p>button
+<strong>i. Vertical Movement Button</strong>
+</p>
 
 <p>
         Two push buttons, namely up and down, are used to raise or
