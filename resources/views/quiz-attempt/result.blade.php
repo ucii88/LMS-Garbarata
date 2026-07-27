@@ -1,4 +1,4 @@
-@section('topbar_title', 'Hasil Quiz — ' . $quiz->title)
+@section('topbar_title', __('Hasil Quiz') . ' — ' . $quiz->title)
 
 <x-app-layout>
 <div class="max-w-3xl mx-auto space-y-6">
@@ -10,13 +10,13 @@
         <div class="p-6 md:p-8 text-center">
             <h1 class="text-2xl font-bold {{ $attempt->isPendingEssay() ? 'text-orange-600' : ($quiz->isPractice() || $attempt->is_passed ? 'text-emerald-700' : 'text-red-600') }}">
                 @if($attempt->isPendingEssay())
-                    Menunggu Penilaian
+                    {{ __('Menunggu Penilaian') }}
                 @elseif($quiz->isPractice())
-                    Latihan Selesai
+                    {{ __('Latihan Selesai') }}
                 @elseif($attempt->is_passed)
-                    Selamat, Kamu Lulus!
+                    {{ __('Selamat, Kamu Lulus!') }}
                 @else
-                    Belum Lulus
+                    {{ __('Belum Lulus') }}
                 @endif
             </h1>
             <p class="text-slate-500 text-base mt-1">{{ $quiz->title }}</p>
@@ -25,7 +25,7 @@
             <div class="my-6">
                 @if($attempt->isPendingEssay())
                     <div class="inline-flex flex-col items-center justify-center w-28 h-28 rounded-full border-4 border-orange-400 bg-white shadow-sm">
-                        <span class="text-sm font-bold text-orange-600">Menunggu</span>
+                        <span class="text-sm font-bold text-orange-600">{{ __('Menunggu') }}</span>
                     </div>
                 @else
                     <div class="inline-flex items-center justify-center w-28 h-28 rounded-full border-4 {{ $quiz->isPractice() || $attempt->is_passed ? 'border-emerald-500' : 'border-red-400' }} bg-white shadow-sm">
@@ -34,7 +34,7 @@
                         </span>
                     </div>
                 @endif
-                <p class="text-sm text-slate-400 mt-2">{{ $attempt->isPendingEssay() ? 'Nilai akan keluar setelah instruktur menilai esai' : ('dari 100 poin' . ($quiz->isPractice() ? ' · Hasil latihan tersimpan' : ' · Nilai lulus: ' . $quiz->passing_score)) }}</p>
+                <p class="text-sm text-slate-400 mt-2">{{ $attempt->isPendingEssay() ? __('Nilai akan keluar setelah instruktur menilai esai') : (__('dari 100 poin') . ($quiz->isPractice() ? __(' · Hasil latihan tersimpan') : __(' · Nilai lulus: ') . $quiz->passing_score)) }}</p>
             </div>
             
             {{-- Stats --}}
@@ -47,19 +47,19 @@
                 @endphp
                 <div class="text-center">
                     <div class="text-lg font-bold text-emerald-600">{{ $correctCount }}</div>
-                    <div class="text-sm text-slate-500">Benar</div>
+                    <div class="text-sm text-slate-500">{{ __('Benar') }}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-lg font-bold text-red-500">{{ $incorrectCount }}</div>
-                    <div class="text-sm text-slate-500">Salah</div>
+                    <div class="text-sm text-slate-500">{{ __('Salah') }}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-lg font-bold text-slate-600">{{ $attempt->getDurationLabel() }}</div>
-                    <div class="text-sm text-slate-500">Waktu</div>
+                    <div class="text-sm text-slate-500">{{ __('Waktu') }}</div>
                 </div>
             </div>
             @else
-            <div class="text-center text-base text-slate-500">Durasi: {{ $attempt->getDurationLabel() }}</div>
+            <div class="text-center text-base text-slate-500">{{ __('Durasi:') }} {{ $attempt->getDurationLabel() }}</div>
             @endif
         </div>
     </div>
@@ -67,8 +67,8 @@
     {{-- Banner Pending Essay --}}
     @if($attempt->isPendingEssay())
         <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5">
-            <h3 class="font-bold text-orange-800">Menunggu Penilaian Instruktur</h3>
-            <p class="text-sm text-orange-700 mt-1">Jawaban esai kamu sedang menunggu untuk dinilai oleh instruktur. Nilai akhir kamu akan keluar setelah semua soal esai selesai dinilai. Kamu bisa cek kembali halaman ini nanti.</p>
+            <h3 class="font-bold text-orange-800">{{ __('Menunggu Penilaian Instruktur') }}</h3>
+            <p class="text-sm text-orange-700 mt-1">{{ __('Jawaban esai kamu sedang menunggu untuk dinilai oleh instruktur. Nilai akhir kamu akan keluar setelah semua soal esai selesai dinilai. Kamu bisa cek kembali halaman ini nanti.') }}</p>
         </div>
     @endif
 
@@ -79,14 +79,14 @@
                 CERT
             </div>
             <div class="flex-1">
-                <h3 class="font-bold text-amber-800">Sertifikat Diterbitkan!</h3>
+                <h3 class="font-bold text-amber-800">{{ __('Sertifikat Diterbitkan!') }}</h3>
                 <p class="text-sm text-amber-700 mt-0.5">
-                    Kamu telah menyelesaikan semua quiz dalam course ini. Sertifikatmu sudah siap!
+                    {{ __('Kamu telah menyelesaikan semua quiz dalam course ini. Sertifikatmu sudah siap!') }}
                 </p>
             </div>
             <a href="{{ route('certificate.show', $certificate) }}"
                class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-base font-bold rounded-xl transition shrink-0">
-                Lihat Sertifikat
+                {{ __('Lihat Sertifikat') }}
             </a>
         </div>
     @endif
@@ -95,23 +95,23 @@
     <div class="flex gap-3">
         <a href="{{ route('courses.chapters.show', [$course, $quiz->chapter_id ?? $course->chapters->first()->id]) }}"
            class="flex-1 text-center py-2.5 text-base font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
-            ← Kembali ke Materi
+            {{ __('← Kembali ke Materi') }}
         </a>
         @if(($quiz->isPractice() || !$attempt->is_passed) && $quiz->canAttempt(auth()->id()))
             <a href="{{ route($quiz->isPractice() ? 'practice.start' : 'quiz.start', [$course, $quiz]) }}"
                class="flex-1 text-center py-2.5 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                Coba Lagi
+                {{ __('Coba Lagi') }}
             </a>
         @endif
     </div>
 
     {{-- Review per Soal --}}
     <div class="space-y-4">
-        <h2 class="text-base font-bold text-slate-800">Review Jawaban</h2>
+        <h2 class="text-base font-bold text-slate-800">{{ __('Review Jawaban') }}</h2>
 
         @if($quiz->review_policy === 'hide_all')
             <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center text-slate-500 italic text-sm">
-                Detail review jawaban untuk quiz ini dinonaktifkan oleh instruktur.
+                {{ __('Detail review jawaban untuk quiz ini dinonaktifkan oleh instruktur.') }}
             </div>
         @elseif($quiz->review_policy === 'points_only')
             @foreach($attempt->answers->sortBy('question_id') as $i => $answer)
@@ -119,7 +119,7 @@
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                 <div class="flex items-center gap-2 px-5 py-3 bg-slate-50">
                     <span class="text-base font-bold text-slate-700">
-                        Soal {{ $i + 1 }}
+                        {{ __('Soal') }} {{ $i + 1 }}
                     </span>
                     <span class="text-sm text-slate-500">·</span>
                     <span class="text-sm font-semibold px-2 py-0.5 rounded-full bg-white/60
@@ -134,9 +134,9 @@
                     </span>
                     <span class="ml-auto text-sm font-semibold text-slate-600">
                         @if($question->type === 'matching' || $question->type === 'ordering')
-                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->options->count() * $question->points }} poin
+                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->options->count() * $question->points }} {{ __('poin') }}
                         @else
-                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->points }} poin
+                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->points }} {{ __('poin') }}
                         @endif
                     </span>
                 </div>
@@ -144,43 +144,43 @@
                     <p class="text-base font-medium text-slate-800">{!! nl2br(e($question->question_text)) !!}</p>
                     @if($question->question_image)
                         <img src="{{ Storage::url($question->question_image) }}"
-                             alt="Gambar Soal"
+                             alt="{{ __('Gambar Soal') }}"
                              class="mt-2 max-h-48 rounded-xl border border-slate-100 object-contain">
                     @endif
 
                     {{-- Jawaban user --}}
                     <div class="text-base">
                         @if($question->type === 'multiple_choice' || $question->type === 'true_false')
-                            <span class="text-sm font-semibold text-slate-500">Jawabanmu: </span>
+                            <span class="text-sm font-semibold text-slate-500">{{ __('Jawabanmu:') }} </span>
                             <span class="text-slate-700 font-medium">
-                                {{ $answer->selectedOption?->option_text ?? 'Tidak dijawab' }}
+                                {{ $answer->selectedOption?->option_text ?? __('Tidak dijawab') }}
                             </span>
                         @elseif($question->type === 'essay')
-                            <span class="text-sm font-semibold text-slate-500 block mb-1">Jawabanmu:</span>
+                            <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu:') }}</span>
                             <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
-                                {{ $answer->text_answer ?? 'Tidak dijawab' }}
+                                {{ $answer->text_answer ?? __('Tidak dijawab') }}
                             </div>
                             {{-- Nilai & Feedback instruktur --}}
                             @if($answer->essay_graded_at)
                                 <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <span class="text-sm font-bold text-blue-700 block mb-1">Penilaian Instruktur</span>
+                                    <span class="text-sm font-bold text-blue-700 block mb-1">{{ __('Penilaian Instruktur') }}</span>
                                     @if($answer->essay_feedback)
                                         <p class="text-sm text-blue-700 mt-1">{{ $answer->essay_feedback }}</p>
                                     @endif
-                                    <p class="text-[10px] text-blue-400 mt-1">Dinilai oleh {{ $answer->gradedBy?->name }}</p>
+                                    <p class="text-[10px] text-blue-400 mt-1">{{ __('Dinilai oleh') }} {{ $answer->gradedBy?->name }}</p>
                                 </div>
                             @else
                                 <div class="mt-2 text-sm text-orange-600 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
-                                    Belum dinilai oleh instruktur
+                                    {{ __('Belum dinilai oleh instruktur') }}
                                 </div>
                             @endif
                         @elseif($question->type === 'matching')
-                            <span class="text-sm font-semibold text-slate-500 block mb-1">Jawabanmu (Mencocokkan):</span>
+                            <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu (Mencocokkan):') }}</span>
                             <div class="space-y-1 pl-3 border-l-2 border-slate-200 text-sm">
                                 @php $userMatch = $answer->order_answer ?? []; @endphp
                                 @foreach($question->options as $option)
                                     @php
-                                        $userChoice = $userMatch[$option->id] ?? 'Tidak dijawab';
+                                        $userChoice = $userMatch[$option->id] ?? __('Tidak dijawab');
                                     @endphp
                                     <div class="flex items-center gap-2">
                                         <span class="text-slate-600 font-medium">{{ $option->option_text }}</span>
@@ -192,7 +192,7 @@
                                 @endforeach
                             </div>
                         @elseif($question->type === 'ordering')
-                            <span class="text-sm font-semibold text-slate-500 block mb-1">Jawabanmu (Urutan Langkah):</span>
+                            <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu (Urutan Langkah):') }}</span>
                             <div class="space-y-1 pl-3 border-l-2 border-slate-200 text-sm">
                                 @php
                                     $userOrder = $answer->order_answer ?? [];
@@ -202,13 +202,13 @@
                                         $opt = $question->options->firstWhere('id', $optId);
                                     @endphp
                                     <div class="flex items-center gap-2">
-                                        <span class="font-bold text-slate-400 text-[10px]">Langkah {{ $j + 1 }}:</span>
+                                        <span class="font-bold text-slate-400 text-[10px]">{{ __('Langkah') }} {{ $j + 1 }}:</span>
                                         <span class="text-slate-700 font-medium">
-                                            {{ $opt?->option_text ?? 'Tidak diisi' }}
+                                            {{ $opt?->option_text ?? __('Tidak diisi') }}
                                         </span>
                                     </div>
                                 @empty
-                                    <span class="text-slate-500 font-medium">Tidak diisi</span>
+                                    <span class="text-slate-500 font-medium">{{ __('Tidak diisi') }}</span>
                                 @endforelse
                             </div>
                         @endif
@@ -223,7 +223,7 @@
                 {{ $answer->is_correct === null ? 'border-orange-200' : ($answer->is_correct ? 'border-emerald-200' : 'border-red-200') }}">
                 <div class="flex items-center gap-2 px-5 py-3 {{ $answer->is_correct === null ? 'bg-orange-50' : ($answer->is_correct ? 'bg-emerald-50' : 'bg-red-50') }}">
                     <span class="text-base font-bold {{ $answer->is_correct === null ? 'text-orange-600' : ($answer->is_correct ? 'text-emerald-700' : 'text-red-600') }}">
-                        [{{ $answer->is_correct === null ? 'Menunggu Penilaian' : ($answer->is_correct ? 'Benar' : 'Salah') }}] Soal {{ $i + 1 }}
+                        [{{ $answer->is_correct === null ? __('Menunggu Penilaian') : ($answer->is_correct ? __('Benar') : __('Salah')) }}] {{ __('Soal') }} {{ $i + 1 }}
                     </span>
                     <span class="text-sm text-slate-500">·</span>
                     <span class="text-sm font-semibold px-2 py-0.5 rounded-full bg-white/60
@@ -238,9 +238,9 @@
                     </span>
                     <span class="ml-auto text-sm font-semibold {{ $answer->is_correct ? 'text-emerald-700' : 'text-red-500' }}">
                         @if($question->type === 'matching' || $question->type === 'ordering')
-                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->options->count() * $question->points }} poin
+                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->options->count() * $question->points }} {{ __('poin') }}
                         @else
-                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->points }} poin
+                            +{{ number_format($answer->points_earned, 0) }} / {{ $question->points }} {{ __('poin') }}
                         @endif
                     </span>
                 </div>
@@ -248,42 +248,42 @@
                     <p class="text-base font-medium text-slate-800">{!! nl2br(e($question->question_text)) !!}</p>
                     @if($question->question_image)
                         <img src="{{ Storage::url($question->question_image) }}"
-                             alt="Gambar Soal"
+                             alt="{{ __('Gambar Soal') }}"
                              class="mt-2 max-h-48 rounded-xl border border-slate-100 object-contain">
                     @endif
 
                     {{-- Jawaban user --}}
                     <div class="text-base">
                         @if($question->type === 'multiple_choice' || $question->type === 'true_false')
-                            <span class="text-sm font-semibold text-slate-500">Jawabanmu: </span>
+                            <span class="text-sm font-semibold text-slate-500">{{ __('Jawabanmu:') }} </span>
                             <span class="{{ $answer->is_correct ? 'text-emerald-700 font-semibold' : 'text-red-500 line-through' }}">
-                                {{ $answer->selectedOption?->option_text ?? 'Tidak dijawab' }}
+                                {{ $answer->selectedOption?->option_text ?? __('Tidak dijawab') }}
                             </span>
                         @elseif($question->type === 'essay')
-                            <span class="text-sm font-semibold text-slate-500 block mb-1">Jawabanmu:</span>
+                            <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu:') }}</span>
                             <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
-                                {{ $answer->text_answer ?? 'Tidak dijawab' }}
+                                {{ $answer->text_answer ?? __('Tidak dijawab') }}
                             </div>
                             @if($answer->essay_graded_at)
                                 <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                                    <span class="text-sm font-bold text-blue-700 block mb-1">Penilaian Instruktur</span>
+                                    <span class="text-sm font-bold text-blue-700 block mb-1">{{ __('Penilaian Instruktur') }}</span>
                                     @if($answer->essay_feedback)
                                         <p class="text-sm text-blue-700 mt-1">{{ $answer->essay_feedback }}</p>
                                     @endif
-                                    <p class="text-[10px] text-blue-400 mt-1">Dinilai oleh {{ $answer->gradedBy?->name }}</p>
+                                    <p class="text-[10px] text-blue-400 mt-1">{{ __('Dinilai oleh') }} {{ $answer->gradedBy?->name }}</p>
                                 </div>
                             @else
                                 <div class="mt-2 text-sm text-orange-600 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
-                                    Belum dinilai oleh instruktur
+                                    {{ __('Belum dinilai oleh instruktur') }}
                                 </div>
                             @endif
                         @elseif($question->type === 'matching')
-                            <span class="text-sm font-semibold text-slate-500 block mb-1">Jawabanmu (Mencocokkan):</span>
+                            <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu (Mencocokkan):') }}</span>
                             <div class="space-y-1 pl-3 border-l-2 border-slate-200 text-sm">
                                 @php $userMatch = $answer->order_answer ?? []; @endphp
                                 @foreach($question->options as $option)
                                     @php
-                                        $userChoice = $userMatch[$option->id] ?? 'Tidak dijawab';
+                                        $userChoice = $userMatch[$option->id] ?? __('Tidak dijawab');
                                         $isChoiceCorrect = $userChoice === $option->match_label;
                                     @endphp
                                     <div class="flex items-center gap-2">
@@ -293,13 +293,13 @@
                                             {{ $userChoice }}
                                         </span>
                                         @if(!$isChoiceCorrect)
-                                            <span class="text-slate-400 font-normal">(Seharusnya: <span class="text-emerald-700 font-semibold">{{ $option->match_label }}</span>)</span>
+                                            <span class="text-slate-400 font-normal">({{ __('Seharusnya:') }} <span class="text-emerald-700 font-semibold">{{ $option->match_label }}</span>)</span>
                                         @endif
                                     </div>
                                 @endforeach
                             </div>
                         @elseif($question->type === 'ordering')
-                            <span class="text-sm font-semibold text-slate-500 block mb-1">Jawabanmu (Urutan Langkah):</span>
+                            <span class="text-sm font-semibold text-slate-500 block mb-1">{{ __('Jawabanmu (Urutan Langkah):') }}</span>
                             <div class="space-y-1 pl-3 border-l-2 border-slate-200 text-sm">
                                 @php
                                     $userOrder = $answer->order_answer ?? [];
@@ -312,16 +312,16 @@
                                         $isStepCorrect = $optId === ($correctOrder[$j] ?? null);
                                     @endphp
                                     <div class="flex items-center gap-2">
-                                        <span class="font-bold text-slate-400 text-[10px]">Langkah {{ $j + 1 }}:</span>
+                                        <span class="font-bold text-slate-400 text-[10px]">{{ __('Langkah') }} {{ $j + 1 }}:</span>
                                         <span class="{{ $isStepCorrect ? 'text-emerald-700 font-semibold' : 'text-red-500 font-medium' }}">
-                                            {{ $opt?->option_text ?? 'Tidak diisi' }}
+                                            {{ $opt?->option_text ?? __('Tidak diisi') }}
                                         </span>
                                         @if(!$isStepCorrect)
-                                            <span class="text-slate-400 font-normal">(Seharusnya: <span class="text-emerald-700 font-semibold">{{ $correctOpt?->option_text }}</span>)</span>
+                                            <span class="text-slate-400 font-normal">({{ __('Seharusnya:') }} <span class="text-emerald-700 font-semibold">{{ $correctOpt?->option_text }}</span>)</span>
                                         @endif
                                     </div>
                                 @empty
-                                    <span class="text-red-500 font-medium">Tidak diisi</span>
+                                    <span class="text-red-500 font-medium">{{ __('Tidak diisi') }}</span>
                                 @endforelse
                             </div>
                         @endif
@@ -330,7 +330,7 @@
                     {{-- Jawaban benar (jika salah) --}}
                     @if(!$answer->is_correct && in_array($question->type, ['multiple_choice', 'true_false']))
                         <div class="text-base">
-                            <span class="text-sm font-semibold text-slate-500">Jawaban benar: </span>
+                            <span class="text-sm font-semibold text-slate-500">{{ __('Jawaban benar:') }} </span>
                             <span class="text-emerald-700 font-semibold">
                                 {{ $question->options->firstWhere('is_correct', true)?->option_text ?? '-' }}
                             </span>
@@ -340,7 +340,7 @@
                     {{-- Penjelasan --}}
                     @if($question->explanation)
                         <div class="text-sm bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-blue-700">
-                            <span class="font-semibold">Penjelasan:</span> {{ $question->explanation }}
+                            <span class="font-semibold">{{ __('Penjelasan:') }}</span> {{ $question->explanation }}
                         </div>
                     @endif
                 </div>

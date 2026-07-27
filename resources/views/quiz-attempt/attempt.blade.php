@@ -1,4 +1,4 @@
-@section('topbar_title', $quiz->title . ' — ' . __('Sedang Dikerjakan'))
+@section('topbar_title', __($quiz->title) . ' — ' . __('Sedang Dikerjakan'))
 
 <x-app-layout>
 {{-- Quiz meminta konfirmasi keluar; latihan boleh ditinggalkan dan dilanjutkan. --}}
@@ -81,11 +81,11 @@
                             </span>
                             <span class="text-sm text-slate-400">
                                 @if($question->type === 'matching')
-                                    {{ $question->points }} poin per pasangan (Total: {{ $question->options->count() * $question->points }} poin)
+                                    {{ $question->points }} {{ __('poin per pasangan') }} ({{ __('Total:') }} {{ $question->options->count() * $question->points }} {{ __('poin') }})
                                 @elseif($question->type === 'ordering')
-                                    {{ $question->points }} poin per langkah (Total: {{ $question->options->count() * $question->points }} poin)
+                                    {{ $question->points }} {{ __('poin per langkah') }} ({{ __('Total:') }} {{ $question->options->count() * $question->points }} {{ __('poin') }})
                                 @else
-                                    {{ $question->points }} poin
+                                    {{ $question->points }} {{ __('poin') }}
                                 @endif
                             </span>
                         </div>
@@ -182,11 +182,11 @@
                                 @endphp
                                 @for($stepNum = 1; $stepNum <= $question->options->count(); $stepNum++)
                                     <div class="flex flex-col gap-2 p-3 bg-slate-50/50 rounded-xl border border-slate-100 shadow-sm">
-                                        <span class="text-sm font-bold text-slate-500">Langkah {{ $stepNum }}:</span>
+                                        <span class="text-sm font-bold text-slate-500">{{ __('Langkah') }} {{ $stepNum }}:</span>
                                         <select name="answers[{{ $question->id }}][]" required
                                                 onchange="autoSaveOrdering({{ $question->id }})"
                                                 class="w-full border-2 border-slate-200 rounded-lg px-3 py-2.5 text-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-                                            <option value="">-- Pilih Langkah Ke-{{ $stepNum }} --</option>
+                                            <option value="">-- {{ __('Pilih Langkah Ke-') }}{{ $stepNum }} --</option>
                                             @foreach($optionsShuffled as $opt)
                                                 <option value="{{ $opt->id }}"
                                                         {{ isset($savedOrder[$stepNum - 1]) && $savedOrder[$stepNum - 1] == $opt->id ? 'selected' : '' }}>
@@ -206,7 +206,7 @@
                         @if($loop->iteration > 1)
                             <button type="button" onclick="jumpTo({{ $loop->iteration - 1 }})"
                                     class="px-4 py-2 text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
-                                ← Sebelumnya
+                                {{ __('← Sebelumnya') }}
                             </button>
                         @else
                             <div></div>
@@ -215,12 +215,12 @@
                         @if($loop->iteration < $questions->count())
                             <button type="button" onclick="jumpTo({{ $loop->iteration + 1 }})"
                                     class="px-5 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                                Selanjutnya →
+                                {{ __('Selanjutnya →') }}
                             </button>
                         @else
                             <button type="button" onclick="confirmSubmit()"
                                     class="px-5 py-2.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition">
-                                Selesai & Kirim
+                                {{ __('Selesai & Kirim') }}
                             </button>
                         @endif
                     </div>
@@ -231,7 +231,7 @@
             {{-- Sidebar: Navigasi Soal --}}
             <div class="lg:col-span-1">
                 <div class="sticky top-24 bg-white border border-slate-100 rounded-2xl shadow-sm p-4 space-y-4">
-                    <h3 class="text-sm font-bold text-slate-700">Navigasi Soal</h3>
+                    <h3 class="text-sm font-bold text-slate-700">{{ __('Navigasi Soal') }}</h3>
                     <div class="grid grid-cols-5 lg:grid-cols-4 gap-1.5" id="nav-grid">
                         @foreach($questions as $i => $question)
                             <button type="button" onclick="jumpTo({{ $loop->iteration }})"
@@ -244,20 +244,20 @@
                     <div class="space-y-1.5 text-sm text-slate-500 border-t border-slate-100 pt-3">
                         <div class="flex items-center gap-2">
                             <div class="w-4.5 h-4.5 rounded bg-slate-500 shrink-0"></div>
-                            <span>Sudah dijawab (Abu-abu)</span>
+                            <span>{{ __('Sudah dijawab (Abu-abu)') }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="w-4.5 h-4.5 rounded bg-amber-500 shrink-0"></div>
-                            <span>Ragu-ragu / Ditandai (Oranye)</span>
+                            <span>{{ __('Ragu-ragu / Ditandai (Oranye)') }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="w-4.5 h-4.5 rounded bg-white border-2 border-slate-200 shrink-0"></div>
-                            <span>Belum dijawab (Putih)</span>
+                            <span>{{ __('Belum dijawab (Putih)') }}</span>
                         </div>
                     </div>
                     <button type="button" onclick="confirmSubmit()"
                             class="w-full py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                        Submit Quiz
+                        Submit {{ $quiz->isPractice() ? __('Latihan') : __('Quiz') }}
                     </button>
                 </div>
             </div>
@@ -270,17 +270,17 @@
 <div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
         <div class="text-center mb-4">
-            <h3 class="text-base font-bold text-slate-800">Yakin submit quiz?</h3>
+            <h3 class="text-base font-bold text-slate-800">{{ __('Yakin submit quiz?') }}</h3>
             <p class="text-base text-slate-500 mt-1" id="unanswered-msg"></p>
         </div>
         <div class="flex gap-3">
             <button onclick="document.getElementById('confirm-modal').classList.add('hidden')"
                     class="flex-1 py-2.5 text-base font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50">
-                Kembali
+                {{ __('Kembali') }}
             </button>
             <button onclick="submitQuiz()"
                     class="flex-1 py-2.5 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl">
-                Ya, Submit
+                {{ __('Ya, Submit') }}
             </button>
         </div>
     </div>
@@ -293,13 +293,13 @@
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-50 text-red-600 font-bold mb-1">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
-            <h3 class="text-base font-bold text-red-600">Peringatan Keamanan!</h3>
-            <p class="text-sm text-slate-700 font-semibold">Anda terdeteksi meninggalkan halaman quiz.</p>
+            <h3 class="text-base font-bold text-red-600">{{ __('Peringatan Keamanan!') }}</h3>
+            <p class="text-sm text-slate-700 font-semibold">{{ __('Anda terdeteksi meninggalkan halaman quiz.') }}</p>
             <p class="text-xs text-slate-500 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100" id="cheat-warning-msg"></p>
         </div>
         <button type="button" onclick="closeCheatModal()"
-                class="w-full py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-xl transition">
-            Saya Mengerti & Lanjutkan Quiz
+                class="w-full py-2.5 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-sm transition cursor-pointer">
+            {{ __('Mengerti & Lanjutkan') }}
         </button>
     </div>
 </div>
@@ -322,11 +322,11 @@ function handleFocusLoss() {
     
     if (focusLossCount >= MAX_FOCUS_LOSS) {
         window.isSubmittingQuiz = true;
-        showGlobalAlert('Pelanggaran Keamanan', 'Quiz Anda otomatis dikirim karena melanggar aturan fokus halaman quiz sebanyak 3 kali.');
+        showGlobalAlert(@js(__('Pelanggaran Keamanan')), @js(__('Quiz Anda otomatis dikirim karena melanggar aturan fokus halaman quiz sebanyak 3 kali.')));
         document.getElementById('quiz-form').submit();
     } else {
         const remaining = MAX_FOCUS_LOSS - focusLossCount;
-        const msg = `Peringatan ${focusLossCount}/${MAX_FOCUS_LOSS}: Harap tetap fokus pada halaman quiz. Jika Anda meninggalkan halaman ini sebanyak ${remaining} kali lagi, jawaban Anda akan otomatis dikirim secara paksa!`;
+        const msg = @js(__('Peringatan')) + ` ${focusLossCount}/${MAX_FOCUS_LOSS}: ` + @js(__('Harap tetap fokus pada halaman quiz. Jika Anda meninggalkan halaman ini sebanyak')) + ` ${remaining} ` + @js(__('kali lagi, jawaban Anda akan otomatis dikirim secara paksa!'));
         
         document.getElementById('cheat-warning-msg').textContent = msg;
         document.getElementById('cheat-modal').classList.remove('hidden');
@@ -352,31 +352,28 @@ function showConnectionStatus(isOnline) {
     const submitBtns = document.querySelectorAll('button[onclick="confirmSubmit()"], button[type="submit"]');
     
     if (isOnline) {
-        text.textContent = '✓ Koneksi Terhubung Kembali! Menyelaraskan jawaban...';
+        text.textContent = '✓ ' + @js(__('Koneksi Terhubung Kembali! Menyelaraskan jawaban...'));
         banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-sm font-bold bg-emerald-600 text-white shadow-md transition-all duration-300';
         
         // Aktifkan kembali tombol submit
         submitBtns.forEach(btn => {
             btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
         });
         
-        // Sembunyikan banner setelah 2.5 detik
+        // Sembunyikan banner setelah 4 detik
         setTimeout(() => {
-            if (navigator.onLine) {
-                banner.classList.add('hidden');
-            }
-        }, 2500);
+            banner.classList.add('hidden');
+        }, 4000);
     } else {
-        text.textContent = 'Koneksi Internet Terputus! Harap jangan menutup halaman quiz ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.';
-        banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-sm font-bold bg-red-600 text-white shadow-md animate-pulse transition-all duration-300';
+        text.textContent = @js(__('Koneksi Internet Terputus! Harap jangan menutup halaman quiz ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.'));
+        banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-sm font-bold bg-rose-600 text-white shadow-md transition-all duration-300';
+        banner.classList.remove('hidden');
         
-        // Nonaktifkan tombol submit
+        // Nonaktifkan tombol submit saat offline
         submitBtns.forEach(btn => {
             btn.disabled = true;
-            btn.style.opacity = '0.5';
-            btn.style.cursor = 'not-allowed';
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
         });
     }
 }
@@ -553,8 +550,8 @@ function confirmSubmit() {
 
     const unanswered = total - answeredCount;
     const msg = unanswered > 0
-        ? `${unanswered} soal belum terjawab. Soal yang belum dijawab tidak akan mendapat poin.`
-        : 'Semua soal sudah dijawab.';
+        ? `${unanswered} ` + @js(__('soal belum terjawab. Soal yang belum dijawab tidak akan mendapat poin.'))
+        : @js(__('Semua soal sudah dijawab.'));
     document.getElementById('unanswered-msg').textContent = msg;
     document.getElementById('confirm-modal').classList.remove('hidden');
 }

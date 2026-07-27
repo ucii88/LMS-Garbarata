@@ -17,10 +17,13 @@ class LocaleMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->hasSession() && session()->has('locale')) {
-            App::setLocale(session('locale'));
+            $locale = session('locale');
+            App::setLocale($locale);
+            \Carbon\Carbon::setLocale($locale);
         } else {
             // Default to Indonesian if not set
             App::setLocale('id');
+            \Carbon\Carbon::setLocale('id');
         }
 
         return $next($request);

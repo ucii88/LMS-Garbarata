@@ -76,15 +76,15 @@
                             this.showUploadModal = false;
                             window.location.reload();
                         } else {
-                            showGlobalAlert('Gagal', data.message || 'Gagal mengunggah gambar.');
+                            showGlobalAlert(@js(__('Gagal')), data.message || @js(__('Gagal mengunggah gambar.')));
                         }
                     } catch (err) {
-                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan koneksi.');
+                        showGlobalAlert(@js(__('Gagal')), @js(__('Terjadi kesalahan koneksi.')));
                     }
                     this.uploading = false;
                 },
                 async confirmDeleteDiagram() {
-                    showGlobalConfirm('Hapus Diagram', 'Apakah Anda yakin ingin menghapus diagram modul ini beserta seluruh hotspotnya?', async () => {
+                    showGlobalConfirm(@js(__('Hapus Diagram')), @js(__('Apakah Anda yakin ingin menghapus diagram modul ini beserta seluruh hotspotnya?')), async () => {
                         try {
                             const res = await fetch(this.destroyDiagramUrl, {
                                 method: 'DELETE',
@@ -97,7 +97,7 @@
                                 window.location.reload();
                             }
                         } catch (err) {
-                            showGlobalAlert('Gagal', 'Gagal menghapus diagram.');
+                            showGlobalAlert(@js(__('Gagal')), @js(__('Gagal menghapus diagram.')));
                         }
                     });
                 },
@@ -239,15 +239,15 @@
                             }
                             this.showHotspotFormModal = false;
                         } else {
-                            showGlobalAlert('Gagal', data.message || 'Gagal menyimpan hotspot.');
+                            showGlobalAlert(@js(__('Gagal')), data.message || @js(__('Gagal menyimpan hotspot.')));
                         }
                     } catch (e) {
-                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan saat menyimpan hotspot.');
+                        showGlobalAlert(@js(__('Kesalahan')), @js(__('Terjadi kesalahan saat menyimpan hotspot.')));
                     }
                     this.savingHotspot = false;
                 },
                 async deleteHotspot(id) {
-                    showGlobalConfirm('Hapus Hotspot', 'Apakah Anda yakin hanya ingin menghapus 1 hotspot ini?', async () => {
+                    showGlobalConfirm(@js(__('Hapus Hotspot')), @js(__('Apakah Anda yakin hanya ingin menghapus 1 hotspot ini?')), async () => {
                         try {
                             const res = await fetch(this.baseUrl + '/' + id, {
                                 method: 'DELETE',
@@ -259,10 +259,10 @@
                             if (res.ok) {
                                 this.hotspots = this.hotspots.filter(h => String(h.id) !== String(id));
                                 this.showHotspotFormModal = false;
-                                showGlobalAlert('Berhasil', 'Hotspot berhasil dihapus.');
+                                showGlobalAlert(@js(__('Berhasil')), @js(__('Hotspot berhasil dihapus.')));
                             }
                         } catch (e) {
-                            showGlobalAlert('Gagal', 'Gagal menghapus hotspot.');
+                            showGlobalAlert(@js(__('Gagal')), @js(__('Gagal menghapus hotspot.')));
                         }
                     });
                 },
@@ -324,12 +324,12 @@
                         if (res.ok) {
                             this.originalHotspots = (this.hotspots || []).map(h => Object.assign({}, h));
                             this.editMode = false;
-                            showGlobalAlert('Berhasil', 'Posisi Hotspot berhasil disimpan.');
+                            showGlobalAlert(@js(__('Berhasil')), @js(__('Posisi Hotspot berhasil disimpan.')));
                         } else {
-                            showGlobalAlert('Gagal', 'Gagal menyimpan posisi.');
+                            showGlobalAlert(@js(__('Gagal')), @js(__('Gagal menyimpan posisi.')));
                         }
                     } catch (e) {
-                        showGlobalAlert('Kesalahan', 'Terjadi kesalahan jaringan.');
+                        showGlobalAlert(@js(__('Kesalahan')), @js(__('Terjadi kesalahan jaringan.')));
                     }
                     this.saving = false;
                 }
@@ -399,8 +399,8 @@
                         </button>
                         <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-                            <span x-show="!saving">Simpan Posisi</span>
-                            <span x-show="saving">Menyimpan...</span>
+                            <span x-show="!saving">{{ __('Simpan Posisi') }}</span>
+                            <span x-show="saving">{{ __('Menyimpan...') }}</span>
                         </button>
                     </div>
             </div>

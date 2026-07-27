@@ -6832,15 +6832,13 @@ technical specifications, capacity and unit dimensions.</p>
                 $enTitle = $matches[1] . ' Drawing Sheet ' . $matches[2];
             }
 
-            if (empty($module->getTranslation('title', 'en')) || $module->getTranslation('title', 'en') === $titleId) {
-                $module->setTranslation('title', 'en', $enTitle);
-            }
+            // Always overwrite title so stale/empty values are refreshed.
+            $module->setTranslation('title', 'en', $enTitle);
 
             // Content: use real translation override if available, otherwise copy ID content
+            // Always overwrite so empty-string placeholders are replaced with real translations.
             $enContent = $englishContent[$titleId] ?? $contentId;
-            if (empty($module->getTranslation('content', 'en'))) {
-                $module->setTranslation('content', 'en', $enContent);
-            }
+            $module->setTranslation('content', 'en', $enContent);
 
             $module->save();
         }

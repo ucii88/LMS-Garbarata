@@ -109,7 +109,7 @@ class QuizController extends Controller
         ]);
 
         return redirect($this->activityRoute('edit', $course, $quiz))
-                         ->with('success', ($isPractice ? 'Latihan' : 'Quiz') . ' dibuat. Pilih soal dengan total tepat 100 poin untuk menyelesaikannya.');
+                         ->with('success', ($isPractice ? __('Latihan') : __('Quiz')) . ' ' . __('dibuat. Pilih soal dengan total tepat 100 poin untuk menyelesaikannya.'));
     }
 
     /**
@@ -201,7 +201,7 @@ class QuizController extends Controller
         ]);
 
         return redirect($this->activityRoute('edit', $course, $quiz))
-                         ->with('success', 'Quiz berhasil diperbarui.');
+                         ->with('success', __('Quiz berhasil diperbarui.'));
     }
 
     /** Publikasikan atau simpan kembali aktivitas sebagai draft. */
@@ -218,11 +218,11 @@ class QuizController extends Controller
         });
 
         if ($published && $totalPoints !== 100) {
-            return back()->with('error', "Aktivitas belum dapat dipublikasikan. Total poin soal harus tepat 100/100; saat ini {$totalPoints}/100.");
+            return back()->with('error', __('Aktivitas belum dapat dipublikasikan. Total poin soal harus tepat 100/100; saat ini :points/100.', ['points' => $totalPoints]));
         }
 
         $quiz->update(['is_active' => $published]);
-        $label = $quiz->isPractice() ? 'Latihan' : ($quiz->isFinalQuiz() ? 'Ujian' : 'Quiz');
+        $label = $quiz->isPractice() ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Quiz'));
 
         // Kirim notifikasi ke semua peserta saat dipublish
         if ($published) {
@@ -230,7 +230,7 @@ class QuizController extends Controller
             Notification::notifyQuizPublished($quiz);
         }
 
-        return back()->with('success', $published ? "{$label} berhasil dipublikasikan." : "{$label} dikembalikan menjadi draft.");
+        return back()->with('success', $published ? __(':label berhasil dipublikasikan.', ['label' => $label]) : __(':label dikembalikan menjadi draft.', ['label' => $label]));
     }
 
     /**
@@ -282,9 +282,10 @@ class QuizController extends Controller
             $quiz->update(['is_active' => false]);
         }
 
-        $msg = count($questionIds) . " soal berhasil disimpan ({$totalPoints}/100 poin).";
+        $count = count($questionIds);
+        $msg = __(':count soal berhasil disimpan (:points/100 poin).', ['count' => $count, 'points' => $totalPoints]);
         if ($totalPoints !== 100) {
-            $msg .= " Status quiz disimpan sebagai Draft sampai total poin tepat 100/100.";
+            $msg .= ' ' . __('Status quiz disimpan sebagai Draft sampai total poin tepat 100/100.');
         }
 
         return back()->with('success', $msg);
@@ -300,7 +301,7 @@ class QuizController extends Controller
         $quiz->delete();
 
         return redirect($this->activityRoute('index', $course, $quiz))
-                         ->with('success', ($quiz->isPractice() ? 'Latihan' : 'Quiz') . ' berhasil dihapus.');
+                         ->with('success', ($quiz->isPractice() ? __('Latihan') : __('Quiz')) . ' ' . __('berhasil dihapus.'));
     }
 
     /**
@@ -339,7 +340,7 @@ class QuizController extends Controller
             Certificate::where('user_id', $userId)->where('course_id', $course->id)->delete();
         }
 
-        return back()->with('success', 'Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan quiz ini kembali dan sertifikat sebelumnya telah dicabut.');
+        return back()->with('success', __('Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan quiz ini kembali dan sertifikat sebelumnya telah dicabut.'));
     }
 
     /**
@@ -424,7 +425,7 @@ class QuizController extends Controller
         $redirectRoute = $quiz->isPractice() ? 'practices.attempts' : 'quizzes.attempts';
 
         return redirect()->route($redirectRoute, [$course, $quiz])
-            ->with('success', 'Penilaian esai berhasil disimpan.' . ($ungradedCount === 0 ? ' Nilai peserta sudah diperbarui.' : ''));
+            ->with('success', __('Penilaian esai berhasil disimpan.') . ($ungradedCount === 0 ? ' ' . __('Nilai peserta sudah diperbarui.') : ''));
     }
 
     /**

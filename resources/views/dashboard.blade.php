@@ -178,7 +178,7 @@
                                             <td class="px-5 py-3.5 text-slate-400">{{ $item->created_at->format('d M Y') }}</td>
                                             <td class="px-5 py-3.5 text-right">
                                                 @if ($item->id !== $user->id)
-                                                    <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST" data-confirm="Apakah Anda yakin ingin menghapus user ini?">
+                                                    <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus user ini?') }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="font-bold text-rose-600 transition hover:text-rose-800">

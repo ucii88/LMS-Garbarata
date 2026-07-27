@@ -1,4 +1,4 @@
-@section('topbar_title', __('Hasil') . ' ' . ($isPractice ? __('Latihan') : __('Kuis')) . ' ' . __('Peserta') . ' — ' . $quiz->title)
+@section('topbar_title', ($isPractice ? __('Hasil Latihan Peserta') : __('Hasil Quiz Peserta')) . ' — ' . $quiz->title)
 <x-app-layout>
 <div class="max-w-6xl mx-auto space-y-6">
 
@@ -7,9 +7,9 @@
         <div>
             <a href="{{ route($isPractice ? 'practices.index' : 'quizzes.index', $course) }}"
                class="inline-flex text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
-                &larr; {{ __('Kembali ke Manajemen') }} {{ $isPractice ? __('Latihan') : __('Quiz') }}
+                &larr; {{ $isPractice ? __('Kembali ke Manajemen Latihan') : __('Kembali ke Manajemen Quiz') }}
             </a>
-            <h1 class="text-xl font-bold text-slate-800">{{ __('Hasil') }} {{ $isPractice ? __('Latihan') : __('Kuis') }} {{ __('Peserta') }}</h1>
+            <h1 class="text-xl font-bold text-slate-800">{{ $isPractice ? __('Hasil Latihan Peserta') : __('Hasil Quiz Peserta') }}</h1>
             <p class="text-sm text-slate-500 mt-1">
                 {{ $isPractice ? __('Latihan') : __('Quiz') }}: <span class="font-semibold text-blue-600">{{ $quiz->title }}</span>
                 @unless($isPractice) · {{ __('Nilai lulus:') }} {{ $quiz->passing_score }}% @endunless
@@ -138,7 +138,7 @@
                     @empty
                     <tr>
                         <td colspan="6" class="px-6 py-12 text-center text-slate-400">
-                            {{ __('Belum ada peserta yang mengerjakan') }} {{ $isPractice ? __('latihan') : __('kuis') }} {{ __('ini.') }}
+                            {{ $isPractice ? __('Belum ada peserta yang mengerjakan latihan ini.') : __('Belum ada peserta yang mengerjakan quiz ini.') }}
                         </td>
                     </tr>
                     @endforelse

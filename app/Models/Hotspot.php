@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\HasTranslations;
 
 class Hotspot extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'diagram_id',
@@ -20,6 +21,11 @@ class Hotspot extends Model
         'popup_image',
         'x_percent',
         'y_percent',
+    ];
+
+    protected $translatable = [
+        'popup_title',
+        'popup_content',
     ];
 
     protected $casts = [

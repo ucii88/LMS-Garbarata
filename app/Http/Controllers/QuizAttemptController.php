@@ -345,7 +345,7 @@ class QuizAttemptController extends Controller
 
         if ($quiz->isPractice()) {
             return redirect()->route('courses.practices', $course)
-                ->with('success', 'Latihan selesai. Nilai terakhir kamu: ' . number_format($attempt->fresh()->score, 0) . '%.');
+                ->with('success', __('Latihan selesai. Nilai terakhir kamu: :score%.', ['score' => number_format($attempt->fresh()->score, 0)]));
         }
 
         return redirect()->route('quiz.result', [$course, $quiz]);

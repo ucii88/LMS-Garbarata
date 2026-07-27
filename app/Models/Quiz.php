@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Traits\HasTranslations;
 
 class Quiz extends Model
 {
+    use HasTranslations;
+
     protected $fillable = [
         'course_id',
         'chapter_id',
@@ -25,6 +28,11 @@ class Quiz extends Model
         'end_time',
         'is_active',
         'order',
+    ];
+
+    protected $translatable = [
+        'title',
+        'description',
     ];
 
     protected $casts = [

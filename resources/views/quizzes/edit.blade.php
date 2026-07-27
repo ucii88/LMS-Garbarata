@@ -13,11 +13,11 @@
         </div>
 
         @if (session('success'))
-            <div class="rounded-xl bg-emerald-50 p-3 text-base text-emerald-700">{{ session('success') }}</div>
+            <div class="rounded-xl bg-emerald-50 p-3 text-base text-emerald-700">{{ __(session('success')) }}</div>
         @endif
         @if ($errors->any())
             <div class="rounded-xl border border-rose-100 bg-rose-50 p-3 text-sm font-semibold text-rose-700">
-                @foreach ($errors->all() as $error)<p>{{ $error }}</p>@endforeach
+                @foreach ($errors->all() as $error)<p>{{ __( $error ) }}</p>@endforeach
             </div>
         @endif
 
@@ -36,7 +36,7 @@
                         <div><label class="mb-1 block text-xs font-semibold">{{ __('Maks. percobaan (kosong = tanpa batas)') }}</label><input type="number" name="max_attempts" min="1" max="100" value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
                     @else
                         <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">{{ __('Dibuka pada') }}</label><input type="datetime-local" name="start_time" value="{{ old('start_time', $quiz->start_time ? $quiz->start_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">{{ __('Ditutup pada') }}</label><input type="datetime-local" name="end_time" value="{{ old('end_time', $quiz->end_time ? $quiz->end_time->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
-                        <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">{{ __('Timer (menit)') }} <span class="text-gray-400 font-normal">— {{ __('kosong = tanpa batas') }}</span></label><input type="number" name="time_limit" min="1" placeholder="Contoh: 30" value="{{ old('time_limit', $quiz->time_limit) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">{{ __('Nilai lulus *') }}</label><input type="number" name="passing_score" required value="{{ old('passing_score', $quiz->passing_score) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
+                        <div class="grid grid-cols-2 gap-3"><div><label class="mb-1 block text-xs font-semibold">{{ __('Timer (menit)') }} <span class="text-gray-400 font-normal">— {{ __('kosong = tanpa batas') }}</span></label><input type="number" name="time_limit" min="1" placeholder="{{ __('Contoh: 30') }}" value="{{ old('time_limit', $quiz->time_limit) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div><div><label class="mb-1 block text-xs font-semibold">{{ __('Nilai lulus *') }}</label><input type="number" name="passing_score" required value="{{ old('passing_score', $quiz->passing_score) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div></div>
                         <div><label class="mb-1 block text-xs font-semibold">{{ __('Maks. percobaan *') }}</label><input type="number" name="max_attempts" required value="{{ old('max_attempts', $quiz->max_attempts) }}" class="w-full rounded-xl border px-3 py-2.5 text-sm"></div>
                         <select name="review_policy" class="w-full rounded-xl border px-3 py-2.5 text-sm"><option value="show_all" @selected($quiz->review_policy === 'show_all')>{{ __('Tampilkan semua') }}</option><option value="points_only" @selected($quiz->review_policy === 'points_only')>{{ __('Skor saja') }}</option><option value="hide_all" @selected($quiz->review_policy === 'hide_all')>{{ __('Sembunyikan detail') }}</option></select>
                         <div class="flex gap-4 text-xs -mt-2"><label><input type="checkbox" name="shuffle_questions" value="1" @checked($quiz->shuffle_questions)> {{ __('Acak soal') }}</label><label><input type="checkbox" name="shuffle_options" value="1" @checked($quiz->shuffle_options)> {{ __('Acak pilihan') }}</label></div>

@@ -1,4 +1,4 @@
-@section('topbar_title', __('Manajemen') . ' ' . ($isPractice ? __('Latihan') : __('Quiz')))
+@section('topbar_title', $isPractice ? __('Manajemen Latihan') : __('Manajemen Quiz'))
 
 <x-app-layout>
 <div class="max-w-5xl mx-auto space-y-6">
@@ -6,7 +6,7 @@
     {{-- Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-            <h1 class="text-xl font-bold text-slate-800">{{ __('Manajemen') }} {{ $isPractice ? __('Latihan') : __('Quiz') }}</h1>
+            <h1 class="text-xl font-bold text-slate-800">{{ $isPractice ? __('Manajemen Latihan') : __('Manajemen Quiz') }}</h1>
             <p class="text-sm text-slate-500 mt-0.5">
                 {{ __('Course:') }} <span class="font-semibold text-blue-600">{{ $course->title }}</span> &mdash;
                 {{ $quizzes->count() }} {{ $isPractice ? __('latihan') : __('quiz') }}
@@ -17,19 +17,19 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
-            {{ __('Buat') }} {{ $isPractice ? __('Latihan') : __('Quiz') }} {{ __('Baru') }}
+            {{ $isPractice ? __('Buat Latihan Baru') : __('Buat Quiz Baru') }}
         </a>
     </div>
 
     @if(session('success'))
         <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-base px-4 py-3 rounded-xl">
-            {{ session('success') }}
+            {{ __(session('success')) }}
         </div>
     @endif
 
     @if(session('error'))
         <div class="bg-rose-50 border border-rose-200 text-rose-700 text-base px-4 py-3 rounded-xl">
-            {{ session('error') }}
+            {{ __(session('error')) }}
         </div>
     @endif
 
