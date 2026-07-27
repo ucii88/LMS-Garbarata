@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="LMS Garbarata - Portal Belajar Mandiri Terintegrasi Suku Cadang, Sistem Mekanikal & Elektrikal Passenger Boarding Bridge.">
-        <title>LMS Garbarata - Portal Belajar Mandiri Terintegrasi</title>
+        <meta name="description" content="{{ __('LMS Garbarata - Portal Belajar Mandiri Terintegrasi Suku Cadang, Sistem Mekanikal & Elektrikal Passenger Boarding Bridge.') }}">
+        <title>{{ __('LMS Garbarata - Portal Belajar Mandiri Terintegrasi') }}</title>
 
         <!-- Google Fonts: Outfit & Inter -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,11 +67,16 @@
 
             <!-- Auth Buttons -->
             <nav class="flex items-center gap-4">
+                <div class="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-1 py-1 text-xs font-bold shadow-sm">
+                    <span class="px-1 text-[10px] text-slate-400">{{ __('Selected Language') }}</span>
+                    <a href="{{ route('lang.switch', 'id') }}" class="rounded px-2 py-1 {{ app()->getLocale() === 'id' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:bg-slate-100' }}">ID</a>
+                    <a href="{{ route('lang.switch', 'en') }}" class="rounded px-2 py-1 {{ app()->getLocale() === 'en' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:bg-slate-100' }}">EN</a>
+                </div>
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ route('dashboard') }}" 
                            class="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 transition-premium flex items-center gap-1.5">
-                            Masuk Dashboard
+                            {{ __('Masuk Dashboard') }}
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
@@ -79,12 +84,12 @@
                     @else
                         <a href="{{ route('login') }}" 
                            class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-premium">
-                            Log in
+                            {{ __('Log in') }}
                         </a>
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}" 
                                class="px-4.5 py-2 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium bg-white shadow-sm transition-premium">
-                                Register
+                                {{ __('Register') }}
                             </a>
                         @endif
                     @endauth
@@ -100,16 +105,20 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
-                Interactive Training Portal
+                {{ __('Interactive Training Portal') }}
             </div>
             
             <h1 class="font-outfit text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-slate-900 max-w-3xl">
-                Kuasai Kompetensi <br>
-                <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent">Garbarata</span> Interaktif
+                @if (app()->getLocale() === 'en')
+                    {{ __('Master Interactive Boarding Bridge Operations') }}
+                @else
+                    {{ __('Kuasai Kompetensi') }} <br>
+                    <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent">Garbarata</span> {{ __('Interaktif') }}
+                @endif
             </h1>
             
             <p class="text-base sm:text-base text-slate-600 leading-relaxed max-w-2xl">
-                Portal belajar mandiri terlengkap mengenai sistem mekanikal, elektrikal, perakitan Rotunda & Cabin, serta standardisasi suku cadang Passenger Boarding Bridge (PBB).
+                {{ __('Portal belajar mandiri terlengkap mengenai sistem mekanikal, elektrikal, perakitan Rotunda & Cabin, serta standardisasi suku cadang Passenger Boarding Bridge (PBB).') }}
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-2 w-full sm:w-auto">
@@ -117,7 +126,7 @@
                     <a href="{{ route('dashboard') }}"
                        style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:linear-gradient(to right,#2563eb,#4f46e5);color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.2);transition:opacity 0.3s;"
                        onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                        Mulai Belajar Sekarang
+                        {{ __('Mulai Belajar Sekarang') }}
                         <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
@@ -126,7 +135,7 @@
                     <a href="{{ route('login') }}"
                        style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:linear-gradient(to right,#2563eb,#4f46e5);color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.2);transition:opacity 0.3s;"
                        onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                        Masuk &amp; Mulai Belajar
+                        {{ __('Masuk & Mulai Belajar') }}
                         <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
@@ -135,23 +144,23 @@
                 <a href="#features"
                    style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;border:1px solid #e2e8f0;background:#fff;color:#475569;font-size:1rem;font-weight:500;text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,0.06);transition:border-color 0.3s, color 0.3s;"
                    onmouseover="this.style.borderColor='#94a3b8';this.style.color='#1e293b';" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#475569';">
-                    Tinjau Fitur
+                    {{ __('Tinjau Fitur') }}
                 </a>
             </div>
 
             <!-- Stats counter -->
             <div class="grid grid-cols-3 gap-8 px-8 py-4 border border-slate-200/80 bg-white/60 backdrop-blur-md rounded-2xl mt-4 w-full max-w-lg mx-auto shadow-sm">
                 <div>
-                    <span class="block text-2xl font-bold text-slate-900 font-outfit">7 Bab</span>
-                    <span class="text-[10px] uppercase tracking-wider text-slate-500">Materi Silabus</span>
+                    <span class="block text-2xl font-bold text-slate-900 font-outfit">7 {{ __('Bab') }}</span>
+                    <span class="text-[10px] uppercase tracking-wider text-slate-500">{{ __('Materi Silabus') }}</span>
                 </div>
                 <div class="border-x border-slate-200">
                     <span class="block text-2xl font-bold text-slate-900 font-outfit">50+</span>
-                    <span class="text-[10px] uppercase tracking-wider text-slate-500">Soal Latihan</span>
+                    <span class="text-[10px] uppercase tracking-wider text-slate-500">{{ __('Soal Latihan') }}</span>
                 </div>
                 <div>
-                    <span class="block text-2xl font-bold text-slate-900 font-outfit">Lulus</span>
-                    <span class="text-[10px] uppercase tracking-wider text-slate-500">Sertifikasi</span>
+                    <span class="block text-2xl font-bold text-slate-900 font-outfit">{{ __('Lulus') }}</span>
+                    <span class="text-[10px] uppercase tracking-wider text-slate-500">{{ __('Sertifikasi') }}</span>
                 </div>
             </div>
         </main>
@@ -159,8 +168,8 @@
         <!-- Features Highlights Section -->
         <section id="features" class="w-full max-w-7xl mx-auto px-6 py-20 relative z-10 border-t border-slate-200">
             <div class="text-center max-w-2xl mx-auto mb-16">
-                <h2 class="font-outfit text-3xl font-bold text-slate-900 mb-4">Fitur Utama Pembelajaran</h2>
-                <p class="text-base text-slate-500">Dirancang secara khusus dengan fitur pendukung lengkap guna menjamin akselerasi pemahaman kompetensi operasional & pemeliharaan.</p>
+                <h2 class="font-outfit text-3xl font-bold text-slate-900 mb-4">{{ __('Fitur Utama Pembelajaran') }}</h2>
+                <p class="text-base text-slate-500">{{ __('Dirancang secara khusus dengan fitur pendukung lengkap guna menjamin akselerasi pemahaman kompetensi operasional & pemeliharaan.') }}</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -171,9 +180,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
                     </div>
-                    <h3 class="font-outfit text-lg font-bold text-slate-900">7 Bab Silabus Terstruktur</h3>
+                    <h3 class="font-outfit text-lg font-bold text-slate-900">{{ __('7 Bab Silabus Terstruktur') }}</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        Kurikulum lengkap dari dasar pengenalan struktur Rotunda Assembly, Cabin, hingga langkah pemecahan masalah (Troubleshooting) operasional di lapangan.
+                        {{ __('Kurikulum lengkap dari dasar pengenalan struktur Rotunda Assembly, Cabin, hingga langkah pemecahan masalah (Troubleshooting) operasional di lapangan.') }}
                     </p>
                 </div>
 
@@ -184,9 +193,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>
                     </div>
-                    <h3 class="font-outfit text-lg font-bold text-slate-900">Bank Soal & Kuis Mandiri</h3>
+                    <h3 class="font-outfit text-lg font-bold text-slate-900">{{ __('Bank Soal & Kuis Mandiri') }}</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        Evaluasi komprehensif dengan berbagai tipe soal ujian interaktif seperti pilihan ganda, benar/salah, menjodohkan bagian drawing, dan esai deskriptif.
+                        {{ __('Evaluasi komprehensif dengan berbagai tipe soal ujian interaktif seperti pilihan ganda, benar/salah, menjodohkan bagian drawing, dan esai deskriptif.') }}
                     </p>
                 </div>
 
@@ -197,9 +206,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                         </svg>
                     </div>
-                    <h3 class="font-outfit text-lg font-bold text-slate-900">Sertifikat Kompetensi Digital</h3>
+                    <h3 class="font-outfit text-lg font-bold text-slate-900">{{ __('Sertifikat Kompetensi Digital') }}</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">
-                        Bukti pencapaian akademik terverifikasi. Selesaikan seluruh materi modul dan lulus kuis penilaian akhir untuk mengklaim sertifikat kompetensi Anda.
+                        {{ __('Bukti pencapaian akademik terverifikasi. Selesaikan seluruh materi modul dan lulus kuis penilaian akhir untuk mengklaim sertifikat kompetensi Anda.') }}
                     </p>
                 </div>
             </div>
@@ -207,8 +216,8 @@
 
         <!-- Footer -->
         <footer class="w-full max-w-7xl mx-auto px-6 py-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10 mt-auto text-slate-400 text-sm">
-            <p>&copy; {{ date('Y') }} LMS Garbarata. Hak Cipta Dilindungi.</p>
-            <p>Dirancang untuk Pembelajaran Mandiri Terintegrasi.</p>
+            <p>&copy; {{ date('Y') }} LMS Garbarata. {{ __('Hak Cipta Dilindungi.') }}</p>
+            <p>{{ __('Dirancang untuk Pembelajaran Mandiri Terintegrasi.') }}</p>
         </footer>
     </body>
 </html>

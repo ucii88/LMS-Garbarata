@@ -1,8 +1,8 @@
 <x-guest-layout>
     <!-- Welcome Header Inside Form -->
     <div class="text-center mb-2">
-        <h2 class="font-outfit text-2xl font-bold text-slate-900 tracking-tight">Selamat Datang</h2>
-        <p class="text-sm text-slate-500">Masukkan email & kata sandi untuk masuk ke kelas LMS</p>
+        <h2 class="font-outfit text-2xl font-bold text-slate-900 tracking-tight">{{ __('Selamat Datang') }}</h2>
+        <p class="text-sm text-slate-500">{{ __('Masukkan email & kata sandi untuk masuk ke kelas LMS') }}</p>
     </div>
 
     <!-- Session Status -->
@@ -13,7 +13,7 @@
 
         <!-- Email Address -->
         <div>
-            <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">Alamat Email</label>
+            <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">{{ __('Alamat Email') }}</label>
             <div class="relative">
                 <input id="email" 
                        class="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-base text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" 
@@ -33,11 +33,11 @@
         <!-- Password -->
         <div>
             <div class="flex items-center justify-between mb-1.5">
-                <label for="password" class="block text-sm font-semibold text-slate-700">Kata Sandi</label>
+                <label for="password" class="block text-sm font-semibold text-slate-700">{{ __('Kata Sandi') }}</label>
                 @if (Route::has('password.request'))
                     <a class="text-[11px] text-blue-600 hover:text-blue-500 transition duration-200 font-medium" 
                        href="{{ route('password.request') }}">
-                        Lupa sandi?
+                        {{ __('Lupa sandi?') }}
                     </a>
                 @endif
             </div>
@@ -62,7 +62,7 @@
                        type="checkbox" 
                        class="rounded border-slate-300 bg-white text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" 
                        name="remember">
-                <span class="ms-2.5 text-sm text-slate-500 hover:text-slate-700 transition duration-200">Ingat saya di perangkat ini</span>
+                <span class="ms-2.5 text-sm text-slate-500 hover:text-slate-700 transition duration-200">{{ __('Ingat saya di perangkat ini') }}</span>
             </label>
         </div>
 
@@ -71,7 +71,7 @@
             <button type="submit"
                     style="background: linear-gradient(to right, #2563eb, #4f46e5); color: #fff; width: 100%; padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(37,99,235,0.25); transition: box-shadow 0.3s, opacity 0.3s;"
                     onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                <span>Masuk Sekarang</span>
+                <span>{{ __('Masuk Sekarang') }}</span>
                 <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
@@ -81,8 +81,8 @@
         <!-- Registration Route Link -->
         @if (Route::has('register'))
             <p class="text-sm text-slate-500 text-center mt-3">
-                Belum terdaftar? 
-                <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-500 font-semibold transition duration-200">Buat akun baru</a>
+                {{ __('Belum terdaftar?') }} 
+                <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-500 font-semibold transition duration-200">{{ __('Buat akun baru') }}</a>
             </p>
         @endif
     </form>
