@@ -48,17 +48,17 @@
                     <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 text-rose-600 font-bold mb-3">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     </div>
-                    <h3 class="text-base font-bold text-slate-800">{{ __('Yakin ingin keluar?') }}</h3>
-                    <p class="text-sm text-slate-500 mt-1">{{ __('Anda akan keluar dari sesi masuk LMS-Garbarata saat ini.') }}</p>
+                    <h3 class="text-base font-bold text-slate-800">{{ __('Are you sure you want to log out?') }}</h3>
+                    <p class="text-sm text-slate-500 mt-1">{{ __('You will be signed out of your current LMS-Garbarata session.') }}</p>
                 </div>
                 <div class="flex gap-3">
                     <button type="button" onclick="closeLogoutModal()"
                             class="flex-1 py-2.5 text-sm font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition">
-                        {{ __('Batal') }}
+                        {{ __('Cancel') }}
                     </button>
                     <button type="button" onclick="submitLogoutForm()"
                             class="flex-1 py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition">
-                        {{ __('Ya, Keluar') }}
+                        {{ __('Yes, Log Out') }}
                     </button>
                 </div>
             </div>

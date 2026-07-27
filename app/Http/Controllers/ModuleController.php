@@ -53,7 +53,7 @@ class ModuleController extends Controller
 
         return redirect()
             ->route('courses.chapters.show', [$course->id, $chapter->id])
-            ->with('success', 'Modul berhasil ditambahkan.');
+            ->with('success', __('Modul berhasil ditambahkan.'));
     }
 
     /**
@@ -105,7 +105,7 @@ class ModuleController extends Controller
 
         return redirect()
             ->route('courses.chapters.show', [$course->id, $chapter->id])
-            ->with('success', 'Modul berhasil diperbarui.');
+            ->with('success', __('Modul berhasil diperbarui.'));
     }
 
     /**
@@ -122,6 +122,6 @@ class ModuleController extends Controller
 
         return redirect()
             ->route('courses.chapters.show', [$course->id, $chapter->id])
-            ->with('success', 'Modul berhasil dihapus.');
+            ->with('success', __('Modul berhasil dihapus.'));
     }
 }

@@ -577,15 +577,15 @@
 
                     <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative z-10 inline-block w-full max-w-md align-middle overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-2xl transition-all">
                         <div class="border-b border-slate-100 px-6 py-5">
-                            <h3 class="text-base font-bold text-slate-900" id="modal-title">Tambah Pengguna Baru</h3>
-                            <p class="text-[10px] text-slate-400 mt-1">Buat akun admin, instruktur, atau peserta baru.</p>
+                            <h3 class="text-base font-bold text-slate-900" id="modal-title">{{ __('Tambah Pengguna Baru') }}</h3>
+                            <p class="text-[10px] text-slate-400 mt-1">{{ __('Buat akun admin, instruktur, atau peserta baru.') }}</p>
                         </div>
 
                         <form id="addUserForm" action="{{ route('admin.users.store') }}" method="POST" class="space-y-4 px-6 py-5 text-sm text-slate-700">
                             @csrf
 
                             <div class="space-y-1">
-                                <label for="name" class="block font-bold text-slate-700">Nama Lengkap <span class="font-medium text-slate-400">(opsional)</span></label>
+                                <label for="name" class="block font-bold text-slate-700">{{ __('Nama Lengkap') }} <span class="font-medium text-slate-400">{{ __('(opsional)') }}</span></label>
                                 <input type="text" name="name" id="name" value="{{ old('name') }}" class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 @error('name')
                                     <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
@@ -593,7 +593,7 @@
                             </div>
 
                             <div class="space-y-1">
-                                <label for="email" class="block font-bold text-slate-700">Alamat Email</label>
+                                <label for="email" class="block font-bold text-slate-700">{{ __('Alamat Email') }}</label>
                                 <input type="email" name="email" id="email" value="{{ old('email') }}" required class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 @error('email')
                                     <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
@@ -601,7 +601,7 @@
                             </div>
 
                             <div class="space-y-1">
-                                <label for="password" class="block font-bold text-slate-700">Password</label>
+                                <label for="password" class="block font-bold text-slate-700">{{ __('Password') }}</label>
                                 <input type="password" name="password" id="password" required class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 @error('password')
                                     <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
@@ -609,11 +609,11 @@
                             </div>
 
                             <div class="space-y-1">
-                                <label for="role" class="block font-bold text-slate-700">Peran</label>
+                                <label for="role" class="block font-bold text-slate-700">{{ __('Peran') }}</label>
                                 <select name="role" id="role" required class="block w-full rounded-lg border-slate-200 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="peserta" @selected(old('role') === 'peserta')>Peserta</option>
-                                    <option value="instruktur" @selected(old('role') === 'instruktur')>Instruktur</option>
-                                    <option value="admin" @selected(old('role') === 'admin')>Admin</option>
+                                    <option value="peserta" @selected(old('role') === 'peserta')>{{ __('Peserta') }}</option>
+                                    <option value="instruktur" @selected(old('role') === 'instruktur')>{{ __('Instruktur') }}</option>
+                                    <option value="admin" @selected(old('role') === 'admin')>{{ __('Admin') }}</option>
                                 </select>
                                 @error('role')
                                     <p class="text-[10px] font-semibold text-rose-600">{{ $message }}</p>
@@ -623,10 +623,10 @@
 
                         <div class="flex flex-col-reverse gap-2 border-t border-slate-100 bg-slate-50 px-6 py-4 sm:flex-row sm:justify-end text-sm">
                             <button type="button" @click="showModal = false" class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 font-bold text-slate-700 transition hover:bg-slate-50">
-                                Batal
+                                {{ __('Batal') }}
                             </button>
                             <button type="submit" form="addUserForm" class="inline-flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 font-bold text-white transition shadow-sm">
-                                Simpan
+                                {{ __('Simpan Pengguna') }}
                             </button>
                         </div>
                     </div>
@@ -686,3 +686,5 @@
         </div>
     </div>
 </x-app-layout>
+
+

@@ -1,4 +1,4 @@
-@section('topbar_title', 'Hasil ' . ($isPractice ? 'Latihan' : 'Kuis') . ' Peserta — ' . $quiz->title)
+@section('topbar_title', __('Hasil') . ' ' . ($isPractice ? __('Latihan') : __('Kuis')) . ' ' . __('Peserta') . ' — ' . $quiz->title)
 <x-app-layout>
 <div class="max-w-6xl mx-auto space-y-6">
 
@@ -7,19 +7,19 @@
         <div>
             <a href="{{ route($isPractice ? 'practices.index' : 'quizzes.index', $course) }}"
                class="inline-flex text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
-                ← Kembali ke Manajemen {{ $isPractice ? 'Latihan' : 'Quiz' }}
+                &larr; {{ __('Kembali ke Manajemen') }} {{ $isPractice ? __('Latihan') : __('Quiz') }}
             </a>
-            <h1 class="text-xl font-bold text-slate-800">Hasil {{ $isPractice ? 'Latihan' : 'Kuis' }} Peserta</h1>
+            <h1 class="text-xl font-bold text-slate-800">{{ __('Hasil') }} {{ $isPractice ? __('Latihan') : __('Kuis') }} {{ __('Peserta') }}</h1>
             <p class="text-sm text-slate-500 mt-1">
-                {{ $isPractice ? 'Latihan' : 'Quiz' }}: <span class="font-semibold text-blue-600">{{ $quiz->title }}</span>
-                @unless($isPractice) · Nilai lulus: {{ $quiz->passing_score }}% @endunless
+                {{ $isPractice ? __('Latihan') : __('Quiz') }}: <span class="font-semibold text-blue-600">{{ $quiz->title }}</span>
+                @unless($isPractice) · {{ __('Nilai lulus:') }} {{ $quiz->passing_score }}% @endunless
             </p>
         </div>
         <div class="flex items-center gap-2">
             @if(!$isPractice && $attempts->isNotEmpty())
                 <a href="{{ route('quizzes.attempts.export', [$course, $quiz]) }}"
                    class="px-4 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition">
-                    Ekspor Rekap Nilai (CSV)
+                    {{ __('Ekspor Rekap Nilai (CSV)') }}
                 </a>
             @endif
         </div>
@@ -39,8 +39,8 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
             </div>
             <div class="flex-1">
-                <p class="text-base font-bold text-orange-800">{{ $pendingEssayCount }} percobaan menunggu penilaian esai</p>
-                <p class="text-sm text-orange-700 mt-0.5">Klik tombol "Nilai Jawaban" di bawah untuk mulai menilai jawaban peserta.</p>
+                <p class="text-base font-bold text-orange-800">{{ $pendingEssayCount }} {{ __('percobaan menunggu penilaian esai') }}</p>
+                <p class="text-sm text-orange-700 mt-0.5">{{ __('Klik tombol "Nilai Jawaban" di bawah untuk mulai menilai jawaban peserta.') }}</p>
             </div>
         </div>
     @endif
@@ -51,12 +51,12 @@
             <table class="w-full text-left text-base">
                 <thead>
                     <tr class="bg-slate-50 border-b text-slate-400 text-sm uppercase">
-                        <th class="px-6 py-4">Peserta</th>
-                        <th class="px-6 py-4 text-center">Percobaan</th>
-                        <th class="px-6 py-4">Waktu Pengerjaan</th>
-                        <th class="px-6 py-4 text-center">Skor / Nilai</th>
-                        <th class="px-6 py-4 text-center">Status</th>
-                        <th class="px-6 py-4 text-center">Aksi</th>
+                        <th class="px-6 py-4">{{ __('Peserta') }}</th>
+                        <th class="px-6 py-4 text-center">{{ __('Percobaan') }}</th>
+                        <th class="px-6 py-4">{{ __('Waktu Pengerjaan') }}</th>
+                        <th class="px-6 py-4 text-center">{{ __('Skor / Nilai') }}</th>
+                        <th class="px-6 py-4 text-center">{{ __('Status') }}</th>
+                        <th class="px-6 py-4 text-center">{{ __('Aksi') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -73,12 +73,12 @@
 
                         {{-- Waktu --}}
                         <td class="px-6 py-4 text-sm text-slate-600">
-                            Mulai: {{ $attempt->started_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}
+                            {{ __('Mulai:') }} {{ $attempt->started_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}
                             @if($attempt->submitted_at)
-                                <br>Selesai: {{ $attempt->submitted_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}
-                                <br><span class="text-slate-400">Durasi: {{ $attempt->getDurationLabel() }}</span>
+                                <br>{{ __('Selesai:') }} {{ $attempt->submitted_at->timezone('Asia/Jakarta')->format('d M Y H:i') }}
+                                <br><span class="text-slate-400">{{ __('Durasi:') }} {{ $attempt->getDurationLabel() }}</span>
                             @else
-                                <br><span class="text-amber-600 font-semibold">Sedang dikerjakan</span>
+                                <br><span class="text-amber-600 font-semibold">{{ __('Sedang dikerjakan') }}</span>
                             @endif
                         </td>
 
@@ -87,7 +87,7 @@
                             @if(!$attempt->submitted_at)
                                 -
                             @elseif($attempt->isPendingEssay())
-                                <span class="text-orange-500 text-sm">Menunggu esai</span>
+                                <span class="text-orange-500 text-sm">{{ __('Menunggu esai') }}</span>
                             @else
                                 {{ number_format($attempt->score, 0) }}%
                             @endif
@@ -96,14 +96,14 @@
                         {{-- Status --}}
                         <td class="px-6 py-4 text-center">
                             @if(!$attempt->submitted_at)
-                                <span class="px-2.5 py-1 rounded-full text-sm font-bold bg-amber-50 text-amber-700">BERJALAN</span>
+                                <span class="px-2.5 py-1 rounded-full text-sm font-bold bg-amber-50 text-amber-700">{{ __('BERJALAN') }}</span>
                             @elseif($attempt->isPendingEssay())
-                                <span class="px-2.5 py-1 rounded-full text-sm font-bold bg-orange-100 text-orange-700">MENUNGGU PENILAIAN</span>
+                                <span class="px-2.5 py-1 rounded-full text-sm font-bold bg-orange-100 text-orange-700">{{ __('MENUNGGU PENILAIAN') }}</span>
                             @elseif($isPractice)
-                                <span class="px-2.5 py-1 rounded-full text-sm font-bold bg-violet-50 text-violet-700">SELESAI</span>
+                                <span class="px-2.5 py-1 rounded-full text-sm font-bold bg-violet-50 text-violet-700">{{ __('SELESAI') }}</span>
                             @else
                                 <span class="px-2.5 py-1 rounded-full text-sm font-bold {{ $attempt->is_passed ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600' }}">
-                                    {{ $attempt->is_passed ? 'LULUS' : 'GAGAL' }}
+                                    {{ $attempt->is_passed ? __('LULUS') : __('GAGAL') }}
                                 </span>
                             @endif
                         </td>
@@ -115,21 +115,21 @@
                                 @if($attempt->submitted_at && $attempt->isPendingEssay())
                                     <a href="{{ route($isPractice ? 'practices.attempts.grade' : 'quizzes.attempts.grade', [$course, $quiz, $attempt]) }}"
                                        class="px-3 py-1.5 bg-orange-500 text-white text-sm font-bold rounded-lg hover:bg-orange-600 transition inline-flex items-center gap-1">
-                                         Nilai Jawaban
+                                         {{ __('Nilai Jawaban') }}
                                     </a>
                                 @elseif($attempt->submitted_at)
                                     <a href="{{ route($isPractice ? 'practices.attempts.grade' : 'quizzes.attempts.grade', [$course, $quiz, $attempt]) }}"
                                        class="px-3 py-1.5 bg-slate-100 text-slate-600 text-sm font-bold rounded-lg hover:bg-slate-200 transition inline-flex items-center gap-1">
-                                         Lihat Jawaban
+                                         {{ __('Lihat Jawaban') }}
                                     </a>
                                 @endif
 
                                 {{-- Reset --}}
                                 <form action="{{ route($isPractice ? 'practices.attempts.destroy' : 'quizzes.attempts.destroy', [$course, $quiz, $attempt]) }}"
-                                      method="POST" data-confirm="Apakah Anda yakin ingin mereset percobaan ini? Nilai & jawaban akan dihapus.">
+                                      method="POST" data-confirm="{{ __('Apakah Anda yakin ingin mereset percobaan ini? Nilai & jawaban akan dihapus.') }}">
                                     @csrf @method('DELETE')
                                     <button class="px-3 py-1.5 bg-red-50 text-red-600 text-sm font-bold rounded-lg border border-red-200 hover:bg-red-100 transition">
-                                        Reset
+                                        {{ __('Reset') }}
                                     </button>
                                 </form>
                             </div>
@@ -138,7 +138,7 @@
                     @empty
                     <tr>
                         <td colspan="6" class="px-6 py-12 text-center text-slate-400">
-                            Belum ada peserta yang mengerjakan {{ $isPractice ? 'latihan' : 'kuis' }} ini.
+                            {{ __('Belum ada peserta yang mengerjakan') }} {{ $isPractice ? __('latihan') : __('kuis') }} {{ __('ini.') }}
                         </td>
                     </tr>
                     @endforelse

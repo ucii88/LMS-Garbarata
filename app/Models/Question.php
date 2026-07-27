@@ -73,12 +73,14 @@ class Question extends Model
      */
     public function getTypeLabelAttribute(): string
     {
+        $isEnglish = app()->getLocale() === 'en';
+
         return match($this->type) {
-            'multiple_choice' => 'Pilihan Ganda',
-            'true_false'      => 'Benar / Salah',
-            'essay'           => 'Esai',
-            'matching'        => 'Menjodohkan',
-            'ordering'        => 'Urutan Langkah',
+            'multiple_choice' => $isEnglish ? 'Multiple Choice' : 'Pilihan Ganda',
+            'true_false'      => $isEnglish ? 'True / False' : 'Benar / Salah',
+            'essay'           => $isEnglish ? 'Essay' : 'Esai',
+            'matching'        => $isEnglish ? 'Matching' : 'Menjodohkan',
+            'ordering'        => $isEnglish ? 'Step Ordering' : 'Urutan Langkah',
             default           => $this->type,
         };
     }

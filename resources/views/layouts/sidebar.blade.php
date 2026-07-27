@@ -208,7 +208,7 @@
 
         <!-- Language Switcher -->
         <div class="flex items-center justify-between px-3 py-2 text-xs border border-gray-100 rounded-lg bg-gray-50 mb-2">
-            <span class="text-gray-500 font-semibold">{{ __('Pilih Bahasa') }}</span>
+            <span class="text-gray-500 font-semibold">{{ __('Selected Language') }}</span>
             <div class="flex space-x-1.5">
                 <a href="{{ route('lang.switch', 'id') }}" class="px-2 py-0.5 rounded font-bold transition {{ App::getLocale() === 'id' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">ID</a>
                 <a href="{{ route('lang.switch', 'en') }}" class="px-2 py-0.5 rounded font-bold transition {{ App::getLocale() === 'en' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">EN</a>

@@ -1,4 +1,4 @@
-@section('topbar_title', 'Bank Soal — ' . $chapter->title)
+@section('topbar_title', __('Bank Soal') . ' — ' . $chapter->title)
 
 <x-app-layout>
 <div class="max-w-7xl mx-auto space-y-6">
@@ -8,12 +8,12 @@
         <div>
             <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}"
                class="inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
-                ← Kembali ke Chapter
+                {{ __('← Kembali ke Chapter') }}
             </a>
-            <h1 class="text-xl font-bold text-slate-800">Bank Soal</h1>
+            <h1 class="text-xl font-bold text-slate-800">{{ __('Bank Soal') }}</h1>
             <p class="text-sm text-slate-500 mt-0.5">
                 <span class="font-semibold text-blue-600">{{ $chapter->title }}</span> —
-                {{ $questions->count() }} soal tersedia
+                {{ $questions->count() }} {{ __('soal tersedia') }}
             </p>
         </div>
         <button onclick="openAddModal()"
@@ -21,7 +21,7 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
-            Tambah Soal
+            {{ __('Tambah Soal') }}
         </button>
     </div>
 
@@ -38,8 +38,8 @@
             <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
-            <h3 class="font-semibold text-slate-700">Belum ada soal</h3>
-            <p class="text-base text-slate-500 mt-1">Klik "Tambah Soal" untuk mulai mengisi bank soal chapter ini.</p>
+            <h3 class="font-semibold text-slate-700">{{ __('Belum ada soal') }}</h3>
+            <p class="text-base text-slate-500 mt-1">{{ __('Klik "Tambah Soal" untuk mulai mengisi bank soal chapter ini.') }}</p>
         </div>
     @else
         <div class="space-y-3">
@@ -61,19 +61,19 @@
                                 @endswitch">
                                 {{ $question->type_label }}
                             </span>
-                            <span class="text-sm text-slate-400">{{ $question->points }} poin</span>
+                            <span class="text-sm text-slate-400">{{ $question->points }} {{ __('poin') }}</span>
                             @if($question->topic_tag)
                                 <span class="text-sm px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full">
-                                    {{ $question->topic_tag }}
+                                    {{ __($question->topic_tag) }}
                                 </span>
                             @endif
                         </div>
                         <p class="text-base text-slate-800 font-medium leading-relaxed">
-                            {!! nl2br(e($question->question_text)) !!}
+                            {!! nl2br(e($question->getTranslation('question_text', app()->getLocale()))) !!}
                         </p>
                         @if($question->question_image)
                             <img src="{{ Storage::url($question->question_image) }}"
-                                 class="mt-2 max-h-32 rounded-lg border border-slate-200" alt="Gambar soal">
+                                 class="mt-2 max-h-32 rounded-lg border border-slate-200" alt="{{ __('Gambar soal') }}">
                         @endif
 
                         {{-- Pilihan Jawaban --}}
@@ -84,17 +84,17 @@
                                         {{ $opt->is_correct ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300' }}">
                                         {{ $opt->is_correct ? '✓' : '' }}
                                     </span>
-                                    @if($opt->match_label)
-                                        <span class="font-bold">{{ $opt->match_label }}.</span>
+                                    @if($opt->getTranslation('match_label', app()->getLocale()))
+                                        <span class="font-bold">{{ $opt->getTranslation('match_label', app()->getLocale()) }}.</span>
                                     @endif
-                                    {{ $opt->option_text }}
+                                    {{ $opt->getTranslation('option_text', app()->getLocale()) }}
                                 </div>
                             @endforeach
                         </div>
 
-                        @if($question->explanation)
+                        @if($question->getTranslation('explanation', app()->getLocale()))
                             <div class="mt-3 text-sm bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-blue-700">
-                                <span class="font-semibold">Penjelasan:</span> {{ $question->explanation }}
+                                <span class="font-semibold">{{ __('Penjelasan:') }}</span> {{ $question->getTranslation('explanation', app()->getLocale()) }}
                             </div>
                         @endif
                     </div>
@@ -102,13 +102,13 @@
                     {{-- Actions --}}
                     <div class="flex items-center gap-1 shrink-0">
                         <button onclick="openEditModal({{ $question->id }})"
-                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-sm" title="Edit Soal">
+                                class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition text-sm" title="{{ __('Edit Soal') }}">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
                         <form action="{{ route('questions.destroy', [$course, $chapter, $question]) }}"
-                              method="POST" data-confirm="Apakah Anda yakin ingin menghapus soal ini dari bank soal?">
+                              method="POST" data-confirm="{{ __('Hapus soal ini dari bank soal?') }}">
                             @csrf @method('DELETE')
-                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-sm" title="Hapus Soal">
+                            <button class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-sm" title="{{ __('Hapus Soal') }}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </form>
@@ -125,7 +125,7 @@
 <div id="modal-add-question" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between p-6 border-b border-slate-100">
-            <h2 class="text-base font-bold text-slate-800">Tambah Soal ke Bank Soal</h2>
+            <h2 class="text-base font-bold text-slate-800">{{ __('Tambah Soal ke Bank Soal') }}</h2>
             <button onclick="closeQuestionModal()"
                     class="text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
         </div>
@@ -136,36 +136,53 @@
 
             {{-- Tipe Soal --}}
             <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1">Tipe Soal <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Tipe Soal') }} <span class="text-red-500">*</span></label>
                 <select name="type" id="q-type" onchange="renderOptionsUI(this.value)"
                         class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    <option value="multiple_choice">Pilihan Ganda</option>
-                    <option value="true_false">Benar / Salah</option>
-                    <option value="essay">Esai</option>
-                    <option value="matching">Menjodohkan</option>
-                    <option value="ordering">Urutan Langkah</option>
+                    <option value="multiple_choice">{{ __('Pilihan Ganda') }}</option>
+                    <option value="true_false">{{ __('Benar / Salah') }}</option>
+                    <option value="essay">{{ __('Esai') }}</option>
+                    <option value="matching">{{ __('Menjodohkan') }}</option>
+                    <option value="ordering">{{ __('Urutan Langkah') }}</option>
                 </select>
             </div>
 
             {{-- Pertanyaan --}}
-            <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1">Pertanyaan <span class="text-red-500">*</span></label>
-                <textarea name="question_text" rows="3" required
-                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
-                          placeholder="Tulis pertanyaan di sini..."></textarea>
+            <div class="space-y-3">
+                <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Pertanyaan') }} <span class="text-red-500">*</span></label>
+                <div class="grid gap-3 md:grid-cols-2">
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Indonesia') }}</span>
+                        <textarea name="question_text[id]" rows="3" required
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Tulis pertanyaan di sini...') }}"></textarea>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Inggris') }}</span>
+                        <textarea name="question_text[en]" rows="3"
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Write the question here...') }}"></textarea>
+                    </div>
+                </div>
+                @error('question_text.id')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
+                @error('question_text.en')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Gambar Soal (opsional) --}}
             <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1">Gambar Soal <span class="text-slate-400">(opsional)</span></label>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Gambar Soal') }} <span class="text-slate-400">({{ __('opsional') }})</span></label>
                 <input type="file" name="question_image" accept="image/*"
                        class="w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700">
-                <p class="mt-1 text-[10px] text-slate-400">Ukuran gambar maksimal 5MB.</p>
+                <p class="mt-1 text-[10px] text-slate-400">{{ __('Ukuran gambar maksimal 5MB.') }}</p>
                 <div id="current-image-preview" class="hidden mt-2 p-2 border border-slate-100 rounded-xl bg-slate-50/50 flex items-center justify-between gap-3">
                     <img src="" id="current-image-img" class="max-h-20 max-w-[120px] rounded-lg object-contain border bg-white">
                     <label class="flex items-center gap-1.5 text-sm text-red-600 font-bold cursor-pointer shrink-0 select-none">
                         <input type="checkbox" name="delete_image" value="1" class="w-4 h-4 rounded text-red-600">
-                        Hapus Gambar
+                        {{ __('Hapus Gambar') }}
                     </label>
                 </div>
             </div>
@@ -178,23 +195,40 @@
             {{-- Poin & Tag --}}
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Poin <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Poin') }} <span class="text-red-500">*</span></label>
                     <input type="number" name="points" value="1" min="1"
                            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">Tag Topik <span class="text-slate-400">(opsional)</span></label>
-                    <input type="text" name="topic_tag" placeholder="misal: Hidrolik"
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Tag Topik') }} <span class="text-slate-400">({{ __('opsional') }})</span></label>
+                    <input type="text" name="topic_tag" placeholder="{{ __('misal: Hidrolik') }}"
                            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
 
             {{-- Penjelasan --}}
-            <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1">Penjelasan Jawaban <span class="text-slate-400">(opsional)</span></label>
-                <textarea name="explanation" rows="2"
-                          class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-none"
-                          placeholder="Penjelasan mengapa jawaban ini benar..."></textarea>
+            <div class="space-y-3">
+                <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Penjelasan Jawaban') }} <span class="text-slate-400">({{ __('opsional') }})</span></label>
+                <div class="grid gap-3 md:grid-cols-2">
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Indonesia') }}</span>
+                        <textarea name="explanation[id]" rows="2"
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Penjelasan mengapa jawaban ini benar...') }}"></textarea>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Inggris') }}</span>
+                        <textarea name="explanation[en]" rows="2"
+                                  class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                                  placeholder="{{ __('Explain why this answer is correct...') }}"></textarea>
+                    </div>
+                </div>
+                @error('explanation.id')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
+                @error('explanation.en')
+                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             @if($errors->any())
@@ -206,11 +240,11 @@
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="closeQuestionModal()"
                         class="px-4 py-2 text-base font-semibold text-slate-600 hover:text-slate-800 transition">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <button type="submit"
                         class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-xl transition">
-                    Simpan Soal
+                    {{ __('Simpan Soal') }}
                 </button>
             </div>
         </form>
@@ -229,14 +263,38 @@ function closeQuestionModal() {
     document.getElementById('modal-add-question').classList.add('hidden');
 }
 
-// Render UI pilihan jawaban berdasarkan tipe soal
+// Pass translated strings from PHP to JS
+const _t = {
+    answerOptions: '{{ __('Pilihan Jawaban') }} *',
+    correct: '{{ __('Benar') }}',
+    delete: '{{ __('Hapus') }}',
+    optionPlaceholder: '{{ __('Opsi') }}',
+    stepPlaceholder: '{{ __('Langkah ke-') }}',
+    leftItem: '{{ __('Item kiri (soal)') }}',
+    rightItem: '{{ __('Item kanan (pasangan)') }}',
+    addOption: '+ {{ __('Tambah opsi') }}',
+    minOption: '{{ __('Minimal harus ada 1 opsi jawaban.') }}',
+    essayTitle: '{{ __('Soal Esai — Dinilai Manual') }}',
+    essayDesc: '{{ __('Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.') }}',
+    trueFalseTrue: '{{ __('Benar') }}',
+    trueFalseFalse: '{{ __('Salah') }}',
+    trueFalseTrueId: 'Benar',
+    trueFalseTrueEn: 'Correct',
+    trueFalseFalseId: 'Salah',
+    trueFalseFalseEn: 'False',
+    trueFalseHint: '{{ __('Pilih mana yang merupakan jawaban benar.') }}',
+    addModalTitle: '{{ __('Tambah Soal ke Bank Soal') }}',
+    editModalTitle: '{{ __('Edit Soal') }}',
+    imageTooBig: '{{ __('File gambar terlalu besar! Maksimal ukuran file adalah 5MB.') }}',
+};
+
 function renderOptionsUI(type) {
     const container = document.getElementById('options-container');
     container.innerHTML = '';
 
     const label = document.createElement('label');
     label.className = 'block text-sm font-semibold text-slate-700 mb-2';
-    label.textContent = 'Pilihan Jawaban *';
+    label.textContent = _t.answerOptions;
     container.appendChild(label);
 
     if (type === 'multiple_choice') {
@@ -255,6 +313,34 @@ function renderOptionsUI(type) {
     }
 }
 
+function localeInputName(base, locale) {
+    return `${base}[${locale}]`;
+}
+
+function localeValue(value, locale) {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    return value[locale] ?? value.id ?? value.en ?? '';
+}
+
+function setLocalizedField(form, base, value) {
+    ['id', 'en'].forEach(locale => {
+        const field = form.querySelector(`[name="${base}[${locale}]"]`);
+        if (field) {
+            field.value = localeValue(value, locale);
+        }
+    });
+}
+
+function setLocalizedRowValues(row, field, value) {
+    ['id', 'en'].forEach(locale => {
+        const input = row.querySelector(`[data-field="${field}"][data-locale="${locale}"]`);
+        if (input) {
+            input.value = localeValue(value, locale);
+        }
+    });
+}
+
 function buildMCOptions(count) {
     const wrap = document.createElement('div');
     wrap.id = 'mc-options';
@@ -268,49 +354,59 @@ function buildMCOptions(count) {
 
 function mcOptionRow(i, label) {
     const row = document.createElement('div');
-    row.className = 'flex items-center gap-2';
+    row.className = 'flex flex-col gap-2 rounded-xl border border-slate-100 p-3 md:flex-row md:items-start md:gap-3';
     row.innerHTML = `
-        <span class="opt-label text-sm font-bold text-slate-500 w-5">${label}.</span>
-        <input type="text" name="options[${i}][text]" placeholder="Opsi ${label}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <label class="flex items-center gap-1 text-sm text-emerald-600 font-semibold cursor-pointer shrink-0">
-            <input type="radio" name="correct_mc" value="${i}">
-            Benar
-        </label>
-        <input type="hidden" name="options[${i}][is_correct]" value="0">
-        <button type="button" onclick="removeOptionRow(this, 'multiple_choice')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
-            Hapus
-        </button>
+        <div class="flex items-center gap-2 shrink-0">
+            <span class="opt-label text-sm font-bold text-slate-500 w-5">${label}.</span>
+            <label class="flex items-center gap-1 text-sm text-emerald-600 font-semibold cursor-pointer shrink-0">
+                <input type="radio" name="correct_mc" value="${i}">
+                ${_t.correct}
+            </label>
+        </div>
+        <div class="grid gap-2 flex-1 md:grid-cols-2">
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.optionPlaceholder} ${label} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.optionPlaceholder} ${label} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <input type="hidden" name="options[${i}][is_correct]" data-field="is_correct" value="0">
+        <div class="flex justify-end">
+            <button type="button" onclick="removeOptionRow(this, 'multiple_choice')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
+                ${_t.delete}
+            </button>
+        </div>
     `;
     // Simpler approach using a radio
     row.querySelector('input[type=radio]').addEventListener('change', function() {
         document.querySelectorAll('.mc-correct').forEach(h => h.value = 0);
         row.querySelector('.mc-correct').value = 1;
     });
-    const hidden = row.querySelector('input[type=hidden]');
+    const hidden = row.querySelector('[data-field="is_correct"]');
     hidden.className = 'mc-correct';
     return row;
 }
 
 function buildTrueFalseOptions() {
     const wrap = document.createElement('div');
-    wrap.className = 'space-y-2';
+    wrap.className = 'space-y-3';
     wrap.innerHTML = `
-        <div class="flex items-center gap-4">
-            <label class="flex items-center gap-2 text-base cursor-pointer">
+        <div class="grid gap-3 md:grid-cols-2">
+            <label class="flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-base cursor-pointer">
                 <input type="radio" name="correct_tf" value="0" checked onchange="setTFCorrect(0)">
-                <input type="hidden" name="options[0][text]" value="Benar">
+                <input type="hidden" name="options[0][text][id]" value="${_t.trueFalseTrueId}">
+                <input type="hidden" name="options[0][text][en]" value="${_t.trueFalseTrueEn}">
                 <input type="hidden" name="options[0][is_correct]" id="tf-correct-0" value="1">
-                <span class="font-semibold text-emerald-600">✓ Benar</span>
+                <span class="font-semibold text-emerald-600">✓ ${_t.trueFalseTrue}</span>
             </label>
-            <label class="flex items-center gap-2 text-base cursor-pointer">
+            <label class="flex items-center gap-2 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-base cursor-pointer">
                 <input type="radio" name="correct_tf" value="1" onchange="setTFCorrect(1)">
-                <input type="hidden" name="options[1][text]" value="Salah">
+                <input type="hidden" name="options[1][text][id]" value="${_t.trueFalseFalseId}">
+                <input type="hidden" name="options[1][text][en]" value="${_t.trueFalseFalseEn}">
                 <input type="hidden" name="options[1][is_correct]" id="tf-correct-1" value="0">
-                <span class="font-semibold text-red-500">✗ Salah</span>
+                <span class="font-semibold text-red-500">✗ ${_t.trueFalseFalse}</span>
             </label>
         </div>
-        <p class="text-sm text-slate-400">Pilih mana yang merupakan jawaban benar.</p>
+        <p class="text-sm text-slate-400">${_t.trueFalseHint}</p>
     `;
     return wrap;
 }
@@ -324,8 +420,12 @@ function buildFillBlankOption() {
     const wrap = document.createElement('div');
     wrap.innerHTML = `
         <input type="hidden" name="options[0][is_correct]" value="1">
-        <input type="text" name="options[0][text]" required placeholder="Ketik jawaban yang benar (case-insensitive)"
-               class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        <div class="grid gap-2 md:grid-cols-2">
+            <input type="text" name="options[0][text][id]" required placeholder="Ketik jawaban yang benar (ID)"
+                   class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[0][text][en]" placeholder="Type the correct answer (EN)"
+                   class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
         <p class="text-sm text-slate-400 mt-1">Jawaban dicocokkan secara case-insensitive.</p>
     `;
     return wrap;
@@ -337,8 +437,8 @@ function buildEssayInfo() {
         <div class="flex items-start gap-3 p-4 bg-orange-50 border border-orange-200 rounded-xl">
             <svg class="w-6 h-6 text-orange-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
             <div>
-                <p class="text-base font-semibold text-orange-800">Soal Esai — Dinilai Manual</p>
-                <p class="text-sm text-orange-700 mt-1">Peserta akan menulis jawaban panjang. Instruktur yang akan memberikan nilai setelah peserta mengumpulkan jawabannya. Tidak perlu mengisi opsi jawaban.</p>
+                <p class="text-base font-semibold text-orange-800">${_t.essayTitle}</p>
+                <p class="text-sm text-orange-700 mt-1">${_t.essayDesc}</p>
             </div>
         </div>
     `;
@@ -358,18 +458,28 @@ function buildMatchingOptions(count) {
 
 function matchingRow(i, letter) {
     const row = document.createElement('div');
-    row.className = 'flex items-center gap-2';
+    row.className = 'grid gap-2 rounded-xl border border-slate-100 p-3 md:grid-cols-[auto_1fr_auto_1fr_auto] md:items-center';
     row.innerHTML = `
         <span class="opt-label text-sm font-bold text-slate-500 w-6">${letter}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
-        <input type="text" name="options[${i}][text]" placeholder="Item kiri (soal)" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <span class="text-slate-400">→</span>
-        <input type="text" name="options[${i}][match_label]" placeholder="Item kanan (pasangan)" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <button type="button" onclick="removeOptionRow(this, 'matching')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
-            Hapus
-        </button>
+        <div class="grid gap-2 md:grid-cols-2">
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.leftItem} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.leftItem} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <span class="hidden md:block text-slate-400 text-center">→</span>
+        <div class="grid gap-2 md:grid-cols-2">
+            <input type="text" name="options[${i}][match_label][id]" data-field="match_label" data-locale="id" placeholder="${_t.rightItem} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][match_label][en]" data-field="match_label" data-locale="en" placeholder="${_t.rightItem} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div class="flex justify-end md:justify-start">
+            <button type="button" onclick="removeOptionRow(this, 'matching')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
+                ${_t.delete}
+            </button>
+        </div>
     `;
     return row;
 }
@@ -386,25 +496,31 @@ function buildOrderingOptions(count) {
 
 function orderingRow(i) {
     const row = document.createElement('div');
-    row.className = 'flex items-center gap-2';
+    row.className = 'flex flex-col gap-2 rounded-xl border border-slate-100 p-3 md:flex-row md:items-center md:gap-3';
     row.innerHTML = `
         <span class="opt-label text-sm font-bold text-slate-500 w-6">${i+1}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
-        <input type="text" name="options[${i}][text]" placeholder="Langkah ke-${i+1}" required
-               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
-        <button type="button" onclick="removeOptionRow(this, 'ordering')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
-            Hapus
-        </button>
+        <div class="grid gap-2 flex-1 md:grid-cols-2">
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.stepPlaceholder}${i+1} (ID)" required
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.stepPlaceholder}${i+1} (EN)"
+                   class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div class="flex justify-end">
+            <button type="button" onclick="removeOptionRow(this, 'ordering')" class="text-sm text-red-500 hover:text-red-700 font-semibold px-2">
+                ${_t.delete}
+            </button>
+        </div>
     `;
     return row;
 }
 
 function removeOptionRow(btn, type) {
-    const row = btn.closest('.flex');
+    const row = btn.closest('.rounded-xl');
     if (!row) return;
     const wrap = row.parentNode;
     if (wrap.children.length <= 1) {
-        showGlobalAlert('Pemberitahuan', 'Minimal harus ada 1 opsi jawaban.');
+        showGlobalAlert(_t.notice, _t.minOption);
         return;
     }
     row.remove();
@@ -427,18 +543,24 @@ function reindexOptions(type) {
             }
         }
         
-        const textInputs = row.querySelectorAll('input[type=text]');
-        if (textInputs.length > 0) {
-            if (type === 'matching') {
-                textInputs[0].name = `options[${idx}][text]`;
-                textInputs[1].name = `options[${idx}][match_label]`;
-            } else {
-                textInputs[0].name = `options[${idx}][text]`;
-                if (type === 'multiple_choice') textInputs[0].placeholder = `Opsi ${letters[idx]}`;
-                else if (type === 'ordering') textInputs[0].placeholder = `Langkah ke-${idx + 1}`;
+        row.querySelectorAll('[data-field]').forEach(input => {
+            const field = input.dataset.field;
+            const locale = input.dataset.locale;
+            input.name = locale ? `options[${idx}][${field}][${locale}]` : `options[${idx}][${field}]`;
+            if (type === 'multiple_choice' && field === 'text' && locale === 'id') {
+                input.placeholder = `${_t.optionPlaceholder} ${letters[idx]} (ID)`;
             }
-        }
-        
+            if (type === 'multiple_choice' && field === 'text' && locale === 'en') {
+                input.placeholder = `${_t.optionPlaceholder} ${letters[idx]} (EN)`;
+            }
+            if (type === 'ordering' && field === 'text' && locale === 'id') {
+                input.placeholder = `${_t.stepPlaceholder}${idx + 1} (ID)`;
+            }
+            if (type === 'ordering' && field === 'text' && locale === 'en') {
+                input.placeholder = `${_t.stepPlaceholder}${idx + 1} (EN)`;
+            }
+        });
+
         const correctInput = row.querySelector('.mc-correct');
         if (correctInput) {
             correctInput.name = `options[${idx}][is_correct]`;
@@ -449,14 +571,9 @@ function reindexOptions(type) {
             radioInput.value = idx;
         }
 
-        const idInput = row.querySelector('input[name*="[id]"]');
-        if (idInput) {
-            idInput.name = `options[${idx}][id]`;
-        }
-
-        const isCorrectHidden = row.querySelector('input[name$="[is_correct]"]:not(.mc-correct)');
-        if (isCorrectHidden) {
-            isCorrectHidden.name = `options[${idx}][is_correct]`;
+        const hiddenCorrect = row.querySelector('input[type=hidden][name*="[is_correct]"]');
+        if (hiddenCorrect && !hiddenCorrect.classList.contains('mc-correct')) {
+            hiddenCorrect.name = `options[${idx}][is_correct]`;
         }
     });
 }
@@ -465,7 +582,7 @@ function addOptionBtn(container, type) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'mt-2 text-sm text-blue-600 hover:text-blue-800 font-semibold';
-    btn.textContent = '+ Tambah opsi';
+    btn.textContent = _t.addOption;
     btn.onclick = function() {
         const wrap = document.getElementById(type === 'matching' ? 'matching-options' : (type === 'ordering' ? 'ordering-options' : 'mc-options'));
         const i = wrap.children.length;
@@ -478,13 +595,30 @@ function addOptionBtn(container, type) {
 }
 
 // Data quiz untuk keperluan Edit Modal
-const questionsData = @js($questions->keyBy('id'));
+const questionsData = @js($questions->mapWithKeys(function ($question) {
+    return [$question->id => [
+        'type' => $question->type,
+        'points' => $question->points,
+        'topic_tag' => $question->topic_tag,
+        'question_image' => $question->question_image,
+        'question_text' => $question->getTranslations('question_text'),
+        'explanation' => $question->getTranslations('explanation'),
+        'options' => $question->options->map(function ($option) {
+            return [
+                'id' => $option->id,
+                'is_correct' => $option->is_correct,
+                'option_text' => $option->getTranslations('option_text'),
+                'match_label' => $option->getTranslations('match_label'),
+            ];
+        })->values(),
+    ]];
+}));
 
 function openAddModal() {
     const modal = document.getElementById('modal-add-question');
     const form = document.getElementById('form-add-question');
     
-    modal.querySelector('h2').textContent = 'Tambah Soal ke Bank Soal';
+    modal.querySelector('h2').textContent = _t.addModalTitle;
     form.action = `{{ route('questions.store', [$course->id, $chapter->id]) }}`;
     
     const methodInput = form.querySelector('input[name="_method"]');
@@ -510,7 +644,7 @@ function openEditModal(id) {
     const modal = document.getElementById('modal-add-question');
     const form = document.getElementById('form-add-question');
     
-    modal.querySelector('h2').textContent = 'Edit Soal';
+    modal.querySelector('h2').textContent = _t.editModalTitle;
     form.action = `{{ route('questions.update', [$course->id, $chapter->id, '__ID__']) }}`.replace('__ID__', id);
     
     let methodInput = form.querySelector('input[name="_method"]');
@@ -521,11 +655,13 @@ function openEditModal(id) {
         methodInput.value = 'PUT';
         form.appendChild(methodInput);
     }
+    form.reset();
+    methodInput.value = 'PUT';
 
     form.querySelector('[name=type]').value = question.type;
-    form.querySelector('[name=question_text]').value = question.question_text;
+    setLocalizedField(form, 'question_text', question.question_text);
     form.querySelector('[name=points]').value = question.points;
-    form.querySelector('[name=explanation]').value = question.explanation || '';
+    setLocalizedField(form, 'explanation', question.explanation || {});
     form.querySelector('[name=topic_tag]').value = question.topic_tag || '';
 
     // Kelola preview gambar lama
@@ -556,7 +692,8 @@ function openEditModal(id) {
             idInput.name = `options[${idx}][id]`;
             idInput.value = opt.id;
             row.appendChild(idInput);
-            row.querySelector('input[type=text]').value = opt.option_text;
+
+            setLocalizedRowValues(row, 'text', opt.option_text);
             if (opt.is_correct) {
                 row.querySelector('input[type=radio]').checked = true;
                 row.querySelector('.mc-correct').value = 1;
@@ -596,8 +733,9 @@ function openEditModal(id) {
             idInput.name = `options[${idx}][id]`;
             idInput.value = opt.id;
             row.appendChild(idInput);
-            row.querySelector('[placeholder="Item kiri (soal)"]').value = opt.option_text;
-            row.querySelector('[placeholder="Item kanan (pasangan)"]').value = opt.match_label;
+            
+            setLocalizedRowValues(row, 'text', opt.option_text);
+            setLocalizedRowValues(row, 'match_label', opt.match_label || {});
             wrap.appendChild(row);
         });
     } else if (question.type === 'ordering') {
@@ -610,7 +748,8 @@ function openEditModal(id) {
             idInput.name = `options[${idx}][id]`;
             idInput.value = opt.id;
             row.appendChild(idInput);
-            row.querySelector('input[type=text]').value = opt.option_text;
+        
+            setLocalizedRowValues(row, 'text', opt.option_text);
             wrap.appendChild(row);
         });
     }
@@ -638,8 +777,8 @@ document.querySelector('input[name="question_image"]').addEventListener('change'
         const file = this.files[0];
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            showGlobalAlert('Ukuran File Terlalu Besar', 'File gambar terlalu besar! Maksimal ukuran file adalah 5MB.\nFile yang Anda pilih berukuran ' + (file.size / (1024 * 1024)).toFixed(2) + 'MB. Silakan pilih gambar lain.');
-            this.value = ''; // Reset file input
+            showGlobalAlert(_t.tooBigTitle, _t.imageTooBig + ' ' + (file.size / (1024 * 1024)).toFixed(2) + 'MB. {{ __('Silakan kompres gambar atau pilih gambar lain.') }}');
+            this.value = '';
         }
     }
 });

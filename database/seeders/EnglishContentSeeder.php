@@ -25,101 +25,101 @@ class EnglishContentSeeder extends Seeder
     {
         // Map of module title (ID) => English content override
         // Add real English translations here as they become available
-        $englishContent = [
-            '1.1 Rotunda' => '<p><strong>The main components of Garbarata consist of:</strong></p>
-
-        <p>
+                $englishContent = [
+            '1.1 Rotunda' => '<p>
+<strong>The main components of Garbarata consist of:</strong>
+</p>
+<p>
             The <strong>Rotunda</strong> is designed as the central axis for the vertical and horizontal movement of the Garbarata.
             During operation, rotunda columns, floors, ceilings and corridor wall panels are abutted
             with the terminal not moving (static), while the rotunda rigid frame and roof will rotate
             adjust column movement. The rotunda consists of:
         </p>
-
-        <ul class="space-y-4">
-            <li>
-                <strong>a) Rotunda Corridor</strong><br>
+<ul class="space-y-4">
+<li>
+<strong>a) Rotunda Corridor</strong>
+<br>
 
                 The Rotunda Corridor is the link between the rotunda and the terminal building.
                 The Rotunda Corridor is designed using flexible weather seals and floor steps
                 with a hinge connection from the rotunda to the terminal building so that there is no load
                 as well as vibrations from the Garbarata which are channeled to the fixed link.
             </li>
-
-            <li>
-                <strong>b) Rotunda Support Column</strong><br>
+<li>
+<strong>b) Rotunda Support Column</strong>
+<br>
 
                 The Rotunda Support Column is a static support for the Garbarata.
                 Rotunda Support column rests on the foundation with eight anchor bolts
                 each of which is equipped with 3 nuts.
             </li>
-
-            <li>
-                <strong>c) Main Distribution Panel</strong><br>
+<li>
+<strong>c) Main Distribution Panel</strong>
+<br>
 
                 The electrical panel is installed on the equipped rotunda support column
                 with circuit breakers and transformers needed to change
                 and adjust the need for electric current supplied from the tenninal building
                 for electricity needs at Garbarata.
             </li>
-
-            <li>
-                <strong>d) Aluminum Side Curtains</strong><br>
+<li>
+<strong>d) Aluminum Side Curtains</strong>
+<br>
 
                 Aluminum side curtains are installed on both sides of the rolling Rotunda
                 on a coil on each side and can follow the rotational movement of the rotunda.
                 Both coils have springs attached along the axis to provide
                 tension on the curtain and keep it tight and tight.
             </li>
-
-            <li>
-                <strong>e) Rotunda Swing Limit Switches</strong><br>
+<li>
+<strong>e) Rotunda Swing Limit Switches</strong>
+<br>
 
                 The limit switch is mounted on a rotating rigid frame at the bottom of the rotunda,
                 and the cam is installed on the static/non-rotating rotunda flange.
             </li>
-        </ul>',
+</ul>',
             '1.2 Telescopic Tunnel' => '<p>
             Starting from the rotunda, the tunnels are called tunnels A, B and C
             for 3 tunnel Garbarata (A and B for 2 tunnel Garbarata). Telescoping tunnel
             rectangular in shape, with the largest tunnel size being close to the plane.
         </p>
-
-        <p>
+<p>
             All tunnels are made of corrugated plate with supporting flanges. Holes
             Drilled into the roof flange so water can flow down. Water channels are made
             on each side of the Garbarata floor, inside Tunnels B and C.
         </p>
-
-        <ul class="space-y-4">
-            <li>
-                <strong>a) Rails and Roller Bearings</strong><br>
+<ul class="space-y-4">
+<li>
+<strong>a) Rails and Roller Bearings</strong>
+<br>
 
                 Rails for the roller track are made on each side so that the Garbarata can move
                 forward and backward smoothly. All tunnels have roller tracks at the top
                 and bottom. A stopper is welded to the lower roller track of tunnel B
                 to prevent the roller from coming out of the end of the track.
             </li>
-
-            <li>
-                <strong>b) Rotunda Guide Rollers</strong><br>
+<li>
+<strong>b) Rotunda Guide Rollers</strong>
+<br>
 
                 Tunnel guide rollers are installed on the left and right sides of the rotunda, the main function
                 The purpose of this guide roller is to maintain the distance and position between
                 tunnel with a rigid frame when the Garbarata moves up, down and
                 rotating (left and right).
             </li>
-
-            <li>
-                <strong>c) Cable Scissors</strong><br>
+<li>
+<strong>c) Cable Scissors</strong>
+<br>
 
                 Cable scissors are installed under the tunnel, holding and carrying the power cable
                 and control cables to remain connected while the Garbarata extends and
                 shortened. The scissor cable is connected between the back of tunnel A to
                 rear of tunnel B.
             </li>
-
-            <li>
-                <strong>d) Ramps</strong><br>
+<li>
+<strong>d) Ramps</strong>
+<br>
 
                 In the telescoping tunnel section that intersects tunnel A
                 and B, there is a transition bridge (ramp) and also between tunnel B
@@ -127,31 +127,31 @@ class EnglishContentSeeder extends Seeder
                 tunnels. This ramp is attached to the tunnel using hinges. Handrails
                 installed on the right and left.
             </li>
-
-            <li>
-                <strong>e) Glass Wall Panels</strong><br>
+<li>
+<strong>e) Glass Wall Panels</strong>
+<br>
 
                 Colored glass is installed along the tunnel walls. Glass walls installed
                 with a floating system so there is no pressure or load
                 weighing down the glass walls.
             </li>
-
-            <li>
-                <strong>f) Roof Safety Hand Rail</strong><br>
+<li>
+<strong>f) Roof Safety Hand Rail</strong>
+<br>
 
                 Roof safety hand rail is installed on the roof which functions as
                 safety for airport crew who are working on the Garbarata roof.
             </li>
-        </ul>',
+</ul>',
             '1.3 Vertical Lift Column' => '<p>
             The vertical lift column consists of a ball screw and nut installed in a square steel tube.
             Column lift components also include a vertical drive motor, brake system,
             cable tray, and limit switch.
         </p>
-
-        <ul class="space-y-4">
-            <li>
-                <strong>a) Ball screws and nut assembly</strong><br>
+<ul class="space-y-4">
+<li>
+<strong>a) Ball screws and nut assembly</strong>
+<br>
 
                 The ball screw and nut consist of a chain coupler, thrust bearing, top plate,
                 oil cup, wiper and safety device. Ball screws and nuts have concave
@@ -160,9 +160,9 @@ class EnglishContentSeeder extends Seeder
                 will move along the axis of the screw, changing the rotational motion of the screw
                 be a straight linear movement of the nut.
             </li>
-
-            <li>
-                <strong>b) Grease Nipple</strong><br>
+<li>
+<strong>b) Grease Nipple</strong>
+<br>
 
                 Lubrication of the ball screw and nut can be done via the grease nipple
                 is on the outside of the bottom column. Raise the lift column to the highest position
@@ -170,65 +170,65 @@ class EnglishContentSeeder extends Seeder
                 while lowering the lift column to the lowest position. Repeat process
                 applying grease if necessary.
             </li>
-
-            <li>
-                <strong>c) Vertical Drive Motors and Brakes</strong><br>
+<li>
+<strong>c) Vertical Drive Motors and Brakes</strong>
+<br>
 
                 This vertical drive motor uses an electro-magnetic system and brakes
                 spring-setting, which is designed to stop and hold a load with
                 right. The brake system is connected directly to the motor terminals so that
                 will automatically release the brake when the motor is activated.
             </li>
-
-            <li>
-                <strong>d) Cable tray assembly</strong><br>
+<li>
+<strong>d) Cable tray assembly</strong>
+<br>
 
                 The cable tray on the drive column contains the cables from the wheel bogie.
                 The cable is routed from the J-box under tunnel C, through the cable tray and
                 ends in a horizontal motor.
             </li>
-
-            <li>
-                <strong>e) Height Indicator</strong><br>
+<li>
+<strong>e) Height Indicator</strong>
+<br>
 
                 The bridge has a proximity switch located on the motor flange on the side
                 on the drive column to detect the number of rotations of the ball screw. This signal
                 sends data digitally to the control console which is then processed
                 to show how far the Garbarata has moved up or down.
             </li>
-        </ul>',
+</ul>',
             '1.4 Wheel Boogie' => '<p>
-            <strong>Wheel Boogie</strong> consists of frame, tires, drive chain,
+<strong>Wheel Boogie</strong> consists of frame, tires, drive chain,
             electric motor, limit switch box, landing gear (optional) and
             electrical cables.
         </p>
-
-        <ul class="space-y-4">
-            <li>
-                <strong>a) Wheels</strong><br>
+<ul class="space-y-4">
+<li>
+<strong>a) Wheels</strong>
+<br>
 
                 Two solid tires are installed on the frame. Trunions help distribute
                 The load held on each wheel is balanced.
             </li>
-
-            <li>
-                <strong>b) Chains Drives</strong><br>
+<li>
+<strong>b) Chains Drives</strong>
+<br>
 
                 The right and left wheels have two chains with duplex sprockets
                 on the motor shaft and wheels. Chain guard protects workers on the apron.
             </li>
-
-            <li>
-                <strong>c) Limit Switch</strong><br>
+<li>
+<strong>c) Limit Switch</strong>
+<br>
 
                 The steering limit switch is installed on the cross beam below the bogie.
                 If the bogie turns left or right, the cam limit switch will
                 Touch the limit switch at the end of the steering limit and activate it
                 warning buzzer on the control console to indicate oversteering.
             </li>
-
-            <li>
-                <strong>d) Motors and Brakes</strong><br>
+<li>
+<strong>d) Motors and Brakes</strong>
+<br>
 
                 Each drive chain is connected to a motor gear. 3 phase motor
                 It uses electro-magnetic brakes, which release braking power
@@ -237,32 +237,32 @@ class EnglishContentSeeder extends Seeder
                 emergency, if the Garbarata needs to be towed/moved when it is not
                 there is electric power.
             </li>
-
-            <li>
-                <strong>e) Safety Hoop</strong><br>
+<li>
+<strong>e) Safety Hoop</strong>
+<br>
 
                 A safety hoop is a functional safety device
                 to anticipate the presence of objects or personal beings that are close by
                 with wheel boogie. Safety hoop made of RHS with sides
                 1 inch cross section.
             </li>
-        </ul>',
+</ul>',
             '1.5 Service Access' => '<p>
             Service doors, platforms and stairs are located on the right and left sides
             at the front of the tunnel. This service access provides a path from the apron to
             Garbarata or vice versa for ground crew.
         </p>
-
-        <ul class="space-y-4">
-            <li>
-                <strong>a) Service Door</strong><br>
+<ul class="space-y-4">
+<li>
+<strong>a) Service Door</strong>
+<br>
 
                 Service door is a steel door that is equipped with
                 glass window, opening towards the outside of the platform.
             </li>
-
-            <li>
-                <strong>b) Platforms</strong><br>
+<li>
+<strong>b) Platforms</strong>
+<br>
 
                 The height of the platform is made the same as the cabin floor.
                 The platform floor is made of checkered patterned aluminum
@@ -270,9 +270,9 @@ class EnglishContentSeeder extends Seeder
                 galvanized steel handrail. A light is installed above the service
                 door to illuminate the platform.
             </li>
-
-            <li>
-                <strong>c) Service Stairs</strong><br>
+<li>
+<strong>c) Service Stairs</strong>
+<br>
 
                 This ladder is a self-adjusting ladder mounted on a frame
                 galvanized steel and handrails are installed on both sides of the stairs.
@@ -281,34 +281,34 @@ class EnglishContentSeeder extends Seeder
                 service stair and allows the stairs to follow the Garbarata
                 operates around the apron.
             </li>
-
-            <li>
-                <strong>d) Roof Access Ladder</strong><br>
+<li>
+<strong>d) Roof Access Ladder</strong>
+<br>
 
                 A galvanized ladder is attached to the leading platform
                 tunnel roof as access for maintenance crews.
             </li>
-        </ul>',
+</ul>',
             '1.6 Cabin' => '<p>
-            <strong>Cabin</strong> is made of steel, the exterior is coated
+<strong>Cabin</strong> is made of steel, the exterior is coated
             with epoxy base paint and interior parts with floor covering,
             ceiling and lighting. The electric motor is installed in the section
             The bottom of the cabin functions to rotate the cabin. There is also a cabin in the cabin
             side curtain, double swing door, and control console.
         </p>
-
-        <ul class="space-y-4">
-            <li>
-                <strong>a) Double Swing Door</strong><br>
+<ul class="space-y-4">
+<li>
+<strong>a) Double Swing Door</strong>
+<br>
 
                 A double swing door is attached to the cabin, when closed
                 The double swing door can protect the interior and operator
                 from the conditions outside and around it when the Garbarata is in operation
                 not used.
             </li>
-
-            <li>
-                <strong>b) Closure</strong><br>
+<li>
+<strong>b) Closure</strong>
+<br>
 
                 When Garbarata docks with a plane, closure
                 cover the gaps between the cabin and the plane. Closure
@@ -316,9 +316,9 @@ class EnglishContentSeeder extends Seeder
                 Pressure-sensitive limit switches on both sides prevent
                 closure suppresses excessive fuselage.
             </li>
-
-            <li>
-                <strong>c) Side Curtains</strong><br>
+<li>
+<strong>c) Side Curtains</strong>
+<br>
 
                 Curtain is made of aluminum and like the rotunda,
                 The curtain has a right and left side, which can roll up
@@ -327,89 +327,88 @@ class EnglishContentSeeder extends Seeder
                 to provide tension on the curtain, keeping it steady
                 tense and tight.
             </li>
-
-            <li>
-                <strong>d) Control Console</strong><br>
+<li>
+<strong>d) Control Console</strong>
+<br>
 
                 In the Control panel there are all the necessary controls
                 to operate the Garbarata. These controls will
                 explained in another chapter that discusses operational controls.
             </li>
-
-            <li>
-                <strong>e) Safety Door Shoe</strong><br>
+<li>
+<strong>e) Safety Door Shoe</strong>
+<br>
 
                 Safety Door Shoe is a back up sensor for the bridge when
                 autolevel cannot detect changes in altitude.
                 Safety door shoes must be positioned under the aircraft door
                 during the docking process.
             </li>
-        </ul>',
+</ul>',
             '2.1 Main-Distribution Panel' => '<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-            <img src="/images/modules/main_distribution_panel.png"
+<img src="/images/modules/main_distribution_panel.png"
                 class="mx-auto max-h-96 w-full object-contain rounded-lg"
                 alt="Main Distribution Panel">
-        </figure>
-        <p class="text-center text-sm text-gray-600 mb-6">
+</figure>
+<p class="text-center text-sm text-gray-600 mb-6">
             Main-Distribution Panel
         </p>
-        <p>
+<p>
             The Main-Distribution Panel is positioned on the Rotunda Column of the Garbarata.
             Its main function is to transfer and share electrical power
             from the airport building to the Garbarata safely.
         </p>
-        <br>
-        <p><strong>The internal components of the Main Power Panel are as follows:</strong></p>
-        <br>
-        <p><strong>(a) Circuit Breaker (MCCB/ MCB/ ELCB)</strong></p>
-        <p>
+<br>
+<p>
+<strong>The internal components of the Main Power Panel are as follows:</strong>
+</p>
+<br>
+<p>
+<strong>(a) Circuit Breaker (MCCB/ MCB/ ELCB)</strong>
+</p>
+<p>
             Circuit Breaker functions to protect energy from airport buildings
             towards Garbarata. Circuit Breakers used such as MCCB,
             MCB and ELCB to control power
         </p>
-
-        <ul class="list-disc ml-6 mt-2">
-            <li>Main Power Breaker for Main Distribution Panel</li>
-            <li>Main Power Breaker for Drive Power</li>
-            <li>Main Power Breaker for Lighting and Control System</li>
-            <li>Main Power Breaker for Air Conditioner System</li>
-            <li>Main Power Breaker for Rotunda Air Conditioner</li>
-            <li>etc (as needed)</li>
-        </ul>
-
-        <br>
-
-        <p><strong>(b) Contactor (C)</strong></p>
-
-        <p>
+<ul class="list-disc ml-6 mt-2">
+<li>Main Power Breaker for Main Distribution Panel</li>
+<li>Main Power Breaker for Drive Power</li>
+<li>Main Power Breaker for Lighting and Control System</li>
+<li>Main Power Breaker for Air Conditioner System</li>
+<li>Main Power Breaker for Rotunda Air Conditioner</li>
+<li>etc (as needed)</li>
+</ul>
+<br>
+<p>
+<strong>(b) Contactor (C)</strong>
+</p>
+<p>
             Contactors connect electrical power to several components.
             When a failure occurs, the Contactor will open and disconnect
             all electrical power to the component.
         </p>
-
-        <br>
-
-        <p><strong>(c) Terminal Block (TB) and Terminal Strip (TS)</strong></p>
-
-        <p>
+<br>
+<p>
+<strong>(c) Terminal Block (TB) and Terminal Strip (TS)</strong>
+</p>
+<p>
             TB and TS are used as cable terminals.
         </p>
-
-        <br>
-
-        <p><strong>(d) Relay (RL)</strong></p>
-
-        <p>
+<br>
+<p>
+<strong>(d) Relay (RL)</strong>
+</p>
+<p>
             Relays are used to control circuits using signals
             low powered or where multiple circuits are required
             controlled with a single signal.
         </p>
-
-        <br>
-
-        <p><strong>(e) Pilot Lamp (PL)</strong></p>
-
-        <p>
+<br>
+<p>
+<strong>(e) Pilot Lamp (PL)</strong>
+</p>
+<p>
             Three indicator lights as indicators of electric power flow
             Garbarata.
         </p>',
@@ -420,68 +419,60 @@ class EnglishContentSeeder extends Seeder
             consumer needs. Specific detailed data is shown in the figure
             As-Built.
         </p>
-
-        <br>
-
-        <p><strong>(a) Circuit Breaker (MCB/ MCCB/ ELCB)</strong></p>
-
-        <p>
+<br>
+<p>
+<strong>(a) Circuit Breaker (MCB/ MCCB/ ELCB)</strong>
+</p>
+<p>
             Circuit Breaker functions to protect energy from airport buildings
             towards Garbarata. The Circuit Breaker used is like an MCCB.
             MCB and ELCB to control power
         </p>
-
-        <ol class="list-decimal ml-6 mt-2 space-y-1">
-            <li>Lighting Power Breaker</li>
-            <li>Control Power Breaker</li>
-            <li>Receptacle Power breaker</li>
-            <li>Horizontal Motor Breaker</li>
-            <li>Vertical Motor breaker</li>
-            <li>Cabin Motor breaker</li>
-            <li>Air Conditional Breaker</li>
-        </ol>
-
-        <br>
-
-        <p><strong>(b) Contactor</strong></p>
-
-        <ol class="list-decimal ml-6 mt-2 space-y-4">
-            <li>
-                <strong>Tunnel lights and rotunda main contactor</strong>
-
-                <p class="mt-2">
+<ol class="list-decimal ml-6 mt-2 space-y-1">
+<li>Lighting Power Breaker</li>
+<li>Control Power Breaker</li>
+<li>Receptacle Power breaker</li>
+<li>Horizontal Motor Breaker</li>
+<li>Vertical Motor breaker</li>
+<li>Cabin Motor breaker</li>
+<li>Air Conditional Breaker</li>
+</ol>
+<br>
+<p>
+<strong>(b) Contactor</strong>
+</p>
+<ol class="list-decimal ml-6 mt-2 space-y-4">
+<li>
+<strong>Tunnel lights and rotunda main contactor</strong>
+<p class="mt-2">
                     Magnetic contactors are used to connect power
                     from the Lighting Power Breaker to the tunnel lights and
                     rotunda. The operating system is on the console desk
                     in the Cabin.
                 </p>
-            </li>
-
-            <li>
-                <strong>Magnetic Contactor</strong>
-
-                <p class="mt-2">
+</li>
+<li>
+<strong>Magnetic Contactor</strong>
+<p class="mt-2">
                     Magnetic contactor reverses CW/CCW motor rotation
                     according to PLC commands
                 </p>
-            </li>
-        </ol>
-
-        <br>
-
-        <p><strong>(c) Variable Speed Drive</strong></p>
-
-        <p>
+</li>
+</ol>
+<br>
+<p>
+<strong>(c) Variable Speed Drive</strong>
+</p>
+<p>
             Garbarata uses several Variable Speed transistor units
             Drive, the inverter uses power through Main
             Contactor.
         </p>
-
-        <br>
-
-        <p><strong>(d) Thermal Overloads</strong></p>
-
-        <p>
+<br>
+<p>
+<strong>(d) Thermal Overloads</strong>
+</p>
+<p>
             Thermal Overload is on the Power Panel Box and will trip
             and stops the motor when the component is overloaded.
             The circuit will remain open until the thermal overload is reset
@@ -492,120 +483,114 @@ class EnglishContentSeeder extends Seeder
             On the Console Desk there is a Control Interface (Buttons and Touchscreen)
             and Control Panel (Relay, Fuse, and PLC)
         </p>
-        <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-            <img src="/images/modules/console_desk.png"
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/console_desk.png"
                 class="mx-auto max-h-96 w-full object-contain rounded-lg"
                 alt="Console Desk">
-        </figure>
-        <p class="text-center text-sm text-gray-600 mb-6">
+</figure>
+<p class="text-center text-sm text-gray-600 mb-6">
             Console Desk
         </p>
-
-        <br>
-        <h4><strong>(a) Control Interface</strong></h4>
-        <p>
+<br>
+<h4>
+<strong>(a) Control Interface</strong>
+</h4>
+<p>
             The control interface is positioned above the Console Desk.
             The touchscreen displays the condition of the Garbarata via several indicators.
             Operation details are explained in Chapter three.
         </p>
-
-        <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-            <img src="/images/modules/control_interface.png"
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/control_interface.png"
                 class="mx-auto max-h-96 w-full object-contain rounded-lg"
                 alt="Control Interface">
-        </figure>
-        <p class="text-center text-sm text-gray-600 mb-6">
+</figure>
+<p class="text-center text-sm text-gray-600 mb-6">
             Control Interface
         </p>
-        <br>
-
-        <h4><strong>(b) Control Panel</strong></h4>
-        <p>
+<br>
+<h4>
+<strong>(b) Control Panel</strong>
+</h4>
+<p>
             All operating systems are in the Control Panel and positioned
             under Control Interface. Garbarata control center is located at
             that part.
         </p>',
-            '2.4 Pencahayaan' => '<p><strong>a. Interior Lighting</strong></p>
-        <div class="overflow-x-auto my-6">
-            <table class="w-full border border-black border-collapse text-sm">
-                <tbody>
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+            '2.4 Pencahayaan' => '<p>
+<strong>a. Interior Lighting</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-black border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-black px-4 py-2">
                             Tunnel Lights
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Rotunda Lights
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Cabin Lights
                         </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <p><strong>b. Exterior Lighting</strong></p>
-        <div class="overflow-x-auto my-6">
-            <table class="w-full border border-black border-collapse text-sm">
-                <tbody>
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>b. Exterior Lighting</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-black border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-black px-4 py-2">
                             Landing Stair Lights
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Obstruction Lights
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Rotary Lamp
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Flood light Tunnel Light
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Cabin LED Light
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Control Panel Lights
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Flood light cabin LED Light
                         </td>
-                    </tr>
-
-                    <tr>
-                        <td class="border border-black px-4 py-2">
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
                             Emergency LED Light
                         </td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-        <p>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
             The exterior and interior lighting control center is located at
             <strong>Console Desk</strong>.
         </p>',
@@ -616,526 +601,478 @@ class EnglishContentSeeder extends Seeder
             guarantee operational safety. Following are the components
             which are found in every part of the Garbarata.
         </p>
-
-<p><strong>a. Rotunda</strong></p>
-
+<p>
+<strong>a. Rotunda</strong>
+</p>
 <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Initial Rotunda Left / Right limit switches
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To limit horizontal rotation of the Rotunda
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Ultimate Rotunda Left / Right limit switches
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Slope Up/Down
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit changes in the height of the Garbarata
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Encoder Rotunda Rotation sensor
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Determine the angular position of the Rotunda
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Potentiometer Rotunda Rotation Sensor
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Determine the angular position of the rotunda
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             CCTV Cameras / Closed Circuit Television
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Check the apron situation
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Camera Box and Wiper
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Protects the Camera from external interference
                         </td>
-                    </tr>
-
+</tr>
 </tbody>
-            </table>
-        </div>
-
-<p><strong>b. Tunnel (A/B/C)</strong></p>
-
+</table>
+</div>
+<p>
+<strong>b. Tunnel (A/B/C)</strong>
+</p>
 <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Limit switches Initial Full Retract & Full Extend
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limiting changes to the length of the Garbarata
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Ultimate Full Retract & Full Extend limit switches
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit switch Slow down Tunnel Travel
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Slows down the Garbarata speed when approaching the fuselage
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Travel Tunnel Sensor
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detect changes in the length of the Garbarata
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Reset Travel Tunnel Sensor
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As a sensor calibrator
                         </td>
-                    </tr>
-
+</tr>
 </tbody>
-            </table>
-        </div>
-
-<p><strong>c. Cabin</strong></p>
-
+</table>
+</div>
+<p>
+<strong>c. Cabin</strong>
+</p>
 <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Bumper Limit switch
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To detect the fuselage
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Horn/Bell
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As a signal that Garbarata is operating
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Safety Door Shoes
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Backup if autolevel doesn\'t work
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Photo Electric Switch
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To detect the position of the aircraft and slow down the Garbarata speed
                         </td>
-                    </tr>
-
+</tr>
 </tbody>
-            </table>
-        </div>
-
+</table>
+</div>
 <br>
-        <p><strong>Canopy</strong></p>
-        <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-
+<p>
+<strong>Canopy</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Limit switch Left Canopy Retract
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limits canopy movement when retracting
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit switch Right Canopy Retract
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit switch Left Canopy Stop/Extend & over Pressure
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limits canopy movement if there is excess pressure
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit switch Right Canopy Stop/Extend & over Pressure
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             R/L Canopy Motor Actuator
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To move the canopy
                         </td>
-                    </tr>
-
+</tr>
 </tbody>
-            </table>
-        </div>
-        <p><strong>Cabin Rotation</strong></p>
-
+</table>
+</div>
+<p>
+<strong>Cabin Rotation</strong>
+</p>
 <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Limit switch Initial Cabin Rotation Left & Ultimate Cabin Rotation Left
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limits the rotational movement of the cabin to the left
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit switch Initial Cabin Rotation Right & Ultimate Cabin Rotation Right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limits rotational movement of the cabin to the right
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Cabin Rotation Sensor
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detecting the angular position of the cabin
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Reset cabin rotation sensor
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As a sensor calibrator
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Cabin Rotation Motor Actuator
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To move the cabin
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Cabin Floor Up / Down
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detect changes in cabin floor height
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Cabin Floor Motor Actuator
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Move the cabin floor
                         </td>
-                    </tr>
-
+</tr>
 </tbody>
-            </table>
-        </div>
-        <p><strong>Autolevel</strong></p>
-
+</table>
+</div>
+<p>
+<strong>Autolevel</strong>
+</p>
 <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Proximity Ultimate Auto level Wheel Up/Down
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To detect changes in aircraft altitude
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Auto level Not Out
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detects if autolevel does not exit
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Auto level Not Contact
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detects if the autolevel is not in contact with the fuselage
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Auto level Wheel Up/Down
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detect autolevel wheel rotation
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Actuator Motor Auto level Stop
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detects autolevel if it has been in contact with the aircraft
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Actuator Motor Auto level
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To move the autolevel
                         </td>
-                    </tr>
-
+</tr>
 </tbody>
-            </table>
-        </div>
-
-<p><strong>d. Column Elevator</strong></p>
-        <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+</table>
+</div>
+<p>
+<strong>d. Column Elevator</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Vertical Column L/R Motor Actuator
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Moving the lift column
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Counter Column Right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detecting the height of the Garbarata
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Proximity Reset Counter Column Right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As a sensor calibrator
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Column Fault Left
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detect if the lift column is unbalanced
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Column Fault Right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Initial Vertical Up/Down Left
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As an initial sensor
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Initial Vertical Up/Down Right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Ultimate Vertical Up/Down Left
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As the ultimate sensor
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit Switch Ultimate Vertical Up/Down Right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-<p><strong>e. Wheel Boogie</strong></p>
-        <div class="overflow-x-auto my-6">
-            <table class="w-full border border-gray-500 border-collapse text-sm">
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-500 px-4 py-2 w-1/2">
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>e. Wheel Boogie</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
                             Limit switch Initial Steer Left
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As a wheel boogie initial sensor
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Limit switch Initial Steer Right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Ultimate Steer Right limit switch
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As the ultimate wheel boogie sensor
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Ultimate Steer Left limit switch
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
-                        </td>
-                    </tr>
-
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Encoder Wheel Boogie Rotation Sensor
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Detecting wheel boogie rotation
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Safety Hoop limit switch
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             As a protector and detector for the boogie wheel from foreign objects
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Horizontal Drive L/R Motor Actuator
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To move the boogie wheel
                         </td>
-                    </tr>
-
+</tr>
 <tr>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             Inverter Variable speed drive Horizontal motor Left/right
                         </td>
-                        <td class="border border-gray-500 px-4 py-2">
+<td class="border border-gray-500 px-4 py-2">
                             To speed up or slow down the boogie wheel
                         </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</tr>
+</tbody>
+</table>
+</div>
 
 ',
             '1.1 Model' => '<p>
@@ -1148,299 +1085,319 @@ class EnglishContentSeeder extends Seeder
         22 meters when the Garbarata is maximally shortened and 39 meters when maximally extended.
         Likewise, it has the same meaning as type B2 - 21/28.
     </p>
-
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/garbarata_2Tunnel.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Garbarata">
-    </figure>
-
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/garbarata_3Tunnel.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Garbarata 3 tunnel">
-    </figure>
-
-    <div class="overflow-x-auto my-6">
-        <table class="w-full border-collapse text-sm">
-            <head>
-        <tr>
-            <th colspan="5" class="border-b-2 border-gray-700 py-2 text-center text-lg font-bold">
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/garbarata_2Tunnel.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Garbarata">
+</figure>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/garbarata_3Tunnel.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Garbarata 3 tunnel">
+</figure>
+<div class="overflow-x-auto my-6">
+<table class="w-full border-collapse text-sm">
+<head>
+<tr>
+<th colspan="5" class="border-b-2 border-gray-700 py-2 text-center text-lg font-bold">
                 General Specifications
             </th>
-        </tr>
-            </thead>s
+</tr>
+</thead>s
             <tbody>
-        <tr class="border-b border-gray-400">
-            <td class="py-2 font-medium w-1/3">Type Number</td>
-            <td class="py-2 w-4">:</td>
-            <td class="py-2 font-semibold">B2 - 21/28 SWRGG</td>
-            <td class="py-2 font-semibold">B3 - 22/39 SWLGG</td>
-        </tr>
-        <tr class="border-b border-gray-400">
-            <td class="py-2 font-medium">Number of PBB</td>
-            <td>:</td>
-            <td>3 units</td>
-            <td>3 units</td>
-        </tr>
-        <tr class="border-b border-gray-400">
-            <td class="py-2 font-medium">Number of Tunnels</td>
-            <td>:</td>
-            <td>2 Tunnels</td>
-            <td>3 Tunnels</td>
-        </tr>
-        <tr class="border-b border-gray-400">
-            <td class="py-2 font-medium">Service Door Position</td>
-            <td>:</td>
-            <td>Right</td>
-            <td>Left</td>
-        </tr>
-        <tr class="border-b border-gray-400">
-            <td class="py-2 font-medium">Tunnel Side Wall</td>
-            <td>:</td>
-            <td>Glass Wall</td>
-            <td>Glass Wall</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>',
+<tr class="border-b border-gray-400">
+<td class="py-2 font-medium w-1/3">Type Number</td>
+<td class="py-2 w-4">:</td>
+<td class="py-2 font-semibold">B2 - 21/28 SWRGG</td>
+<td class="py-2 font-semibold">B3 - 22/39 SWLGG</td>
+</tr>
+<tr class="border-b border-gray-400">
+<td class="py-2 font-medium">Number of PBB</td>
+<td>:</td>
+<td>3 units</td>
+<td>3 units</td>
+</tr>
+<tr class="border-b border-gray-400">
+<td class="py-2 font-medium">Number of Tunnels</td>
+<td>:</td>
+<td>2 Tunnels</td>
+<td>3 Tunnels</td>
+</tr>
+<tr class="border-b border-gray-400">
+<td class="py-2 font-medium">Service Door Position</td>
+<td>:</td>
+<td>Right</td>
+<td>Left</td>
+</tr>
+<tr class="border-b border-gray-400">
+<td class="py-2 font-medium">Tunnel Side Wall</td>
+<td>:</td>
+<td>Glass Wall</td>
+<td>Glass Wall</td>
+</tr>
+</tbody>
+</table>
+</div>',
             '1.2 Batasan Rancangan' => '<div class="overflow-x-auto my-6">
-        <table class="w-full border-collapse text-sm">
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Maximum floor load</td>
-            <td class="py-2 px-3 text-right">200 kg/m<sup>2</sup></td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Maximum roof load</td>
-            <td class="py-2 px-3 text-right">122 kg/m<sup>2</sup></td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Maximum wind speed in operation</td>
-            <td class="py-2 px-3 text-right">27 m/s</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Maximum wind speed not in operation</td>
-            <td class="py-2 px-3 text-right">40 m/s</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Ambient temperature</td>
-            <td class="py-2 px-3 text-right">35°C</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Maximum humidity</td>
-            <td class="py-2 px-3 text-right">80%</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>',
-            '1.3 Dimensi' => '<p><strong>1.3.1 Internal Dimensions</strong></p>
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/dimensi_internal.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Internal dimensions">
-    </figure>
-
-    <div class="overflow-x-auto my-6">
-        <table class="w-full border-collapse text-sm">
-            <head>
-        <tr>
-            <th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
-        </tr>
-            </head>
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Minimum Clear Internal Width (A)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">1.49 m</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Minimum Clear Internal Height (B)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">2.15 m</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <p><strong>1.3.2 Maximum and Minimum Length</strong></p>
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/max_min_length.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Maximum and minimum length">
-    </figure>
-
-    <div class="overflow-x-auto my-6">
-        <table class="w-full border-collapse text-sm">
-            <head>
-        <tr>
-            <th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
-        </tr>
-            </head>
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Retracted operation limit (A)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">23 m</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="py-2 px-3 font-medium">Extended operation limit (B)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">32 m</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>',
-            '1.4 Performa' => '<p><strong>1.4.1 Garbarata Movement</strong></p>
-
-<p><strong>a. Vertical Movement</strong></p>
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/gerakan_vertikal.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Vertical movement">
-    </figure>
-    <p class="text-center font-bold my-2"><strong>B2 - 23/32 SWRGG</strong></p>
-    <div class="overflow-x-auto my-4">
-        <table class="w-full border border-gray-500 border-collapse text-sm">
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Lowest level (A)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">2.0 m</td>
-        </tr>
-        <tr>
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Highest level (B)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">5.4 m</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>
-
-<p><strong>b. Rotunda Horizontal Turning Angle</strong></p>
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/sudut_putar_horizontal_rotunda.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Rotunda horizontal rotation angle">
-    </figure>
-    <p class="text-center font-bold my-2"><strong>B2 - 23/32 SWRGG</strong></p>
-    <div class="overflow-x-auto my-4">
-        <table class="w-full border border-gray-500 border-collapse text-sm">
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum left swing (A)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">87.5°</td>
-        </tr>
-        <tr>
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum right swing (B)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">87.5°</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>
-
-<p><strong>c. Cabin Rotation Turning Angle</strong></p>
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/sudut_putar_rotasi_cabin.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Cabin rotation angle">
-    </figure>
-    <p class="text-center font-bold my-2"><strong>B2 - 23/32 SWRGG</strong></p>
-    <div class="overflow-x-auto my-4">
-        <table class="w-full border border-gray-500 border-collapse text-sm">
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum left rotation (A)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">75°</td>
-        </tr>
-        <tr>
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum right rotation (B)</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">75°</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>
-
-<p><strong>d. Wheel Boogie Rotation Angle</strong></p>
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/sudut_putar_rotasi_wheel_boogie.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Boogie wheel rotation angle">
-    </figure>
-    <p class="text-center font-bold my-2"><strong>B2 SWRGG and B3 SWLGG</strong></p>
-
-<p><strong>1.4.2 Operation Speed</strong></p>
-    <div class="overflow-x-auto my-4">
-        <table class="w-full border border-gray-500 border-collapse text-sm">
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Horizontal Movement</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">0 – 25 m/min</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Vertical Movement</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">1.5 m/min</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Forward and reverse speed</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">< 0.4 m/s</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Vertical drive speed</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">< 0.1 m/s</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Cabin rotation speed</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">< 2°/sec</td>
-        </tr>
-        <tr class="border-b border-gray-500">
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Wheel steering speed</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">< 0.5 m/s</td>
-        </tr>
-        <tr>
-            <td class="border-r border-gray-500 py-2 px-3 font-medium">Auto leveler vertical speed</td>
-            <td class="py-2 px-3 text-right whitespace-nowrap">0.013 m/s</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>
+<table class="w-full border-collapse text-sm">
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Maximum floor load</td>
+<td class="py-2 px-3 text-right">200 kg/m<sup>2</sup>
+</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Maximum roof load</td>
+<td class="py-2 px-3 text-right">122 kg/m<sup>2</sup>
+</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Maximum wind speed in operation</td>
+<td class="py-2 px-3 text-right">27 m/s</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Maximum wind speed not in operation</td>
+<td class="py-2 px-3 text-right">40 m/s</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Ambient temperature</td>
+<td class="py-2 px-3 text-right">35°C</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Maximum humidity</td>
+<td class="py-2 px-3 text-right">80%</td>
+</tr>
+</tbody>
+</table>
+</div>',
+            '1.3 Dimensi' => '<p>
+<strong>1.3.1 Internal Dimensions</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/dimensi_internal.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Internal dimensions">
+</figure>
+<div class="overflow-x-auto my-6">
+<table class="w-full border-collapse text-sm">
+<head>
+<tr>
+<th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
+</tr>
+</head>
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Minimum Clear Internal Width (A)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">1.49 m</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Minimum Clear Internal Height (B)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">2.15 m</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>1.3.2 Maximum and Minimum Length</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/max_min_length.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Maximum and minimum length">
+</figure>
+<div class="overflow-x-auto my-6">
+<table class="w-full border-collapse text-sm">
+<head>
+<tr>
+<th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
+</tr>
+</head>
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Retracted operation limit (A)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">23 m</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="py-2 px-3 font-medium">Extended operation limit (B)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">32 m</td>
+</tr>
+</tbody>
+</table>
+</div>',
+            '1.4 Performa' => '<p>
+<strong>1.4.1 Garbarata Movement</strong>
+</p>
+<p>
+<strong>a. Vertical Movement</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/gerakan_vertikal.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Vertical movement">
+</figure>
+<p class="text-center font-bold my-2">
+<strong>B2 - 23/32 SWRGG</strong>
+</p>
+<div class="overflow-x-auto my-4">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Lowest level (A)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">2.0 m</td>
+</tr>
+<tr>
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Highest level (B)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">5.4 m</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>b. Rotunda Horizontal Turning Angle</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/sudut_putar_horizontal_rotunda.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Rotunda horizontal rotation angle">
+</figure>
+<p class="text-center font-bold my-2">
+<strong>B2 - 23/32 SWRGG</strong>
+</p>
+<div class="overflow-x-auto my-4">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum left swing (A)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">87.5°</td>
+</tr>
+<tr>
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum right swing (B)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">87.5°</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>c. Cabin Rotation Turning Angle</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/sudut_putar_rotasi_cabin.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Cabin rotation angle">
+</figure>
+<p class="text-center font-bold my-2">
+<strong>B2 - 23/32 SWRGG</strong>
+</p>
+<div class="overflow-x-auto my-4">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum left rotation (A)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">75°</td>
+</tr>
+<tr>
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Maximum right rotation (B)</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">75°</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>d. Wheel Boogie Rotation Angle</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/sudut_putar_rotasi_wheel_boogie.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Boogie wheel rotation angle">
+</figure>
+<p class="text-center font-bold my-2">
+<strong>B2 SWRGG and B3 SWLGG</strong>
+</p>
+<p>
+<strong>1.4.2 Operation Speed</strong>
+</p>
+<div class="overflow-x-auto my-4">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Horizontal Movement</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">0 – 25 m/min</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Vertical Movement</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">1.5 m/min</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Forward and reverse speed</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">
+< 0.4 m/s</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Vertical drive speed</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">
+< 0.1 m/s</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Cabin rotation speed</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">
+< 2°/sec</td>
+</tr>
+<tr class="border-b border-gray-500">
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Wheel steering speed</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">
+< 0.5 m/s</td>
+</tr>
+<tr>
+<td class="border-r border-gray-500 py-2 px-3 font-medium">Auto leveler vertical speed</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">0.013 m/s</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ',
-            '2.1 Power Supply' => '<p>The main electrical power source for Garbarata comes from the airport building which is divided according to the following main components:</p>
-    <div class="overflow-x-auto my-4">
-        <table class="w-full border border-gray-500 border-collapse text-sm">
-            <tbody>
-        <tr>
-            <td class="border border-gray-500 py-2 px-3 font-medium">Drive power</td>
-            <td class="border border-gray-500 py-2 px-3">380V</td>
-            <td class="border border-gray-500 py-2 px-3">3-phase</td>
-            <td class="border border-gray-500 py-2 px-3">50 Hz</td>
-        </tr>
-        <tr>
-            <td class="border border-gray-500 py-2 px-3 font-medium">Lighting and Control power</td>
-            <td class="border border-gray-500 py-2 px-3">220V</td>
-            <td class="border border-gray-500 py-2 px-3">single phase</td>
-            <td class="border border-gray-500 py-2 px-3">50 Hz</td>
-        </tr>
-        <tr>
-            <td rowspan="2" class="border border-gray-500 py-2 px-3 font-medium">Air Conditioner power</td>
-            <td class="border border-gray-500 py-2 px-3">380 VAC</td>
-            <td class="border border-gray-500 py-2 px-3">3 phase</td>
-            <td class="border border-gray-500 py-2 px-3">50 Hz</td>
-        </tr>
-        <tr>
-            <td class="border border-gray-500 py-2 px-3">220 V</td>
-            <td class="border border-gray-500 py-2 px-3">single phase</td>
-            <td class="border border-gray-500 py-2 px-3">50 Hz</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>',
+            '2.1 Power Supply' => '<p>The main electrical power source for Garbarata comes from the airport building which is divided
+according to the following main components:</p>
+<div class="overflow-x-auto my-4">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 py-2 px-3 font-medium">Drive power</td>
+<td class="border border-gray-500 py-2 px-3">380V</td>
+<td class="border border-gray-500 py-2 px-3">3-phase</td>
+<td class="border border-gray-500 py-2 px-3">50 Hz</td>
+</tr>
+<tr>
+<td class="border border-gray-500 py-2 px-3 font-medium">Lighting and Control power</td>
+<td class="border border-gray-500 py-2 px-3">220V</td>
+<td class="border border-gray-500 py-2 px-3">single phase</td>
+<td class="border border-gray-500 py-2 px-3">50 Hz</td>
+</tr>
+<tr>
+<td rowspan="2" class="border border-gray-500 py-2 px-3 font-medium">Air Conditioner power</td>
+<td class="border border-gray-500 py-2 px-3">380 VAC</td>
+<td class="border border-gray-500 py-2 px-3">3 phase</td>
+<td class="border border-gray-500 py-2 px-3">50 Hz</td>
+</tr>
+<tr>
+<td class="border border-gray-500 py-2 px-3">220 V</td>
+<td class="border border-gray-500 py-2 px-3">single phase</td>
+<td class="border border-gray-500 py-2 px-3">50 Hz</td>
+</tr>
+</tbody>
+</table>
+</div>',
             '2.2 Aktuator' => '<div class="overflow-x-auto my-4">
-        <table class="w-full table-fixed border border-gray-500 border-collapse text-sm">
-            <tbody>
-        <tr>
-            <td class="border border-gray-500 py-2 px-3 font-medium align-top break-words w-[34%]">Horizontal drive motor</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">5.5 kW</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
-        </tr>
-        <tr>
-            <td class="border border-gray-500 py-2 px-3 font-medium align-top break-words w-[34%]">Vertical drive motor</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">3.7 kW</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
-        </tr>
-        <tr>
-            <td class="border border-gray-500 py-2 px-3 font-medium align-top break-words w-[34%]">Cabin rotation motor</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">0.75kW</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
-            <td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
-        </tr>
-            </tbody>
-        </table>
-    </div>',
+<table class="w-full table-fixed border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 py-2 px-3 font-medium align-top break-words w-[34%]">Horizontal drive motor</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">5.5 kW</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
+</tr>
+<tr>
+<td class="border border-gray-500 py-2 px-3 font-medium align-top break-words w-[34%]">Vertical drive motor</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">3.7 kW</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
+</tr>
+<tr>
+<td class="border border-gray-500 py-2 px-3 font-medium align-top break-words w-[34%]">Cabin rotation motor</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">0.75kW</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
+</tr>
+</tbody>
+</table>
+</div>',
             '2.3 Pencahayaan ' => '<p>
         Garbarata is equipped with complete lighting, both interior and exterior,
         and added with emergency lights and operating lights. Details of the position of the lights are available
@@ -1449,28 +1406,28 @@ class EnglishContentSeeder extends Seeder
             '1.1 Deskripsi Detail Pengoperasian' => '<p>
         The settings for operating the Garbarata are located on the control console in the cabin which refers to the face plate layout for various controls such as indicators and annunciators. The following is an overview of some important controls:
     </p>
-
 <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/control_face_plate.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="Control Face Plate">
-        <figcaption class="text-center mt-3 font-semibold">
+<img src="/images/modules/control_face_plate.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="Control Face Plate">
+<figcaption class="text-center mt-3 font-semibold">
             Control Face Plate
         </figcaption>
-    </figure>
-
-<p><strong>a. Telephone Socket</strong></p>
-
+</figure>
+<p>
+<strong>a. Telephone Socket</strong>
+</p>
 <p>
         The socket for the telecommunications cable is positioned on the desk console.
     </p>
-
-<p><strong>b. Light Button</strong></p>
-
+<p>
+<strong>b. Light Button</strong>
+</p>
 <p>
         Light button to turn on the Garbarata lights. Both interiors,
         exterior, as well as Garbarata obstruction.
     </p>
-
-<p><strong>c. Emergency Stop</strong></p>button
+<p>
+<strong>c. Emergency Stop</strong>
+</p>button
 
 <p>
         The Emergency stop button is on the control console and boogie wheel
@@ -1478,116 +1435,115 @@ class EnglishContentSeeder extends Seeder
         the emergency stop button is pressed in manual and auto mode, then the Garbarata
         stops operating and is accompanied by a horn and buzzer sound.
     </p>
-
-<p><strong>d. Power on and off button</strong></p>
-
+<p>
+<strong>d. Power on and off button</strong>
+</p>
 <div class="overflow-x-auto my-6">
-        <table class="w-full border border-gray-500 border-collapse text-sm">
-            <tbody>
-        <tr class="border-b border-gray-500">
-            <td class="border border-gray-500 px-4 py-3 font-semibold w-1/4">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr class="border-b border-gray-500">
+<td class="border border-gray-500 px-4 py-3 font-semibold w-1/4">
                 On button
             </td>
-            <td class="border border-gray-500 px-4 py-3">
+<td class="border border-gray-500 px-4 py-3">
                 The power ON button activates all stand-by power for all motor controls and lights on the power indicator. Make sure the keyswitch is in the "OFF" position
             </td>
-        </tr>
-
+</tr>
 <tr>
-            <td class="border border-gray-500 px-4 py-3 font-semibold">
+<td class="border border-gray-500 px-4 py-3 font-semibold">
                 Off button
             </td>
-            <td class="border border-gray-500 px-4 py-3">
-                <p>i. After normal operation and the Garbarata returns to the predetermined/parked position, the power off button must be pressed. This will stop the energy/power on the machine, and control the power.</p>
-
-<p class="mt-3">ii. In an emergency, the Emergency Stop button must be pressed immediately, this will turn off all electricity, except the lights.</p>
-            </td>
-        </tr>
-            </tbody>
-        </table>
-    </div>
-
-<p><strong>e. Keyswitch</strong></p>
-
+<td class="border border-gray-500 px-4 py-3">
+<p>i. After normal operation and the Garbarata returns to the predetermined/parked position, the power
+off button must be pressed. This will stop the energy/power on the machine, and control the power.</p>
+<p class="mt-3">ii. In an emergency, the Emergency Stop button must be pressed immediately, this will turn off all
+electricity, except the lights.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>e. Keyswitch</strong>
+</p>
 <p>
         There are three keyswitch positions, namely off, manual and auto
     </p>
-
 <div class="overflow-x-auto my-6">
-        <table class="w-full border border-gray-500 border-collapse text-sm">
-            <tbody>
-
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
 <tr class="border-b border-gray-500">
-            <td class="border border-gray-500 px-4 py-3 font-semibold w-1/4">
+<td class="border border-gray-500 px-4 py-3 font-semibold w-1/4">
                 Off
             </td>
-            <td class="border border-gray-500 px-4 py-3">
-                <ul class="list-disc pl-5">
-                    <li>Garbarata is in stand-by condition</li>
-                </ul>
-            </td>
-        </tr>
-
+<td class="border border-gray-500 px-4 py-3">
+<ul class="list-disc pl-5">
+<li>Garbarata is in stand-by condition</li>
+</ul>
+</td>
+</tr>
 <tr class="border-b border-gray-500">
-            <td class="border border-gray-500 px-4 py-3 font-semibold">
+<td class="border border-gray-500 px-4 py-3 font-semibold">
                 Manuals
             </td>
-            <td class="border border-gray-500 px-4 py-3">
-                <ul class="list-disc pl-5">
-                    <li>The manual indicator light will come on</li>
-                    <li>All components of the aerobridge drive can be moved</li>
-                </ul>
-            </td>
-        </tr>
-
+<td class="border border-gray-500 px-4 py-3">
+<ul class="list-disc pl-5">
+<li>The manual indicator light will come on</li>
+<li>All components of the aerobridge drive can be moved</li>
+</ul>
+</td>
+</tr>
 <tr>
-            <td class="border border-gray-500 px-4 py-3 font-semibold">
+<td class="border border-gray-500 px-4 py-3 font-semibold">
                 Auto
             </td>
-            <td class="border border-gray-500 px-4 py-3">
-                <ul class="list-disc pl-5">
-                    <li>The auto light will turn on</li>
-                    <li>All manual movements will turn off</li>
-                </ul>
-            </td>
-        </tr>
-
+<td class="border border-gray-500 px-4 py-3">
+<ul class="list-disc pl-5">
+<li>The auto light will turn on</li>
+<li>All manual movements will turn off</li>
+</ul>
+</td>
+</tr>
 </tbody>
-        </table>
-    </div>
-    <p><strong>f. Canopy Left or Canopy Right</strong></p>
-
+</table>
+</div>
+<p>
+<strong>f. Canopy Left or Canopy Right</strong>
+</p>
 <p>
         Two dead man type buttons work to control the right and left canopies for
         adjust the canopy position relative to the aircraft. If closing is not correct,
         (CANOPY DOWN indicator light remains on) The bridge cannot move forward
         forward because there is an interlock.
     </p>
-
-<p><strong>g. Cabin Rotation</strong></p>button
+<p>
+<strong>g. Cabin Rotation</strong>
+</p>button
 
 <p>
         Two dead man type buttons are also used to control the rotary movement
         cabin to the right or left.
     </p>
-
-<p><strong>h. Cabin Floor</strong></p>button
+<p>
+<strong>h. Cabin Floor</strong>
+</p>button
 
 <p>
         The boarding bridge is equipped with a floor cabin that can be moved accordingly
         height requirements. Two cabin floor buttons that can be raised or
         lowered.
     </p>
-
-<p><strong>i. Vertical Movement</strong></p>button
+<p>
+<strong>i. Vertical Movement</strong>
+</p>button
 
 <p>
         Two push buttons, namely up and down, are used to raise or
         lowering the Garbarata.
     </p>
-
-<p><strong>j. Horizontal Drive Control (Joystick)</strong></p>
-
+<p>
+<strong>j. Horizontal Drive Control (Joystick)</strong>
+</p>
 <p>
         The 4-quadrant joystick control on Garbarata is used to move
         forward, backward, right and left. The joystick is spring loaded
@@ -1596,145 +1552,162 @@ class EnglishContentSeeder extends Seeder
         to the joystick position. Steering, left or right can be done sequentially
         in the direction of forward or backward movement.
     </p>
-
-<p><strong>k. Touch Screen Display Indicator</strong></p>
-
+<p>
+<strong>k. Touch Screen Display Indicator</strong>
+</p>
 <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/touchscreen_display.png"
+<img src="/images/modules/touchscreen_display.png"
              class="mx-auto max-h-96 w-full object-contain rounded-lg"
              alt="Touchscreen Display">
-        <figcaption class="text-center mt-3 font-semibold">
+<figcaption class="text-center mt-3 font-semibold">
             Touchscreen Display
         </figcaption>
-    </figure>
-
+</figure>
 <ol class="list-lower-roman pl-6 space-y-4">
-
 <li>
-            <strong>Manual on/off:</strong> The Manual ‘ON’ indicator lights up when in position
+<strong>Manual on/off:</strong> The Manual ‘ON’ indicator lights up when in position
             control keyswitch in manual mode for manual operation.
             Meanwhile, the MANUAL OFF indicator lights up when the keyswitch is in the position
             OFF or AUTO position.
         </li>
-
 <li>
-            <strong>Auto level on/off:</strong> By turning the keyswitch to the auto level position
+<strong>Auto level on/off:</strong> By turning the keyswitch to the auto level position
             Turn on the autolevel indicator and the autolevel will come out.
         </li>
-
 <li>
-            <strong>Safety shoe:</strong> This indicator will light up if it is active in auto.
+<strong>Safety shoe:</strong> This indicator will light up if it is active in auto.
         </li>
-
 <li>
-            <strong>Maximum cabin rotation:</strong> This indicator lights up when the cabin reaches the limit
+<strong>Maximum cabin rotation:</strong> This indicator lights up when the cabin reaches the limit
             maximum rotation.
         </li>
-
 <li>
-            <strong>Maximum travel:</strong> This indicator lights up when the tunnel reaches
+<strong>Maximum travel:</strong> This indicator lights up when the tunnel reaches
             maximum horizontal elongation or shortening travel limit.
         </li>
-
 <li>
-            <strong>Vertical limit:</strong> This indicator lights up when the tunnel reaches the travel limit
+<strong>Vertical limit:</strong> This indicator lights up when the tunnel reaches the travel limit
             maximum vertical direction.
         </li>
-
 <li>
-            <strong>Maximum steering:</strong> This indicator lights up when wheel boogie reaches
+<strong>Maximum steering:</strong> This indicator lights up when wheel boogie reaches
             maximum steering limit.
         </li>
-
 <li>
-            <strong>Maximum swing:</strong> This will be indicated by a swing indicator light
+<strong>Maximum swing:</strong> This will be indicated by a swing indicator light
             and an alarm will sound when the rotunda touches its rotation limit.
         </li>
-
 <li>
-            <strong>Service warning:</strong> The service warning indicator will light up when present
+<strong>Service warning:</strong> The service warning indicator will light up when present
             error/alarm on Garbarata.
         </li>
-
 <li>
-            <strong>Autolevel warning:</strong> The indicator will light up when the system is autolevel
+<strong>Autolevel warning:</strong> The indicator will light up when the system is autolevel
             works more than 4 seconds.
         </li>
-
 <li>
-            <strong>Bumper limit:</strong> This indicator will light up if the bumper comes into contact
+<strong>Bumper limit:</strong> This indicator will light up if the bumper comes into contact
             with the fuselage.
         </li>
-
 <li>
-            <strong>Canopy down:</strong> If the Canopy doesn\'t really go up/retract
+<strong>Canopy down:</strong> If the Canopy doesn\'t really go up/retract
             this will be illustrated by the “CANOPY DOWN” indicator light.
         </li>
-
 <li>
-            <strong>Slow down:</strong> This indicator lights up when the scanner sensor detects it
+<strong>Slow down:</strong> This indicator lights up when the scanner sensor detects it
             fuselage about 1 m and/or before the bridge completely
             elongated or shortened.
         </li>
-
 <li>
-            <strong>Column fault:</strong> This indicator lights up and a warning buzzer sounds when
+<strong>Column fault:</strong> This indicator lights up and a warning buzzer sounds when
             The right and left lift columns are approximately 70 mm apart.
         </li>
-
 <li>
-            <strong>Safety Hoop:</strong> The indicator will light up if the safety hoop touches
+<strong>Safety Hoop:</strong> The indicator will light up if the safety hoop touches
             with foreign objects.
         </li>
-
 <li>
-            <strong>Tunnel slope:</strong> On negative or positive slope, the indicator will
+<strong>Tunnel slope:</strong> On negative or positive slope, the indicator will
             lights up when the tunnel hits its Slope Limit.
         </li>
-
 <li>
-            <strong>Video monitoring system:</strong> The video monitor displays totals
+<strong>Video monitoring system:</strong> The video monitor displays totals
             image of wheel boogie. The operator can see which way the wheel is going
             directed and in which direction the Garbarata will move from its initial position.
         </li>
-
-    </ol>',
+</ol>',
             '2.1 Penggerak Horizontal' => '<p>
         When the POWER ON button is pressed (turned on) the PLC will activate and function
         regulate all voltages and controls on all Garbarata components.
         By turning the keyswitch to the manual position, power will flow throughout
-        Garbarata components include horizontal drive.</p><p>
+        Garbarata components include horizontal drive.</p>
+<p>
         Garbarata is a robotic machine that has many sensors for
         detect every movement. For example, when the Garbarata shortens
         maximum, then the bridge will no longer be able to be shortened, or when
         the garbarata is extended to the maximum, then the garbarata will no longer be available
         extended. When the bridge moves horizontally, automatically
         The rotary light and travel warning bell will light up as a warning to the crew
-        other crews around Garbarata.</p><p><strong>Garbarata can move horizontally if :</strong></p><ol class="list-decimal pl-6">
-        <li>There is no difference in the slope angle of the Garbarata and the floor in the rotunda</li><li>Canopy is folded</li><li>The vertical lift column is not active</li><li>Safety hoops are not obstructed by foreign objects</li><li>Is within the maximum horizontal rotation range</li><li>When the Garbarata is 2 meters from the fuselage, the Garbarata will automatically move slowly even if the joystick is pointed fully forward.</li></ol>
-
-    <p class="mt-4"><strong>a) Moving Forward</strong></p><p>
+        other crews around Garbarata.</p>
+<p>
+<strong>Garbarata can move horizontally if :</strong>
+</p>
+<ol class="list-decimal pl-6">
+<li>There is no difference in the slope angle of the Garbarata and the floor in the rotunda</li>
+<li>Canopy is folded</li>
+<li>The vertical lift column is not active</li>
+<li>Safety hoops are not obstructed by foreign objects</li>
+<li>Is within the maximum horizontal rotation range</li>
+<li>When the Garbarata is 2 meters from the fuselage, the Garbarata will automatically move slowly even
+if the joystick is pointed fully forward.</li>
+</ol>
+<p class="mt-4">
+<strong>a) Moving Forward</strong>
+</p>
+<p>
         By moving the joystick forward it will move
         Garbarata towards the front, and simultaneously will accelerate the speed
         Garbarata. The aerobridge can be moved forward if it is not in position
-        maximum length.</p><p><strong>b) Move backwards</strong></p><p>
+        maximum length.</p>
+<p>
+<strong>b) Move backwards</strong>
+</p>
+<p>
         To move backwards or retract, point the joystick backwards /
         backwards and simultaneously accelerates. Garbarata can\'t
-        moved backwards if it is not in the maximum short condition.</p><p><strong>c) Move left</strong></p><p>
+        moved backwards if it is not in the maximum short condition.</p>
+<p>
+<strong>c) Move left</strong>
+</p>
+<p>
         Point the joystick to the left and to the right, point the joystick
         towards the right.</p>',
             '2.2 Rotasi Kabin' => '<p>
-        The cabin rotation button functions to move the cabin left or right.</p><p><strong>The cabin can be moved if :</strong></p><ol class="list-lower-roman pl-6">
-        <li>The rotation buttons are not pressed simultaneously</li><li>The canopy is closed</li><li>is not in the maximum left or right position</li><li>The cabin does not touch the aircraft body</li></ol>
-
-    <p>
+        The cabin rotation button functions to move the cabin left or right.</p>
+<p>
+<strong>The cabin can be moved if :</strong>
+</p>
+<ol class="list-lower-roman pl-6">
+<li>The rotation buttons are not pressed simultaneously</li>
+<li>The canopy is closed</li>
+<li>is not in the maximum left or right position</li>
+<li>The cabin does not touch the aircraft body</li>
+</ol>
+<p>
         The cab can be rotated left or right using the cab rotation button
         on the control console.</p>',
             '2.3 Penggerak Vertikal' => '<p>
         The vertical drive functions to move the Garbarata vertically, with
-        using the vertical up/down buttons on the control console.</p><p><strong>Garbarata can be moved vertically if:</strong></p><ol class="list-lower-roman pl-6">
-        <li>The vertical up and down buttons are not pressed simultaneously</li><li>Garbarata is not in a maximum high or low position.</li><li>Canopy is perfectly folded</li><li>Garbarata is not moved horizontally</li>
-    </ol>',
+        using the vertical up/down buttons on the control console.</p>
+<p>
+<strong>Garbarata can be moved vertically if:</strong>
+</p>
+<ol class="list-lower-roman pl-6">
+<li>The vertical up and down buttons are not pressed simultaneously</li>
+<li>Garbarata is not in a maximum high or low position.</li>
+<li>Canopy is perfectly folded</li>
+<li>Garbarata is not moved horizontally</li>
+</ol>',
             '2.4 Penggerak Canopy' => '<p>
         The canopy functions as a barrier between the environment and the interior
         Garbarata while attached to the aircraft body. Canopy has
@@ -1743,114 +1716,176 @@ class EnglishContentSeeder extends Seeder
             '3. Mode Auto (Autolevel)' => '<p>
         Auto mode is used to lock the Garbarata drive components which are not working
         used during the service process. When the keyswitch is in the Auto position, all
-        Garbarata drive components will die.</p><p>
+        Garbarata drive components will die.</p>
+<p>
         Auto mode is only activated during the passenger loading and unloading process,
         When the process is complete, return the Garbarata to the parked position and turn it off
-        all power and keyswitches are off.</p><p><strong>a. When the keyswitch is in the AUTO position, then :</strong></p><ul class="list-disc pl-6">
-        <li>The horizontal drive function is not active</li><li>The vertical drive function is only active via the autolevel wheel (automatic)</li><li>In autolevel mode, the canopy system operates automatically</li><li>Cabin off rotation function</li><li>The autolevel indicator lights up</li><li>Cabin floor setting function is OFF</li></ul>
-
-    <p class="mt-4"><strong>b. When a plane goes up or down, the following things happen:</strong></p><ul class="list-disc pl-6">
-        <li>When the plane rises, sensors on the wheels light up. This regulates the PLC output to provide energy to the motor\'s vertical rise.</li><li>When the plane is descending, the sensors on the wheels turn on. This regulates the PLC output to energize the motor\'s vertical descent.</li><li>If the autolevel indicator and service warning indicator are on, an alarm will sound to alert the ground crew if a system failure occurs.</li><li>To turn off this alarm, one must turn the three position knob to the off/manual state.</li></ul>
-
-    <p class="mt-4">
-        <strong>When operating, make sure the Garbarata is under the intense supervision of the Garbarata operator</strong></p>',
-            '4.1 Prosedur Pengoperasian Standar (Mode Manual)' => '<p><strong>a. Check and clean the Garbarata movement area of ​​any disturbing objects</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_a.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.a">
-    </figure>
-
-    <p><strong>b. Turn on the exterior and interior lights as well as the AC</strong>n</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_b.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.b">
-    </figure>
-
-    <p><strong>c. Console Control</strong>s</p><p>i. Make sure the keyswitch is in Off mode</p><p>ii. Press the Power On button and the On button light will turn on</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_c2.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.c2">
-    </figure>
-
-    <p>
+        all power and keyswitches are off.</p>
+<p>
+<strong>a. When the keyswitch is in the AUTO position, then :</strong>
+</p>
+<ul class="list-disc pl-6">
+<li>The horizontal drive function is not active</li>
+<li>The vertical drive function is only active via the autolevel wheel (automatic)</li>
+<li>In autolevel mode, the canopy system operates automatically</li>
+<li>Cabin off rotation function</li>
+<li>The autolevel indicator lights up</li>
+<li>Cabin floor setting function is OFF</li>
+</ul>
+<p class="mt-4">
+<strong>b. When a plane goes up or down, the following things happen:</strong>
+</p>
+<ul class="list-disc pl-6">
+<li>When the plane rises, sensors on the wheels light up. This regulates the PLC output to provide
+energy to the motor\'s vertical rise.</li>
+<li>When the plane is descending, the sensors on the wheels turn on. This regulates the PLC output to
+energize the motor\'s vertical descent.</li>
+<li>If the autolevel indicator and service warning indicator are on, an alarm will sound to alert the
+ground crew if a system failure occurs.</li>
+<li>To turn off this alarm, one must turn the three position knob to the off/manual state.</li>
+</ul>
+<p class="mt-4">
+<strong>When operating, make sure the Garbarata is under the intense supervision of the Garbarata operator</strong>
+</p>',
+            '4.1 Prosedur Pengoperasian Standar (Mode Manual)' => '<p>
+<strong>a. Check and clean the Garbarata movement area of ​​any disturbing objects</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_a.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.a">
+</figure>
+<p>
+<strong>b. Turn on the exterior and interior lights as well as the AC</strong>n</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_b.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.b">
+</figure>
+<p>
+<strong>c. Console Control</strong>s</p>
+<p>i. Make sure the keyswitch is in Off mode</p>
+<p>ii. Press the Power On button and the On button light will turn on</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_c2.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.c2">
+</figure>
+<p>
         iii. Turn the keyswitch to manual mode, immediately after turning it into mode
-        manual, a buzzer beep will sound.</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_c3.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.c3">
-    </figure>
-
-    <p><strong>d. Check the following components</strong></p><ol class="list-lower-roman pl-6 space-y-2">
-        <li>
+        manual, a buzzer beep will sound.</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_c3.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.c3">
+</figure>
+<p>
+<strong>d. Check the following components</strong>
+</p>
+<ol class="list-lower-roman pl-6 space-y-2">
+<li>
             The closure is fully folded, when the canopy lights are down
-            If the condition is On, the Garbarata will not be able to be moved.</li><li>
-            Autolevel is stationary.</li><li>
+            If the condition is On, the Garbarata will not be able to be moved.</li>
+<li>
+            Autolevel is stationary.</li>
+<li>
             Make sure there are no people along the tunnel, especially in the ramp area
-            tunnels and meeting areas between tunnels.</li></ol>
-
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_d.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.d">
-    </figure>
-
-    <p>
-        <strong>e.</strong> Use the Joystick to move the Garbarata forward or backward,
+            tunnels and meeting areas between tunnels.</li>
+</ol>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_d.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.d">
+</figure>
+<p>
+<strong>e.</strong> Use the Joystick to move the Garbarata forward or backward,
         Use the vertical drive and cabin rotation buttons to position
-        Garbarata corresponds to the position of the aircraft.</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_e.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.e">
-    </figure>
-
-    <p>
-        <strong>f.</strong> After the Garbarata touches the fuselage, adjust the cabin bumper
+        Garbarata corresponds to the position of the aircraft.</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_e.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.e">
+</figure>
+<p>
+<strong>f.</strong> After the Garbarata touches the fuselage, adjust the cabin bumper
         with the airplane door. When the cabin bumper is close to the body
-        aircraft, the Garbarata speed will automatically decrease.</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_f.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.f">
-    </figure>
-
-    <p><strong>g. Lower the Canopy Closure</strong>s</p>
-
-    <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.1_g.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.g">
-    </figure>
+        aircraft, the Garbarata speed will automatically decrease.</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_f.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.f">
+</figure>
+<p>
+<strong>g. Lower the Canopy Closure</strong>s</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.1_g.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.1.g">
+</figure>
 ',
-            '4.2 Prosedure Standar Operasi (Auto Mode)' => '<p><strong>a. Turn the keyswitch to the auto</strong>position</p><p>
+            '4.2 Prosedure Standar Operasi (Auto Mode)' => '<p>
+<strong>a. Turn the keyswitch to the auto</strong>position</p>
+<p>
         Note: When autolevel is on, all drives are on
-        control console cannot work.</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_a.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.a">
-    </figure>
-    <p>
-        <strong>b.</strong> Make sure the autolevel is in perfect contact with the fuselage. If
+        control console cannot work.</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_a.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.a">
+</figure>
+<p>
+<strong>b.</strong> Make sure the autolevel is in perfect contact with the fuselage. If
         Autolevel doesn\'t move perfectly, don\'t use aerobridge.
-        fix the autolevel first.</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_b.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.b">
-    </figure>
-    <p><strong>c. Open the plane</strong>\'s door</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_c.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.c">
-    </figure>
-    <p><strong>d. Place the safety door shoe under the aircraft door</strong></p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_d.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.d">
-    </figure>
-    <p><strong>e. Once the process is complete, close the plane</strong>\'s door</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_e.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.e">
-    </figure>
-    <p><strong>f. Close the service door</strong></p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_f.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.f">
-    </figure>
-    <p><strong>g. Turn the keyswitch to the manual position</strong></p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_g.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.g">
-    </figure>
-    <p><strong>h. Fold the closure to its fullest extent</strong>s</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_h.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.h">
-    </figure>
-    <p><strong>i. Return the aerobridge to the parked position</strong></p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_i.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.i">
-    </figure>
-    <p><strong>j. Turn the keyswitch to off mode, and turn off the Garbarata and remove the key</strong>s</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_j.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.j">
-    </figure>
-    <p><strong>k. Press the off button to turn off the bridge</strong>s</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.2_k.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.k">
-    </figure>
-    <p><strong>l. Turn off lights and air conditioning when not in use</strong></p><p>
-        <strong>Note :</strong> The emergency stop button is only used in emergencies.</p>',
-            '4.3 Prosedur Pengoperasian Darurat' => '<p><strong>a. Over Swing</strong>s</p><p>
+        fix the autolevel first.</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_b.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.b">
+</figure>
+<p>
+<strong>c. Open the plane</strong>\'s door</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_c.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.c">
+</figure>
+<p>
+<strong>d. Place the safety door shoe under the aircraft door</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_d.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.d">
+</figure>
+<p>
+<strong>e. Once the process is complete, close the plane</strong>\'s door</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_e.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.e">
+</figure>
+<p>
+<strong>f. Close the service door</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_f.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.f">
+</figure>
+<p>
+<strong>g. Turn the keyswitch to the manual position</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_g.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.g">
+</figure>
+<p>
+<strong>h. Fold the closure to its fullest extent</strong>s</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_h.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.h">
+</figure>
+<p>
+<strong>i. Return the aerobridge to the parked position</strong>
+</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_i.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.i">
+</figure>
+<p>
+<strong>j. Turn the keyswitch to off mode, and turn off the Garbarata and remove the key</strong>s</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_j.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.j">
+</figure>
+<p>
+<strong>k. Press the off button to turn off the bridge</strong>s</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.2_k.png" class="mx-auto max-h-96 w-full object-contain rounded-lg" alt="4.2.k">
+</figure>
+<p>
+<strong>l. Turn off lights and air conditioning when not in use</strong>
+</p>
+<p>
+<strong>Note :</strong> The emergency stop button is only used in emergencies.</p>',
+            '4.3 Prosedur Pengoperasian Darurat' => '<p>
+<strong>a. Over Swing</strong>s</p>
+<p>
         The following explanation is the procedure if the Garbarata moves (swings)
-        so far that it exceeds the maximum limit on the rotunda column.</p><ol class="list-lower-roman pl-6 space-y-4">
-        <li>
+        so far that it exceeds the maximum limit on the rotunda column.</p>
+<ol class="list-lower-roman pl-6 space-y-4">
+<li>
             If the Garbarata moves too far and touches the limit sensor
             main switch, the Garbarata will automatically stop, for
-            To return it, the Garbarata must be moved in the opposite direction.</li><li>
+            To return it, the Garbarata must be moved in the opposite direction.</li>
+<li>
             If the Garbarata passes the main limit switch sensor then there is
             backup limit switch sensor (back up). When the Garbarata touches
             limit switch sensor back up, then the swing limit indicator will light up,
@@ -1859,25 +1894,32 @@ class EnglishContentSeeder extends Seeder
             moved back to parking position. When the Garbarata is in place
             in parking position, press the reset button to restore
             Bridge to normal operation. Immediately contact maintenance personnel
-            to identify failure of the main limit switch in operation.</li></ol>
-
-    <p class="mt-6"><strong>b. Over Steer</strong></p><p>
+            to identify failure of the main limit switch in operation.</li>
+</ol>
+<p class="mt-6">
+<strong>b. Over Steer</strong>
+</p>
+<p>
         The following procedure is carried out if Garbarata moves beyond the position
-        steering range of motion.</p><ol class="list-lower-roman pl-6 space-y-4">
-        <li>
+        steering range of motion.</p>
+<ol class="list-lower-roman pl-6 space-y-4">
+<li>
             Under normal circumstances, if the operator moves the Garbarata in the direction
             right or left, when it reaches the maximum range then the limit switch
-            which acts as a movement limiter will function.</li><li>
+            which acts as a movement limiter will function.</li>
+<li>
             Each limit switch has a back up limit switch which is a sensor
-            backup when the main (initial) limit switch does not work.</li></ol>
-
-    <p>
+            backup when the main (initial) limit switch does not work.</li>
+</ol>
+<p>
         When the main limit switch fails, the movement of the Garbarata will be restricted
         by the back up limit switch, and maximum steering and service indicators
-        warning ON will sound.</p><p>
+        warning ON will sound.</p>
+<p>
         The action that needs to be taken is to direct the Garbarata back to
         parking position, after press the reset button to restore
-        Bridge to normal operation.</p><p>
+        Bridge to normal operation.</p>
+<p>
         Immediately contact maintenance personnel to identify the failure
         main limit switch in operation.</p>
 ',
@@ -1885,27 +1927,37 @@ class EnglishContentSeeder extends Seeder
         When parking Garbarata if wind gusts exceed 25 m/s,
         The aerobridge should be rotated so that the front part of its length is avoided
         from the wind, and make sure that the parts exposed to the wind
-        minimized. The aerobridge should be shortened and lowered.</p><p class="mt-6"><strong>Note :</strong></p><ul class="list-disc pl-6 space-y-3">
-        <li>
+        minimized. The aerobridge should be shortened and lowered.</p>
+<p class="mt-6">
+<strong>Note :</strong>
+</p>
+<ul class="list-disc pl-6 space-y-3">
+<li>
             To prevent strong winds from blowing into the cabin,
             The operator must always close the cabin door / rolling door when
             Garbarata is not operated. When the Garbarata returned to position
             parking, the operator must close the door and retract or rotate
-            Garbarata away from the direction of the wind.</li><li>
+            Garbarata away from the direction of the wind.</li>
+<li>
             Do not leave empty aerobridges that are not in use
             the autolevel state sticks to the Plane. When the Garbarata does not
             used, then position the Garbarata according to the position of the aircraft.</li>
-    </ul>
+</ul>
 ',
             '4.5 Penggunaan Jacking Stand' => '<p>
         In situations where Jacking Stands are needed for support
-        Bridge or repair wheel boogie, follow these steps:</p><p><strong>4.5.1</strong> Raise the Garbarata to allow the Jacking Stand to be under the Garbarata support beams.</p><p><strong>4.5.2</strong> Place stands directly under support beams.</p><figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
-        <img src="/images/modules/chapter3_4.5.2.png"
+        Bridge or repair wheel boogie, follow these steps:</p>
+<p>
+<strong>4.5.1</strong> Raise the Garbarata to allow the Jacking Stand to be under the Garbarata support beams.</p>
+<p>
+<strong>4.5.2</strong> Place stands directly under support beams.</p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/chapter3_4.5.2.png"
              class="mx-auto max-h-96 w-full object-contain rounded-lg"
              alt="Jacking Stand">
-    </figure>
-    <p>
-        <strong>4.5.3</strong> Lower the bridge until the support beams are at the top
+</figure>
+<p>
+<strong>4.5.3</strong> Lower the bridge until the support beams are at the top
         jacking stand, and the stand (jack) stands firmly on the apron.
         Continue by holding the Down button to raise the wheel
         boogie from the ground for service.</p>',
@@ -1916,19 +1968,28 @@ class EnglishContentSeeder extends Seeder
         followed if the warning and interlock do not work. Make sure that
         The boogie wheel does not rotate too much when doing it
         withdrawal. Columns should not be rotated more than 87.5 degrees from the line
-        middle.</p><p><strong>The actuation procedure includes:</strong></p><p>
-        <strong>4.6.1</strong> Install the tow rope in place on the drive column. Then
+        middle.</p>
+<p>
+<strong>The actuation procedure includes:</strong>
+</p>
+<p>
+<strong>4.6.1</strong> Install the tow rope in place on the drive column. Then
         Connect the towing rope to the eye hook plate on the column frame
-        using shackles, then tighten the locking pin.</p><p>
-        <strong>4.6.2</strong> Connect the end of the towing rope to the towing vehicle.</p><p>
-        <strong>4.6.3</strong> Release the brake on the wheel boogie motor by turning
-        brake knob clockwise on the motorbike.</p><p>
-        <strong>4.6.4</strong> Pull the Garbarata slowly, do not pull the Garbarata
-        violently or suddenly at high speed.</p><p>
-        <strong>4.6.5</strong> Pull the Garbarata in the direction according to the wheel boogie position,
+        using shackles, then tighten the locking pin.</p>
+<p>
+<strong>4.6.2</strong> Connect the end of the towing rope to the towing vehicle.</p>
+<p>
+<strong>4.6.3</strong> Release the brake on the wheel boogie motor by turning
+        brake knob clockwise on the motorbike.</p>
+<p>
+<strong>4.6.4</strong> Pull the Garbarata slowly, do not pull the Garbarata
+        violently or suddenly at high speed.</p>
+<p>
+<strong>4.6.5</strong> Pull the Garbarata in the direction according to the wheel boogie position,
         do not forcefully pull the Garbarata in the opposite direction
-        wheel boogie.</p><p>
-        <strong>4.6.6</strong> The motorbike brake will function automatically as usual
+        wheel boogie.</p>
+<p>
+<strong>4.6.6</strong> The motorbike brake will function automatically as usual
         when the power returns to normal, but there is one safety suggestion,
         Lock the wheel boogie motorbike brakes again after you have finished pulling
         Garbarata by turning the brake knob counterclockwise.</p>',
@@ -6689,7 +6750,7 @@ technical specifications, capacity and unit dimensions.</p>
             '7.14 Lembar Gambar 14' => '<p>Attachment to Electrical Drawing Sheet 14 (As-Built Garbarata Diagram).</p>',
         ];
 
-        // --- Chapter Titles (EN) ---
+// --- Chapter Titles (EN) ---
         $chapterTitles = [
             'BAB 1: DESKRIPSI KOMPONEN' => 'CHAPTER 1: COMPONENT DESCRIPTION',
             'BAB 2: SPESIFIKASI' => 'CHAPTER 2: SPECIFICATIONS',

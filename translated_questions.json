@@ -1,0 +1,413 @@
+[
+    {
+        "id": 1,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Bahan pembersih apakah yang dianjurkan untuk membersihkan karpet dan jendela Garbarata guna mencegah kerusakan material?\",\"en\":\"What cleaning agent is recommended for cleaning Garbarata carpets and windows to prevent damage to the material?\"}",
+        "explanation": "{\"id\":\"Pembersihan karpet dan jendela harus menggunakan shampoo yang bebas detergen berkualitas tinggi.\",\"en\":\"Carpet and window cleaning should use a high-quality, detergent-free shampoo.\"}",
+        "options": [
+            {
+                "id": 1,
+                "option_text": "{\"id\":\"Shampoo bebas detergen\",\"en\":\"Detergent-free shampoo\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 2,
+                "option_text": "{\"id\":\"Detergen konsentrat tinggi\",\"en\":\"Highly concentrated detergent\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 3,
+                "option_text": "{\"id\":\"Cairan pemutih klorin\",\"en\":\"Chlorine bleach liquid\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 4,
+                "option_text": "{\"id\":\"Sabun cuci piring pekat\",\"en\":\"Concentrated dish soap\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Untuk mencegah karat, bagian-bagian bergerak seperti rantai, sprocket, bearing, dan roller pada Garbarata harus dilapisi cat dasar logam dan polyurethane secara berkala.\",\"en\":\"To prevent rust, moving parts such as chains, sprockets, bearings and rollers on Garbarata must be coated with metal base paint and polyurethane periodically.\"}",
+        "explanation": "{\"id\":\"Salah. Bagian bergerak seperti rantai, sprocket, shaft, bearing, roller, atau rel TIDAK boleh dicat.\",\"en\":\"Wrong. Moving parts such as chains, sprockets, shafts, bearings, rollers, or rails must NOT be painted.\"}",
+        "options": [
+            {
+                "id": 5,
+                "option_text": "{\"id\":\"Benar\",\"en\":\"Correct\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 6,
+                "option_text": "{\"id\":\"Salah\",\"en\":\"Wrong\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Jelaskan mengapa pemeliharaan\\\/inspeksi berkala pada permukaan luar Garbarata yang bercat sangat penting, serta apa akibatnya jika tumpahan minyak hidrokarbon dibiarkan terlalu lama!\",\"en\":\"Explain why regular maintenance\\\/inspection of the painted outer surface of the Garbarata is very important, and what the consequences will be if a hydrocarbon oil spill is left for too long!\"}",
+        "explanation": "{\"id\":\"Inspeksi berkala penting untuk mencegah reaksi kotoran dan sisa pelumas dengan cat. Minyak hidrokarbon yang dibiarkan dapat merusak lapisan cat pelindung, memicu korosi dini pada struktur logam Garbarata.\",\"en\":\"Periodic inspections are important to prevent the reaction of dirt and lubricant residue with the paint. Hydrocarbon oil that is left untreated can damage the protective paint layer, triggering premature corrosion of the Garbarata's metal structure.\"}",
+        "options": []
+    },
+    {
+        "id": 4,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Jodohkan aktivitas perawatan berikut dengan interval waktu pelaksanaannya yang tepat berdasarkan manual Garbarata!\",\"en\":\"Match the following maintenance activities with the correct implementation time intervals based on the Garbarata manual!\"}",
+        "explanation": "{\"id\":\"Pembersihan karpet & jendela dilakukan harian. Perawatan keseluruhan dilakukan 3 bulanan. Pembersihan minyak hidrokarbon dilakukan 6 bulanan.\",\"en\":\"Carpet & window cleaning is done daily. Overall treatment is carried out 3 months. Hydrocarbon oil cleaning is carried out every 6 months.\"}",
+        "options": [
+            {
+                "id": 7,
+                "option_text": "{\"id\":\"Pembersihan karpet dan jendela\",\"en\":\"Carpet and window cleaning\"}",
+                "match_label": "{\"id\":\"Setiap hari (Harian)\",\"en\":\"Every day (Daily)\"}"
+            },
+            {
+                "id": 8,
+                "option_text": "{\"id\":\"Perawatan rutin keseluruhan (triwulan)\",\"en\":\"Overall routine maintenance (quarterly)\"}",
+                "match_label": "{\"id\":\"Tiga bulan sekali\",\"en\":\"Once every three months\"}"
+            },
+            {
+                "id": 9,
+                "option_text": "{\"id\":\"Pembersihan endapan minyak hidrokarbon\",\"en\":\"Cleaning of hydrocarbon oil deposits\"}",
+                "match_label": "{\"id\":\"Setengah tahun sekali (6 bulan)\",\"en\":\"Once every half a year (6 months)\"}"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Urutkan langkah-langkah pengecatan ulang permukaan luar Garbarata yang berkarat atau mengelupas dengan benar!\",\"en\":\"Sequence the steps for repainting the rusty or peeling outer surface of the Garbarata correctly!\"}",
+        "explanation": "{\"id\":\"Urutan yang benar: 1. Gunakan pelarut untuk membersihkan kotoran\\\/minyak, 2. Gunakan amplas untuk membersihkan karat, 3. Beri cat dasar berkualitas tinggi, 4. Lapisi dengan dua lapis polyurethane enamel.\",\"en\":\"Correct order: 1. Use solvent to clean dirt\\\/oil, 2. Use sandpaper to clean rust, 3. Apply high quality primer, 4. Coat with two coats of polyurethane enamel.\"}",
+        "options": [
+            {
+                "id": 10,
+                "option_text": "{\"id\":\"Gunakan pelarut untuk membersihkan daerah kotor\\\/berminyak\",\"en\":\"Use solvent to clean dirty\\\/oily areas\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 11,
+                "option_text": "{\"id\":\"Gunakan amplas halus untuk membersihkan karat dan cat mengelupas\",\"en\":\"Use fine sandpaper to clean rust and peeling paint\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 12,
+                "option_text": "{\"id\":\"Aplikasikan cat dasar berkualitas tinggi untuk logam\",\"en\":\"Apply a high-quality primer for metal\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 13,
+                "option_text": "{\"id\":\"Akhiri dengan dua lapis polyurethane enamel sesuai warna\",\"en\":\"Finish with two coats of color-matched polyurethane enamel\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Berapakah ketebalan minimum dari bantalan lift column (column guides) sebelum diwajibkan untuk diganti dengan pad yang baru?\",\"en\":\"What is the minimum thickness of the lift column bearing (column guides) before it is required to be replaced with a new pad?\"}",
+        "explanation": "{\"id\":\"Berdasarkan tabel ketebalan bantalan, jika ketebalan mencapai 22 mm, pad harus segera diganti.\",\"en\":\"Based on the pad thickness table, if the thickness reaches 22 mm, the pad must be replaced immediately.\"}",
+        "options": [
+            {
+                "id": 14,
+                "option_text": "{\"id\":\"22 mm\",\"en\":\"22mm\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 15,
+                "option_text": "{\"id\":\"25 mm\",\"en\":\"25mm\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 16,
+                "option_text": "{\"id\":\"23.5 mm\",\"en\":\"23.5mm\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 17,
+                "option_text": "{\"id\":\"20 mm\",\"en\":\"20mm\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Setiap lift column pada Garbarata memiliki 8 bantalan (4 di bagian atas dan 4 di bagian bawah) untuk mencegah terjadinya gesekan langsung antarlogam.\",\"en\":\"Each lift column on Garbarata has 8 bearings (4 at the top and 4 at the bottom) to prevent direct friction between metals.\"}",
+        "explanation": "{\"id\":\"Benar. Setiap lift column memiliki 8 bantalan, 4 di atas dan 4 di bawah.\",\"en\":\"Correct. Each lift column has 8 bearings, 4 at the top and 4 at the bottom.\"}",
+        "options": [
+            {
+                "id": 18,
+                "option_text": "{\"id\":\"Benar\",\"en\":\"Correct\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 19,
+                "option_text": "{\"id\":\"Salah\",\"en\":\"Wrong\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Jelaskan apa yang dimaksud dengan Column Fault pada Vertical Lift Column, serta sebutkan indikasi yang memicu sistem proteksi ini menyala!\",\"en\":\"Explain what is meant by Column Fault on a Vertical Lift Column, and state the indication that triggers this protection system to turn on!\"}",
+        "explanation": "{\"id\":\"Column Fault terjadi jika salah satu lift column bergerak lebih cepat dari yang lain sehingga miring\\\/condong. Indikator menyala bila salah satu column naik 70mm lebih tinggi dari yang lain.\",\"en\":\"Column Fault occurs if one of the lift columns moves faster than the others so that it tilts. The indicator lights up when one column rises 70mm higher than the other.\"}",
+        "options": []
+    },
+    {
+        "id": 9,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Jodohkan kode Trouble berikut dengan gejala kerusakan yang ditimbulkannya pada sistem Garbarata!\",\"en\":\"Match the following Trouble code with the symptoms of damage it causes to the Garbarata system!\"}",
+        "explanation": "{\"id\":\"Trouble 11 adalah motor horizontal berdengung tapi tidak jalan. Trouble 12 adalah Canopy Closure tidak mau naik\\\/turun. Trouble 15 adalah tiang miring\\\/condong.\",\"en\":\"Trouble 11 is the horizontal motor buzzing but not running. Trouble 12 is the Canopy Closure won't go up\\\/down. Trouble 15 is a tilted pole.\"}",
+        "options": [
+            {
+                "id": 20,
+                "option_text": "{\"id\":\"Trouble 11\",\"en\":\"Trouble 11\"}",
+                "match_label": "{\"id\":\"Motor horizontal berdengung, tapi tidak beroperasi\",\"en\":\"The horizontal motor hums, but does not operate\"}"
+            },
+            {
+                "id": 21,
+                "option_text": "{\"id\":\"Trouble 12\",\"en\":\"Trouble 12\"}",
+                "match_label": "{\"id\":\"Canopy Closure tidak mau naik atau turun\",\"en\":\"Canopy Closure won't go up or down\"}"
+            },
+            {
+                "id": 22,
+                "option_text": "{\"id\":\"Trouble 15\",\"en\":\"Trouble 15\"}",
+                "match_label": "{\"id\":\"Tiang Vertical Lift Column miring\\\/tidak sejajar\",\"en\":\"The Vertical Lift Column pole is tilted\\\/not parallel\"}"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "chapter_id": 4,
+        "question_text": "{\"id\":\"Urutkan langkah pertama hingga akhir dalam prosedur pelepasan ban Garbarata untuk pemeliharaan roda!\",\"en\":\"Sequence the first to last steps in the Garbarata tire removal procedure for wheel maintenance!\"}",
+        "explanation": "{\"id\":\"Langkah pelepasan ban: 1. Naikkan di atas dongkrak, 2. Tahan tombol down sampai roda menyentuh tanah, 3. Bongkar pelindung dan putus rantai, 4. Lepaskan bearing tapper lockwasher.\",\"en\":\"Steps to remove the tire: 1. Raise it on a jack, 2. Hold the down button until the wheel touches the ground, 3. Disassemble the protector and break the chain, 4. Remove the tapper lockwasher bearing.\"}",
+        "options": [
+            {
+                "id": 23,
+                "option_text": "{\"id\":\"Angkat Garbarata di atas dongkrak \\\/ Jacking Stand\",\"en\":\"Lift the Garbarata on jacks \\\/ Jacking Stands\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 24,
+                "option_text": "{\"id\":\"Tahan tombol down hingga roda menyentuh tanah\",\"en\":\"Hold the down button until the wheel touches the ground\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 25,
+                "option_text": "{\"id\":\"Bongkar pelindung rantai dan putus rantai\",\"en\":\"Dismantle the chain guard and break the chain\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 26,
+                "option_text": "{\"id\":\"Lepaskan bearing tapper yang terpasang pada lockwasher\",\"en\":\"Remove the tapper bearing attached to the lockwasher\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Berdasarkan daftar suku cadang Rotunda Assembly, apakah nama komponen yang memiliki kode part number \\\"ORT023SM\\\"?\",\"en\":\"Based on the Rotunda Assembly parts list, what is the name of the component that has the part number code \\\"ORT023SM\\\"?\"}",
+        "explanation": "{\"id\":\"Part number ORT023SM merujuk pada Potentiometer Rotunda Assy.\",\"en\":\"Part number ORT023SM refers to the Potentiometer Rotunda Assy.\"}",
+        "options": [
+            {
+                "id": 27,
+                "option_text": "{\"id\":\"Potentiometer Rotunda Assy\",\"en\":\"Potentiometer Rotunda Assy\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 28,
+                "option_text": "{\"id\":\"Guide Pipe Barrel\",\"en\":\"Guide Pipe Barrel\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 29,
+                "option_text": "{\"id\":\"Roller Bearing Rotunda\",\"en\":\"Rotunda Roller Bearings\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 30,
+                "option_text": "{\"id\":\"Worm Gear Assembly\",\"en\":\"Worm Gear Assembly\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Part number \\\"ORT001AM\\\" and \\\"ORT002AM\\\" berturut-turut merupakan suku cadang untuk rakitan curtain barrel (penutup celah) sisi kiri dan sisi kanan pada Rotunda.\",\"en\":\"Part numbers \\\"ORT001AM\\\" and \\\"ORT002AM\\\" respectively are spare parts for the curtain barrel assembly (gap cover) on the left and right sides of the Rotunda.\"}",
+        "explanation": "{\"id\":\"Benar. ORT001AM adalah sisi kiri (Left side) dan ORT002AM adalah sisi kanan (Right side).\",\"en\":\"Correct. ORT001AM is the left side and ORT002AM is the right side.\"}",
+        "options": [
+            {
+                "id": 31,
+                "option_text": "{\"id\":\"Benar\",\"en\":\"Correct\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 32,
+                "option_text": "{\"id\":\"Salah\",\"en\":\"Wrong\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Mengapa ketelitian dalam menuliskan part number (seperti ORT107AM untuk Carpet) sangat krusial saat melakukan pemesanan suku cadang Garbarata kepada pihak manufaktur?\",\"en\":\"Why is accuracy in writing the part number (such as ORT107AM for Carpet) so crucial when ordering Garbarata spare parts from the manufacturer?\"}",
+        "explanation": "{\"id\":\"Ketelitian part number penting untuk mencegah ketidakcocokan dimensi, tipe bearing, atau spesifikasi mekanik\\\/elektrik saat komponen pengganti dipasang. Kesalahan kode dapat menyebabkan keterlambatan operasional Garbarata.\",\"en\":\"Part number accuracy is important to prevent mismatches in dimensions, bearing type, or mechanical\\\/electrical specifications when replacement components are installed. Code errors can cause delays in Garbarata operations.\"}",
+        "options": []
+    },
+    {
+        "id": 14,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Jodohkan nama suku cadang berikut dengan kode part number resminya yang benar!\",\"en\":\"Match the following spare part names with the correct official part number codes!\"}",
+        "explanation": "{\"id\":\"ORT107AM untuk carpet, ORT008AM untuk roller bearing, ORT103AM untuk guide pipe barrel.\",\"en\":\"ORT107AM for carpet, ORT008AM for roller bearings, ORT103AM for guide pipe barrel.\"}",
+        "options": [
+            {
+                "id": 33,
+                "option_text": "{\"id\":\"Carpet for Rotunda\",\"en\":\"Carpet for Rotunda\"}",
+                "match_label": "{\"id\":\"ORT107AM\",\"en\":\"ORT107AM\"}"
+            },
+            {
+                "id": 34,
+                "option_text": "{\"id\":\"Roller Bearing Rotunda\",\"en\":\"Rotunda Roller Bearings\"}",
+                "match_label": "{\"id\":\"ORT008AM\",\"en\":\"ORT008AM\"}"
+            },
+            {
+                "id": 35,
+                "option_text": "{\"id\":\"Guide Pipe Barrel\",\"en\":\"Guide Pipe Barrel\"}",
+                "match_label": "{\"id\":\"ORT103AM\",\"en\":\"ORT103AM\"}"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Urutkan komponen Rotunda Assembly berikut berdasarkan nomor item terkecil hingga terbesar pada gambar Technical Drawing!\",\"en\":\"Sort the following Rotunda Assembly components based on the smallest to largest item number in the Technical Drawing image!\"}",
+        "explanation": "{\"id\":\"Urutan No. Item: 1 (Left Barrel), 3 (Guide Pipe), 4 (Tension Barrel Bearing), 6 (Tension Barrel).\",\"en\":\"Sequence No. Items: 1 (Left Barrel), 3 (Guide Pipe), 4 (Tension Barrel Bearing), 6 (Tension Barrel).\"}",
+        "options": [
+            {
+                "id": 36,
+                "option_text": "{\"id\":\"Barrel Rotunda Curtain Assembly Left (No. 1)\",\"en\":\"Barrel Rotunda Curtain Assembly Left (No. 1)\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 37,
+                "option_text": "{\"id\":\"Guide Pipe Barrel (No. 3)\",\"en\":\"Guide Pipe Barrel (No. 3)\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 38,
+                "option_text": "{\"id\":\"Tension Barrel Bearing (No. 4)\",\"en\":\"Tension Barrel Bearing (No. 4)\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 39,
+                "option_text": "{\"id\":\"Tension Barrel (No. 6)\",\"en\":\"Tension Barrel (No. 6)\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Manakah kode part number resmi yang sesuai untuk komponen Worm Gear Assembly (L\\\/R) pada Rotunda?\",\"en\":\"Which is the appropriate official part number code for the Worm Gear Assembly (L\\\/R) component on the Rotunda?\"}",
+        "explanation": "{\"id\":\"Berdasarkan tabel daftar komponen, Worm Gear Assembly memiliki part number ORT013AM.\",\"en\":\"Based on the component list table, the Worm Gear Assembly has part number ORT013AM.\"}",
+        "options": [
+            {
+                "id": 40,
+                "option_text": "{\"id\":\"ORT013AM\",\"en\":\"ORT013AM\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 41,
+                "option_text": "{\"id\":\"ORT012CM\",\"en\":\"ORT012CM\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 42,
+                "option_text": "{\"id\":\"ORT013CM\",\"en\":\"ORT013CM\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 43,
+                "option_text": "{\"id\":\"ORT106AM\",\"en\":\"ORT106AM\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Part number \\\"ORT107AM\\\" merupakan kode komponen resmi untuk Carpet for Rotunda.\",\"en\":\"Part number \\\"ORT107AM\\\" is the official component code for Carpet for Rotunda.\"}",
+        "explanation": "{\"id\":\"Benar. Suku cadang Carpet for Rotunda terdaftar dengan kode ORT107AM.\",\"en\":\"Correct. Carpet for Rotunda spare parts are listed with code ORT107AM.\"}",
+        "options": [
+            {
+                "id": 44,
+                "option_text": "{\"id\":\"Benar\",\"en\":\"Correct\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 45,
+                "option_text": "{\"id\":\"Salah\",\"en\":\"Wrong\"}",
+                "match_label": "[]"
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Sebutkan minimal 3 nama suku cadang yang digunakan pada perakitan Rotunda Assembly beserta kode part numbernya berdasarkan materi Bab 5!\",\"en\":\"Mention at least 3 names of spare parts used in the Rotunda Assembly assembly along with their part number codes based on Chapter 5 material!\"}",
+        "explanation": "{\"id\":\"Contoh suku cadang: 1. Carpet for Rotunda (ORT107AM), 2. Tension Barrel (ORT104AM), 3. Hinge Pin (ORT012CM).\",\"en\":\"Examples of spare parts: 1. Carpet for Rotunda (ORT107AM), 2. Tension Barrel (ORT104AM), 3. Hinge Pin (ORT012CM).\"}",
+        "options": []
+    },
+    {
+        "id": 19,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Jodohkan nama komponen berikut dengan kode part numbernya yang benar!\",\"en\":\"Match the following component names with the correct part number codes!\"}",
+        "explanation": "{\"id\":\"Guide Pipe Barrel adalah ORT103AM, Hinge Pin adalah ORT012CM, Plate Curtain Upper adalah ORT106AM.\",\"en\":\"Guide Pipe Barrel is ORT103AM, Hinge Pin is ORT012CM, Plate Curtain Upper is ORT106AM.\"}",
+        "options": [
+            {
+                "id": 46,
+                "option_text": "{\"id\":\"Guide Pipe Barrel\",\"en\":\"Guide Pipe Barrel\"}",
+                "match_label": "{\"id\":\"ORT103AM\",\"en\":\"ORT103AM\"}"
+            },
+            {
+                "id": 47,
+                "option_text": "{\"id\":\"Hinge Pin\",\"en\":\"Hinge Pin\"}",
+                "match_label": "{\"id\":\"ORT012CM\",\"en\":\"ORT012CM\"}"
+            },
+            {
+                "id": 48,
+                "option_text": "{\"id\":\"Plate Curtain Upper\",\"en\":\"Plate Curtain Upper\"}",
+                "match_label": "{\"id\":\"ORT106AM\",\"en\":\"ORT106AM\"}"
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "chapter_id": 5,
+        "question_text": "{\"id\":\"Urutkan komponen-komponen berikut dari posisi teratas hingga posisi terbawah (lantai) pada perakitan curtain Rotunda!\",\"en\":\"Sort the following components from the top position to the bottom position (floor) in the Rotunda curtain assembly!\"}",
+        "explanation": "{\"id\":\"Urutan dari atas ke bawah: Plate Curtain Upper (atas), Slat Curtain Assy (tengah\\\/selubung), Carpet for Rotunda (bawah\\\/lantai).\",\"en\":\"Order from top to bottom: Plate Curtain Upper (top), Slat Curtain Assy (middle\\\/sheathing), Carpet for Rotunda (bottom\\\/floor).\"}",
+        "options": [
+            {
+                "id": 49,
+                "option_text": "{\"id\":\"Plate Curtain Upper (Bagian Atas)\",\"en\":\"Plate Curtain Upper (Top Part)\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 50,
+                "option_text": "{\"id\":\"Slat Curtain Assy (Sisi Selubung Tengah)\",\"en\":\"Slat Curtain Assy (Middle Sheath Side)\"}",
+                "match_label": "[]"
+            },
+            {
+                "id": 51,
+                "option_text": "{\"id\":\"Carpet for Rotunda (Bagian Alas\\\/Lantai)\",\"en\":\"Carpet for Rotunda (Base\\\/Floor Part)\"}",
+                "match_label": "[]"
+            }
+        ]
+    }
+]

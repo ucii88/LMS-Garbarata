@@ -149,8 +149,8 @@
                                 const found = (this.modules || []).find(m => {
                                     if (!m || !m.title) return false;
                                     const titleLower = m.title.trim().toLowerCase();
-                                    return titleLower.startsWith(labelStr + '.') || 
-                                           titleLower.startsWith(labelStr + ' ') || 
+                                    return titleLower.startsWith(labelStr + '.') ||
+                                           titleLower.startsWith(labelStr + ' ') ||
                                            titleLower === labelStr ||
                                            titleLower.includes(searchStr) ||
                                            String(m.id) === labelStr;
@@ -194,7 +194,7 @@
                                 }
 
                                 this.$nextTick(() => {
-                                    const el = document.getElementById('module-' + targetId) 
+                                    const el = document.getElementById('module-' + targetId)
                                             || document.getElementById('mech-module-' + targetId)
                                             || document.getElementById('elec-module-' + targetId)
                                             || document.querySelector('[data-module-id="' + targetId + '"]');
@@ -359,12 +359,15 @@
     <div x-show="diagramObj && diagramObj.image_path" x-cloak class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full mb-6">
     <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
         <div class="flex items-center gap-2">
-            <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
-        <span x-show="diagramObj" class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
+            <h3 class="text-base font-bold text-slate-700">{{ __('Diagram Interaktif') }}</h3>
+            <span x-show="diagramObj" class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
             <!-- Controls Ukuran Bulatan Hotspot - Instruktur only -->
             @if(auth()->user()->isInstruktur())
+
+
+            <!-- Controls Ukuran Bulatan Hotspot -->
             <div x-show="hotspots.length > 0" class="flex items-center gap-1 border-l border-slate-200 pl-2">
-                <span class="text-[10px] text-slate-500 font-semibold mr-1">Ukuran Dot:</span>
+                <span class="text-[10px] text-slate-500 font-semibold mr-1">{{ __('Ukuran Dot:') }}</span>
                 <button type="button" @click="setDotSize('sm')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">S</button>
                 <button type="button" @click="setDotSize('md')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">M</button>
                 <button type="button" @click="setDotSize('lg')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">L</button>
@@ -378,39 +381,39 @@
                     <div x-show="diagramObj" class="flex flex-wrap items-center gap-2">
                         <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span>Ganti Gambar</span>
+                            <span>{{ __('Ganti Gambar') }}</span>
                         </button>
 
-                        <button x-show="!editMode" 
-                                @click="addHotspotMode = !addHotspotMode" 
+                        <button x-show="!editMode"
+                                @click="addHotspotMode = !addHotspotMode"
                                 class="px-3 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
                                 :class="addHotspotMode ? 'bg-amber-500 text-white shadow-md' : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200'">
                             <template x-if="addHotspotMode">
                                 <div class="flex items-center gap-1.5">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                    <span>Batal Tambah</span>
+                                    <span>{{ __('Batal Tambah') }}</span>
                                 </div>
                             </template>
                             <template x-if="!addHotspotMode">
                                 <div class="flex items-center gap-1.5">
                                     <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                    <span>Tambah Hotspot</span>
+                                    <span>{{ __('Tambah Hotspot') }}</span>
                                 </div>
                             </template>
                         </button>
 
                         <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span>Atur Posisi / Edit</span>
+                            <span>{{ __('Atur Posisi / Edit') }}</span>
                         </button>
 
                         <button x-show="editMode" @click="cancelEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">
-                            Batal Edit
+                            {{ __('Batal Edit') }}
                         </button>
                         <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-                            <span x-show="!saving">Simpan Posisi</span>
-                            <span x-show="saving">Menyimpan...</span>
+                            <span x-show="!saving">{{ __('Simpan Posisi') }}</span>
+                            <span x-show="saving">{{ __('Menyimpan...') }}</span>
                         </button>
                     </div>
             </div>
@@ -420,11 +423,11 @@
     <!-- Notification indicator when addHotspotMode is active -->
     <div x-show="addHotspotMode" x-cloak class="mb-3 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-semibold flex items-center gap-2 animate-pulse">
         <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-        <span>Klik di posisi mana saja pada gambar diagram untuk menempatkan titik hotspot baru.</span>
+        <span>{{ __('Klik di posisi mana saja pada gambar diagram untuk menempatkan titik hotspot baru.') }}</span>
     </div>
 
     <!-- Diagram Display Container -->
-    <div x-ref="diagramContainer" 
+    <div x-ref="diagramContainer"
          @click="onDiagramClick($event)"
          class="relative bg-slate-50 rounded-xl w-full max-w-xl mx-auto border border-gray-200 shadow-sm select-none min-h-[150px]"
          :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
@@ -451,8 +454,8 @@
                 <!-- Hotspot Dot -->
                 <span class="relative inline-flex rounded-full border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110 shrink-0"
                       :class="[
-                          hotspot.action_type === 'popup' 
-                            ? 'bg-amber-500 text-white' 
+                          hotspot.action_type === 'popup'
+                            ? 'bg-amber-500 text-white'
                             : (typeof activeMechId !== 'undefined' && activeMechId === hotspot.target_module_id && !editMode ? 'bg-blue-700 scale-110 ring-4 ring-blue-500/30' : 'bg-blue-600 text-white'),
                           dotSize === 'sm' ? 'w-5 h-5 text-[10px]' : (dotSize === 'md' ? 'w-6 h-6 text-[11px]' : (dotSize === 'lg' ? 'w-7 h-7 text-[12px]' : 'w-8 h-8 text-[13px]'))
                       ]">
@@ -481,7 +484,7 @@
     <div x-show="editMode && hotspots.length > 0" class="mt-4 pt-4 border-t border-slate-100" x-cloak>
         <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">
             <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            <span>Daftar Hotspot (Klik tombol Hapus untuk menghapus 1 titik spesifik)</span>
+            <span>{{ __('Daftar Hotspot (Klik tombol Hapus untuk menghapus 1 titik spesifik)') }}</span>
         </h4>
         <div class="flex flex-wrap gap-2">
             <template x-for="(hotspot, idx) in hotspots" :key="hotspot.id">
@@ -490,11 +493,11 @@
                     <span x-text="hotspot.label"></span>
                     <button type="button" @click="activeHotspot = Object.assign({}, hotspot); showHotspotFormModal = true;" class="text-blue-600 hover:text-blue-800 font-bold ml-1 hover:underline flex items-center gap-1">
                         <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        <span>Edit</span>
+                        <span>{{ __('Edit') }}</span>
                     </button>
                     <button type="button" @click="deleteHotspot(hotspot.id)" class="text-red-600 hover:text-red-800 font-bold ml-1 bg-red-50 px-2 py-0.5 rounded-lg border border-red-100 hover:bg-red-100 transition flex items-center gap-1">
                         <svg class="w-3.5 h-3.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        <span>Hapus</span>
+                        <span>{{ __('Hapus') }}</span>
                     </button>
                 </div>
             </template>

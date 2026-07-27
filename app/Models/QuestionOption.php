@@ -22,6 +22,7 @@ class QuestionOption extends Model
 
     protected $translatable = [
         'option_text',
+        'match_label',
     ];
 
     protected $casts = [

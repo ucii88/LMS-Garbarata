@@ -711,9 +711,24 @@ class Chapter3Seeder extends Seeder
 
     private function module(int $chapterId, string $title, string $content, int $order): void
     {
+        $englishTitles = [
+            '1.1 Deskripsi Detail Pengoperasian' => '1.1 Detailed Operating Description',
+            '2.1 Penggerak Horizontal' => '2.1 Horizontal Drive',
+            '2.2 Rotasi Kabin' => '2.2 Cabin Rotation',
+            '2.3 Penggerak Vertikal' => '2.3 Vertical Drive',
+            '2.4 Penggerak Canopy' => '2.4 Canopy Drive',
+            '3. Mode Auto (Autolevel)' => '3. Auto Mode (Autolevel)',
+            '4.1 Prosedur Pengoperasian Standar (Mode Manual)' => '4.1 Standard Operating Procedure (Manual Mode)',
+            '4.2 Prosedure Standar Operasi (Auto Mode)' => '4.2 Standard Operating Procedure (Auto Mode)',
+            '4.3 Prosedur Pengoperasian Darurat' => '4.3 Emergency Operating Procedure',
+            '4.4 Parkir' => '4.4 Parking',
+            '4.5 Penggunaan Jacking Stand' => '4.5 Use of Jacking Stand',
+            '4.6 Malfungsi Pergerakan atau Fault Power Garbarata' => '4.6 Garbarata Movement Malfunction or Power Failure',
+        ];
+
         Module::create([
             'chapter_id' => $chapterId,
-            'title' => $title,
+            'title' => ['id' => $title, 'en' => $englishTitles[$title] ?? $title],
             'content' => $content,
             'image_path' => null,
             'order' => $order,
