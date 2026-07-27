@@ -12,6 +12,8 @@ class Notification extends Model
         'type',
         'title',
         'body',
+        'title_en',
+        'body_en',
         'url',
         'read_at',
     ];
@@ -59,8 +61,11 @@ class Notification extends Model
         $rows = $peserta->map(fn ($uid) => [
             'user_id'    => $uid,
             'type'       => $type,
-            'title'      => "{$label} Baru: {$quiz->title}",
-            'body'       => "{$label} baru telah dipublikasikan di {$course->title}{$chapterInfo}. Mulai sekarang!",
+            ...static::localizedContent(':label Baru: :title', ':label baru telah dipublikasikan di :target. Mulai sekarang!', [
+                'label' => $label,
+                'title' => $quiz->title,
+                'target' => $course->title . $chapterInfo,
+            ]),
             'url'        => $quiz->isPractice()
                                 ? route('courses.practices', $course)
                                 : route('courses.quizzes', $course),
@@ -92,9 +97,13 @@ class Notification extends Model
         $rows = $instrukturIds->map(fn ($uid) => [
             'user_id'    => $uid,
             'type'       => 'submission',
-            'title'      => "Submission {$label}: {$quiz->title}",
-            'body'       => "{$peserta->name} telah mengumpulkan {$label} \"{$quiz->title}\" di {$course->title}.",
-            'url'        => route('quizzes.attempts', [$course, $quiz]),
+            ...static::localizedContent('Submission :label: :title', ':name telah mengumpulkan :label ":title" di :course.', [
+                'name' => $peserta->name,
+                'label' => $label,
+                'title' => $quiz->title,
+                'course' => $course->title,
+            ]),
+            'url'        => route($quiz->isPractice() ? 'practices.attempts' : 'quizzes.attempts', [$course, $quiz]),
             'read_at'    => null,
             'created_at' => now(),
             'updated_at' => now(),
@@ -121,8 +130,11 @@ class Notification extends Model
         $rows = $adminIds->map(fn ($uid) => [
             'user_id'    => $uid,
             'type'       => 'user_created',
-            'title'      => "Pengguna Baru: {$newUser->name}",
-            'body'       => "Akun {$roleLabel} baru atas nama {$newUser->name} ({$newUser->email}) telah ditambahkan.",
+            ...static::localizedContent('Pengguna Baru: :name', 'Akun :role baru atas nama :name (:email) telah ditambahkan.', [
+                'name' => $newUser->name,
+                'role' => $roleLabel,
+                'email' => $newUser->email,
+            ]),
             'url'        => route('admin.users.index'),
             'read_at'    => null,
             'created_at' => now(),
@@ -132,6 +144,27 @@ class Notification extends Model
         if (!empty($rows)) {
             static::insert($rows);
         }
+    }
+
+    private static function localizedContent(string $title, string $body, array $replace): array
+    {
+        return [
+            'title' => __($title, static::localizedReplace($replace, 'id'), 'id'),
+            'body' => __($body, static::localizedReplace($replace, 'id'), 'id'),
+            'title_en' => __($title, static::localizedReplace($replace, 'en'), 'en'),
+            'body_en' => __($body, static::localizedReplace($replace, 'en'), 'en'),
+        ];
+    }
+
+    private static function localizedReplace(array $replace, string $locale): array
+    {
+        foreach (['label', 'role'] as $key) {
+            if (isset($replace[$key])) {
+                $replace[$key] = __($replace[$key], [], $locale);
+            }
+        }
+
+        return $replace;
     }
 
     /**

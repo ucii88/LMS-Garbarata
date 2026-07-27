@@ -1,5 +1,14 @@
 @section('topbar_title', __('Detail Pengguna'))
 
+@php
+    $roleLabel = match ($user->role) {
+        'admin' => 'Admin',
+        'instruktur' => 'Instruktur',
+        'peserta' => 'Peserta',
+        default => $user->role,
+    };
+@endphp
+
 <x-app-layout>
     <div class="space-y-6">
         {{-- Page Header --}}
@@ -12,7 +21,7 @@
                         {{ __('Kembali ke Daftar') }}
                     </a>
                     <h1 class="text-2xl font-extrabold tracking-tight text-white mt-3">{{ __('Detail Pengguna') }}: {{ $user->name }}</h1>
-                    <p class="text-sm text-slate-300 leading-relaxed">{{ $user->email }} &bull; {{ __('Peran') }}: <span class="capitalize font-bold">{{ $user->role }}</span></p>
+                    <p class="text-sm text-slate-300 leading-relaxed">{{ $user->email }} &bull; {{ __('Peran') }}: <span class="capitalize font-bold">{{ __($roleLabel) }}</span></p>
                 </div>
             </div>
         </section>
@@ -88,7 +97,7 @@
                 @forelse ($certificates as $cert)
                     <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm flex flex-col items-center text-center">
                         <svg class="w-12 h-12 text-amber-500 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        <h3 class="font-bold text-slate-800 text-sm mb-1">{{ $cert->course->title ?? 'Course' }}</h3>
+                        <h3 class="font-bold text-slate-800 text-sm mb-1">{{ $cert->course->title ?? __('Course') }}</h3>
                         <p class="text-[10px] text-slate-500 mb-3">{{ __('Kode:') }} {{ $cert->certificate_code }}<br>{{ __('Diterbitkan:') }} {{ $cert->issued_at->format('d M Y') }}</p>
                         <a href="{{ route('admin.certificates.download', $cert->id) }}" target="_blank" class="w-full inline-flex items-center justify-center gap-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 text-xs font-bold text-white transition shadow-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
