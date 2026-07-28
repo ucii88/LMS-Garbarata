@@ -126,7 +126,10 @@
 
                                 {{-- Reset --}}
                                 <form action="{{ route($isPractice ? 'practices.attempts.destroy' : 'quizzes.attempts.destroy', [$course, $quiz, $attempt]) }}"
-                                      method="POST" data-confirm="{{ __('Apakah Anda yakin ingin mereset percobaan ini? Nilai & jawaban akan dihapus.') }}">
+                                      method="POST"
+                                      data-confirm="{{ __('Apakah Anda yakin ingin mereset percobaan ini? Nilai & jawaban akan dihapus.') }}"
+                                      data-confirm-title="{{ __('Konfirmasi Reset') }}"
+                                      data-confirm-btn="{{ __('Ya, Reset') }}">
                                     @csrf @method('DELETE')
                                     <button class="px-3 py-1.5 bg-red-50 text-red-600 text-sm font-bold rounded-lg border border-red-200 hover:bg-red-100 transition">
                                         {{ __('Reset') }}

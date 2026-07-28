@@ -171,7 +171,7 @@
     {{-- Header Area (Tetap di Atas) --}}
     <div class="header-area">
         <div class="org-name">Garbarata Training Center</div>
-        <div class="cert-title">Sertifikat Kelulusan</div>
+        <div class="cert-title">{{ __('Sertifikat Kelulusan') }}</div>
     </div>
 
     {{-- Middle Content Area (Tengah Vertikal & Horizontal) --}}
@@ -180,15 +180,15 @@
             <tr>
                 <td class="middle-cell">
                     <div class="stars">&#9733; &#9733; &#9733;</div>
-                    <div class="rec-label">Diberikan kepada:</div>
+                    <div class="rec-label">{{ __('Diberikan kepada:') }}</div>
                     <div class="rec-name">{{ $certificate->user->name }}</div>
                     <div class="divider"></div>
-                    <div class="comp-text">Telah berhasil menyelesaikan dan lulus semua evaluasi dalam kursus:</div>
+                    <div class="comp-text">{{ __('Telah berhasil menyelesaikan dan lulus semua evaluasi dalam kursus:') }}</div>
                     <div class="course-nm">{{ $certificate->course->title }}</div>
                     <div class="score-text">
-                        dengan nilai rata-rata
+                        {{ __('dengan nilai rata-rata') }}
                         <span class="score-val">{{ number_format($certificate->total_score, 1) }}</span>
-                        dari 100
+                        {{ __('dari 100') }}
                     </div>
                 </td>
             </tr>
@@ -200,11 +200,11 @@
         <table class="meta-tbl">
             <tr>
                 <td>
-                    <div class="meta-lbl">Tanggal Diterbitkan</div>
-                    <div class="meta-val">{{ $certificate->issued_at->locale('id')->translatedFormat('d F Y') }}</div>
+                    <div class="meta-lbl">{{ __('Tanggal Diterbitkan') }}</div>
+                    <div class="meta-val">{{ $certificate->issued_at->locale(app()->getLocale())->translatedFormat('d F Y') }}</div>
                 </td>
                 <td>
-                    <div class="meta-lbl">Kode Verifikasi</div>
+                    <div class="meta-lbl">{{ __('Kode Verifikasi') }}</div>
                     <div class="meta-val meta-code">{{ $certificate->certificate_code }}</div>
                 </td>
             </tr>
@@ -215,7 +215,7 @@
                 <td>
                     <div class="sig-space"></div>
                     <div class="sig-line"></div>
-                    <div class="sig-lbl">Instruktur</div>
+                    <div class="sig-lbl">{{ __('Instruktur') }}</div>
                 </td>
                 <td>
                     <div class="sig-space"></div>

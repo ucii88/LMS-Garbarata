@@ -1,4 +1,4 @@
-@section('topbar_title', 'Sertifikat — ' . $certificate->course->title)
+@section('topbar_title', __('Sertifikat') . ' — ' . $certificate->course->title)
 
 <x-app-layout>
 <div class="max-w-4xl mx-auto space-y-6">
@@ -7,18 +7,18 @@
     <div class="flex justify-between items-center">
         <a href="{{ route('courses.chapters.show', [$certificate->course, $certificate->course->chapters->first()]) }}"
            class="text-sm font-bold text-slate-500 hover:text-blue-600 transition">
-            ← Kembali ke Course
+            ← {{ __('Kembali ke Course') }}
         </a>
         <div class="flex items-center gap-3">
             <button onclick="window.print()"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                <span>Cetak</span>
+                <span>{{ __('Cetak') }}</span>
             </button>
             <a href="{{ request()->url() }}?download=1"
                class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <span>Unduh PDF</span>
+                <span>{{ __('Unduh PDF') }}</span>
             </a>
         </div>
     </div>
@@ -70,7 +70,7 @@
 
             {{-- Title --}}
             <div style="font-family:'Arial',sans-serif;font-size:1.5vw;font-weight:bold;letter-spacing:0.4em;color:#92400e;text-transform:uppercase;margin-bottom:1%;">
-                Sertifikat Kelulusan
+                {{ __('Sertifikat Kelulusan') }}
             </div>
 
             {{-- Stars --}}
@@ -80,7 +80,7 @@
 
             {{-- Given label --}}
             <div style="font-family:'Arial',sans-serif;font-size:0.9vw;color:#64748b;margin-bottom:0.6%;">
-                Diberikan kepada:
+                {{ __('Diberikan kepada:') }}
             </div>
 
             {{-- Recipient name --}}
@@ -93,7 +93,7 @@
 
             {{-- Completion text --}}
             <div style="font-family:'Arial',sans-serif;font-size:0.9vw;color:#475569;margin-bottom:0.5%;">
-                Telah berhasil menyelesaikan dan lulus semua evaluasi dalam kursus:
+                {{ __('Telah berhasil menyelesaikan dan lulus semua evaluasi dalam kursus:') }}
             </div>
 
             {{-- Course name --}}
@@ -103,24 +103,24 @@
 
             {{-- Score --}}
             <div style="font-family:'Arial',sans-serif;font-size:0.9vw;color:#475569;margin-bottom:1.8%;">
-                dengan nilai rata-rata
+                {{ __('dengan nilai rata-rata') }}
                 <span style="font-weight:bold;color:#059669;font-size:1.1vw;">{{ number_format($certificate->total_score, 1) }}</span>
-                dari 100
+                {{ __('dari 100') }}
             </div>
 
             {{-- Meta: date & code --}}
             <div style="display:flex;width:55%;margin:0 auto 1.5%;gap:0;">
                 <div style="flex:1;text-align:center;padding:0 2%;border-right:1px solid #e2e8f0;">
                     <div style="font-family:'Arial',sans-serif;font-size:0.7vw;color:#94a3b8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3%;">
-                        Tanggal Diterbitkan
+                        {{ __('Tanggal Diterbitkan') }}
                     </div>
                     <div style="font-family:'Arial',sans-serif;font-size:0.95vw;font-weight:bold;color:#334155;">
-                        {{ $certificate->issued_at->locale('id')->translatedFormat('d F Y') }}
+                        {{ $certificate->issued_at->locale(app()->getLocale())->translatedFormat('d F Y') }}
                     </div>
                 </div>
                 <div style="flex:1;text-align:center;padding:0 2%;">
                     <div style="font-family:'Arial',sans-serif;font-size:0.7vw;color:#94a3b8;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3%;">
-                        Kode Verifikasi
+                        {{ __('Kode Verifikasi') }}
                     </div>
                     <div style="font-family:'Courier New',monospace;font-size:0.9vw;font-weight:bold;color:#334155;letter-spacing:0.15em;">
                         {{ $certificate->certificate_code }}
@@ -133,7 +133,7 @@
                 <div style="flex:1;text-align:center;padding:0 4%;">
                     <div style="height:3vw;"></div>
                     <div style="border-bottom:1.5px solid #cbd5e1;width:70%;margin:0 auto 0.4%;"></div>
-                    <div style="font-family:'Arial',sans-serif;font-size:0.75vw;color:#64748b;">Instruktur</div>
+                    <div style="font-family:'Arial',sans-serif;font-size:0.75vw;color:#64748b;">{{ __('Instruktur') }}</div>
                 </div>
                 <div style="flex:1;text-align:center;padding:0 4%;">
                     <div style="height:3vw;"></div>
@@ -145,7 +145,7 @@
     </div>
 
     <p class="text-center text-sm text-slate-400">
-        Kode unik ini dapat digunakan untuk memverifikasi keaslian sertifikat.
+        {{ __('Kode unik ini dapat digunakan untuk memverifikasi keaslian sertifikat.') }}
     </p>
 
 </div>
