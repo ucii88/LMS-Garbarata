@@ -570,5 +570,16 @@
     "Quiz (Tenggat)": "Quiz (Tenggat)",
     "Pembukaan waktu pengerjaan evaluasi.": "Pembukaan waktu pengerjaan evaluasi.",
     "Batas akhir pengumpulan / pengerjaan evaluasi.": "Batas akhir pengumpulan / pengerjaan evaluasi.",
-    "Kerjakan Sebelum Ditutup": "Kerjakan Sebelum Ditutup"
+    "Kerjakan Sebelum Ditutup": "Kerjakan Sebelum Ditutup",
+    ":count soal berhasil disimpan (:points/100 poin).": ":count soal berhasil disimpan (:points/100 poin).",
+    "Status quiz disimpan sebagai Draft sampai total poin tepat 100/100.": "Status quiz disimpan sebagai Draft sampai total poin tepat 100/100.",
+    "Bab baru berhasil ditambahkan.": "Bab baru berhasil ditambahkan.",
+    "Bab berhasil diperbarui.": "Bab berhasil diperbarui.",
+    "Bab berhasil dihapus.": "Bab berhasil dihapus.",
+    "Halaman Kalender hanya tersedia untuk Instruktur dan Peserta.": "Halaman Kalender hanya tersedia untuk Instruktur dan Peserta.",
+    "Kelola Evaluasi": "Kelola Evaluasi",
+    "Kerjakan Sekarang": "Kerjakan Sekarang",
+    "Kursus LMS": "Kursus LMS",
+    "Latihan:": "Latihan:",
+    "auth.password": "Kata sandi yang diberikan salah."
 }
