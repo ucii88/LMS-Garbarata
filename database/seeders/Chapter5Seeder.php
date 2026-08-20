@@ -64,7 +64,6 @@ class Chapter5Seeder extends Seeder
         
 // 5.1.2 Tunnel Roller
         $c_5_1_2 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.2. Tunnel Roller</h4>' .
-            '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) lokasi pemasangan roller dan detail rakitan komponen untuk Tunnel Roller. <strong>Klik pada tombol lingkaran biru transparan di gambar peta lokasi atau lembar referensi detail</strong> untuk melihat detail rakitan serta menyorot part number pada tabel di bawah.</p>' .
             
             // Tunnel Roller Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
