@@ -17,13 +17,11 @@ class Chapter1Seeder extends Seeder
         if (!$chapter) {
             return;
         }
-
-        // 1.1 Rotunda
-        $module1_1 = Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '1.1 Rotunda', 'en' => '1.1 Rotunda'],
-            'image_path' => 'images/modules/rotunda.png',
-            'content' => '
+        $module1 = $this->module($chapter->id, '1.1 Rotunda', [
+                'id' => '1.1 Rotunda',
+                'en' => '1.1 Rotunda',
+            ], [
+                'id' => '
                 <p><strong>Komponen utama Garbarata terdiri dari :</strong></p>
 
                 <p>
@@ -77,14 +75,66 @@ class Chapter1Seeder extends Seeder
                     </li>
                 </ul>
             ',
-            'order' => 1,
-        ]);
+                'en' => '<p>
+<strong>The main components of Garbarata consist of:</strong>
+</p>
+<p>
+            The <strong>Rotunda</strong> is designed as the central axis for the vertical and horizontal movement of the Garbarata.
+            During operation, rotunda columns, floors, ceilings and corridor wall panels are abutted
+            with the terminal not moving (static), while the rotunda rigid frame and roof will rotate
+            adjust column movement. The rotunda consists of:
+        </p>
+<ul class="space-y-4">
+<li>
+<strong>a) Rotunda Corridor</strong>
+<br>
 
-        $module1_2 = Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '1.2 Telescopic Tunnel', 'en' => '1.2 Telescopic Tunnel'],
-            'image_path' => 'images/modules/telescoping_tunnels.png',
-            'content' => '
+                The Rotunda Corridor is the link between the rotunda and the terminal building.
+                The Rotunda Corridor is designed using flexible weather seals and floor steps
+                with a hinge connection from the rotunda to the terminal building so that there is no load
+                as well as vibrations from the Garbarata which are channeled to the fixed link.
+            </li>
+<li>
+<strong>b) Rotunda Support Column</strong>
+<br>
+
+                The Rotunda Support Column is a static support for the Garbarata.
+                Rotunda Support column rests on the foundation with eight anchor bolts
+                each of which is equipped with 3 nuts.
+            </li>
+<li>
+<strong>c) Main Distribution Panel</strong>
+<br>
+
+                The electrical panel is installed on the equipped rotunda support column
+                with circuit breakers and transformers needed to change
+                and adjust the need for electric current supplied from the tenninal building
+                for electricity needs at Garbarata.
+            </li>
+<li>
+<strong>d) Aluminum Side Curtains</strong>
+<br>
+
+                Aluminum side curtains are installed on both sides of the rolling Rotunda
+                on a coil on each side and can follow the rotational movement of the rotunda.
+                Both coils have springs attached along the axis to provide
+                tension on the curtain and keep it tight and tight.
+            </li>
+<li>
+<strong>e) Rotunda Swing Limit Switches</strong>
+<br>
+
+                The limit switch is mounted on a rotating rigid frame at the bottom of the rotunda,
+                and the cam is installed on the static/non-rotating rotunda flange.
+            </li>
+</ul>',
+            ], 'images/modules/rotunda.png', 1);
+
+        $module2 = $this->module($chapter->id, '1.2 Telescopic Tunnel', [
+                'id' => '1.2 Telescopic Tunnel',
+                'en' => '1.2 Telescopic Tunnel',
+            ], [
+                'id' => '
                 <p>
                     Dimulai dari arah rotunda, tunnel-tunnel dinamakan dengan tunnel A, B dan C
                     untuk Garbarata 3 tunnel (A dan B untuk Garbarata 2 tunnel). Telescoping tunnel
@@ -151,15 +201,77 @@ class Chapter1Seeder extends Seeder
                     </li>
                 </ul>
             ',
-            'order' => 2,
-        ]);
+                'en' => '<p>
+            Starting from the rotunda, the tunnels are called tunnels A, B and C
+            for 3 tunnel Garbarata (A and B for 2 tunnel Garbarata). Telescoping tunnel
+            rectangular in shape, with the largest tunnel size being close to the plane.
+        </p>
+<p>
+            All tunnels are made of corrugated plate with supporting flanges. Holes
+            Drilled into the roof flange so water can flow down. Water channels are made
+            on each side of the Garbarata floor, inside Tunnels B and C.
+        </p>
+<ul class="space-y-4">
+<li>
+<strong>a) Rails and Roller Bearings</strong>
+<br>
 
-        // 1.3 Vertical Lift Column
-        $module1_3 = Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '1.3 Vertical Lift Column', 'en' => '1.3 Vertical Lift Column'],
-            'image_path' => null,
-            'content' => '
+                Rails for the roller track are made on each side so that the Garbarata can move
+                forward and backward smoothly. All tunnels have roller tracks at the top
+                and bottom. A stopper is welded to the lower roller track of tunnel B
+                to prevent the roller from coming out of the end of the track.
+            </li>
+<li>
+<strong>b) Rotunda Guide Rollers</strong>
+<br>
+
+                Tunnel guide rollers are installed on the left and right sides of the rotunda, the main function
+                The purpose of this guide roller is to maintain the distance and position between
+                tunnel with a rigid frame when the Garbarata moves up, down and
+                rotating (left and right).
+            </li>
+<li>
+<strong>c) Cable Scissors</strong>
+<br>
+
+                Cable scissors are installed under the tunnel, holding and carrying the power cable
+                and control cables to remain connected while the Garbarata extends and
+                shortened. The scissor cable is connected between the back of tunnel A to
+                rear of tunnel B.
+            </li>
+<li>
+<strong>d) Ramps</strong>
+<br>
+
+                In the telescoping tunnel section that intersects tunnel A
+                and B, there is a transition bridge (ramp) and also between tunnel B
+                and C which is used to overcome height differences on the floor
+                tunnels. This ramp is attached to the tunnel using hinges. Handrails
+                installed on the right and left.
+            </li>
+<li>
+<strong>e) Glass Wall Panels</strong>
+<br>
+
+                Colored glass is installed along the tunnel walls. Glass walls installed
+                with a floating system so there is no pressure or load
+                weighing down the glass walls.
+            </li>
+<li>
+<strong>f) Roof Safety Hand Rail</strong>
+<br>
+
+                Roof safety hand rail is installed on the roof which functions as
+                safety for airport crew who are working on the Garbarata roof.
+            </li>
+</ul>',
+            ], 'images/modules/telescoping_tunnels.png', 2);
+
+        $module3 = $this->module($chapter->id, '1.3 Vertical Lift Column', [
+                'id' => '1.3 Vertical Lift Column',
+                'en' => '1.3 Vertical Lift Column',
+            ], [
+                'id' => '
                 <p>
                     Vertical lift column terdiri dari ball screw dan nut yang terpasang didalam square steel tube.
                     Komponen lift column juga termasuk motor vertical drive, system penahan (brake),
@@ -215,15 +327,67 @@ class Chapter1Seeder extends Seeder
                     </li>
                 </ul>
             ',
-            'order' => 3,
-        ]);
+                'en' => '<p>
+            The vertical lift column consists of a ball screw and nut installed in a square steel tube.
+            Column lift components also include a vertical drive motor, brake system,
+            cable tray, and limit switch.
+        </p>
+<ul class="space-y-4">
+<li>
+<strong>a) Ball screws and nut assembly</strong>
+<br>
 
-        // 1.4 Wheel Boogie
-        $module1_4 = Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '1.4 Wheel Boogie', 'en' => '1.4 Wheel Boogie'],
-            'image_path' => 'images/modules/wheel_boogie.png',
-            'content' => '
+                The ball screw and nut consist of a chain coupler, thrust bearing, top plate,
+                oil cup, wiper and safety device. Ball screws and nuts have concave
+                helical ball race, forms a closed groove where the bearing balls
+                rotates uniformly with the rotation of the screw. If the motor is running, the ball nut
+                will move along the axis of the screw, changing the rotational motion of the screw
+                be a straight linear movement of the nut.
+            </li>
+<li>
+<strong>b) Grease Nipple</strong>
+<br>
+
+                Lubrication of the ball screw and nut can be done via the grease nipple
+                is on the outside of the bottom column. Raise the lift column to the highest position
+                high, then attach the grease gun to the grease nipple. Start adding grease
+                while lowering the lift column to the lowest position. Repeat process
+                applying grease if necessary.
+            </li>
+<li>
+<strong>c) Vertical Drive Motors and Brakes</strong>
+<br>
+
+                This vertical drive motor uses an electro-magnetic system and brakes
+                spring-setting, which is designed to stop and hold a load with
+                right. The brake system is connected directly to the motor terminals so that
+                will automatically release the brake when the motor is activated.
+            </li>
+<li>
+<strong>d) Cable tray assembly</strong>
+<br>
+
+                The cable tray on the drive column contains the cables from the wheel bogie.
+                The cable is routed from the J-box under tunnel C, through the cable tray and
+                ends in a horizontal motor.
+            </li>
+<li>
+<strong>e) Height Indicator</strong>
+<br>
+
+                The bridge has a proximity switch located on the motor flange on the side
+                on the drive column to detect the number of rotations of the ball screw. This signal
+                sends data digitally to the control console which is then processed
+                to show how far the Garbarata has moved up or down.
+            </li>
+</ul>',
+            ], '', 3);
+
+        $module4 = $this->module($chapter->id, '1.4 Wheel Boogie', [
+                'id' => '1.4 Wheel Boogie',
+                'en' => '1.4 Wheel Boogie',
+            ], [
+                'id' => '
                 <p>
                     <strong>Wheel Boogie</strong> terdiri dari frame, ban, drive chain,
                     motor listrik, kotak limit switch, landing gear (optional) dan
@@ -275,15 +439,63 @@ class Chapter1Seeder extends Seeder
                     </li>
                 </ul>
             ',
-            'order' => 4,
-        ]);
+                'en' => '<p>
+<strong>Wheel Boogie</strong> consists of frame, tires, drive chain,
+            electric motor, limit switch box, landing gear (optional) and
+            electrical cables.
+        </p>
+<ul class="space-y-4">
+<li>
+<strong>a) Wheels</strong>
+<br>
 
-        // 1.5 Service Access
-        $module1_5 = Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '1.5 Service Access', 'en' => '1.5 Service Access'],
-            'image_path' => 'images/modules/service_access.png',
-            'content' => '
+                Two solid tires are installed on the frame. Trunions help distribute
+                The load held on each wheel is balanced.
+            </li>
+<li>
+<strong>b) Chains Drives</strong>
+<br>
+
+                The right and left wheels have two chains with duplex sprockets
+                on the motor shaft and wheels. Chain guard protects workers on the apron.
+            </li>
+<li>
+<strong>c) Limit Switch</strong>
+<br>
+
+                The steering limit switch is installed on the cross beam below the bogie.
+                If the bogie turns left or right, the cam limit switch will
+                Touch the limit switch at the end of the steering limit and activate it
+                warning buzzer on the control console to indicate oversteering.
+            </li>
+<li>
+<strong>d) Motors and Brakes</strong>
+<br>
+
+                Each drive chain is connected to a motor gear. 3 phase motor
+                It uses electro-magnetic brakes, which release braking power
+                at the same time as the motor is activated. Those brakes too
+                can be released manually, this is required in the circumstances
+                emergency, if the Garbarata needs to be towed/moved when it is not
+                there is electric power.
+            </li>
+<li>
+<strong>e) Safety Hoop</strong>
+<br>
+
+                A safety hoop is a functional safety device
+                to anticipate the presence of objects or personal beings that are close by
+                with wheel boogie. Safety hoop made of RHS with sides
+                1 inch cross section.
+            </li>
+</ul>',
+            ], 'images/modules/wheel_boogie.png', 4);
+
+        $module5 = $this->module($chapter->id, '1.5 Service Access', [
+                'id' => '1.5 Service Access',
+                'en' => '1.5 Service Access',
+            ], [
+                'id' => '
                 <p>
                     Pintu service door, platform dan tangga terletak pada sisi kanan dan kiri
                     pada bagian depan tunnel. Service access ini memberi jalan dari apron ke
@@ -327,15 +539,55 @@ class Chapter1Seeder extends Seeder
                     </li>
                 </ul>
             ',
-            'order' => 5,
-        ]);
+                'en' => '<p>
+            Service doors, platforms and stairs are located on the right and left sides
+            at the front of the tunnel. This service access provides a path from the apron to
+            Garbarata or vice versa for ground crew.
+        </p>
+<ul class="space-y-4">
+<li>
+<strong>a) Service Door</strong>
+<br>
 
-        // 1.6 Cabin
-        $module1_6 = Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '1.6 Cabin', 'en' => '1.6 Cabin'],
-            'image_path' => 'images/modules/cabin.png',
-            'content' => '
+                Service door is a steel door that is equipped with
+                glass window, opening towards the outside of the platform.
+            </li>
+<li>
+<strong>b) Platforms</strong>
+<br>
+
+                The height of the platform is made the same as the cabin floor.
+                The platform floor is made of checkered patterned aluminum
+                mounted on a galvanized steel frame and surrounded by
+                galvanized steel handrail. A light is installed above the service
+                door to illuminate the platform.
+            </li>
+<li>
+<strong>c) Service Stairs</strong>
+<br>
+
+                This ladder is a self-adjusting ladder mounted on a frame
+                galvanized steel and handrails are installed on both sides of the stairs.
+                Self-adjusting means the ladder can adjust its height
+                according to the position of the Garbarata up and down. Castor wheel supports
+                service stair and allows the stairs to follow the Garbarata
+                operates around the apron.
+            </li>
+<li>
+<strong>d) Roof Access Ladder</strong>
+<br>
+
+                A galvanized ladder is attached to the leading platform
+                tunnel roof as access for maintenance crews.
+            </li>
+</ul>',
+            ], 'images/modules/service_access.png', 5);
+
+        $module6 = $this->module($chapter->id, '1.6 Cabin', [
+                'id' => '1.6 Cabin',
+                'en' => '1.6 Cabin',
+            ], [
+                'id' => '
                 <p>
                     <strong>Kabin</strong> terbuat dari baja, bagian exterior dilapisi
                     dengan cat dasar epoxy dan bagian interior dengan penutup lantai,
@@ -393,69 +645,69 @@ class Chapter1Seeder extends Seeder
                     </li>
                 </ul>
             ',
-            'order' => 6,
-        ]);
+                'en' => '<p>
+<strong>Cabin</strong> is made of steel, the exterior is coated
+            with epoxy base paint and interior parts with floor covering,
+            ceiling and lighting. The electric motor is installed in the section
+            The bottom of the cabin functions to rotate the cabin. There is also a cabin in the cabin
+            side curtain, double swing door, and control console.
+        </p>
+<ul class="space-y-4">
+<li>
+<strong>a) Double Swing Door</strong>
+<br>
 
-        // Diagram & Hotspots
-        $diagram = Diagram::create([
-            'chapter_id' => $chapter->id,
-            'title' => 'Diagram Struktur Utama Garbarata',
-            'image_path' => 'images/garbarata.png',
-        ]);
+                A double swing door is attached to the cabin, when closed
+                The double swing door can protect the interior and operator
+                from the conditions outside and around it when the Garbarata is in operation
+                not used.
+            </li>
+<li>
+<strong>b) Closure</strong>
+<br>
 
-        Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'target_module_id' => $module1_1->id,
-            'label' => 'Rotunda',
-            'x_percent' => 13.5,
-            'y_percent' => 13.0,
-        ]);
+                When Garbarata docks with a plane, closure
+                cover the gaps between the cabin and the plane. Closure
+                shaped in folds and made of weather-resistant material.
+                Pressure-sensitive limit switches on both sides prevent
+                closure suppresses excessive fuselage.
+            </li>
+<li>
+<strong>c) Side Curtains</strong>
+<br>
 
-        Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'target_module_id' => $module1_2->id,
-            'label' => 'Telescopic Tunnel',
-            'x_percent' => 25.0,
-            'y_percent' => 20.0,
-        ]);
+                Curtain is made of aluminum and like the rotunda,
+                The curtain has a right and left side, which can roll up
+                on a coil following the cabin during rotation. Second
+                The coil has a spring attached along the axis
+                to provide tension on the curtain, keeping it steady
+                tense and tight.
+            </li>
+<li>
+<strong>d) Control Console</strong>
+<br>
 
-        Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'target_module_id' => $module1_3->id,
-            'label' => 'Vertical Lift Column',
-            'x_percent' => 74.8,
-            'y_percent' => 67.0,
-        ]);
+                In the Control panel there are all the necessary controls
+                to operate the Garbarata. These controls will
+                explained in another chapter that discusses operational controls.
+            </li>
+<li>
+<strong>e) Safety Door Shoe</strong>
+<br>
 
-        Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'target_module_id' => $module1_4->id,
-            'label' => 'Wheel Boogie',
-            'x_percent' => 72.0,
-            'y_percent' => 77.0,
-        ]);
+                Safety Door Shoe is a back up sensor for the bridge when
+                autolevel cannot detect changes in altitude.
+                Safety door shoes must be positioned under the aircraft door
+                during the docking process.
+            </li>
+</ul>',
+            ], 'images/modules/cabin.png', 6);
 
-        Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'target_module_id' => $module1_5->id,
-            'label' => 'Service Stair',
-            'x_percent' => 76.5,
-            'y_percent' => 57.0,
-        ]);
-
-        Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'target_module_id' => $module1_6->id,
-            'label' => 'Cabin and Control Unit',
-            'x_percent' => 87.0,
-            'y_percent' => 45.0,
-        ]);
-
-        // 2.1 Main-Distribution Panel
-        Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '2.1 Main-Distribution Panel', 'en' => '2.1 Main Distribution Panel'],
-            'content' => '
+        $module7 = $this->module($chapter->id, '2.1 Main-Distribution Panel', [
+                'id' => '2.1 Main-Distribution Panel',
+                'en' => '2.1 Main-Distribution Panel',
+            ], [
+                'id' => '
                 <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                     <img src="/images/modules/main_distribution_panel.png"
                         class="mx-auto max-h-96 w-full object-contain rounded-lg"
@@ -525,14 +777,80 @@ class Chapter1Seeder extends Seeder
                     Garbarata.
                 </p>
             ',
-            'order' => 7,
-        ]);
+                'en' => '<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/main_distribution_panel.png"
+                class="mx-auto max-h-96 w-full object-contain rounded-lg"
+                alt="Main Distribution Panel">
+</figure>
+<p class="text-center text-sm text-gray-600 mb-6">
+            Main-Distribution Panel
+        </p>
+<p>
+            The Main-Distribution Panel is positioned on the Rotunda Column of the Garbarata.
+            Its main function is to transfer and share electrical power
+            from the airport building to the Garbarata safely.
+        </p>
+<br>
+<p>
+<strong>The internal components of the Main Power Panel are as follows:</strong>
+</p>
+<br>
+<p>
+<strong>(a) Circuit Breaker (MCCB/ MCB/ ELCB)</strong>
+</p>
+<p>
+            Circuit Breaker functions to protect energy from airport buildings
+            towards Garbarata. Circuit Breakers used such as MCCB,
+            MCB and ELCB to control power
+        </p>
+<ul class="list-disc ml-6 mt-2">
+<li>Main Power Breaker for Main Distribution Panel</li>
+<li>Main Power Breaker for Drive Power</li>
+<li>Main Power Breaker for Lighting and Control System</li>
+<li>Main Power Breaker for Air Conditioner System</li>
+<li>Main Power Breaker for Rotunda Air Conditioner</li>
+<li>etc (as needed)</li>
+</ul>
+<br>
+<p>
+<strong>(b) Contactor (C)</strong>
+</p>
+<p>
+            Contactors connect electrical power to several components.
+            When a failure occurs, the Contactor will open and disconnect
+            all electrical power to the component.
+        </p>
+<br>
+<p>
+<strong>(c) Terminal Block (TB) and Terminal Strip (TS)</strong>
+</p>
+<p>
+            TB and TS are used as cable terminals.
+        </p>
+<br>
+<p>
+<strong>(d) Relay (RL)</strong>
+</p>
+<p>
+            Relays are used to control circuits using signals
+            low powered or where multiple circuits are required
+            controlled with a single signal.
+        </p>
+<br>
+<p>
+<strong>(e) Pilot Lamp (PL)</strong>
+</p>
+<p>
+            Three indicator lights as indicators of electric power flow
+            Garbarata.
+        </p>',
+            ], '', 7);
 
-        // 2.2 Distribution Power Panel
-        Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '2.2 Distribution Power Panel', 'en' => '2.2 Distribution Power Panel'],
-            'content' => '
+        $module8 = $this->module($chapter->id, '2.2 Distribution Power Panel', [
+                'id' => '2.2 Distribution Power Panel',
+                'en' => '2.2 Distribution Power Panel',
+            ], [
+                'id' => '
                 <p>
                     Distribution Power Panel terdiri dari Transistor, inverter,
                     magnetic contactor dan circuit breaker. Semua posisi dan jenis
@@ -608,14 +926,79 @@ class Chapter1Seeder extends Seeder
                     kembali. Dan hal ini juga akan me reset contactor.
                 </p>
             ',
-            'order' => 8,
-        ]);
+                'en' => '<p>
+            The Distribution Power Panel consists of transistors, inverters,
+            magnetic contactor and circuit breaker. All positions and types
+            The components in the Distribution Power Panel differ depending
+            consumer needs. Specific detailed data is shown in the figure
+            As-Built.
+        </p>
+<br>
+<p>
+<strong>(a) Circuit Breaker (MCB/ MCCB/ ELCB)</strong>
+</p>
+<p>
+            Circuit Breaker functions to protect energy from airport buildings
+            towards Garbarata. The Circuit Breaker used is like an MCCB.
+            MCB and ELCB to control power
+        </p>
+<ol class="list-decimal ml-6 mt-2 space-y-1">
+<li>Lighting Power Breaker</li>
+<li>Control Power Breaker</li>
+<li>Receptacle Power breaker</li>
+<li>Horizontal Motor Breaker</li>
+<li>Vertical Motor breaker</li>
+<li>Cabin Motor breaker</li>
+<li>Air Conditional Breaker</li>
+</ol>
+<br>
+<p>
+<strong>(b) Contactor</strong>
+</p>
+<ol class="list-decimal ml-6 mt-2 space-y-4">
+<li>
+<strong>Tunnel lights and rotunda main contactor</strong>
+<p class="mt-2">
+                    Magnetic contactors are used to connect power
+                    from the Lighting Power Breaker to the tunnel lights and
+                    rotunda. The operating system is on the console desk
+                    in the Cabin.
+                </p>
+</li>
+<li>
+<strong>Magnetic Contactor</strong>
+<p class="mt-2">
+                    Magnetic contactor reverses CW/CCW motor rotation
+                    according to PLC commands
+                </p>
+</li>
+</ol>
+<br>
+<p>
+<strong>(c) Variable Speed Drive</strong>
+</p>
+<p>
+            Garbarata uses several Variable Speed transistor units
+            Drive, the inverter uses power through Main
+            Contactor.
+        </p>
+<br>
+<p>
+<strong>(d) Thermal Overloads</strong>
+</p>
+<p>
+            Thermal Overload is on the Power Panel Box and will trip
+            and stops the motor when the component is overloaded.
+            The circuit will remain open until the thermal overload is reset
+            back. And this will also reset the contactor.
+        </p>',
+            ], '', 8);
 
-        // 2.3 Console Desk
-        Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '2.3 Console Desk', 'en' => '2.3 Console Desk'],
-            'content' => '
+        $module9 = $this->module($chapter->id, '2.3 Console Desk', [
+                'id' => '2.3 Console Desk',
+                'en' => '2.3 Console Desk',
+            ], [
+                'id' => '
                 <p>
                     Garbarata dikendalikan dan dikontrol melalui Console Desk.
                     Pada Console Desk terdapat Control Interface (Tombol dan Touchscreen)
@@ -655,14 +1038,52 @@ class Chapter1Seeder extends Seeder
                     bagian tersebut.
                 </p>
             ',
-            'order' => 9,
-        ]);
+                'en' => '<p>
+            The bridge is managed and controlled via the Console Desk.
+            On the Console Desk there is a Control Interface (Buttons and Touchscreen)
+            and Control Panel (Relay, Fuse, and PLC)
+        </p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/console_desk.png"
+                class="mx-auto max-h-96 w-full object-contain rounded-lg"
+                alt="Console Desk">
+</figure>
+<p class="text-center text-sm text-gray-600 mb-6">
+            Console Desk
+        </p>
+<br>
+<h4>
+<strong>(a) Control Interface</strong>
+</h4>
+<p>
+            The control interface is positioned above the Console Desk.
+            The touchscreen displays the condition of the Garbarata via several indicators.
+            Operation details are explained in Chapter three.
+        </p>
+<figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
+<img src="/images/modules/control_interface.png"
+                class="mx-auto max-h-96 w-full object-contain rounded-lg"
+                alt="Control Interface">
+</figure>
+<p class="text-center text-sm text-gray-600 mb-6">
+            Control Interface
+        </p>
+<br>
+<h4>
+<strong>(b) Control Panel</strong>
+</h4>
+<p>
+            All operating systems are in the Control Panel and positioned
+            under Control Interface. Garbarata control center is located at
+            that part.
+        </p>',
+            ], '', 9);
 
-        // 2.4 Pencahayaan
-        Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '2.4 Pencahayaan', 'en' => '2.4 Lighting'],
-            'content' => '
+        $module10 = $this->module($chapter->id, '2.4 Pencahayaan', [
+                'id' => '2.4 Pencahayaan',
+                'en' => '2.4 Lighting',
+            ], [
+                'id' => '
                 <p><strong>a. Pencahayaan Interior</strong></p>
                 <div class="overflow-x-auto my-6">
                     <table class="w-full border border-black border-collapse text-sm">
@@ -748,543 +1169,896 @@ class Chapter1Seeder extends Seeder
                     <strong>Console Desk</strong>.
                 </p>
             ',
-            'order' => 10,
+                'en' => '<p>
+<strong>a. Interior Lighting</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-black border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Tunnel Lights
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Rotunda Lights
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Cabin Lights
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>b. Exterior Lighting</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-black border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Landing Stair Lights
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Obstruction Lights
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Rotary Lamp
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Flood light Tunnel Light
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Cabin LED Light
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Control Panel Lights
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Flood light cabin LED Light
+                        </td>
+</tr>
+<tr>
+<td class="border border-black px-4 py-2">
+                            Emergency LED Light
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+            The exterior and interior lighting control center is located at
+            <strong>Console Desk</strong>.
+        </p>',
+            ], '', 10);
+
+        $module11 = $this->module($chapter->id, '2.5 Safety Device / Sensor / Actuator', [
+                'id' => '2.5 Safety Device / Sensor / Actuator',
+                'en' => '2.5 Safety Device / Sensor / Actuator',
+            ], [
+                'id' => '<p>Garbarata menggunakan motor listrik dan sistem mekanik yang dilengkapi berbagai <strong>Safety Device</strong>, <strong>Sensor</strong>, dan <strong>Actuator</strong> untuk menjamin keselamatan pengoperasian. Berikut komponen-komponen yang terdapat pada setiap bagian Garbarata.</p>
+<p><strong>a. Rotunda</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm" style="width: 100%; height: 176.375px;">
+<tbody>
+<tr style="height: 39.1944px;">
+<td class="border border-gray-500 px-4 py-2 w-1/2" style="width: 43.1399%; height: 39.1944px;">Limit switch Initial Rotunda Left / Right</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 51.9604%; height: 39.1944px;">Untuk membatasi rotasi Rotunda secara horizontal</td>
+</tr>
+<tr style="height: 39.1944px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 43.1399%; height: 39.1944px;">Limit switch Ultimate Rotunda Left / Right</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 51.9604%; height: 39.1944px;">Untuk membatasi rotasi Rotunda secara horizontal</td>
+</tr>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 43.1399%; height: 19.5972px;">Proximity Slope Up/Down</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 51.9604%; height: 19.5972px;">Membatasi perubahan ketinggian Garbarata</td>
+</tr>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 43.1399%; height: 19.5972px;">Encoder Rotunda Rotation sensor</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 51.9604%; height: 19.5972px;">Menentukan posisi angular Rotunda</td>
+</tr>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 43.1399%; height: 19.5972px;">Potentiometer Rotunda Rotation Sensor</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 51.9604%; height: 19.5972px;">Menentukan posisi angular Rotunda</td>
+</tr>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 43.1399%; height: 19.5972px;">Camera CCTV / Closed Circuit Television</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 51.9604%; height: 19.5972px;">Memeriksa situasi apron&nbsp;</td>
+</tr>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 43.1399%; height: 19.5972px;">Camera Box and Wiper</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 51.9604%; height: 19.5972px;">Melindungi Kamera dari gangguan eksternal</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>b. Tunnel (A/B/C)</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">Limit switch Initial Full Retract &amp; Full Extend</td>
+<td class="border border-gray-500 px-4 py-2">Membatasi perubahan panjang Garbarata</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit switch Ultimate Full Retract &amp; Full Extend</td>
+<td class="border border-gray-500 px-4 py-2">Membatasi perubahan panjang Garbarata</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit switch Slow down Tunnel Travel</td>
+<td class="border border-gray-500 px-4 py-2">Memperlambat kecepatan Garbarata saat mendekati badan pesawat</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Travel Tunnel Sensor</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi perubahan panjang Garbarata</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Reset Travel Tunnel Sensor</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai kalibrator sensor</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>c. Cabin</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">Limit switch Bumper Limit</td>
+<td class="border border-gray-500 px-4 py-2">Untuk mendeteksi badan pesawat</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Horn/Bell</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai sinyal pertanda Garbarata sedang beroperasi</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Safety Door Shoe</td>
+<td class="border border-gray-500 px-4 py-2">Backup jika autolevel tidak dapat bekerja</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Photo Electric Switch</td>
+<td class="border border-gray-500 px-4 py-2">Untuk mendeteksi posisi pesawat dan memperlambat kecepatan Garbarata</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>&nbsp;</p>
+<p><strong>Canopy</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm" style="width: 100%; height: 137.18px;">
+<tbody>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2 w-1/2" style="width: 49.2356%; height: 19.5972px;">Limit switch Left Canopy Retract</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 45.8648%; height: 19.5972px;">Membatasi gerakan canopy saat retract</td>
+</tr>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 49.2356%; height: 19.5972px;">Limit switch Right Canopy Retract</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 45.8648%; height: 19.5972px;">Membatasi gerakan canopy saat retract</td>
+</tr>
+<tr style="height: 39.1944px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 49.2356%; height: 39.1944px;">Limit switch Left Canopy Stop/Extend &amp; over Pressure</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 45.8648%; height: 39.1944px;">Membatasi gerakan canopy jika kelebihan tekanan</td>
+</tr>
+<tr style="height: 39.1944px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 49.2356%; height: 39.1944px;">Limit switch Right Canopy Stop/Extend &amp; over Pressure</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 45.8648%; height: 39.1944px;">Membatasi gerakan canopy jika kelebihan tekanan</td>
+</tr>
+<tr style="height: 19.5972px;">
+<td class="border border-gray-500 px-4 py-2" style="width: 49.2356%; height: 19.5972px;">Actuator Motor Canopy R/L</td>
+<td class="border border-gray-500 px-4 py-2" style="width: 45.8648%; height: 19.5972px;">Untuk menggerakkan canopy</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Cabin Rotation</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">Limit switch Initial Cabin Rotation Left &amp; Ultimate Cabin Rotation Left</td>
+<td class="border border-gray-500 px-4 py-2">Membatasi gerakan rotasi kabin ke kiri</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit switch Initial Cabin Rotation Right &amp; Ultimate Cabin Rotation Right</td>
+<td class="border border-gray-500 px-4 py-2">Membatasi gerakan rotasi kabin ke kanan</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Cabin Rotation Sensor</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi posisi angular cabin</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Reset cabin rotation sensor</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai kalibrator sensor</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Actuator Motor Rotation Cabin</td>
+<td class="border border-gray-500 px-4 py-2">Untuk menggerakkan cabin</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Cabin Floor Up / Down</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi perubahan ketinggian cabin floor</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Actuator Motor Cabin Floor</td>
+<td class="border border-gray-500 px-4 py-2">Menggerakkan cabin floor</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Autolevel</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">Proximity Ultimate Auto level Wheel Up/ Down</td>
+<td class="border border-gray-500 px-4 py-2">Untuk mendeteksi perubahan ketinggian pesawat</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Auto level Not Out</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi jika autolevel tidak keluar</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Auto level Not Contact</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi jika autolevel tidak berkontak dengan badan pesawat</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Auto level Wheel Up/Down</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi putaran wheel autolevel</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Actuator Motor Auto level Stop</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi autolevel jika sudah berkontak dengan pesawat</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Actuator Motor Auto level</td>
+<td class="border border-gray-500 px-4 py-2">Untuk menggerakkan autolevel</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>d. Lift Column</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">Actuator Motor Vertical Column L/R</td>
+<td class="border border-gray-500 px-4 py-2">Menggerakkan lift column</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Counter Column Right</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi ketinggian Garbarata</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Proximity Reset Counter Column Right</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai kalibrator sensor</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Column Fault Left</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi jika lift column unbalance</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Column Fault Right</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi jika lift column unbalance</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Initial Vertical Up/Down Left</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai sensor initial</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Initial Vertical Up/Down Right</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai sensor initial</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Ultimate Vertical Up/Down Left</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai ultimate sensor</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit Switch Ultimate Vertical Up/Down Right</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai ultimate sensor</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>e. Wheel Boogie</strong></p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">Limit switch Initial Steer Left</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai sensor inisial wheel boogie</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit switch Initial Steer Right</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai sensor inisial wheel boogie</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit switch Ultimate Steer Right</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai sensor ultimate wheel boogie</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit switch Ultimate Steer Left</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai sensor ultimate wheel boogie</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Encoder Wheel Boogie Rotation Sensor</td>
+<td class="border border-gray-500 px-4 py-2">Mendeteksi putaran wheel boogie</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Limit switch Safety Hoop</td>
+<td class="border border-gray-500 px-4 py-2">Sebagai pelindung dan detector wheel boogie dari benda asing</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Actuator Motor Horizontal Drive L/R</td>
+<td class="border border-gray-500 px-4 py-2">Untuk menggerakkan wheel boogie</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">Inverter Variable speed drive Horizontal motor Left/right</td>
+<td class="border border-gray-500 px-4 py-2">Untuk mempercepat atau memperlambat wheel boogie</td>
+</tr>
+</tbody>
+</table>
+</div>',
+                'en' => '<p>
+            Garbarata uses an electric motor and mechanical system
+            equipped with various <strong>Safety Devices</strong>,
+            <strong>Sensors</strong>, and <strong>Actuators</strong> for
+            guarantee operational safety. Following are the components
+            which are found in every part of the Garbarata.
+        </p>
+<p>
+<strong>a. Rotunda</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Initial Rotunda Left / Right limit switches
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To limit horizontal rotation of the Rotunda
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Ultimate Rotunda Left / Right limit switches
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Slope Up/Down
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit changes in the height of the Garbarata
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Encoder Rotunda Rotation sensor
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Determine the angular position of the Rotunda
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Potentiometer Rotunda Rotation Sensor
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Determine the angular position of the rotunda
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            CCTV Cameras / Closed Circuit Television
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Check the apron situation
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Camera Box and Wiper
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Protects the Camera from external interference
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>b. Tunnel (A/B/C)</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Limit switches Initial Full Retract & Full Extend
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Limiting changes to the length of the Garbarata
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Ultimate Full Retract & Full Extend limit switches
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit switch Slow down Tunnel Travel
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Slows down the Garbarata speed when approaching the fuselage
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Travel Tunnel Sensor
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detect changes in the length of the Garbarata
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Reset Travel Tunnel Sensor
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As a sensor calibrator
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>c. Cabin</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Bumper Limit switch
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To detect the fuselage
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Horn/Bell
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As a signal that Garbarata is operating
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Safety Door Shoes
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Backup if autolevel doesn\'t work
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Photo Electric Switch
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To detect the position of the aircraft and slow down the Garbarata speed
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<br>
+<p>
+<strong>Canopy</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Limit switch Left Canopy Retract
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Limits canopy movement when retracting
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit switch Right Canopy Retract
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit switch Left Canopy Stop/Extend & over Pressure
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Limits canopy movement if there is excess pressure
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit switch Right Canopy Stop/Extend & over Pressure
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            R/L Canopy Motor Actuator
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To move the canopy
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>Cabin Rotation</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Limit switch Initial Cabin Rotation Left & Ultimate Cabin Rotation Left
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Limits the rotational movement of the cabin to the left
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit switch Initial Cabin Rotation Right & Ultimate Cabin Rotation Right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Limits rotational movement of the cabin to the right
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Cabin Rotation Sensor
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detecting the angular position of the cabin
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Reset cabin rotation sensor
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As a sensor calibrator
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Cabin Rotation Motor Actuator
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To move the cabin
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Cabin Floor Up / Down
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detect changes in cabin floor height
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Cabin Floor Motor Actuator
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Move the cabin floor
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>Autolevel</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Proximity Ultimate Auto level Wheel Up/Down
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To detect changes in aircraft altitude
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Auto level Not Out
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detects if autolevel does not exit
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Auto level Not Contact
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detects if the autolevel is not in contact with the fuselage
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Auto level Wheel Up/Down
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detect autolevel wheel rotation
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Actuator Motor Auto level Stop
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detects autolevel if it has been in contact with the aircraft
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Actuator Motor Auto level
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To move the autolevel
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>d. Column Elevator</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Vertical Column L/R Motor Actuator
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Moving the lift column
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Counter Column Right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detecting the height of the Garbarata
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Proximity Reset Counter Column Right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As a sensor calibrator
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Column Fault Left
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detect if the lift column is unbalanced
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Column Fault Right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Initial Vertical Up/Down Left
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As an initial sensor
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Initial Vertical Up/Down Right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Ultimate Vertical Up/Down Left
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As the ultimate sensor
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit Switch Ultimate Vertical Up/Down Right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+<strong>e. Wheel Boogie</strong>
+</p>
+<div class="overflow-x-auto my-6">
+<table class="w-full border border-gray-500 border-collapse text-sm">
+<tbody>
+<tr>
+<td class="border border-gray-500 px-4 py-2 w-1/2">
+                            Limit switch Initial Steer Left
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As a wheel boogie initial sensor
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Limit switch Initial Steer Right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Ultimate Steer Right limit switch
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As the ultimate wheel boogie sensor
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Ultimate Steer Left limit switch
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+</td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Encoder Wheel Boogie Rotation Sensor
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            Detecting wheel boogie rotation
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Safety Hoop limit switch
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            As a protector and detector for the boogie wheel from foreign objects
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Horizontal Drive L/R Motor Actuator
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To move the boogie wheel
+                        </td>
+</tr>
+<tr>
+<td class="border border-gray-500 px-4 py-2">
+                            Inverter Variable speed drive Horizontal motor Left/right
+                        </td>
+<td class="border border-gray-500 px-4 py-2">
+                            To speed up or slow down the boogie wheel
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+',
+            ], '', 11);
+
+        $diagram = $this->diagram($chapter->id, 'Diagram Struktur Utama Garbarata', 'images/garbarata.png');
+
+        $this->hotspot($diagram->id, $module1->id, 'Rotunda', 13.50, 13.00);
+        $this->hotspot($diagram->id, $module2->id, 'Telescopic Tunnel', 25.00, 20.00);
+        $this->hotspot($diagram->id, $module3->id, 'Vertical Lift Column', 74.80, 67.00);
+        $this->hotspot($diagram->id, $module4->id, 'Wheel Boogie', 72.00, 77.00);
+        $this->hotspot($diagram->id, $module5->id, 'Service Stair', 76.50, 57.00);
+        $this->hotspot($diagram->id, $module6->id, 'Cabin and Control Unit', 87.00, 45.00);
+    }
+
+    private function module(int $chapterId, string $title, array $titleTranslations, array $contentTranslations, string $imagePath, int $order): Module
+    {
+        $modules = Module::where('chapter_id', $chapterId)
+            ->where('order', $order)
+            ->orderBy('id')
+            ->get();
+
+        $module = $modules->shift() ?? new Module();
+        $modules->each->delete();
+
+        $module->fill([
+            'chapter_id' => $chapterId,
+            'title' => $titleTranslations,
+            'content' => $contentTranslations,
+            'image_path' => $imagePath ?: null,
+            'order' => $order,
         ]);
-
-        // 2.5 Safety Device / Sensor / Actuator
-        Module::create([
-            'chapter_id' => $chapter->id,
-            'title' => ['id' => '2.5 Safety Device / Sensor / Actuator', 'en' => '2.5 Safety Device / Sensor / Actuator'],
-            'content' => '
-                <p>
-                    Garbarata menggunakan motor listrik dan sistem mekanik yang
-                    dilengkapi berbagai <strong>Safety Device</strong>,
-                    <strong>Sensor</strong>, dan <strong>Actuator</strong> untuk
-                    menjamin keselamatan pengoperasian. Berikut komponen-komponen
-                    yang terdapat pada setiap bagian Garbarata.
-                </p>
-
-                <p><strong>a. Rotunda</strong></p>
-
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Limit switch Initial Rotunda Left / Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk membatasi rotasi Rotunda secara horizontal
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Ultimate Rotunda Left / Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Slope Up/Down
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Membatasi perubahan ketinggian Garbarata
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Encoder Rotunda Rotation sensor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Menentukan posisi angular Rotunda
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Potentiometer Rotunda Rotation Sensor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Menentukan posisi angular rotunda
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Camera CCTV / Closed Circuit Television
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Memeriksa situasi apron
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Camera Box and Wiper
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Melindungi Kamera dari gangguan eksternal
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <p><strong>b. Tunnel (A/B/C)</strong></p>
-
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Limit switch Initial Full Retract &amp; Full Extend
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Membatasi perubahan panjang Garbarata
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Ultimate Full Retract &amp; Full Extend
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Slow down Tunnel Travel
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Memperlambat kecepatan Garbarata saat mendekati badan pesawat
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Travel Tunnel Sensor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi perubahan panjang Garbarata
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Reset Travel Tunnel Sensor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai kalibrator sensor
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <p><strong>c. Cabin</strong></p>
-
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Limit switch Bumper Limit
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk mendeteksi badan pesawat
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Horn/Bell
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai sinyal pertanda Garbarata sedang beroperasi
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Safety Door Shoe
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Backup jika autolevel tidak dapat bekerja
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Photo Electric Switch
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk mendeteksi posisi pesawat dan memperlambat kecepatan Garbarata
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <br>
-                <p><strong>Canopy</strong></p>
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Limit switch Left Canopy Retract
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Membatasi gerakan canopy saat retract
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Right Canopy Retract
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Left Canopy Stop/Extend &amp; over Pressure
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Membatasi gerakan canopy jika kelebihan tekanan
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Right Canopy Stop/Extend &amp; over Pressure
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Actuator Motor Canopy R/L
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk menggerakkan canopy
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-                <p><strong>Cabin Rotation</strong></p>
-
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Limit switch Initial Cabin Rotation Left &amp; Ultimate Cabin Rotation Left
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Membatasi gerakan rotasi kabin ke kiri
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Initial Cabin Rotation Right &amp; Ultimate Cabin Rotation Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Membatasi gerakan rotasi kabin ke kanan
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Cabin Rotation Sensor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi posisi angular cabin
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Reset cabin rotation sensor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai kalibrator sensor
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Actuator Motor Rotation Cabin
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk menggerakkan cabin
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Cabin Floor Up / Down
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi perubahan ketinggian cabin floor
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Actuator Motor Cabin Floor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Menggerakkan cabin floor
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-                <p><strong>Autolevel</strong></p>
-
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Proximity Ultimate Auto level Wheel Up/ Down
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk mendeteksi perubahan ketinggian pesawat
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Auto level Not Out
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi jika autolevel tidak keluar
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Auto level Not Contact
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi jika autolevel tidak berkontak dengan badan pesawat
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Auto level Wheel Up/Down
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi putaran wheel autolevel
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Actuator Motor Auto level Stop
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi autolevel jika sudah berkontak dengan pesawat
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Actuator Motor Auto level
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk menggerakkan autolevel
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <p><strong>d. Lift Column</strong></p>
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Actuator Motor Vertical Column L/R
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Menggerakkan lift column
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Counter Column Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi ketinggian Garbarata
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Proximity Reset Counter Column Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai kalibrator sensor
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Column Fault Left
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi jika lift column unbalance
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Column Fault Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Initial Vertical Up/Down Left
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai sensor initial
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Initial Vertical Up/Down Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Ultimate Vertical Up/Down Left
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai ultimate sensor
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit Switch Ultimate Vertical Up/Down Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <p><strong>e. Wheel Boogie</strong></p>
-                <div class="overflow-x-auto my-6">
-                    <table class="w-full border border-gray-500 border-collapse text-sm">
-                        <tbody>
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2 w-1/2">
-                                    Limit switch Initial Steer Left
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai sensor inisial wheel boogie
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Initial Steer Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Ultimate Steer Right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai sensor ultimate wheel boogie
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Ultimate Steer Left
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Encoder Wheel Boogie Rotation Sensor
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Mendeteksi putaran wheel boogie
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Limit switch Safety Hoop
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Sebagai pelindung dan detector wheel boogie dari benda asing
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Actuator Motor Horizontal Drive L/R
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk menggerakkan wheel boogie
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Inverter Variable speed drive Horizontal motor Left/right
-                                </td>
-                                <td class="border border-gray-500 px-4 py-2">
-                                    Untuk mempercepat atau memperlambat wheel boogie
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            ',
-            'order' => 11,
+        $module->save();
+
+        return $module;
+    }
+
+    private function diagram(int $chapterId, string $title, string $imagePath): Diagram
+    {
+        $diagrams = Diagram::where('chapter_id', $chapterId)
+            ->orderBy('id')
+            ->get();
+        $diagram = $diagrams->shift() ?? new Diagram();
+        $diagrams->each->delete();
+
+        $diagram->fill([
+            'chapter_id' => $chapterId,
+            'title' => $title,
+            'image_path' => $imagePath,
         ]);
+        $diagram->save();
+
+        return $diagram;
+    }
+
+    private function hotspot(int $diagramId, int $moduleId, string $label, float $xPercent, float $yPercent): void
+    {
+        Hotspot::updateOrCreate(
+            [
+                'diagram_id' => $diagramId,
+                'target_module_id' => $moduleId,
+            ],
+            [
+                'label' => $label,
+                'x_percent' => $xPercent,
+                'y_percent' => $yPercent,
+            ],
+        );
     }
 }
