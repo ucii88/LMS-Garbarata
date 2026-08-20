@@ -1076,14 +1076,13 @@ class EnglishContentSeeder extends Seeder
 
 ',
             '1.1 Model' => '<p>
-        Models and types of Garbarata vary depending on consumer demand. For naming types
-        Garbarata is determined based on the length of the Garbarata from the center of the Rotunda to the end
-        cabin bumper at short and maximum length. International Airport Garbarata
-        Sultan Hasanuddin, Makassar has types B3 - 22/39 and B2 - 21/28 which are
-        Three tunnel or two tunnel garbarata with minimum length of garbarata when shortened
-        according to the specified type. For example, B3 - 22/39 has meaning
-        22 meters when the Garbarata is maximally shortened and 39 meters when maximally extended.
-        Likewise, it has the same meaning as type B2 - 21/28.
+        Garbarata models and types vary depending on consumer demand. The naming of Garbarata types
+        is determined by the length of the Garbarata from the center of the Rotunda to the end
+        of the cabin bumper when fully retracted and fully extended. Garbarata at Sultan Hasanuddin International Airport,
+        Makassar, has the B3 - 22/39 and B2 - 21/28 types, which represent three-tunnel and two-tunnel Garbarata units,
+        with minimum lengths when retracted according to the specified type. For example,
+        B3 - 22/39 means that the Garbarata is 22 meters long when fully retracted and 39 meters long when fully extended.
+        The same meaning applies to type B2 - 21/28.
     </p>
 <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
 <img src="/images/modules/garbarata_2Tunnel.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Garbarata">
@@ -1176,7 +1175,7 @@ class EnglishContentSeeder extends Seeder
 <table class="w-full border-collapse text-sm">
 <head>
 <tr>
-<th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
+<th colspan="2" class="py-2 text-center text-lg font-bold">B2 SWRGG and B3 SWLGG</th>
 </tr>
 </head>
 <tbody>
@@ -1201,17 +1200,21 @@ class EnglishContentSeeder extends Seeder
 <table class="w-full border-collapse text-sm">
 <head>
 <tr>
-<th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
+<th class="py-2 text-center text-lg font-bold"></th>
+<th class="py-2 text-center text-lg font-bold">B2 - 21/28 SWRGG</th>
+<th class="py-2 text-center text-lg font-bold">B3 - 22/39 SWLGG</th>
 </tr>
 </head>
 <tbody>
 <tr class="border-b border-gray-500">
 <td class="py-2 px-3 font-medium">Retracted operation limit (A)</td>
-<td class="py-2 px-3 text-right whitespace-nowrap">23 m</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">21 m</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">22 m</td>
 </tr>
 <tr class="border-b border-gray-500">
 <td class="py-2 px-3 font-medium">Extended operation limit (B)</td>
-<td class="py-2 px-3 text-right whitespace-nowrap">32 m</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">28 m</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">39 m</td>
 </tr>
 </tbody>
 </table>
@@ -1226,7 +1229,7 @@ class EnglishContentSeeder extends Seeder
 <img src="/images/modules/gerakan_vertikal.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Vertical movement">
 </figure>
 <p class="text-center font-bold my-2">
-<strong>B2 - 23/32 SWRGG</strong>
+<strong>B2 SWRGG and B3 SWLGG</strong>
 </p>
 <div class="overflow-x-auto my-4">
 <table class="w-full border border-gray-500 border-collapse text-sm">
@@ -1249,7 +1252,7 @@ class EnglishContentSeeder extends Seeder
 <img src="/images/modules/sudut_putar_horizontal_rotunda.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Rotunda horizontal rotation angle">
 </figure>
 <p class="text-center font-bold my-2">
-<strong>B2 - 23/32 SWRGG</strong>
+<strong>B2 SWRGG and B3 SWLGG</strong>
 </p>
 <div class="overflow-x-auto my-4">
 <table class="w-full border border-gray-500 border-collapse text-sm">
@@ -1272,7 +1275,7 @@ class EnglishContentSeeder extends Seeder
 <img src="/images/modules/sudut_putar_rotasi_cabin.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Cabin rotation angle">
 </figure>
 <p class="text-center font-bold my-2">
-<strong>B2 - 23/32 SWRGG</strong>
+<strong>B2 SWRGG and B3 SWLGG</strong>
 </p>
 <div class="overflow-x-auto my-4">
 <table class="w-full border border-gray-500 border-collapse text-sm">
@@ -1309,7 +1312,7 @@ class EnglishContentSeeder extends Seeder
 </tr>
 <tr class="border-b border-gray-500">
 <td class="border-r border-gray-500 py-2 px-3 font-medium">Vertical Movement</td>
-<td class="py-2 px-3 text-right whitespace-nowrap">1.5 m/min</td>
+<td class="py-2 px-3 text-right whitespace-nowrap">0.78 m/min</td>
 </tr>
 <tr class="border-b border-gray-500">
 <td class="border-r border-gray-500 py-2 px-3 font-medium">Forward and reverse speed</td>
@@ -1393,7 +1396,7 @@ according to the following main components:</p>
 <td class="border border-gray-500 py-2 px-3 align-top break-words">0.75kW</td>
 <td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
 <td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
-<td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
+<td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Hyponic drive</td>
 </tr>
 </tbody>
 </table>

@@ -15,7 +15,20 @@
                         id: 'intro_mekanikal',
                         title: '{{ __('Deskripsi Komponen Mekanikal') }}',
                         button_title: '{{ __('Pengantar') }}',
-                        content: `<p class='mt-2'>{{ __('Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.') }}</p><p class='mt-4'>{{ __('Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.') }}</p>`,
+                        content: `<p class='mt-2'>{{ app()->getLocale() === 'en'
+                                    ? 'Garbarata is an electromechanical passenger boarding bridge that connects the airport terminal building and an aircraft, enabling passengers to move between them. It protects passengers from rain, noise, dust, wind, and other conditions that may cause injury or disrupt airport operations.'
+                                    : __('Garbarata merupakan sebuah jembatan elektromekanik yang menghubungkan bangunan Bandara dengan pesawat yang berfungsi sebagai media para penumpang untuk berpindah dari Pesawat menuju Bandara atau sebaliknya. Dengan menggunakan Garbarata, penumpang dapat terlindungi dari hujan, suara bising, angin debu dan berbagai macam hal lainnya yang dapat menciderai penumpang atau hal yang dapat mengganggu operasional Bandara.') }}</p>
+                                    <p class='mt-4'>{{ app()->getLocale() === 'en' ? 'The main components of the Garbarata consist of:' : __('Komponen utama Garbarata terdiri dari:') }}</p>
+                                    <ul class='mt-2'>
+                                        <li>{{ app()->getLocale() === 'en' ? '- Rotunda' : __('- Rotunda') }}</li>
+                                        <li>{{ app()->getLocale() === 'en' ? '- Telescopic Tunnel' : __('- Telescopic Tunnel') }}</li>
+                                        <li>{{ app()->getLocale() === 'en' ? '- Drive Column and Wheel Boogie' : __('- Drive Column dan Wheel Boogie') }}</li>
+                                        <li>{{ app()->getLocale() === 'en' ? '- Cabin and Control Unit' : __('- Cabin dan Control Unit') }}</li>
+                                        <li>{{ app()->getLocale() === 'en' ? '- Service Stair' : __('- Service Stair') }}</li>
+                                    </ul>
+                                    <p class='mt-4'>{{ app()->getLocale() === 'en'
+                                    ? 'Garbarata uses an electromechanical system controlled from a console in the cabin. This control system integrates all safety equipment and electronic controls, using a Programmable Logic Controller (PLC).'
+                                    : __('Garbarata menggunakan sistem elektromekanik yang dikendalikan melalui sebuah control console di cabin. Sistem kendali ini mengintegrasikan seluruh peralatan keselamatan dan sistem kendali elektronik. Sistem kendali elektronik menggunakan unit kendali yang disebut Programmable Logic Controller atau PLC.') }}</p>`,
                         image_path: null,
                     },
                     ...this.modules
@@ -34,7 +47,11 @@
                         id: 'intro_elektrikal',
                         title: '{{ __('Deskripsi Komponen Elektrikal dan Sistem Kontrol') }}',
                         button_title: '{{ __('Pengantar') }}',
-                        content: `<p class='mt-2'>{{ __('Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.') }}</p>`,
+                        content: `<p class='mt-2'>
+                                    {{ app()->getLocale() === 'en'
+                                        ? 'This section explains the operation of the Garbarata electrical system. Detailed schematics are available in the As-Built drawings. Electrical power is distributed from the airport building through the Main Power Panel, Sub-Distribution Power Panel, and Console Desk to operate actuators, sensors, and other electrical components. The main controls are on the Console Desk, using the Control Face Plate and Touchscreen as the operator interface. Operators can also monitor component conditions through the Console Desk display.'
+                                        : __('Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.') }}
+                                </p>`,
                         image_path: null,
                     },
                     ...this.modules

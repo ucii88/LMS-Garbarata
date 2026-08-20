@@ -20,11 +20,10 @@ class Chapter2Seeder extends Seeder
             <p>
                 Model dan jenis Garbarata bervariasi bergantung permintaan konsumen. Untuk penamaan tipe
                 Garbarata ditentukan berdasarkan panjang Garbarata dari titik pusat Rotunda sampai ujung
-                bumper cabin pada saat pendek dan panjang maksimum. Garbarata Bandara Internasional
-                Sultan Hasanuddin, Makassar memiliki tipe B3 - 22/39 dan B2 - 21/28 yang merupakan
-                Garbarata tiga tunnel atau dua tunnel dengan panjang minimum Garbarata saat diperpendek
-                sesuai dengan tipe yang sudah ditentukan. Sebagai contoh, B3 - 22/39 memiliki arti
-                22 meter saat Garbarata memendek maksimal dan 39 meter saat diperpanjang maksimal.
+                bumper cabin pada saat pendek dan panjang maksimum. Garbarata Bandara Internasional Sultah Hasanuddin, 
+                Makassar memiliki tipe B3 - 22/39 dan B2 - 21/28 yang merupakan Garbarata tiga tunnel atau dua tunnel 
+                dengan panjang minimum Garbarata saat diperpendek sesuai dengan tipe yang sudah ditentukan. Sebagai contoh, 
+                B3 - 22/39 yang memiliki arti 22 menter saat Garbarata memendek maksimal dan 39 meter saat diperpanjang maksimal
                 Begitu juga memiliki kesamaan arti dengan tipe B2 - 21/28.
             </p>
 
@@ -124,7 +123,7 @@ class Chapter2Seeder extends Seeder
                 <table class="w-full border-collapse text-sm">
                     <thead>
                         <tr>
-                            <th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
+                            <th colspan="2" class="py-2 text-center text-lg font-bold">B2 SWRGG dan B3 SWLGG</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,17 +148,21 @@ class Chapter2Seeder extends Seeder
                 <table class="w-full border-collapse text-sm">
                     <thead>
                         <tr>
-                            <th colspan="2" class="py-2 text-center text-lg font-bold">B2 - 23/32 SWRGG</th>
+                            <th class="py-2 text-center text-lg font-bold"></th>
+                            <th class="py-2 text-center text-lg font-bold">B2 - 21/28 SWRGG</th>
+                            <th class="py-2 text-center text-lg font-bold">B3 - 22/39 SWLGG</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="border-b border-gray-500">
                             <td class="py-2 px-3 font-medium">Retracted operation limit (A)</td>
-                            <td class="py-2 px-3 text-right whitespace-nowrap">23 m</td>
+                            <td class="py-2 px-3 text-right whitespace-nowrap">21 m</td>
+                            <td class="py-2 px-3 text-right whitespace-nowrap">22 m</td>
                         </tr>
                         <tr class="border-b border-gray-500">
                             <td class="py-2 px-3 font-medium">Extended operation limit (B)</td>
-                            <td class="py-2 px-3 text-right whitespace-nowrap">32 m</td>
+                            <td class="py-2 px-3 text-right whitespace-nowrap">28 m</td>
+                            <td class="py-2 px-3 text-right whitespace-nowrap">39 m</td>
                         </tr>
                     </tbody>
                 </table>
@@ -173,7 +176,7 @@ class Chapter2Seeder extends Seeder
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <img src="/images/modules/gerakan_vertikal.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Gerakan vertikal">
             </figure>
-            <p class="text-center font-bold my-2"><strong>B2 - 23/32 SWRGG</strong></p>
+            <p class="text-center font-bold my-2"><strong>B2 SWRGG dan B3 SWLGG</strong></p>
             <div class="overflow-x-auto my-4">
                 <table class="w-full border border-gray-500 border-collapse text-sm">
                     <tbody>
@@ -193,7 +196,7 @@ class Chapter2Seeder extends Seeder
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <img src="/images/modules/sudut_putar_horizontal_rotunda.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Sudut putar horizontal rotunda">
             </figure>
-            <p class="text-center font-bold my-2"><strong>B2 - 23/32 SWRGG</strong></p>
+            <p class="text-center font-bold my-2"><strong>B2 SWRGG dan B£ SWLGG</strong></p>
             <div class="overflow-x-auto my-4">
                 <table class="w-full border border-gray-500 border-collapse text-sm">
                     <tbody>
@@ -213,7 +216,7 @@ class Chapter2Seeder extends Seeder
             <figure class="my-6 rounded-xl border border-gray-200 bg-gray-50 p-3">
                 <img src="/images/modules/sudut_putar_rotasi_cabin.png" class="mx-auto max-h-80 w-full object-contain rounded-lg" alt="Sudut putar rotasi cabin">
             </figure>
-            <p class="text-center font-bold my-2"><strong>B2 - 23/32 SWRGG</strong></p>
+            <p class="text-center font-bold my-2"><strong>B2 SWRGG dan B3 SWLGG</strong></p>
             <div class="overflow-x-auto my-4">
                 <table class="w-full border border-gray-500 border-collapse text-sm">
                     <tbody>
@@ -245,7 +248,7 @@ class Chapter2Seeder extends Seeder
                         </tr>
                         <tr class="border-b border-gray-500">
                             <td class="border-r border-gray-500 py-2 px-3 font-medium">Vertical Movement</td>
-                            <td class="py-2 px-3 text-right whitespace-nowrap">1.5 m/min</td>
+                            <td class="py-2 px-3 text-right whitespace-nowrap">0.78 m/min</td>
                         </tr>
                         <tr class="border-b border-gray-500">
                             <td class="border-r border-gray-500 py-2 px-3 font-medium">Forward and reverse speed</td>
@@ -328,7 +331,7 @@ class Chapter2Seeder extends Seeder
                             <td class="border border-gray-500 py-2 px-3 align-top break-words">0.75kW</td>
                             <td class="border border-gray-500 py-2 px-3 align-top break-words">380VAC</td>
                             <td class="border border-gray-500 py-2 px-3 align-top break-words">3 Phase</td>
-                            <td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Cyclo drive</td>
+                            <td class="border border-gray-500 py-2 px-3 align-top break-words">50 Hz Hyponic drive</td>
                         </tr>
                     </tbody>
                 </table>
@@ -346,12 +349,32 @@ class Chapter2Seeder extends Seeder
 
     private function module(int $chapterId, string $title, string $content, int $order): void
     {
-        Module::create([
+        $modules = Module::where('chapter_id', $chapterId)
+            ->where('order', $order)
+            ->orderBy('id')
+            ->get();
+
+        $module = $modules->shift() ?? new Module();
+
+        // Keep the first seeded row and remove duplicates created by earlier runs.
+        $modules->each->delete();
+
+        $titleTranslations = $module->getTranslations('title');
+        $contentTranslations = $module->getTranslations('content');
+
+        $module->fill([
             'chapter_id' => $chapterId,
-            'title' => $title,
-            'content' => $content,
+            'title' => [
+                'id' => $title,
+                'en' => $titleTranslations['en'] ?? '',
+            ],
+            'content' => [
+                'id' => $content,
+                'en' => $contentTranslations['en'] ?? '',
+            ],
             'image_path' => null,
             'order' => $order,
         ]);
+        $module->save();
     }
 }

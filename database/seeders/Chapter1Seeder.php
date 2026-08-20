@@ -438,7 +438,7 @@ class Chapter1Seeder extends Seeder
         Hotspot::create([
             'diagram_id' => $diagram->id,
             'target_module_id' => $module1_5->id,
-            'label' => 'Service Access',
+            'label' => 'Service Stair',
             'x_percent' => 76.5,
             'y_percent' => 57.0,
         ]);
@@ -446,7 +446,7 @@ class Chapter1Seeder extends Seeder
         Hotspot::create([
             'diagram_id' => $diagram->id,
             'target_module_id' => $module1_6->id,
-            'label' => 'Cabin',
+            'label' => 'Cabin and Control Unit',
             'x_percent' => 87.0,
             'y_percent' => 45.0,
         ]);
