@@ -6825,6 +6825,11 @@ technical specifications, capacity and unit dimensions.</p>
 
         // Update Module EN titles and content
         foreach (Module::all() as $module) {
+            // Chapter 1 keeps its current bilingual snapshot from Chapter1Seeder.
+            if ((int) $module->chapter_id === 1) {
+                continue;
+            }
+
             $titleId = $module->getTranslation('title', 'id') ?? '';
             $contentId = $module->getTranslation('content', 'id') ?? '';
 

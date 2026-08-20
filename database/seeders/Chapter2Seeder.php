@@ -43,7 +43,7 @@ class Chapter2Seeder extends Seeder
                                 General Specification
                             </th>
                         </tr>
-                    </thead>s
+                    </thead>
                     <tbody>
                         <tr class="border-b border-gray-400">
                             <td class="py-2 font-medium w-1/3">Type Number</td>
