@@ -227,12 +227,15 @@
                                         </div>
 
                                         <!-- Module Diagram Component -->
-                                        @if($module->diagram || auth()->user()->isInstruktur())
+                                        @php
+                                            $moduleDiagramsList = ($module->diagrams && $module->diagrams->count() > 0) ? $module->diagrams : ($module->diagram ? [$module->diagram] : []);
+                                        @endphp
+                                        @if(count($moduleDiagramsList) > 0 || auth()->user()->isInstruktur())
                                             <div>
                                                 <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
                                                      x-data="moduleDiagramData(
-                                                         @js($module->diagram),
-                                                         @js($module->diagram ? $module->diagram->hotspots : []),
+                                                         @js($moduleDiagramsList),
+                                                         @js(count($moduleDiagramsList) > 0 ? $moduleDiagramsList[0]->hotspots : []),
                                                          {{ $course->id }},
                                                          {{ $chapter->id }},
                                                          {{ $module->id }},
@@ -335,12 +338,12 @@
                             <div id="ch5main-tts-content" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
                             
                             <!-- Module Diagram Component for Single Module Tab -->
-                            <div x-show="getSingleModule(activeTab).diagram || @js(auth()->user()->isInstruktur())">
+                            <div x-show="(getSingleModule(activeTab).diagrams && getSingleModule(activeTab).diagrams.length > 0) || getSingleModule(activeTab).diagram || @js(auth()->user()->isInstruktur())">
                                 <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
                                     :key="getSingleModule(activeTab).id"
                                     x-data="moduleDiagramData(
-                                        getSingleModule(activeTab).diagram,
-                                        getSingleModule(activeTab).diagram ? getSingleModule(activeTab).diagram.hotspots : [],
+                                        (getSingleModule(activeTab).diagrams && getSingleModule(activeTab).diagrams.length > 0) ? getSingleModule(activeTab).diagrams : (getSingleModule(activeTab).diagram ? [getSingleModule(activeTab).diagram] : []),
+                                        (getSingleModule(activeTab).diagrams && getSingleModule(activeTab).diagrams.length > 0) ? (getSingleModule(activeTab).diagrams[0].hotspots || []) : (getSingleModule(activeTab).diagram ? getSingleModule(activeTab).diagram.hotspots : []),
                                         {{ $course->id }},
                                         {{ $chapter->id }},
                                         getSingleModule(activeTab).id,

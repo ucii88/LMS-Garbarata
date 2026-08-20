@@ -1,22 +1,50 @@
 <script>
     if (typeof window.moduleDiagramData !== 'function') {
-        window.moduleDiagramData = function(diagramObj, hotspotsData, courseId, chapterId, moduleId, storeDiagramUrl, destroyDiagramUrl, storeHotspotUrl, updateHotspotsUrl, csrfToken) {
+        window.moduleDiagramData = function(diagramInput, legacyHotspotsData, courseId, chapterId, moduleId, storeDiagramUrl, destroyDiagramUrl, storeHotspotUrl, updateHotspotsUrl, csrfToken) {
+            let diagramsList = [];
+            if (Array.isArray(diagramInput)) {
+                diagramsList = diagramInput;
+            } else if (diagramInput && typeof diagramInput === 'object' && diagramInput !== null) {
+                diagramsList = [diagramInput];
+            }
+
             return {
+                diagrams: diagramsList,
+                activeTab: 0,
                 editMode: false,
                 addHotspotMode: false,
                 saving: false,
                 uploading: false,
                 savingHotspot: false,
                 showUploadModal: false,
+                isUploadingNewTab: false,
                 showHotspotFormModal: false,
                 imagePreview: null,
                 imageFileName: '',
+                newTabTitle: '',
                 activePopupHotspot: null,
-                dotSize: localStorage.getItem('lms_dotsize_mod_' + moduleId) || 'md',
+                highlightedHotspotLabel: null,
+                dotSize: localStorage.getItem('lms_dotsize_mod_' + moduleId) || 'sm',
                 setDotSize(size) {
                     this.dotSize = size;
                     localStorage.setItem('lms_dotsize_mod_' + moduleId, size);
                 },
+
+                get currentDiagram() {
+                    return (this.diagrams && this.diagrams.length > 0) ? (this.diagrams[this.activeTab] || this.diagrams[0]) : null;
+                },
+                get diagramObj() {
+                    return this.currentDiagram;
+                },
+                get hotspots() {
+                    return (this.currentDiagram && this.currentDiagram.hotspots) ? this.currentDiagram.hotspots : [];
+                },
+                set hotspots(val) {
+                    if (this.currentDiagram) {
+                        this.currentDiagram.hotspots = val;
+                    }
+                },
+
                 activeHotspot: {
                     id: null,
                     label: '',
@@ -27,8 +55,6 @@
                     x_percent: 50,
                     y_percent: 50
                 },
-                hotspots: hotspotsData || [],
-                diagramObj: diagramObj,
                 storeDiagramUrl: storeDiagramUrl,
                 destroyDiagramUrl: destroyDiagramUrl,
                 storeHotspotUrl: storeHotspotUrl,
@@ -62,9 +88,11 @@
                     this.uploading = true;
                     try {
                         const formData = new FormData(e.target);
+                        if (!this.isUploadingNewTab && this.currentDiagram && this.currentDiagram.id) {
+                            formData.append('diagram_id', this.currentDiagram.id);
+                        }
                         const targetModuleId = formData.get('target_module_id');
                         let uploadUrl = this.storeDiagramUrl;
-
                         if (targetModuleId && targetModuleId !== 'chapter') {
                             uploadUrl = '/courses/' + courseId + '/chapters/' + chapterId + '/modules/' + targetModuleId + '/diagram';
                         }
@@ -90,25 +118,21 @@
                     this.uploading = false;
                 },
                 async confirmDeleteDiagram() {
-                    showGlobalConfirm(@js(__('Hapus Diagram')), @js(__('Apakah Anda yakin ingin menghapus diagram modul ini beserta seluruh hotspotnya?')), async () => {
+                    if (!this.currentDiagram) return;
+                    showGlobalConfirm(@js(__('Hapus Diagram')), @js(__('Apakah Anda yakin ingin menghapus tab diagram ini beserta seluruh hotspotnya?')), async () => {
                         try {
-                            const res = await fetch(this.destroyDiagramUrl, {
+                            const res = await fetch(this.destroyDiagramUrl + '?diagram_id=' + this.currentDiagram.id, {
                                 method: 'DELETE',
                                 headers: {
                                     'X-CSRF-TOKEN': this.csrfToken,
                                     'Accept': 'application/json'
                                 }
                             });
-                            const data = await res.json();
-                            if (res.ok && data.success) {
-                                this.diagram = null;
-                                this.hotspots = [];
-                                showGlobalAlert(@js(__('Berhasil')), @js(__('Diagram berhasil dihapus.')));
-                            } else {
-                                showGlobalAlert(@js(__('Gagal')), data.message || @js(__('Gagal menghapus diagram.')));
+                            if (res.ok) {
+                                window.location.reload();
                             }
                         } catch (err) {
-                            showGlobalAlert(@js(__('Kesalahan')), @js(__('Terjadi kesalahan koneksi.')));
+                            showGlobalAlert(@js(__('Gagal')), @js(__('Gagal menghapus diagram.')));
                         }
                     });
                 },
@@ -146,6 +170,31 @@
                         if (hotspot.action_type === 'popup') {
                             this.activePopupHotspot = hotspot;
                         } else {
+                            const labelStr = String(hotspot.label || '').trim();
+
+                            // Highlight the matching hotspot dot visually on whichever tab becomes active
+                            this.highlightedHotspotLabel = labelStr;
+                            setTimeout(() => {
+                                if (this.highlightedHotspotLabel === labelStr) {
+                                    this.highlightedHotspotLabel = null;
+                                }
+                            }, 3500);
+
+                            // Automatically switch tab to detail diagram tab if clicking from main map (tab 0) or if current tab doesn't have detail hotspot
+                            if (this.diagrams && this.diagrams.length > 1) {
+                                const currentHasIt = this.hotspots && this.hotspots.some(h => String(h.label || '').trim() === labelStr);
+                                if (!currentHasIt || this.activeTab === 0) {
+                                    const targetTabIdx = this.diagrams.findIndex((diag, idx) => {
+                                        if (idx === 0) return false;
+                                        return diag.hotspots && diag.hotspots.some(h => String(h.label || '').trim() === labelStr);
+                                    });
+
+                                    if (targetTabIdx !== -1) {
+                                        this.activeTab = targetTabIdx;
+                                    }
+                                }
+                            }
+
                             if (hotspot.target_module_id) {
                                 const targetId = hotspot.target_module_id;
                                 if (typeof window.setMechModule === 'function') window.setMechModule(targetId);
@@ -161,28 +210,28 @@
                                 }
                             }
 
-                            const num = parseInt(hotspot.label, 10);
-                            const targetId = hotspot.label;
+                            const num = parseInt(labelStr, 10);
+                            const targetId = labelStr;
 
-                            // Walk up from current diagram component to find the containing module card
                             let container = this.$el ? this.$el.parentElement : null;
                             while (container && container !== document.body && !container.querySelector('table')) {
                                 container = container.parentElement;
                             }
                             if (!container) container = document;
 
-                            // Special handling for 5.1.2 Tunnel Roller with reference tabs
                             if (!isNaN(num) && typeof window.scrollToRollerRow === 'function' && container.querySelector('#roller-row-1')) {
                                 window.scrollToRollerRow(num);
                                 return;
                             }
+                            if (!isNaN(num) && typeof window.scrollToPartRow === 'function' && container.querySelector('#part-row-1')) {
+                                window.scrollToPartRow(num);
+                                return;
+                            }
 
-                             // Locate table row inside THIS module's container
                             let row = container.querySelector(`[id$="-row-${targetId}"]`)
                                    || container.querySelector(`[id="part-row-${targetId}"]`)
                                    || container.querySelector(`[id*="-row-${targetId}"]`);
 
-                            // Fallback to global document search if not found in container
                             if (!row) {
                                 const prefixes = [
                                     'part-row-', 'roller-row-', 'cable-row-', 'lift-row-', 'bogie-row-',
@@ -199,7 +248,6 @@
                                 }
                             }
 
-                            // Fallback: match row by first <td> content
                             if (!row && !isNaN(num)) {
                                 const allTrs = container.querySelectorAll('table tbody tr');
                                 for (const tr of allTrs) {
@@ -214,7 +262,6 @@
                             if (row) {
                                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-                                // Remove previous highlights
                                 document.querySelectorAll('tr').forEach(r => r.classList.remove('bg-blue-100', 'ring-2', 'ring-blue-400', 'bg-blue-50', 'text-blue-900', 'font-semibold'));
 
                                 row.classList.add('bg-blue-100', 'ring-2', 'ring-blue-400', 'font-semibold');
@@ -230,6 +277,10 @@
                         const url = isEdit ? (this.baseUrl + '/' + this.activeHotspot.id) : this.storeHotspotUrl;
                         const method = isEdit ? 'PUT' : 'POST';
 
+                        const payload = Object.assign({}, this.activeHotspot, {
+                            diagram_id: this.currentDiagram ? this.currentDiagram.id : null
+                        });
+
                         const res = await fetch(url, {
                             method: method,
                             headers: {
@@ -237,7 +288,7 @@
                                 'Content-Type': 'application/json',
                                 'Accept': 'application/json'
                             },
-                            body: JSON.stringify(this.activeHotspot)
+                            body: JSON.stringify(payload)
                         });
                         const data = await res.json();
                         if (res.ok && data.status === 'success') {

@@ -48,10 +48,18 @@ class Module extends Model
     }
 
     /**
+     * Get all diagrams for this module.
+     */
+    public function diagrams(): HasMany
+    {
+        return $this->hasMany(Diagram::class)->orderBy('order')->orderBy('id');
+    }
+
+    /**
      * Get the diagram for this module.
      */
     public function diagram(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(Diagram::class);
+        return $this->hasOne(Diagram::class)->oldestOfMany('order');
     }
 }

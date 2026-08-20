@@ -16,6 +16,7 @@ class Diagram extends Model
         'module_id',
         'title',
         'image_path',
+        'order',
     ];
 
     /**

@@ -39,6 +39,8 @@
                             button_title: module.title,
                             content: module.content,
                             image_path: module.image_path,
+                            diagrams: module.diagrams || (module.diagram ? [module.diagram] : []),
+                            diagram: module.diagram,
                         })),
                 ];
 
@@ -53,6 +55,8 @@
                                         : __('Bagian ini menjelaskan proses operasi system elektrikal Garbarata. Gambar skema detil terdapat pada gambar As-Built. Tenaga listrik didistribusikan dari bangunan bandara melalui Main Power Panel, Sub-Distribution Power Panel dan Console Desk. Dari komponen elektrik tersebut, energy listrik digunakan untuk menaktifkan actuator, sensor dan beberapa komponen elektrik pada Garbarata. Kontrol utama berada pada Console Desk yang menggunakan Control Face Plate dan Touchscreen sebagai interface operator. Operator juga dapat memeriksa kondisi komponen Garbarata jika terjadi kegagalan melalui monitor pada Console Desk.') }}
                                 </p>`,
                         image_path: null,
+                        diagrams: [],
+                        diagram: null,
                     },
                     ...this.modules
                         .filter((module, index, self) => module.title.startsWith('2.') && self.findIndex(m => m.title === module.title) === index)
@@ -62,6 +66,8 @@
                             button_title: module.title,
                             content: module.content,
                             image_path: module.image_path,
+                            diagrams: module.diagrams || (module.diagram ? [module.diagram] : []),
+                            diagram: module.diagram,
                         })),
                 ];
 
@@ -270,6 +276,26 @@
 
                                   <div :id="'mech-tts-content-' + item.id" class="text-base text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
 
+                                  <!-- Interactive Module Diagram -->
+                                  <template x-if="item.id !== 'intro_mekanikal' && ((item.diagrams && item.diagrams.length > 0) || item.diagram)">
+                                      <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                          x-data="moduleDiagramData(
+                                              (item.diagrams && item.diagrams.length > 0) ? item.diagrams : (item.diagram ? [item.diagram] : []),
+                                              (item.diagrams && item.diagrams.length > 0) ? (item.diagrams[0].hotspots || []) : (item.diagram ? item.diagram.hotspots : []),
+                                              {{ $course->id }},
+                                              {{ $chapter->id }},
+                                              item.id,
+                                              @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(csrf_token())
+                                          )"
+                                      >
+                                          @include('courses.partials.module-diagram-section')
+                                      </div>
+                                  </template>
+
                                   @if(auth()->user()->isInstruktur())
                                       <template x-if="item.id !== 'intro_mekanikal'">
                                           <div class="flex items-center gap-2 pt-4 border-t border-slate-100 mt-4">
@@ -379,6 +405,26 @@
                                   </template>
 
                                   <div :id="'elec-tts-content-' + item.id" class="text-base text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="item.content"></div>
+
+                                  <!-- Interactive Module Diagram -->
+                                  <template x-if="item.id !== 'intro_elektrikal' && ((item.diagrams && item.diagrams.length > 0) || item.diagram)">
+                                      <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                          x-data="moduleDiagramData(
+                                              (item.diagrams && item.diagrams.length > 0) ? item.diagrams : (item.diagram ? [item.diagram] : []),
+                                              (item.diagrams && item.diagrams.length > 0) ? (item.diagrams[0].hotspots || []) : (item.diagram ? item.diagram.hotspots : []),
+                                              {{ $course->id }},
+                                              {{ $chapter->id }},
+                                              item.id,
+                                              @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', item.id),
+                                              @js(csrf_token())
+                                          )"
+                                      >
+                                          @include('courses.partials.module-diagram-section')
+                                      </div>
+                                  </template>
 
                                   @if(auth()->user()->isInstruktur())
                                       <template x-if="item.id !== 'intro_elektrikal'">

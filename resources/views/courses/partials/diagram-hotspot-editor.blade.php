@@ -28,7 +28,7 @@
                 <select name="target_module_id" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-xs font-semibold text-slate-800 outline-none transition">
                     <option value="chapter">-- {{ __('Diagram Utama Bab (Peta Lokasi Umum)') }} --</option>
                     @if(isset($modules) && count($modules) > 0)
-                        @foreach($modules as $mod)
+                        @foreach($modules->unique('title') as $mod)
                             <option value="{{ $mod->id }}" :selected="typeof module !== 'undefined' && module.id == {{ $mod->id }}">{{ __('Modul') }} {{ $mod->title }}</option>
                         @endforeach
                     @endif
@@ -140,7 +140,7 @@
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{{ __('Target Modul / Subbab') }}</label>
                 <select x-model="activeHotspot.target_module_id" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm font-medium text-slate-800 outline-none transition">
                     <option value="">-- {{ __('Pilih Modul Tujuan') }} --</option>
-                    @foreach($chapter->modules as $mod)
+                    @foreach($chapter->modules->unique('title') as $mod)
                         <option value="{{ $mod->id }}">{{ $loop->iteration }}. {{ $mod->title }}</option>
                     @endforeach
                 </select>

@@ -282,11 +282,11 @@
                             <div :id="'ch4sub-tts-' + subModule.id" class="text-sm text-slate-600 leading-relaxed prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
                             
                             <!-- Interactive Diagram for Sub-Module -->
-                            <template x-if="subModule.diagram || @js(auth()->user()->isInstruktur())">
+                            <template x-if="(subModule.diagrams && subModule.diagrams.length > 0) || subModule.diagram">
                                 <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
                                     x-data="moduleDiagramData(
-                                        subModule.diagram,
-                                        subModule.diagram ? subModule.diagram.hotspots : [],
+                                        (subModule.diagrams && subModule.diagrams.length > 0) ? subModule.diagrams : (subModule.diagram ? [subModule.diagram] : []),
+                                        (subModule.diagrams && subModule.diagrams.length > 0) ? (subModule.diagrams[0].hotspots || []) : (subModule.diagram ? subModule.diagram.hotspots : []),
                                         {{ $course->id }},
                                         {{ $chapter->id }},
                                         subModule.id,

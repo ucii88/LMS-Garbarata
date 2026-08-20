@@ -53,7 +53,7 @@ class CourseController extends Controller
         }
 
         // Fetch the specific chapter belonging to this course
-        $chapter = Chapter::with(['modules.diagram.hotspots', 'diagram.hotspots'])->where('course_id', $course->id)->findOrFail($chapterId);
+        $chapter = Chapter::with(['modules.diagrams.hotspots', 'modules.diagram.hotspots', 'diagram.hotspots'])->where('course_id', $course->id)->findOrFail($chapterId);
         
         // Fetch all other chapters of the course for the sidebar/navigation
         $chapters = $course->chapters()->orderBy('order')->get();
@@ -340,20 +340,29 @@ class CourseController extends Controller
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             'title' => 'nullable|string|max:255',
+            'diagram_id' => 'nullable|exists:diagrams,id',
         ]);
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('diagrams/modules', 'public');
             $imagePath = 'storage/' . $path;
 
-            $diagram = Diagram::updateOrCreate(
-                ['module_id' => $module->id],
-                [
-                    'chapter_id' => null,
-                    'title' => $request->title ?? ($module->title . ' Technical Drawing'),
+            if ($request->filled('diagram_id')) {
+                $diagram = Diagram::where('module_id', $module->id)->where('id', $request->diagram_id)->firstOrFail();
+                $diagram->update([
+                    'title' => $request->title ?? $diagram->title,
                     'image_path' => $imagePath,
-                ]
-            );
+                ]);
+            } else {
+                $maxOrder = $module->diagrams()->max('order') ?? 0;
+                $diagram = Diagram::create([
+                    'module_id' => $module->id,
+                    'chapter_id' => null,
+                    'title' => $request->title ?? ($module->title . ' Technical Drawing ' . ($maxOrder > 0 ? ($maxOrder + 1) : '')),
+                    'image_path' => $imagePath,
+                    'order' => $maxOrder + 1,
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -369,8 +378,13 @@ class CourseController extends Controller
     {
         abort_unless(auth()->user()->isInstruktur(), 403);
 
-        if ($module->diagram) {
-            $module->diagram->delete();
+        $diagramId = request('diagram_id');
+        $diagram = $diagramId
+            ? Diagram::where('module_id', $module->id)->where('id', $diagramId)->first()
+            : $module->diagram;
+
+        if ($diagram) {
+            $diagram->delete();
         }
 
         return response()->json(['status' => 'success', 'message' => 'Diagram modul berhasil dihapus.']);
@@ -381,6 +395,7 @@ class CourseController extends Controller
         abort_unless(auth()->user()->isInstruktur(), 403);
 
         $request->validate([
+            'diagram_id' => 'nullable|exists:diagrams,id',
             'label' => 'required|string|max:255',
             'action_type' => 'required|in:navigate,popup,scroll_row',
             'target_module_id' => 'nullable|exists:modules,id',
@@ -390,7 +405,11 @@ class CourseController extends Controller
             'y_percent' => 'required|numeric|between:0,100',
         ]);
 
-        $diagram = $module->diagram;
+        $diagramId = $request->input('diagram_id');
+        $diagram = $diagramId
+            ? Diagram::where('module_id', $module->id)->where('id', $diagramId)->first()
+            : $module->diagram;
+
         if (!$diagram) {
             return response()->json(['status' => 'error', 'message' => 'Diagram modul belum diunggah.'], 404);
         }

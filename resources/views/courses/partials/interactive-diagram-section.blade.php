@@ -13,7 +13,7 @@
                 imagePreview: null,
                 imageFileName: '',
                 activePopupHotspot: null,
-                dotSize: localStorage.getItem('lms_dotsize_chap_' + chapterId) || 'md',
+                dotSize: localStorage.getItem('lms_dotsize_chap_' + chapterId) || 'sm',
                 setDotSize(size) {
                     this.dotSize = size;
                     localStorage.setItem('lms_dotsize_chap_' + chapterId, size);
@@ -357,65 +357,65 @@
     @touchend.window="editMode && stopDrag()"
 >
     <div x-show="diagramObj && diagramObj.image_path" x-cloak class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm max-w-4xl mx-auto w-full mb-6">
-    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-        <div class="flex items-center gap-2">
-            <h3 class="text-base font-bold text-slate-700">{{ __('Diagram Interaktif') }}</h3>
-            <span x-show="diagramObj" class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-4 pb-3 border-b border-slate-200/80">
+        <!-- Left: Title, Hotspot Pill & Dot Size Selector -->
+        <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-base font-bold text-slate-800">{{ __('Diagram Interaktif') }}</h3>
+            <span x-show="diagramObj" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100 shrink-0" x-text="hotspots.length + ' Hotspot'"></span>
+            
             <!-- Controls Ukuran Bulatan Hotspot - Instruktur only -->
             @if(auth()->user()->isInstruktur())
-
-
-            <!-- Controls Ukuran Bulatan Hotspot -->
-            <div x-show="hotspots.length > 0" class="flex items-center gap-1 border-l border-slate-200 pl-2">
-                <span class="text-[10px] text-slate-500 font-semibold mr-1">{{ __('Ukuran Dot:') }}</span>
-                <button type="button" @click="setDotSize('sm')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">S</button>
-                <button type="button" @click="setDotSize('md')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">M</button>
-                <button type="button" @click="setDotSize('lg')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">L</button>
-                <button type="button" @click="setDotSize('xl')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">XL</button>
+            <div x-show="hotspots.length > 0" class="flex items-center gap-1.5 border-l border-slate-200 pl-2.5 ml-0.5">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{{ __('Ukuran Dot:') }}</span>
+                <div class="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200/80">
+                    <button type="button" @click="setDotSize('sm')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">S</button>
+                    <button type="button" @click="setDotSize('md')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">M</button>
+                    <button type="button" @click="setDotSize('lg')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">L</button>
+                    <button type="button" @click="setDotSize('xl')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">XL</button>
+                </div>
             </div>
             @endif
         </div>
 
+        <!-- Right: Instructor Action Buttons Group -->
         @if(auth()->user()->isInstruktur())
-            <div class="flex flex-wrap items-center gap-2">
-                    <div x-show="diagramObj" class="flex flex-wrap items-center gap-2">
-                        <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span>{{ __('Ganti Gambar') }}</span>
-                        </button>
+            <div class="flex flex-wrap items-center gap-1.5" x-show="diagramObj">
+                <button x-show="!editMode"
+                        @click="addHotspotMode = !addHotspotMode"
+                        class="px-3 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
+                        :class="addHotspotMode ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20'">
+                    <template x-if="addHotspotMode">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <span>{{ __('Batal Tambah') }}</span>
+                        </div>
+                    </template>
+                    <template x-if="!addHotspotMode">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            <span>{{ __('Tambah Hotspot') }}</span>
+                        </div>
+                    </template>
+                </button>
 
-                        <button x-show="!editMode"
-                                @click="addHotspotMode = !addHotspotMode"
-                                class="px-3 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
-                                :class="addHotspotMode ? 'bg-amber-500 text-white shadow-md' : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200'">
-                            <template x-if="addHotspotMode">
-                                <div class="flex items-center gap-1.5">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                    <span>{{ __('Batal Tambah') }}</span>
-                                </div>
-                            </template>
-                            <template x-if="!addHotspotMode">
-                                <div class="flex items-center gap-1.5">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                    <span>{{ __('Tambah Hotspot') }}</span>
-                                </div>
-                            </template>
-                        </button>
+                <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-200 shadow-2xs">
+                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>{{ __('Atur Posisi') }}</span>
+                </button>
 
-                        <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span>{{ __('Atur Posisi / Edit') }}</span>
-                        </button>
+                <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-200 shadow-2xs">
+                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span>{{ __('Ganti Gambar') }}</span>
+                </button>
 
-                        <button x-show="editMode" @click="cancelEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">
-                            {{ __('Batal Edit') }}
-                        </button>
-                        <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-                            <span x-show="!saving">{{ __('Simpan Posisi') }}</span>
-                            <span x-show="saving">{{ __('Menyimpan...') }}</span>
-                        </button>
-                    </div>
+                <button x-show="editMode" @click="cancelEditMode()" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-bold transition border border-slate-200 shadow-2xs">
+                    {{ __('Batal Edit') }}
+                </button>
+                <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                    <span x-show="!saving">{{ __('Simpan Posisi') }}</span>
+                    <span x-show="saving">{{ __('Menyimpan...') }}</span>
+                </button>
             </div>
         @endif
     </div>

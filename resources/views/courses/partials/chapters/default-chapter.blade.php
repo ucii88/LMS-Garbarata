@@ -212,11 +212,11 @@
                             </div>
                         </template>
 
-                        <template x-if="getSingleModule(activeTab).diagram">
+                        <template x-if="(getSingleModule(activeTab).diagrams && getSingleModule(activeTab).diagrams.length > 0) || getSingleModule(activeTab).diagram || @js(auth()->user()->isInstruktur())">
                             <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
                                 x-data="moduleDiagramData(
-                                    getSingleModule(activeTab).diagram,
-                                    getSingleModule(activeTab).diagram ? getSingleModule(activeTab).diagram.hotspots : [],
+                                    (getSingleModule(activeTab).diagrams && getSingleModule(activeTab).diagrams.length > 0) ? getSingleModule(activeTab).diagrams : (getSingleModule(activeTab).diagram ? [getSingleModule(activeTab).diagram] : []),
+                                    (getSingleModule(activeTab).diagrams && getSingleModule(activeTab).diagrams.length > 0) ? (getSingleModule(activeTab).diagrams[0].hotspots || []) : (getSingleModule(activeTab).diagram ? getSingleModule(activeTab).diagram.hotspots : []),
                                     {{ $course->id }},
                                     {{ $chapter->id }},
                                     getSingleModule(activeTab).id,
@@ -278,11 +278,11 @@
                                         </div>
                                     </template>
 
-                                    <template x-if="subModule.diagram">
+                                    <template x-if="(subModule.diagrams && subModule.diagrams.length > 0) || subModule.diagram || @js(auth()->user()->isInstruktur())">
                                         <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
                                             x-data="moduleDiagramData(
-                                                subModule.diagram,
-                                                subModule.diagram ? subModule.diagram.hotspots : [],
+                                                (subModule.diagrams && subModule.diagrams.length > 0) ? subModule.diagrams : (subModule.diagram ? [subModule.diagram] : []),
+                                                (subModule.diagrams && subModule.diagrams.length > 0) ? (subModule.diagrams[0].hotspots || []) : (subModule.diagram ? subModule.diagram.hotspots : []),
                                                 {{ $course->id }},
                                                 {{ $chapter->id }},
                                                 subModule.id,

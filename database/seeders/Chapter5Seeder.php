@@ -64,124 +64,7 @@ class Chapter5Seeder extends Seeder
         
 // 5.1.2 Tunnel Roller
         $c_5_1_2 = '<h4 class="font-bold text-slate-800 text-xs mb-2 mt-8 pt-8 border-t border-slate-200">5.1.2. Tunnel Roller</h4>' .
-            '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) lokasi pemasangan roller dan detail rakitan komponen untuk Tunnel Roller. <strong>Klik pada tombol lingkaran biru transparan di gambar peta lokasi</strong> untuk melihat detail rakitan pada lembar referensi yang sesuai, serta menyorot part number pada tabel di bawah.</p>' .
-            
-            // Component Detail Sheets Alpine Tab Container with Drag & Drop Editor
-            '<div x-data="{' .
-            '   activeTab: 1,' .
-            '   editMode: false,' .
-            '   dragId: null,' .
-            '   hotspotsB2: [' .
-            '       { id: 1, label: \'1\', title: \'1. Fixed Roller (B2 Upper Rear)\', left: 9.32, top: 37.93 },' .
-            '       { id: 2, label: \'2\', title: \'2. Side Roller (B2 Lower Outer Front)\', left: 57.60, top: 33.83 },' .
-            '       { id: 3, label: \'3\', title: \'3. Tandem Roller (B2 Lower Front)\', left: 9.32, top: 70.94 },' .
-            '       { id: 5, label: \'5\', title: \'5. Fixed Roller (B2 Upper Front)\', left: 60.76, top: 70.80 },' .
-            '       { id: 6, label: \'6\', title: \'6. Fixed Roller (B2 Lower Rear)\', left: 34.30, top: 90.59 }' .
-            '   ],' .
-            '   hotspotsB3_1: [' .
-            '       { id: 7, label: \'7\', title: \'7. Fixed Roller (B3 Upper Rear)\', left: 6.17, top: 33.49 },' .
-            '       { id: 8, label: \'8\', title: \'8. Fixed Roller (B3 Upper Front)\', left: 60.95, top: 43.51 },' .
-            '       { id: 9, label: \'9\', title: \'9. Fixed Roller (B3 Lower Rear)\', left: 9.45, top: 66.58 },' .
-            '       { id: 10, label: \'10\', title: \'10. Fixed Roller (B3 Upper Rear)\', left: 62.87, top: 67.50 },' .
-            '       { id: 11, label: \'11\', title: \'11. Fixed Roller (B3 Upper Front)\', left: 7.91, top: 97.17 },' .
-            '       { id: 12, label: \'12\', title: \'12. Fixed Roller (B3 Lower Rear)\', left: 63.84, top: 96.64 }' .
-            '   ],' .
-            '   hotspotsB3_2: [' .
-            '       { id: 13, label: \'13\', title: \'13. Side Roller (B3 Lower Middle)\', left: 6.44, top: 44.58 },' .
-            '       { id: 14, label: \'14\', title: \'14. Side Roller (B3 Lower Outer Front)\', left: 57.98, top: 45.12 },' .
-            '       { id: 15, label: \'15\', title: \'15. Tandem Roller (B3 Lower Front)\', left: 6.30, top: 91.83 },' .
-            '       { id: 16, label: \'16\', title: \'16. Tandem Roller (B3 Lower Front)\', left: 57.70, top: 92.01 }' .
-            '   ],' .
-            '   init() {' .
-            '       const b2 = localStorage.getItem(\'lms_ref_b2\'); if (b2) this.hotspotsB2 = JSON.parse(b2);' .
-            '       const b31 = localStorage.getItem(\'lms_ref_b31\'); if (b31) this.hotspotsB3_1 = JSON.parse(b31);' .
-            '       const b32 = localStorage.getItem(\'lms_ref_b32\'); if (b32) this.hotspotsB3_2 = JSON.parse(b32);' .
-            '   },' .
-            '   savePos() {' .
-            '       localStorage.setItem(\'lms_ref_b2\', JSON.stringify(this.hotspotsB2));' .
-            '       localStorage.setItem(\'lms_ref_b31\', JSON.stringify(this.hotspotsB3_1));' .
-            '       localStorage.setItem(\'lms_ref_b32\', JSON.stringify(this.hotspotsB3_2));' .
-            '       this.editMode = false;' .
-            '       alert(\'Posisi Hotspot Lembar Referensi Detail berhasil disimpan!\');' .
-            '   },' .
-            '   onDrag(e) {' .
-            '       if (!this.editMode || !this.dragId) return;' .
-            '       const containers = Array.from(document.querySelectorAll(\'[data-detail-tab]\'));' .
-            '       const activeEl = containers.find(el => el.offsetWidth > 0 && el.offsetHeight > 0);' .
-            '       if (!activeEl) return;' .
-            '       const rect = activeEl.getBoundingClientRect();' .
-            '       if (!rect.width || !rect.height) return;' .
-            '       let x = ((e.clientX - rect.left) / rect.width) * 100;' .
-            '       let y = ((e.clientY - rect.top) / rect.height) * 100;' .
-            '       x = Math.max(0, Math.min(100, Math.round(x * 100) / 100));' .
-            '       y = Math.max(0, Math.min(100, Math.round(y * 100) / 100));' .
-            '       let list = this.activeTab === 1 ? this.hotspotsB2 : (this.activeTab === 2 ? this.hotspotsB3_1 : this.hotspotsB3_2);' .
-            '       const item = list.find(h => String(h.id) === String(this.dragId));' .
-            '       if (item && !isNaN(x) && !isNaN(y)) { item.left = x; item.top = y; }' .
-            '   }' .
-            '}" @switch-detail-tab.window="activeTab = $event.detail.tab" @mousemove.window="onDrag($event)" @mouseup.window="dragId = null" class="my-6 border border-slate-200 rounded-xl bg-slate-50/50 p-4 shadow-sm">' .
-            '  <!-- Header Toolbar -->' .
-            '  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 mb-4">' .
-            '    <div class="flex flex-wrap gap-2 text-[10px] font-bold text-slate-500">' .
-            '      <button type="button" @click="activeTab = 1" :class="activeTab === 1 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
-            '          Detail B2 (Roller 1-6)' .
-            '      </button>' .
-            '      <button type="button" @click="activeTab = 2" :class="activeTab === 2 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
-            '          Detail B3 - Bagian 1 (Roller 7-12)' .
-            '      </button>' .
-            '      <button type="button" @click="activeTab = 3" :class="activeTab === 3 ? \'bg-blue-600 text-white shadow-xs\' : \'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200\'" class="px-3 py-1.5 rounded-lg transition focus:outline-none">' .
-            '          Detail B3 - Bagian 2 (Roller 13-16)' .
-            '      </button>' .
-            '    </div>';
-
-        $c_5_1_2 .= '    @if(auth()->check() && auth()->user()->isInstruktur())' .
-            '    <div>' .
-            '      <button type="button" x-show="!editMode" @click="editMode = true" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1">' .
-            '        <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>' .
-            '        <span>Atur Posisi / Edit Hotspot Detail</span>' .
-            '      </button>' .
-            '      <div x-show="editMode" class="flex items-center gap-1.5" x-cloak>' .
-            '        <button type="button" @click="editMode = false" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Batal</button>' .
-            '        <button type="button" @click="savePos()" class="px-2.5 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold shadow-xs flex items-center gap-1">' .
-            '          <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>' .
-            '          <span>Simpan Posisi</span>' .
-            '        </button>' .
-            '      </div>' .
-            '    </div>' .
-            '    @endif' .
-            '  </div>' .
-            
-            '  <!-- Tab Contents -->' .
-            '  <!-- Tab 1: reference_B2.png (B2 - Roller 1 to 6) -->' .
-            '  <div x-show="activeTab === 1" data-detail-tab="1" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm max-w-xs w-full select-none" :class="editMode ? \'ring-2 ring-blue-500 cursor-crosshair\' : \'\'">' .
-            '    <img src="/images/modules/TunnelRoller/reference_B2.png" class="w-full h-auto block select-none pointer-events-none" alt="Reference B2 Rollers" draggable="false">' .
-            '    <button type="button" id="roller-hotspot-1" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB2.find(h => h.id == 1) || {}).left ?? 9.32 }%; top: ${ (hotspotsB2.find(h => h.id == 1) || {}).top ?? 37.93 }%; cursor: grab;` : \'left: 9.32%; top: 37.93%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 1" @click="if(!editMode) scrollToRollerRow(1)" title="1. Fixed Roller (B2 Upper Rear)"><span class="font-extrabold leading-none select-none">1</span></button>' .
-            '    <button type="button" id="roller-hotspot-2" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB2.find(h => h.id == 2) || {}).left ?? 57.60 }%; top: ${ (hotspotsB2.find(h => h.id == 2) || {}).top ?? 33.83 }%; cursor: grab;` : \'left: 57.60%; top: 33.83%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 2" @click="if(!editMode) scrollToRollerRow(2)" title="2. Side Roller (B2 Lower Outer Front)"><span class="font-extrabold leading-none select-none">2</span></button>' .
-            '    <button type="button" id="roller-hotspot-3" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB2.find(h => h.id == 3) || {}).left ?? 9.32 }%; top: ${ (hotspotsB2.find(h => h.id == 3) || {}).top ?? 70.94 }%; cursor: grab;` : \'left: 9.32%; top: 70.94%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 3" @click="if(!editMode) scrollToRollerRow(3)" title="3. Tandem Roller (B2 Lower Front)"><span class="font-extrabold leading-none select-none">3</span></button>' .
-            '    <button type="button" id="roller-hotspot-5" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB2.find(h => h.id == 5) || {}).left ?? 60.76 }%; top: ${ (hotspotsB2.find(h => h.id == 5) || {}).top ?? 70.80 }%; cursor: grab;` : \'left: 60.76%; top: 70.80%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 5" @click="if(!editMode) scrollToRollerRow(5)" title="5. Fixed Roller (B2 Upper Front)"><span class="font-extrabold leading-none select-none">5</span></button>' .
-            '    <button type="button" id="roller-hotspot-6" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB2.find(h => h.id == 6) || {}).left ?? 34.30 }%; top: ${ (hotspotsB2.find(h => h.id == 6) || {}).top ?? 90.59 }%; cursor: grab;` : \'left: 34.30%; top: 90.59%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 6" @click="if(!editMode) scrollToRollerRow(6)" title="6. Fixed Roller (B2 Lower Rear)"><span class="font-extrabold leading-none select-none">6</span></button>' .
-            '  </div>' .
-            
-            '  <!-- Tab 2: reference_B3.png (B3 - Roller 7 to 12) -->' .
-            '  <div x-show="activeTab === 2" data-detail-tab="2" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm max-w-xs w-full select-none" :class="editMode ? \'ring-2 ring-blue-500 cursor-crosshair\' : \'\'">' .
-            '    <img src="/images/modules/TunnelRoller/reference_B3.png" class="w-full h-auto block select-none pointer-events-none" alt="Reference B3 Rollers Part 1" draggable="false">' .
-            '    <button type="button" id="roller-hotspot-7" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_1.find(h => h.id == 7) || {}).left ?? 6.17 }%; top: ${ (hotspotsB3_1.find(h => h.id == 7) || {}).top ?? 33.49 }%; cursor: grab;` : \'left: 6.17%; top: 33.49%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 7" @click="if(!editMode) scrollToRollerRow(7)" title="7. Fixed Roller (B3 Upper Rear)"><span class="font-extrabold leading-none select-none">7</span></button>' .
-            '    <button type="button" id="roller-hotspot-8" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_1.find(h => h.id == 8) || {}).left ?? 60.95 }%; top: ${ (hotspotsB3_1.find(h => h.id == 8) || {}).top ?? 43.51 }%; cursor: grab;` : \'left: 60.95%; top: 43.51%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 8" @click="if(!editMode) scrollToRollerRow(8)" title="8. Fixed Roller (B3 Upper Front)"><span class="font-extrabold leading-none select-none">8</span></button>' .
-            '    <button type="button" id="roller-hotspot-9" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_1.find(h => h.id == 9) || {}).left ?? 9.45 }%; top: ${ (hotspotsB3_1.find(h => h.id == 9) || {}).top ?? 66.58 }%; cursor: grab;` : \'left: 9.45%; top: 66.58%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 9" @click="if(!editMode) scrollToRollerRow(9)" title="9. Fixed Roller (B3 Lower Rear)"><span class="font-extrabold leading-none select-none">9</span></button>' .
-            '    <button type="button" id="roller-hotspot-10" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_1.find(h => h.id == 10) || {}).left ?? 62.87 }%; top: ${ (hotspotsB3_1.find(h => h.id == 10) || {}).top ?? 67.50 }%; cursor: grab;` : \'left: 62.87%; top: 67.50%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 10" @click="if(!editMode) scrollToRollerRow(10)" title="10. Fixed Roller (B3 Upper Rear)"><span class="font-extrabold leading-none select-none">10</span></button>' .
-            '    <button type="button" id="roller-hotspot-11" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_1.find(h => h.id == 11) || {}).left ?? 7.91 }%; top: ${ (hotspotsB3_1.find(h => h.id == 11) || {}).top ?? 97.17 }%; cursor: grab;` : \'left: 7.91%; top: 97.17%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 11" @click="if(!editMode) scrollToRollerRow(11)" title="11. Fixed Roller (B3 Upper Front)"><span class="font-extrabold leading-none select-none">11</span></button>' .
-            '    <button type="button" id="roller-hotspot-12" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_1.find(h => h.id == 12) || {}).left ?? 63.84 }%; top: ${ (hotspotsB3_1.find(h => h.id == 12) || {}).top ?? 96.64 }%; cursor: grab;` : \'left: 63.84%; top: 96.64%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 12" @click="if(!editMode) scrollToRollerRow(12)" title="12. Fixed Roller (B3 Lower Rear)"><span class="font-extrabold leading-none select-none">12</span></button>' .
-            '  </div>' .
-            
-            '  <!-- Tab 3: reference_B3(2).png (B3 - Roller 13 to 16) -->' .
-            '  <div x-show="activeTab === 3" data-detail-tab="3" x-transition.opacity class="relative mx-auto border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm max-w-sm w-full select-none" :class="editMode ? \'ring-2 ring-blue-500 cursor-crosshair\' : \'\'">' .
-            '    <img src="/images/modules/TunnelRoller/reference_B3(2).png" class="w-full h-auto block select-none pointer-events-none" alt="Reference B3 Rollers Part 2" draggable="false">' .
-            '    <button type="button" id="roller-hotspot-13" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_2.find(h => h.id == 13) || {}).left ?? 6.44 }%; top: ${ (hotspotsB3_2.find(h => h.id == 13) || {}).top ?? 44.58 }%; cursor: grab;` : \'left: 6.44%; top: 44.58%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 13" @click="if(!editMode) scrollToRollerRow(13)" title="13. Side Roller (B3 Lower Middle)"><span class="font-extrabold leading-none select-none">13</span></button>' .
-            '    <button type="button" id="roller-hotspot-14" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_2.find(h => h.id == 14) || {}).left ?? 57.98 }%; top: ${ (hotspotsB3_2.find(h => h.id == 14) || {}).top ?? 45.12 }%; cursor: grab;` : \'left: 57.98%; top: 45.12%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 14" @click="if(!editMode) scrollToRollerRow(14)" title="14. Side Roller (B3 Lower Outer Front)"><span class="font-extrabold leading-none select-none">14</span></button>' .
-            '    <button type="button" id="roller-hotspot-15" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_2.find(h => h.id == 15) || {}).left ?? 6.30 }%; top: ${ (hotspotsB3_2.find(h => h.id == 15) || {}).top ?? 91.83 }%; cursor: grab;` : \'left: 6.30%; top: 91.83%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 15" @click="if(!editMode) scrollToRollerRow(15)" title="15. Tandem Roller (B3 Lower Front)"><span class="font-extrabold leading-none select-none">15</span></button>' .
-            '    <button type="button" id="roller-hotspot-16" class="absolute w-5 h-5 rounded-full border border-blue-500 bg-blue-600 text-white font-bold text-[10px] flex items-center justify-center shadow-md transition duration-150 -translate-x-1/2 -translate-y-1/2 focus:outline-none z-10" :style="editMode ? `left: ${ (hotspotsB3_2.find(h => h.id == 16) || {}).left ?? 57.70 }%; top: ${ (hotspotsB3_2.find(h => h.id == 16) || {}).top ?? 92.01 }%; cursor: grab;` : \'left: 57.70%; top: 92.01%; cursor: pointer;\'" @mousedown="if(editMode) dragId = 16" @click="if(!editMode) scrollToRollerRow(16)" title="16. Tandem Roller (B3 Lower Front)"><span class="font-extrabold leading-none select-none">16</span></button>' .
-            '  </div>' .
-            '</div>' .
+            '<p class="text-xs text-slate-600 leading-relaxed mb-4">Berikut adalah gambar kerja (technical drawing) lokasi pemasangan roller dan detail rakitan komponen untuk Tunnel Roller. <strong>Klik pada tombol lingkaran biru transparan di gambar peta lokasi atau lembar referensi detail</strong> untuk melihat detail rakitan serta menyorot part number pada tabel di bawah.</p>' .
             
             // Tunnel Roller Parts List Table
             '<div class="overflow-x-auto my-6 border border-slate-100 rounded-xl shadow-xs">' .
@@ -493,10 +376,11 @@ class Chapter5Seeder extends Seeder
             'order' => 2,
         ]);
 
-        $diag2 = \App\Models\Diagram::create([
+        $diag2_1 = \App\Models\Diagram::create([
             'module_id' => $m2->id,
-            'title' => 'Tunnel Roller Location Map',
+            'title' => 'Peta Lokasi',
             'image_path' => 'images/modules/TunnelRoller/tunnel_roller.png',
+            'order' => 1,
         ]);
 
         $tunnelRollerHotspots = [
@@ -521,7 +405,76 @@ class Chapter5Seeder extends Seeder
         ];
 
         foreach ($tunnelRollerHotspots as $h) {
-            $diag2->hotspots()->create([
+            $diag2_1->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
+
+        $diag2_2 = \App\Models\Diagram::create([
+            'module_id' => $m2->id,
+            'title' => 'Detail B2 (Roller 1-6)',
+            'image_path' => 'images/modules/TunnelRoller/reference_B2.png',
+            'order' => 2,
+        ]);
+        $hotspotsB2 = [
+            ['label' => '1', 'x_percent' => 9.32, 'y_percent' => 37.93, 'popup_title' => '1. Fixed Roller (B2 Upper Rear)'],
+            ['label' => '2', 'x_percent' => 57.60, 'y_percent' => 33.83, 'popup_title' => '2. Side Roller (B2 Lower Outer Front)'],
+            ['label' => '3', 'x_percent' => 9.32, 'y_percent' => 70.94, 'popup_title' => '3. Tandem Roller (B2 Lower Front)'],
+            ['label' => '5', 'x_percent' => 60.76, 'y_percent' => 70.80, 'popup_title' => '5. Fixed Roller (B2 Upper Front)'],
+            ['label' => '6', 'x_percent' => 34.30, 'y_percent' => 90.59, 'popup_title' => '6. Fixed Roller (B2 Lower Rear)'],
+        ];
+        foreach ($hotspotsB2 as $h) {
+            $diag2_2->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
+
+        $diag2_3 = \App\Models\Diagram::create([
+            'module_id' => $m2->id,
+            'title' => 'Detail B3 - Part 1 (Roller 7-12)',
+            'image_path' => 'images/modules/TunnelRoller/reference_B3.png',
+            'order' => 3,
+        ]);
+        $hotspotsB3_1 = [
+            ['label' => '7', 'x_percent' => 6.17, 'y_percent' => 33.49, 'popup_title' => '7. Fixed Roller (B3 Upper Rear)'],
+            ['label' => '8', 'x_percent' => 60.95, 'y_percent' => 43.51, 'popup_title' => '8. Fixed Roller (B3 Upper Front)'],
+            ['label' => '9', 'x_percent' => 9.45, 'y_percent' => 66.58, 'popup_title' => '9. Fixed Roller (B3 Lower Rear)'],
+            ['label' => '10', 'x_percent' => 62.87, 'y_percent' => 67.50, 'popup_title' => '10. Fixed Roller (B3 Upper Rear)'],
+            ['label' => '11', 'x_percent' => 7.91, 'y_percent' => 97.17, 'popup_title' => '11. Fixed Roller (B3 Upper Front)'],
+            ['label' => '12', 'x_percent' => 63.84, 'y_percent' => 96.64, 'popup_title' => '12. Fixed Roller (B3 Lower Rear)'],
+        ];
+        foreach ($hotspotsB3_1 as $h) {
+            $diag2_3->hotspots()->create([
+                'label' => $h['label'],
+                'action_type' => 'scroll_row',
+                'popup_title' => $h['popup_title'],
+                'x_percent' => $h['x_percent'],
+                'y_percent' => $h['y_percent'],
+            ]);
+        }
+
+        $diag2_4 = \App\Models\Diagram::create([
+            'module_id' => $m2->id,
+            'title' => 'Detail B3 - Part 2 (Roller 13-16)',
+            'image_path' => 'images/modules/TunnelRoller/reference_B3(2).png',
+            'order' => 4,
+        ]);
+        $hotspotsB3_2 = [
+            ['label' => '13', 'x_percent' => 6.44, 'y_percent' => 44.58, 'popup_title' => '13. Side Roller (B3 Lower Middle)'],
+            ['label' => '14', 'x_percent' => 57.98, 'y_percent' => 45.12, 'popup_title' => '14. Side Roller (B3 Lower Outer Front)'],
+            ['label' => '15', 'x_percent' => 6.30, 'y_percent' => 91.83, 'popup_title' => '15. Tandem Roller (B3 Lower Front)'],
+            ['label' => '16', 'x_percent' => 57.70, 'y_percent' => 92.01, 'popup_title' => '16. Tandem Roller (B3 Lower Front)'],
+        ];
+        foreach ($hotspotsB3_2 as $h) {
+            $diag2_4->hotspots()->create([
                 'label' => $h['label'],
                 'action_type' => 'scroll_row',
                 'popup_title' => $h['popup_title'],

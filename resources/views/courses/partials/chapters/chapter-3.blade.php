@@ -168,6 +168,26 @@
 
                                 <div :id="'ch3detail-tts-' + module.id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
+                                <!-- Interactive Module Diagram -->
+                                <template x-if="(module.diagrams && module.diagrams.length > 0) || module.diagram">
+                                    <div class="my-4 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                        x-data="moduleDiagramData(
+                                            (module.diagrams && module.diagrams.length > 0) ? module.diagrams : (module.diagram ? [module.diagram] : []),
+                                            (module.diagrams && module.diagrams.length > 0) ? (module.diagrams[0].hotspots || []) : (module.diagram ? module.diagram.hotspots : []),
+                                            {{ $course->id }},
+                                            {{ $chapter->id }},
+                                            module.id,
+                                            @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(csrf_token())
+                                        )"
+                                    >
+                                        @include('courses.partials.module-diagram-section')
+                                    </div>
+                                </template>
+
                                 @if(auth()->user()->isInstruktur())
                                     <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -268,6 +288,26 @@
 
                                 <div :id="'ch3manual-tts-' + module.id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
+                                <!-- Interactive Module Diagram -->
+                                <template x-if="(module.diagrams && module.diagrams.length > 0) || module.diagram">
+                                    <div class="my-4 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                        x-data="moduleDiagramData(
+                                            (module.diagrams && module.diagrams.length > 0) ? module.diagrams : (module.diagram ? [module.diagram] : []),
+                                            (module.diagrams && module.diagrams.length > 0) ? (module.diagrams[0].hotspots || []) : (module.diagram ? module.diagram.hotspots : []),
+                                            {{ $course->id }},
+                                            {{ $chapter->id }},
+                                            module.id,
+                                            @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(csrf_token())
+                                        )"
+                                    >
+                                        @include('courses.partials.module-diagram-section')
+                                    </div>
+                                </template>
+
                                 @if(auth()->user()->isInstruktur())
                                     <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -364,6 +404,26 @@
 
                                 <div :id="'ch3auto-tts-' + module.id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
 
+                                <!-- Interactive Module Diagram -->
+                                <template x-if="(module.diagrams && module.diagrams.length > 0) || module.diagram">
+                                    <div class="my-4 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                        x-data="moduleDiagramData(
+                                            (module.diagrams && module.diagrams.length > 0) ? module.diagrams : (module.diagram ? [module.diagram] : []),
+                                            (module.diagrams && module.diagrams.length > 0) ? (module.diagrams[0].hotspots || []) : (module.diagram ? module.diagram.hotspots : []),
+                                            {{ $course->id }},
+                                            {{ $chapter->id }},
+                                            module.id,
+                                            @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(csrf_token())
+                                        )"
+                                    >
+                                        @include('courses.partials.module-diagram-section')
+                                    </div>
+                                </template>
+
                                 @if(auth()->user()->isInstruktur())
                                     <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">
                                         <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + module.id + '/edit'" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-2xs font-bold transition shadow-xs">
@@ -459,6 +519,26 @@
                                 </div>
 
                                 <div :id="'ch3proc-tts-' + module.id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="module.content"></div>
+
+                                <!-- Interactive Module Diagram -->
+                                <template x-if="(module.diagrams && module.diagrams.length > 0) || module.diagram">
+                                    <div class="my-4 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
+                                        x-data="moduleDiagramData(
+                                            (module.diagrams && module.diagrams.length > 0) ? module.diagrams : (module.diagram ? [module.diagram] : []),
+                                            (module.diagrams && module.diagrams.length > 0) ? (module.diagrams[0].hotspots || []) : (module.diagram ? module.diagram.hotspots : []),
+                                            {{ $course->id }},
+                                            {{ $chapter->id }},
+                                            module.id,
+                                            @js(route('courses.modules.diagram.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.diagram.destroy', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.store', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(route('courses.modules.hotspots.update', [$course->id, $chapter->id, '__MODULE__'])).replace('__MODULE__', module.id),
+                                            @js(csrf_token())
+                                        )"
+                                    >
+                                        @include('courses.partials.module-diagram-section')
+                                    </div>
+                                </template>
 
                                 @if(auth()->user()->isInstruktur())
                                     <div class="flex items-center gap-2 pt-3 border-t border-slate-100 mt-3">

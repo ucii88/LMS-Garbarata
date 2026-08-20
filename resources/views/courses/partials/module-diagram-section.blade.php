@@ -1,23 +1,51 @@
 <!-- Module Interactive Diagram with Hotspots -->
 <script>
     if (typeof window.moduleDiagramData !== 'function') {
-        window.moduleDiagramData = function(diagramObj, hotspotsData, courseId, chapterId, moduleId, storeDiagramUrl, destroyDiagramUrl, storeHotspotUrl, updateHotspotsUrl, csrfToken) {
+        window.moduleDiagramData = function(diagramInput, legacyHotspotsData, courseId, chapterId, moduleId, storeDiagramUrl, destroyDiagramUrl, storeHotspotUrl, updateHotspotsUrl, csrfToken) {
+            let diagramsList = [];
+            if (Array.isArray(diagramInput)) {
+                diagramsList = diagramInput;
+            } else if (diagramInput && typeof diagramInput === 'object' && diagramInput !== null) {
+                diagramsList = [diagramInput];
+            }
+
             return {
+                diagrams: diagramsList,
+                activeTab: 0,
                 editMode: false,
                 addHotspotMode: false,
                 saving: false,
                 uploading: false,
                 savingHotspot: false,
                 showUploadModal: false,
+                isUploadingNewTab: false,
                 showHotspotFormModal: false,
                 imagePreview: null,
                 imageFileName: '',
+                newTabTitle: '',
                 activePopupHotspot: null,
-                dotSize: localStorage.getItem('lms_dotsize_mod_' + moduleId) || 'md',
+                highlightedHotspotLabel: null,
+                dotSize: localStorage.getItem('lms_dotsize_mod_' + moduleId) || 'sm',
                 setDotSize(size) {
                     this.dotSize = size;
                     localStorage.setItem('lms_dotsize_mod_' + moduleId, size);
                 },
+
+                get currentDiagram() {
+                    return (this.diagrams && this.diagrams.length > 0) ? (this.diagrams[this.activeTab] || this.diagrams[0]) : null;
+                },
+                get diagramObj() {
+                    return this.currentDiagram;
+                },
+                get hotspots() {
+                    return (this.currentDiagram && this.currentDiagram.hotspots) ? this.currentDiagram.hotspots : [];
+                },
+                set hotspots(val) {
+                    if (this.currentDiagram) {
+                        this.currentDiagram.hotspots = val;
+                    }
+                },
+
                 activeHotspot: {
                     id: null,
                     label: '',
@@ -28,8 +56,6 @@
                     x_percent: 50,
                     y_percent: 50
                 },
-                hotspots: hotspotsData || [],
-                diagramObj: diagramObj,
                 storeDiagramUrl: storeDiagramUrl,
                 destroyDiagramUrl: destroyDiagramUrl,
                 storeHotspotUrl: storeHotspotUrl,
@@ -63,6 +89,9 @@
                     this.uploading = true;
                     try {
                         const formData = new FormData(e.target);
+                        if (!this.isUploadingNewTab && this.currentDiagram && this.currentDiagram.id) {
+                            formData.append('diagram_id', this.currentDiagram.id);
+                        }
                         const res = await fetch(this.storeDiagramUrl, {
                             method: 'POST',
                             headers: {
@@ -84,9 +113,10 @@
                     this.uploading = false;
                 },
                 async confirmDeleteDiagram() {
-                    showGlobalConfirm(@js(__('Hapus Diagram')), @js(__('Apakah Anda yakin ingin menghapus diagram modul ini beserta seluruh hotspotnya?')), async () => {
+                    if (!this.currentDiagram) return;
+                    showGlobalConfirm(@js(__('Hapus Diagram')), @js(__('Apakah Anda yakin ingin menghapus tab diagram ini beserta seluruh hotspotnya?')), async () => {
                         try {
-                            const res = await fetch(this.destroyDiagramUrl, {
+                            const res = await fetch(this.destroyDiagramUrl + '?diagram_id=' + this.currentDiagram.id, {
                                 method: 'DELETE',
                                 headers: {
                                     'X-CSRF-TOKEN': this.csrfToken,
@@ -135,6 +165,31 @@
                         if (hotspot.action_type === 'popup') {
                             this.activePopupHotspot = hotspot;
                         } else {
+                            const labelStr = String(hotspot.label || '').trim();
+
+                            // Highlight the matching hotspot dot visually on whichever tab becomes active
+                            this.highlightedHotspotLabel = labelStr;
+                            setTimeout(() => {
+                                if (this.highlightedHotspotLabel === labelStr) {
+                                    this.highlightedHotspotLabel = null;
+                                }
+                            }, 3500);
+
+                            // Automatically switch tab to detail diagram tab if clicking from main map (tab 0) or if current tab doesn't have detail hotspot
+                            if (this.diagrams && this.diagrams.length > 1) {
+                                const currentHasIt = this.hotspots && this.hotspots.some(h => String(h.label || '').trim() === labelStr);
+                                if (!currentHasIt || this.activeTab === 0) {
+                                    const targetTabIdx = this.diagrams.findIndex((diag, idx) => {
+                                        if (idx === 0) return false;
+                                        return diag.hotspots && diag.hotspots.some(h => String(h.label || '').trim() === labelStr);
+                                    });
+
+                                    if (targetTabIdx !== -1) {
+                                        this.activeTab = targetTabIdx;
+                                    }
+                                }
+                            }
+
                             if (hotspot.target_module_id) {
                                 const targetId = hotspot.target_module_id;
                                 if (typeof window.setMechModule === 'function') window.setMechModule(targetId);
@@ -150,17 +205,15 @@
                                 }
                             }
 
-                            const num = parseInt(hotspot.label, 10);
-                            const targetId = String(hotspot.label || '').trim();
+                            const num = parseInt(labelStr, 10);
+                            const targetId = labelStr;
 
-                            // Walk up from current diagram element to find containing module panel
                             let container = this.$el ? this.$el.parentElement : null;
                             while (container && container !== document.body && !container.querySelector('table')) {
                                 container = container.parentElement;
                             }
                             if (!container) container = document;
 
-                            // Custom scroll handlers for specific sub-modules
                             if (!isNaN(num) && typeof window.scrollToRollerRow === 'function' && container.querySelector('#roller-row-1')) {
                                 window.scrollToRollerRow(num);
                                 return;
@@ -170,7 +223,6 @@
                                 return;
                             }
 
-                            // Try finding row inside container with any prefix or selector
                             let row = container.querySelector(`[id$="-row-${targetId}"]`)
                                    || container.querySelector(`[id*="-row-${targetId}"]`)
                                    || container.querySelector(`[data-part-row="${targetId}"]`);
@@ -190,7 +242,6 @@
                                 }
                             }
 
-                            // Fallback: search row by matching first <td> content
                             if (!row && !isNaN(num)) {
                                 const allTrs = container.querySelectorAll('table tbody tr');
                                 for (const tr of allTrs) {
@@ -220,6 +271,10 @@
                         const url = isEdit ? (this.baseUrl + '/' + this.activeHotspot.id) : this.storeHotspotUrl;
                         const method = isEdit ? 'PUT' : 'POST';
 
+                        const payload = Object.assign({}, this.activeHotspot, {
+                            diagram_id: this.currentDiagram ? this.currentDiagram.id : null
+                        });
+
                         const res = await fetch(url, {
                             method: method,
                             headers: {
@@ -227,7 +282,7 @@
                                 'Content-Type': 'application/json',
                                 'Accept': 'application/json'
                             },
-                            body: JSON.stringify(this.activeHotspot)
+                            body: JSON.stringify(payload)
                         });
                         const data = await res.json();
                         if (res.ok && data.status === 'success') {
@@ -339,70 +394,102 @@
 </script>
 
 <div
-    x-show="diagramObj && diagramObj.image_path"
+    x-show="diagrams && diagrams.length > 0"
     x-cloak
     @mousemove.window="editMode && onDrag($event)"
     @mouseup.window="editMode && stopDrag()"
     @touchmove.window="editMode && onDrag($event)"
     @touchend.window="editMode && stopDrag()"
 >
-    <!-- Top toolbar for Instructor (only when diagram exists) -->
-    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-        <div class="flex items-center gap-2">
-            <h3 class="text-base font-bold text-slate-700">Diagram Interaktif</h3>
-        <span x-show="diagramObj" class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100" x-text="hotspots.length + ' Hotspot'"></span>
+    <!-- Multi-Diagram Tab Navigation Bar -->
+    <div x-show="diagrams && diagrams.length > 0" class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 mb-4">
+        <div class="flex flex-wrap items-center gap-2">
+            <template x-for="(diag, idx) in diagrams" :key="diag.id || idx">
+                <button type="button"
+                        @click="activeTab = idx; editMode = false; addHotspotMode = false;"
+                        :class="activeTab === idx ? 'bg-blue-600 text-white shadow-xs font-bold' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 font-semibold'"
+                        class="px-3 py-1.5 rounded-xl text-xs transition focus:outline-none flex items-center gap-1.5">
+                    <span x-text="diag.title || ('Diagram ' + (idx + 1))"></span>
+                    <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="activeTab === idx ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'" x-text="(diag.hotspots ? diag.hotspots.length : 0)"></span>
+                </button>
+            </template>
+
+            @if(auth()->user()->isInstruktur())
+                <button type="button"
+                        @click="imagePreview = null; imageFileName = ''; isUploadingNewTab = true; showUploadModal = true;"
+                        class="px-3 py-1.5 text-xs font-bold rounded-xl border border-dashed border-blue-400 text-blue-600 hover:bg-blue-50 transition flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>{{ __('Tambah Diagram Tab') }}</span>
+                </button>
+            @endif
+        </div>
+    </div>
+
+    <!-- Top toolbar for Instructor -->
+    <div x-show="currentDiagram" class="flex flex-wrap justify-between items-center gap-3 mb-4 pb-3 border-b border-slate-200/80">
+        <!-- Left: Title, Hotspot Pill & Dot Size Selector -->
+        <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-base font-bold text-slate-800" x-text="currentDiagram ? currentDiagram.title : 'Diagram Interaktif'"></h3>
+            <span x-show="currentDiagram" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 font-bold border border-blue-100 shrink-0" x-text="hotspots.length + ' Hotspot'"></span>
+            
             <!-- Controls Ukuran Bulatan Hotspot - Instruktur only -->
             @if(auth()->user()->isInstruktur())
-            <div x-show="hotspots.length > 0" class="flex items-center gap-1 border-l border-slate-200 pl-2">
-                <span class="text-[10px] text-slate-500 font-semibold mr-1">{{ __('Ukuran Dot:') }}</span>
-                <button type="button" @click="setDotSize('sm')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">S</button>
-                <button type="button" @click="setDotSize('md')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">M</button>
-                <button type="button" @click="setDotSize('lg')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">L</button>
-                <button type="button" @click="setDotSize('xl')" class="px-1.5 py-0.5 rounded text-[10px] font-bold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">XL</button>
+            <div x-show="hotspots.length > 0" class="flex items-center gap-1.5 border-l border-slate-200 pl-2.5 ml-0.5">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{{ __('Ukuran Dot:') }}</span>
+                <div class="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200/80">
+                    <button type="button" @click="setDotSize('sm')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'sm' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">S</button>
+                    <button type="button" @click="setDotSize('md')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'md' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">M</button>
+                    <button type="button" @click="setDotSize('lg')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'lg' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">L</button>
+                    <button type="button" @click="setDotSize('xl')" class="px-2 py-0.5 rounded-md text-[10px] font-bold transition" :class="dotSize === 'xl' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'">XL</button>
+                </div>
             </div>
             @endif
         </div>
 
+        <!-- Right: Instructor Action Buttons Group -->
         @if(auth()->user()->isInstruktur())
-            <div class="flex flex-wrap items-center gap-2">
-                    <div x-show="diagramObj" class="flex flex-wrap items-center gap-2">
-                        <button x-show="!editMode && !addHotspotMode" @click="showUploadModal = true" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span>{{ __('Ganti Gambar') }}</span>
-                        </button>
+            <div class="flex flex-wrap items-center gap-1.5" x-show="currentDiagram">
+                <button x-show="!editMode"
+                        @click="addHotspotMode = !addHotspotMode"
+                        class="px-3 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
+                        :class="addHotspotMode ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20'">
+                    <template x-if="addHotspotMode">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            <span>{{ __('Batal Tambah') }}</span>
+                        </div>
+                    </template>
+                    <template x-if="!addHotspotMode">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            <span>{{ __('Tambah Hotspot') }}</span>
+                        </div>
+                    </template>
+                </button>
 
-                        <button x-show="!editMode"
-                                @click="addHotspotMode = !addHotspotMode"
-                                class="px-3 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
-                                :class="addHotspotMode ? 'bg-amber-500 text-white shadow-md' : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200'">
-                            <template x-if="addHotspotMode">
-                                <div class="flex items-center gap-1.5">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                    <span>{{ __('Batal Tambah') }}</span>
-                                </div>
-                            </template>
-                            <template x-if="!addHotspotMode">
-                                <div class="flex items-center gap-1.5">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                    <span>{{ __('Tambah Hotspot') }}</span>
-                                </div>
-                            </template>
-                        </button>
+                <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-200 shadow-2xs">
+                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>{{ __('Atur Posisi') }}</span>
+                </button>
 
-                        <button x-show="!addHotspotMode && !editMode" @click="startEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span>{{ __('Atur Posisi / Edit') }}</span>
-                        </button>
+                <button x-show="!editMode && !addHotspotMode" @click="imagePreview = null; imageFileName = ''; isUploadingNewTab = false; showUploadModal = true;" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border border-slate-200 shadow-2xs">
+                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span>{{ __('Ganti Gambar') }}</span>
+                </button>
 
-                        <button x-show="editMode" @click="cancelEditMode()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">
-                            {{ __('Batal Edit') }}
-                        </button>
-                        <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-                            <span x-show="!saving">{{ __('Simpan Posisi') }}</span>
-                            <span x-show="saving">{{ __('Menyimpan...') }}</span>
-                        </button>
-                    </div>
+                <button x-show="editMode" @click="cancelEditMode()" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-bold transition border border-slate-200 shadow-2xs">
+                    {{ __('Batal Edit') }}
+                </button>
+                <button x-show="editMode" @click="saveHotspots()" :disabled="saving" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-green-600/20 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                    <span x-show="!saving">{{ __('Simpan Posisi') }}</span>
+                    <span x-show="saving">{{ __('Menyimpan...') }}</span>
+                </button>
+
+                <button x-show="!editMode && !addHotspotMode" @click="confirmDeleteDiagram()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/80 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <span>{{ __('Hapus Tab') }}</span>
+                </button>
             </div>
         @endif
     </div>
@@ -414,12 +501,13 @@
     </div>
 
     <!-- Technical Drawing Display Container -->
-    <div x-ref="diagramContainer"
+    <div x-show="currentDiagram"
+         x-ref="diagramContainer"
          @click="onDiagramClick($event)"
          class="relative bg-slate-50 rounded-xl w-full max-w-xl mx-auto border border-gray-200 shadow-sm select-none min-h-[150px]"
          :class="addHotspotMode ? 'ring-2 ring-amber-500 cursor-crosshair' : (editMode ? 'ring-2 ring-blue-500 cursor-crosshair' : '')">
         
-        <img x-show="diagramObj && diagramObj.image_path" :src="diagramObj && diagramObj.image_path ? (diagramObj.image_path.startsWith('/') ? diagramObj.image_path : '/' + diagramObj.image_path) : ''" class="w-full h-auto block select-none pointer-events-none rounded-xl" alt="Technical Drawing" draggable="false">
+        <img x-show="currentDiagram && currentDiagram.image_path" :src="currentDiagram && currentDiagram.image_path ? (currentDiagram.image_path.startsWith('/') ? currentDiagram.image_path : '/' + currentDiagram.image_path) : ''" class="w-full h-auto block select-none pointer-events-none rounded-xl" alt="Technical Drawing" draggable="false">
 
         <!-- Overlay Hotspot Dots -->
         <template x-for="(hotspot, index) in hotspots" :key="hotspot.id">
@@ -428,30 +516,35 @@
                 @click.stop="clickHotspot(hotspot)"
                 @mousedown="startDrag($event, hotspot.id)"
                 @touchstart="startDrag($event, hotspot.id)"
-                class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none"
+                class="absolute z-20 group -translate-x-1/2 -translate-y-1/2 focus:outline-none select-none transition-all duration-200"
                 :style="`left: ${hotspot.x_percent}%; top: ${hotspot.y_percent}%; cursor: ${editMode ? 'grab' : 'pointer'};`"
-                :class="editMode && dragId === hotspot.id ? 'cursor-grabbing scale-125 z-50' : ''"
+                :class="[
+                    editMode && dragId === hotspot.id ? 'cursor-grabbing z-50' : '',
+                    String(hotspot.label || '').trim() === String(highlightedHotspotLabel || '').trim() ? 'z-50' : ''
+                ]"
             >
-                <!-- Pinging ring for non-edit mode -->
-                <span x-show="!editMode" class="absolute inline-flex h-8 w-8 rounded-full opacity-40 animate-ping -left-[4px] -top-[4px]"
-                      :class="hotspot.action_type === 'popup' ? 'bg-amber-400' : 'bg-blue-500'"></span>
+                <!-- Subtle pinging ring for non-edit mode -->
+                <span x-show="!editMode"
+                      class="absolute inline-flex h-6 w-6 rounded-full opacity-30 animate-ping -left-[2px] -top-[2px]"
+                      :class="String(hotspot.label || '').trim() === String(highlightedHotspotLabel || '').trim() ? 'bg-amber-400 opacity-60' : (hotspot.action_type === 'popup' ? 'bg-amber-400' : 'bg-blue-500')"></span>
 
                 <!-- Hotspot Dot -->
-                <span class="relative inline-flex rounded-full border-2 border-white items-center justify-center shadow-md transition-all duration-150 group-hover:scale-110 shrink-0"
+                <span class="relative inline-flex rounded-full border border-white items-center justify-center shadow-xs transition-all duration-200 group-hover:scale-105 shrink-0"
                       :class="[
-                          hotspot.action_type === 'popup' ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white',
+                          String(hotspot.label || '').trim() === String(highlightedHotspotLabel || '').trim() ? 'bg-amber-500 text-white font-bold ring-2 ring-amber-400/70 shadow-sm' : (hotspot.action_type === 'popup' ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white'),
                           dotSize === 'sm' ? 'w-5 h-5 text-[10px]' : (dotSize === 'md' ? 'w-6 h-6 text-[11px]' : (dotSize === 'lg' ? 'w-7 h-7 text-[12px]' : 'w-8 h-8 text-[13px]'))
                       ]">
                     <span class="font-extrabold leading-none select-none" x-text="hotspot.label"></span>
                 </span>
 
-                <!-- Hover preview tooltip -->
+                <!-- Hover preview tooltip or auto tooltip when highlighted -->
                 <span x-show="!editMode" 
-                      class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2.5 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-2xl transition-all duration-150 opacity-0 transform translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 whitespace-nowrap z-50 pointer-events-none border border-slate-700/80 flex items-center gap-1.5"
-                      style="background-color: #0f172a; color: #ffffff;"
+                      class="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-md transition-all duration-200 whitespace-nowrap z-50 pointer-events-none border border-slate-700/80 flex items-center gap-1"
+                      :class="String(hotspot.label || '').trim() === String(highlightedHotspotLabel || '').trim() ? 'opacity-100 translate-y-0 bg-amber-600 text-white border-amber-400' : 'opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 bg-slate-900 text-white'"
                 >
                     <span x-text="hotspot.popup_title || (hotspot.label ? 'Part No. ' + hotspot.label : '')"></span>
-                    <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent" style="border-top-color: #0f172a;"></span>
+                    <span class="absolute top-full left-1/2 -translate-x-1/2 border-[3px] border-transparent"
+                          :style="String(hotspot.label || '').trim() === String(highlightedHotspotLabel || '').trim() ? 'border-top-color: #d97706;' : 'border-top-color: #0f172a;'"></span>
                 </span>
             </button>
         </template>
@@ -484,11 +577,16 @@
     <div x-show="showUploadModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4" x-cloak>
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4" @click.away="showUploadModal = false">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-800 text-sm">{{ __('Upload Technical Drawing Modul') }}</h3>
+                <h3 class="font-bold text-slate-800 text-sm" x-text="isUploadingNewTab ? '{{ __('Tambah Diagram Tab Baru') }}' : '{{ __('Upload / Ganti Gambar Diagram') }}'"></h3>
                 <button type="button" @click="showUploadModal = false" class="text-slate-400 hover:text-slate-600 font-bold text-base">&times;</button>
             </div>
 
             <form @submit.prevent="uploadDiagram($event)" enctype="multipart/form-data" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">{{ __('Judul Diagram / Nama Tab') }}</label>
+                    <input type="text" name="title" :value="isUploadingNewTab ? '' : (currentDiagram ? currentDiagram.title : '')" placeholder="{{ __('contoh: Detail B2 (Roller 1-6)') }}" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500">
+                </div>
+
                 <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-400 transition" @dragover.prevent @drop.prevent="handleFileDrop($event)">
                     <template x-if="!imagePreview">
                         <div>
