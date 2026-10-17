@@ -1,5 +1,10 @@
 @section('topbar_title', __($quiz->title))
 <x-app-layout><div class="max-w-2xl mx-auto space-y-6">
+@if(session('error'))
+<div class="bg-red-50 border border-red-200 text-red-700 text-sm font-semibold px-4 py-3 rounded-xl">
+    {{ session('error') }}
+</div>
+@endif
 @if($errors->any())
 <div class="bg-red-50 border border-red-200 text-red-700 text-sm font-semibold px-4 py-3 rounded-xl">
 {{ $errors->first() }}

@@ -366,7 +366,13 @@ class QuizAttemptController extends Controller
                                ->whereNotNull('submitted_at')
                                ->with(['answers.question.options', 'answers.selectedOption', 'answers.gradedBy'])
                                ->latest('submitted_at')
-                               ->firstOrFail();
+                               ->first();
+
+        if (! $attempt) {
+            $startRoute = $quiz->isPractice() ? 'practice.start' : 'quiz.start';
+            return redirect()->route($startRoute, [$course, $quiz])
+                ->with('error', __('Anda belum mengerjakan aktivitas ini.'));
+        }
 
         $certificate = $quiz->isPractice() ? null : Certificate::where('user_id', $user->id)
             ->where('course_id', $course->id)->first();
