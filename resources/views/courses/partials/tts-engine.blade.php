@@ -1,12 +1,12 @@
 {{-- ========================================================= --}}
-{{-- GLOBAL TTS ENGINE (Web Speech API) — Bab 1 s.d. 5 saja   --}}
+{{-- GLOBAL TTS ENGINE (Web Speech API) — Semua bab teks (kecuali Bab 6 PDF & Bab 7 Skema) --}}
 {{-- ========================================================= --}}
-@if($chapter->order >= 1 && $chapter->order <= 5)
+@if($chapter->order != 6 && $chapter->order != 7)
 <style>
-    /* Highlight paragraf yang sedang dibacakan TTS */
+        /* Highlight paragraf yang sedang dibacakan TTS */
     .tts-paragraph-highlight {
         background-color: #fef9c3 !important; /* amber/yellow-100 */
-        border-left: 4px solid #f59e0b !important; /* amber-500 indicator bar */
+        border-left: 4px solid #2563eb !important; /* blue-600 LMS Garbarata indicator bar */
         padding-left: 0.75rem !important;
         padding-top: 0.375rem !important;
         padding-bottom: 0.375rem !important;
@@ -15,80 +15,86 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
     }
 
-    /* Control Group Wrapper */
+    /* TTS Audio Bar Container */
     .tts-controls-group {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 3px 4px;
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
+        background: transparent;
     }
 
-    /* Tombol TTS Utama */
-    .tts-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 5px 12px;
+    /* Dropdown Kecepatan */
+    .tts-speed-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230f172a' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 8px center;
+        background-size: 11px;
+        padding: 5px 24px 5px 10px;
+        border: 1.5px solid #cbd5e1;
         border-radius: 8px;
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 700;
+        color: #0f172a;
         cursor: pointer;
-        border: 1px solid;
+        outline: none;
         transition: all 0.15s ease;
-        user-select: none;
+        line-height: 1.2;
+        height: 34px;
     }
-    .tts-btn-idle {
-        background: #eff6ff;
-        color: #2563eb;
-        border-color: #bfdbfe;
-    }
-    .tts-btn-idle:hover {
-        background: #dbeafe;
-    }
-    .tts-btn-playing {
-        background: #fef3c7;
-        color: #b45309;
-        border-color: #fcd34d;
-        animation: tts-pulse 1.8s ease-in-out infinite;
-    }
-    .tts-btn-paused {
-        background: #f0fdf4;
-        color: #15803d;
-        border-color: #bbf7d0;
-    }
-    .tts-btn-paused:hover {
-        background: #dcfce7;
+    .tts-speed-select:hover {
+        border-color: #94a3b8;
+        background-color: #f8fafc;
     }
 
-    /* Tombol Speed Control & Navigasi */
-    .tts-speed-btn,
-    .tts-nav-btn {
+    .tts-divider {
+        width: 1px;
+        height: 22px;
+        background-color: #e2e8f0;
+        margin: 0 4px;
+    }
+
+    /* Tombol Kontrol Persegi (Icon Only) */
+    .tts-ctrl-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 4px;
-        padding: 5px 10px;
+        width: 34px;
+        height: 34px;
         border-radius: 8px;
-        font-size: 11px;
-        font-weight: 700;
-        color: #334155;
+        border: 1.5px solid #cbd5e1;
         background: #ffffff;
-        border: 1px solid #cbd5e1;
+        color: #0f172a;
         cursor: pointer;
         transition: all 0.15s ease;
         user-select: none;
+        padding: 0;
+        flex-shrink: 0;
     }
-    .tts-speed-btn:hover,
-    .tts-nav-btn:hover {
+    .tts-ctrl-btn:hover {
         background: #f1f5f9;
         border-color: #94a3b8;
-        color: #0f172a;
     }
-    .tts-nav-btn {
-        padding: 5px 8px;
+
+    /* Tombol Play/Pause Utama (Biru LMS Garbarata blue-600) */
+    .tts-play-btn {
+        background: #2563eb !important; /* blue-600 */
+        border-color: #1d4ed8 !important; /* blue-700 */
+        color: #ffffff !important;
+    }
+    .tts-play-btn:hover {
+        background: #1d4ed8 !important; /* blue-700 */
+        border-color: #1e40af !important;
+    }
+    .tts-play-btn-playing {
+        background: #1d4ed8 !important;
+        border-color: #1e40af !important;
+    }
+    .tts-play-btn svg,
+    .tts-play-btn svg path,
+    .tts-play-btn svg rect {
+        fill: #ffffff !important;
+        color: #ffffff !important;
     }
 
     @keyframes tts-pulse {
@@ -107,11 +113,11 @@
         let currentIndex       = 0;      
         let currentCharIndex   = 0;      
 
-        const SVG_SPEAKER = `<svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>`;
-
-        const SVG_PAUSE = `<svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
-
-        const SVG_PLAY = `<svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+        const SVG_PLAY = `<svg class="w-4 h-4 ml-0.5" fill="#ffffff" viewBox="0 0 24 24"><path fill="#ffffff" d="M8 5.14v13.72a1 1 0 0 0 1.53.85l11-6.86a1 1 0 0 0 0-1.7l-11-6.86a1 1 0 0 0-1.53.85z"/></svg>`;
+        const SVG_PAUSE = `<svg class="w-4 h-4" fill="#ffffff" viewBox="0 0 24 24"><rect x="6" y="5" width="3.5" height="14" rx="1" fill="#ffffff"/><rect x="14.5" y="5" width="3.5" height="14" rx="1" fill="#ffffff"/></svg>`;
+        const SVG_STOP = `<svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1.5"/></svg>`;
+        const SVG_PREV = `<svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3 6l9 6V6z"/></svg>`;
+        const SVG_NEXT = `<svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 18l9-6-9-6v12zm10-12h2v12h-2z"/></svg>`;
 
         
         const ttsI18n = {
@@ -183,26 +189,29 @@
         }
 
         
-        function broadcastState(id, state ) {
+        function broadcastState(id, state) {
             document.querySelectorAll('[data-tts-id]').forEach(btn => {
                 const btnId = btn.getAttribute('data-tts-id');
-                const icon  = btn.querySelector('.tts-icon');
-                const label = btn.querySelector('.tts-label');
+                const icon = btn.querySelector('.tts-icon') || btn;
                 if (btnId === String(id) && state !== 'idle') {
                     if (state === 'playing') {
-                        btn.className = 'tts-btn tts-btn-playing';
-                        if (icon)  icon.innerHTML   = SVG_PAUSE;
-                        if (label) label.textContent = t('reading');
+                        btn.classList.add('tts-play-btn-playing');
+                        icon.innerHTML = SVG_PAUSE;
+                        btn.title = t('reading') || 'Pause';
                     } else {
-                        btn.className = 'tts-btn tts-btn-paused';
-                        if (icon)  icon.innerHTML   = SVG_PLAY;
-                        if (label) label.textContent = t('resume');
+                        btn.classList.remove('tts-play-btn-playing');
+                        icon.innerHTML = SVG_PLAY;
+                        btn.title = t('resume') || 'Resume';
                     }
                 } else {
-                    btn.className = 'tts-btn tts-btn-idle';
-                    if (icon)  icon.innerHTML   = SVG_SPEAKER;
-                    if (label) label.textContent = t('listen');
+                    btn.classList.remove('tts-play-btn-playing');
+                    icon.innerHTML = SVG_PLAY;
+                    btn.title = t('listen') || 'Play';
                 }
+            });
+
+            document.querySelectorAll('.tts-speed-select').forEach(sel => {
+                sel.value = currentRate.toString();
             });
         }
 
@@ -404,8 +413,8 @@
         
         function setRate(newRate) {
             currentRate = parseFloat(newRate) || 1.0;
-            document.querySelectorAll('.tts-speed-val').forEach(el => {
-                el.textContent = currentRate + 'x';
+            document.querySelectorAll('.tts-speed-select').forEach(el => {
+                el.value = currentRate.toString();
             });
 
             

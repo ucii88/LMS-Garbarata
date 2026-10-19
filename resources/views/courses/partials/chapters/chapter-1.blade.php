@@ -223,47 +223,56 @@
                       <div class="space-y-12">
                           <template x-for="item in mechItems" :key="item.id">
                               <div :id="'mech-module-' + item.id" :data-module-id="item.id" data-type="mech" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_mekanikal' ? 'border-t border-gray-100' : ''">
-                                  <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
-
-                                  {{-- TTS Button Chapter 1 Mekanikal --}}
-                                  <div class="tts-controls-group">
-                                      <button
-                                          type="button"
-                                          class="tts-nav-btn"
-                                          onclick="window.LmsTTS.prevParagraph()"
-                                          title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
-                                      >
-                                          <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                                      </button>
-                                      <button
-                                          class="tts-btn tts-btn-idle"
-                                          :data-tts-id="'mech_' + item.id"
-                                          @click="window.ttsToggle('mech_' + item.id, item.content, 'mech-tts-content-' + item.id)"
-                                          title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
-                                      >
-                                          <span class="tts-icon">
-                                              <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-                                          </span>
-                                          <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
-                                      </button>
-                                      <button
-                                          type="button"
-                                          class="tts-nav-btn"
-                                          onclick="window.LmsTTS.nextParagraph()"
-                                          title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
-                                      >
-                                          <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                      </button>
-                                      <button
-                                          type="button"
-                                          class="tts-speed-btn"
-                                          onclick="window.LmsTTS.cycleRate()"
-                                          title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
-                                      >
-                                          <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                          <span class="tts-speed-val">1x</span>
-                                      </button>
-                                  </div>
+                                  <div class="flex items-center justify-between flex-wrap gap-3">
+                                       <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
+                                       <div class="tts-controls-group">
+        <select class="tts-speed-select" onchange="window.LmsTTS.setRate(this.value)" title="{{ app()->getLocale() === 'en' ? 'Voice Speed' : 'Kecepatan Suara' }}">
+            <option value="0.8">0.8x</option>
+            <option value="1" selected>1.0x</option>
+            <option value="1.2">1.2x</option>
+            <option value="1.4">1.4x</option>
+            <option value="1.6">1.6x</option>
+            <option value="1.8">1.8x</option>
+            <option value="2">2.0x</option>
+        </select>
+        <div class="tts-divider"></div>
+        <button
+            type="button"
+            class="tts-ctrl-btn"
+            onclick="window.LmsTTS.prevParagraph()"
+            title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
+        >
+            <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3 6l9 6V6z"/></svg>
+        </button>
+        <button
+            type="button"
+            class="tts-ctrl-btn"
+            onclick="window.LmsTTS.stop()"
+            title="{{ app()->getLocale() === 'en' ? 'Stop' : 'Berhenti' }}"
+        >
+            <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1.5"/></svg>
+        </button>
+        <button
+            type="button"
+            class="tts-ctrl-btn tts-play-btn"
+            :data-tts-id="'mech_' + item.id"
+            @click="window.ttsToggle('mech_' + item.id, item.content, 'mech-tts-content-' + item.id)"
+            title="{{ app()->getLocale() === 'en' ? 'Play / Pause' : 'Putar / Jeda' }}"
+        >
+            <span class="tts-icon">
+                <svg class="w-4 h-4 ml-0.5" fill="#ffffff" viewBox="0 0 24 24"><path fill="#ffffff" d="M8 5.14v13.72a1 1 0 0 0 1.53.85l11-6.86a1 1 0 0 0 0-1.7l-11-6.86a1 1 0 0 0-1.53.85z"/></svg>
+            </span>
+        </button>
+        <button
+            type="button"
+            class="tts-ctrl-btn"
+            onclick="window.LmsTTS.nextParagraph()"
+            title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
+        >
+            <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 18l9-6-9-6v12zm10-12h2v12h-2z"/></svg>
+        </button>
+    </div>
+                                   </div>
 
                                   <template x-if="item.image_path">
                                       <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 mx-auto"
@@ -356,47 +365,56 @@
                       <div class="space-y-12">
                           <template x-for="item in elecItems" :key="item.id">
                               <div :id="'elec-module-' + item.id" :data-module-id="item.id" data-type="elec" class="space-y-4 pt-4 first:pt-0" :class="item.id !== 'intro_elektrikal' ? 'border-t border-gray-100' : ''">
-                                  <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
-
-                                  {{-- TTS Button Chapter 1 Elektrikal --}}
-                                  <div class="tts-controls-group">
-                                      <button
-                                          type="button"
-                                          class="tts-nav-btn"
-                                          onclick="window.LmsTTS.prevParagraph()"
-                                          title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
-                                      >
-                                          <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                                      </button>
-                                      <button
-                                          class="tts-btn tts-btn-idle"
-                                          :data-tts-id="'elec_' + item.id"
-                                          @click="window.ttsToggle('elec_' + item.id, item.content, 'elec-tts-content-' + item.id)"
-                                          title="{{ app()->getLocale() === 'en' ? 'Listen to Sub-chapter' : 'Dengarkan Suara Subab' }}"
-                                      >
-                                          <span class="tts-icon">
-                                              <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-                                          </span>
-                                          <span class="tts-label">{{ app()->getLocale() === 'en' ? 'Listen' : 'Dengarkan' }}</span>
-                                      </button>
-                                      <button
-                                          type="button"
-                                          class="tts-nav-btn"
-                                          onclick="window.LmsTTS.nextParagraph()"
-                                          title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
-                                      >
-                                          <svg class="w-3.5 h-3.5 text-slate-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                      </button>
-                                      <button
-                                          type="button"
-                                          class="tts-speed-btn"
-                                          onclick="window.LmsTTS.cycleRate()"
-                                          title="{{ app()->getLocale() === 'en' ? 'Change playback speed' : 'Klik untuk mengubah kecepatan suara' }}"
-                                      >
-                                          <svg class="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                          <span class="tts-speed-val">1x</span>
-                                      </button>
-                                  </div>
+                                  <div class="flex items-center justify-between flex-wrap gap-3">
+                                       <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="item.title"></h2>
+                                       <div class="tts-controls-group">
+        <select class="tts-speed-select" onchange="window.LmsTTS.setRate(this.value)" title="{{ app()->getLocale() === 'en' ? 'Voice Speed' : 'Kecepatan Suara' }}">
+            <option value="0.8">0.8x</option>
+            <option value="1" selected>1.0x</option>
+            <option value="1.2">1.2x</option>
+            <option value="1.4">1.4x</option>
+            <option value="1.6">1.6x</option>
+            <option value="1.8">1.8x</option>
+            <option value="2">2.0x</option>
+        </select>
+        <div class="tts-divider"></div>
+        <button
+            type="button"
+            class="tts-ctrl-btn"
+            onclick="window.LmsTTS.prevParagraph()"
+            title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
+        >
+            <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3 6l9 6V6z"/></svg>
+        </button>
+        <button
+            type="button"
+            class="tts-ctrl-btn"
+            onclick="window.LmsTTS.stop()"
+            title="{{ app()->getLocale() === 'en' ? 'Stop' : 'Berhenti' }}"
+        >
+            <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1.5"/></svg>
+        </button>
+        <button
+            type="button"
+            class="tts-ctrl-btn tts-play-btn"
+            :data-tts-id="'elec_' + item.id"
+            @click="window.ttsToggle('elec_' + item.id, item.content, 'elec-tts-content-' + item.id)"
+            title="{{ app()->getLocale() === 'en' ? 'Play / Pause' : 'Putar / Jeda' }}"
+        >
+            <span class="tts-icon">
+                <svg class="w-4 h-4 ml-0.5" fill="#ffffff" viewBox="0 0 24 24"><path fill="#ffffff" d="M8 5.14v13.72a1 1 0 0 0 1.53.85l11-6.86a1 1 0 0 0 0-1.7l-11-6.86a1 1 0 0 0-1.53.85z"/></svg>
+            </span>
+        </button>
+        <button
+            type="button"
+            class="tts-ctrl-btn"
+            onclick="window.LmsTTS.nextParagraph()"
+            title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
+        >
+            <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 18l9-6-9-6v12zm10-12h2v12h-2z"/></svg>
+        </button>
+    </div>
+                                   </div>
 
                                   <template x-if="item.image_path">
                                       <div class="rounded-xl border border-gray-200 bg-gray-50 p-2 shadow-xs my-3 max-w-xl mx-auto">
