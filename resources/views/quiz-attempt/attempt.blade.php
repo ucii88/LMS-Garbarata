@@ -17,6 +17,17 @@
     <span id="connection-banner-text"></span>
 </div>
 
+<style>
+    .quiz-submit-btn.btn-offline-disabled {
+        background-color: #cbd5e1 !important; /* bg-slate-300 */
+        border-color: #cbd5e1 !important;
+        color: #64748b !important; /* text-slate-500 */
+        cursor: not-allowed !important;
+        pointer-events: none !important;
+        box-shadow: none !important;
+    }
+</style>
+
 <div class="max-w-4xl mx-auto">
     <form id="quiz-form" action="{{ route($quiz->isPractice() ? 'practice.submit' : 'quiz.submit', [$course, $quiz]) }}" method="POST">
         @csrf
@@ -49,7 +60,7 @@
             @endif
 
             <button type="button" onclick="confirmSubmit()"
-                    class="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
+                    class="quiz-submit-btn px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
                 Submit {{ $quiz->isPractice() ? __('Latihan') : __('Quiz') }}
             </button>
         </div>
@@ -219,7 +230,7 @@
                             </button>
                         @else
                             <button type="button" onclick="confirmSubmit()"
-                                    class="px-5 py-2.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition">
+                                    class="quiz-submit-btn px-5 py-2.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition">
                                 {{ __('Selesai & Kirim') }}
                             </button>
                         @endif
@@ -256,7 +267,7 @@
                         </div>
                     </div>
                     <button type="button" onclick="confirmSubmit()"
-                            class="w-full py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
+                            class="quiz-submit-btn w-full py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
                         Submit {{ $quiz->isPractice() ? __('Latihan') : __('Quiz') }}
                     </button>
                 </div>
@@ -279,7 +290,7 @@
                 {{ __('Kembali') }}
             </button>
             <button onclick="submitQuiz()"
-                    class="flex-1 py-2.5 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl">
+                    class="quiz-submit-btn flex-1 py-2.5 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
                 {{ __('Ya, Submit') }}
             </button>
         </div>
@@ -304,7 +315,102 @@
     </div>
 </div>
 
+@unless($quiz->isPractice())
+{{-- Leave / Reload Warning Modal (LMS Custom Dialog) --}}
+<div id="leave-warning-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-amber-200">
+        <div class="text-center mb-5 space-y-2">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 text-amber-600 font-bold mb-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-800" id="leave-modal-title">{{ __('Tinggalkan Halaman Ujian?') }}</h3>
+            <p class="text-xs text-slate-600 leading-relaxed bg-amber-50/70 p-3 rounded-xl border border-amber-100 text-left" id="leave-modal-desc">
+                {{ __('Ujian Anda sedang berlangsung. Jika Anda berpindah ke halaman lain atau memuat ulang halaman, waktu pengerjaan tetap berjalan.') }}
+            </p>
+        </div>
+        <div class="flex gap-3">
+            <button type="button" onclick="closeLeaveWarningModal()"
+                    class="flex-1 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition cursor-pointer shadow-sm">
+                {{ __('Tetap di Ujian') }}
+            </button>
+            <button type="button" onclick="confirmLeaveExam()"
+                    class="flex-1 py-2.5 text-sm font-semibold text-rose-600 border border-rose-200 hover:bg-rose-50 rounded-xl transition cursor-pointer">
+                {{ __('Ya, Tinggalkan') }}
+            </button>
+        </div>
+    </div>
+</div>
+@endunless
+
 <script>
+@unless($quiz->isPractice())
+let pendingLeaveUrl = null;
+let pendingLeaveIsReload = false;
+
+function openLeaveWarningModal(url = null, isReload = false) {
+    pendingLeaveUrl = url;
+    pendingLeaveIsReload = isReload;
+    const titleEl = document.getElementById('leave-modal-title');
+    const descEl = document.getElementById('leave-modal-desc');
+    
+    if (isReload) {
+        if (titleEl) titleEl.textContent = @js(__('Muat Ulang Halaman Ujian?'));
+        if (descEl) descEl.textContent = @js(__('Ujian Anda sedang berlangsung. Memuat ulang halaman dapat mengganggu proses pengerjaan dan timer ujian tetap berjalan.'));
+    } else {
+        if (titleEl) titleEl.textContent = @js(__('Tinggalkan Halaman Ujian?'));
+        if (descEl) descEl.textContent = @js(__('Ujian Anda sedang berlangsung. Jika Anda meninggalkan halaman ini, waktu pengerjaan tetap berjalan.'));
+    }
+    
+    const modal = document.getElementById('leave-warning-modal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeLeaveWarningModal() {
+    pendingLeaveUrl = null;
+    pendingLeaveIsReload = false;
+    const modal = document.getElementById('leave-warning-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function confirmLeaveExam() {
+    window.isSubmittingQuiz = true; // Nonaktifkan native beforeunload alert
+    if (pendingLeaveIsReload) {
+        window.location.reload();
+    } else if (pendingLeaveUrl) {
+        window.location.href = pendingLeaveUrl;
+    } else {
+        closeLeaveWarningModal();
+    }
+}
+
+// Cegat klik tautan/navigasi di dalam LMS (misal menu sidebar, logo, breadcrumbs)
+document.addEventListener('click', function(e) {
+    if (window.isSubmittingQuiz) return;
+    const anchor = e.target.closest('a');
+    if (!anchor) return;
+    
+    const href = anchor.getAttribute('href');
+    if (!href || href === '#' || href.startsWith('javascript:')) return;
+    if (anchor.target === '_blank') return;
+
+    e.preventDefault();
+    openLeaveWarningModal(anchor.href, false);
+});
+
+// Cegat shortcut keyboard reload (F5, Ctrl+R, Cmd+R)
+window.addEventListener('keydown', function(e) {
+    if (window.isSubmittingQuiz) return;
+    const isF5 = e.key === 'F5' || e.keyCode === 116;
+    const isCtrlR = (e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R' || e.keyCode === 82);
+    
+    if (isF5 || isCtrlR) {
+        e.preventDefault();
+        openLeaveWarningModal(null, true);
+    }
+});
+@endunless
 let focusLossCount = 0;
 const MAX_FOCUS_LOSS = 3;
 
@@ -349,7 +455,7 @@ window.addEventListener('offline', function() {
 function showConnectionStatus(isOnline) {
     const banner = document.getElementById('connection-banner');
     const text = document.getElementById('connection-banner-text');
-    const submitBtns = document.querySelectorAll('button[onclick="confirmSubmit()"], button[type="submit"]');
+    const submitBtns = document.querySelectorAll('.quiz-submit-btn, button[onclick="confirmSubmit()"], button[onclick="submitQuiz()"], button[type="submit"]');
     
     if (isOnline) {
         text.textContent = '✓ ' + @js(__('Koneksi Terhubung Kembali! Menyelaraskan jawaban...'));
@@ -358,7 +464,8 @@ function showConnectionStatus(isOnline) {
         // Aktifkan kembali tombol submit
         submitBtns.forEach(btn => {
             btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.classList.remove('btn-offline-disabled', 'opacity-50', 'cursor-not-allowed');
+            btn.removeAttribute('title');
         });
         
         // Sembunyikan banner setelah 4 detik
@@ -370,10 +477,11 @@ function showConnectionStatus(isOnline) {
         banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-sm font-bold bg-rose-600 text-white shadow-md transition-all duration-300';
         banner.classList.remove('hidden');
         
-        // Nonaktifkan tombol submit saat offline
+        // Nonaktifkan tombol submit saat offline dan ubah warna menjadi abu-abu disabled
         submitBtns.forEach(btn => {
             btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.classList.add('btn-offline-disabled');
+            btn.title = @js(__('Tombol submit dinonaktifkan karena koneksi internet terputus'));
         });
     }
 }
@@ -535,6 +643,11 @@ function jumpTo(num) {
 }
 
 function confirmSubmit() {
+    if (!navigator.onLine) {
+        alert(@js(__('Koneksi internet terputus. Harap tunggu hingga koneksi terhubung kembali untuk mengirimkan jawaban.')));
+        return;
+    }
+
     const total = {{ $questions->count() }};
     let answeredCount = 0;
     
@@ -557,6 +670,10 @@ function confirmSubmit() {
 }
 
 function submitQuiz() {
+    if (!navigator.onLine) {
+        alert(@js(__('Koneksi internet terputus. Tidak dapat mengirimkan kuis saat offline.')));
+        return;
+    }
     window.isSubmittingQuiz = true;
     document.getElementById('quiz-form').submit();
 }
@@ -593,5 +710,8 @@ setInterval(tick, 1000);
 
 // Init
 updateNavColors();
+if (!navigator.onLine) {
+    showConnectionStatus(false);
+}
 </script>
 </x-app-layout>
