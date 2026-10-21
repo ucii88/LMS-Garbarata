@@ -36,7 +36,7 @@
                 </div>
                 <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">{{ __('Jadwal & Agenda Pembelajaran') }}</h1>
                 <p class="mt-2 text-sm text-slate-300 max-w-2xl leading-relaxed">
-                    {{ __('Pantau seluruh tenggat waktu quiz, ujian akhir, latihan mandiri, dan peluncuran modul materi dalam satu tampilan terpadu.') }}
+                    {{ __('Pantau seluruh tenggat waktu kuis, ujian akhir, latihan mandiri, dan peluncuran modul materi dalam satu tampilan terpadu.') }}
                 </p>
             </div>
 
@@ -44,11 +44,11 @@
             <div class="grid grid-cols-3 gap-3 shrink-0">
                 <div class="rounded-xl bg-slate-800 p-4 border border-slate-700/80 text-center min-w-[95px] shadow-sm">
                     <span class="block text-2xl font-black text-white">{{ $totalMonthEvents }}</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 mt-1 block">{{ __('Total Event') }}</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 mt-1 block">{{ __('Total Agenda') }}</span>
                 </div>
                 <div class="rounded-xl bg-slate-800 p-4 border border-amber-500/40 text-center min-w-[95px] shadow-sm">
                     <span class="block text-2xl font-black text-amber-400">{{ $quizCount }}</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 mt-1 block">{{ __('Quiz/Ujian') }}</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 mt-1 block">{{ __('Kuis/Ujian') }}</span>
                 </div>
                 <div class="rounded-xl bg-slate-800 p-4 border border-emerald-500/40 text-center min-w-[95px] shadow-sm">
                     <span class="block text-2xl font-black text-emerald-400">{{ $materialCount }}</span>
@@ -97,7 +97,7 @@
                         :class="activeFilter === 'quiz' ? 'bg-white text-rose-700 shadow-xs font-extrabold' : 'text-slate-600 font-semibold hover:text-rose-600'"
                         class="px-3 py-1.5 text-xs rounded-lg transition flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                    {{ __('Quiz & Ujian') }}
+                    {{ __('Kuis & Ujian') }}
                 </button>
                 <button type="button" @click="activeFilter = 'practice'"
                         :class="activeFilter === 'practice' ? 'bg-white text-blue-700 shadow-xs font-extrabold' : 'text-slate-600 font-semibold hover:text-blue-600'"
@@ -155,7 +155,7 @@
                                             <button type="button" 
                                                     @click="openModal('{{ $day['date_string'] }}', '{{ $formattedDate }}', '{{ addslashes($dayEventsJson) }}')"
                                                     class="text-[10px] font-bold text-blue-600 hover:text-blue-800 hover:underline">
-                                                {{ count($dayEvents) }} {{ __('event') }}
+                                                {{ count($dayEvents) }} {{ __('agenda') }}
                                             </button>
                                         @endif
                                     </div>

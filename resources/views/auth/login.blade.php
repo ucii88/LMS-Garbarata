@@ -1,4 +1,5 @@
 <x-guest-layout>
+<div x-data="{ showForgotModal: false }">
     <!-- Welcome Header Inside Form -->
     <div class="text-center mb-2">
         <h2 class="font-outfit text-2xl font-bold text-slate-900 tracking-tight">{{ __('Selamat Datang') }}</h2>
@@ -34,12 +35,11 @@
         <div>
             <div class="flex items-center justify-between mb-1.5">
                 <label for="password" class="block text-sm font-semibold text-slate-700">{{ __('Kata Sandi') }}</label>
-                @if (Route::has('password.request'))
-                    <a class="text-[11px] text-blue-600 hover:text-blue-500 transition duration-200 font-medium" 
-                       href="{{ route('password.request') }}">
-                        {{ __('Lupa sandi?') }}
-                    </a>
-                @endif
+                <button type="button" 
+                        @click="showForgotModal = true"
+                        class="text-[11px] text-blue-600 hover:text-blue-500 transition duration-200 font-medium cursor-pointer">
+                    {{ __('Lupa sandi?') }}
+                </button>
             </div>
             <div class="relative">
                 <input id="password" 
@@ -86,4 +86,34 @@
             </p>
         @endif
     </form>
+
+    <!-- Modal Konfirmasi Lupa Sandi ke Admin -->
+    <div x-show="showForgotModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
+         style="display: none;">
+        <div @click.away="showForgotModal = false"
+             class="w-full max-w-sm bg-white rounded-2xl p-6 shadow-2xl border border-slate-100 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 mx-auto flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+                <h3 class="text-base font-bold text-slate-800">{{ __('Lupa Kata Sandi?') }}</h3>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                    {{ __('Untuk mengatur ulang kata sandi akun Anda, silakan hubungi atau konfirmasi langsung ke Administrator kelas LMS Garbarata.') }}
+                </p>
+            </div>
+            <button type="button" 
+                    @click="showForgotModal = false"
+                    class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition cursor-pointer shadow-sm">
+                {{ __('Mengerti') }}
+            </button>
+        </div>
+    </div>
+</div>
 </x-guest-layout>

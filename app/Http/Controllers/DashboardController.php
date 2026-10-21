@@ -166,7 +166,7 @@ class DashboardController extends Controller
             $primaryCourse = $items->first();
             $cards = [
                 ['title' => __('Materi Garbarata'), 'description' => __('Masuk ke kursus interaktif untuk mempelajari komponen utama.'), 'meta' => __('Belajar sekarang'), 'action' => __('Mulai Belajar'), 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#materi-kursus', 'tone' => 'blue'],
-                ['title' => __('Quiz & Ujian'), 'description' => __('Kerjakan quiz chapter dan ujian akhir yang tersedia.'), 'meta' => __('Evaluasi'), 'action' => __('Lihat Quiz & Ujian'), 'href' => $primaryCourse ? route('courses.quizzes', $primaryCourse) : '#quiz-ujian', 'tone' => 'amber'],
+                ['title' => __('Kuis & Ujian'), 'description' => __('Kerjakan kuis chapter dan ujian akhir yang tersedia.'), 'meta' => __('Evaluasi'), 'action' => __('Lihat Kuis & Ujian'), 'href' => $primaryCourse ? route('courses.quizzes', $primaryCourse) : '#quiz-ujian', 'tone' => 'amber'],
                 ['title' => __('Latihan Mandiri'), 'description' => __('Asah pemahaman lewat seluruh latihan yang tersedia.'), 'meta' => __('Latihan'), 'action' => __('Lihat Latihan'), 'href' => $primaryCourse ? route('courses.practices', $primaryCourse) : '#latihan-mandiri', 'tone' => 'slate'],
             ];
             $activities = Quiz::with(['course', 'chapter'])->withCount('questions')
@@ -242,7 +242,7 @@ class DashboardController extends Controller
         foreach ($timedQuizzes as $q) {
             $start = $q->start_time ? \Carbon\Carbon::parse($q->start_time)->timezone('Asia/Jakarta') : null;
             $end = $q->end_time ? \Carbon\Carbon::parse($q->end_time)->timezone('Asia/Jakarta') : null;
-            $prefix = $q->isFinalQuiz() ? __('Final Exam:') . ' ' : ($q->isPractice() ? __('Latihan:') . ' ' : __('Quiz:') . ' ');
+            $prefix = $q->isFinalQuiz() ? __('Final Exam:') . ' ' : ($q->isPractice() ? __('Latihan:') . ' ' : __('Kuis:') . ' ');
             $quizTitle = $q->title;
             $courseTitle = $q->course?->title ?? '';
 

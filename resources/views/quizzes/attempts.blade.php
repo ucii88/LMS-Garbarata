@@ -1,4 +1,4 @@
-@section('topbar_title', ($isPractice ? __('Hasil Latihan Peserta') : __('Hasil Quiz Peserta')) . ' — ' . $quiz->title)
+@section('topbar_title', ($isPractice ? __('Hasil Latihan Peserta') : __('Hasil Kuis Peserta')) . ' — ' . $quiz->title)
 <x-app-layout>
 <div class="max-w-6xl mx-auto space-y-6">
 
@@ -7,11 +7,11 @@
         <div>
             <a href="{{ route($isPractice ? 'practices.index' : 'quizzes.index', $course) }}"
                class="inline-flex text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
-                &larr; {{ $isPractice ? __('Kembali ke Manajemen Latihan') : __('Kembali ke Manajemen Quiz') }}
+                &larr; {{ $isPractice ? __('Kembali ke Manajemen Latihan') : __('Kembali ke Manajemen Kuis') }}
             </a>
-            <h1 class="text-xl font-bold text-slate-800">{{ $isPractice ? __('Hasil Latihan Peserta') : __('Hasil Quiz Peserta') }}</h1>
+            <h1 class="text-xl font-bold text-slate-800">{{ $isPractice ? __('Hasil Latihan Peserta') : __('Hasil Kuis Peserta') }}</h1>
             <p class="text-sm text-slate-500 mt-1">
-                {{ $isPractice ? __('Latihan') : __('Quiz') }}: <span class="font-semibold text-blue-600">{{ $quiz->title }}</span>
+                {{ $isPractice ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis')) }}: <span class="font-semibold text-blue-600">{{ $quiz->title }}</span>
                 @unless($isPractice) · {{ __('Nilai lulus:') }} {{ $quiz->passing_score }}% @endunless
             </p>
         </div>
@@ -26,11 +26,7 @@
     </div>
 
     {{-- Flash Message --}}
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-base px-4 py-3 rounded-xl">
-            {{ session('success') }}
-        </div>
-    @endif
+    <x-flash-message type="success" />
 
     {{-- Banner: ada esai yang butuh penilaian --}}
     @if(isset($pendingEssayCount) && $pendingEssayCount > 0)
@@ -141,7 +137,7 @@
                     @empty
                     <tr>
                         <td colspan="6" class="px-6 py-12 text-center text-slate-400">
-                            {{ $isPractice ? __('Belum ada peserta yang mengerjakan latihan ini.') : __('Belum ada peserta yang mengerjakan quiz ini.') }}
+                            {{ $isPractice ? __('Belum ada peserta yang mengerjakan latihan ini.') : ($quiz->isFinalQuiz() ? __('Belum ada peserta yang mengerjakan ujian ini.') : __('Belum ada peserta yang mengerjakan kuis ini.')) }}
                         </td>
                     </tr>
                     @endforelse

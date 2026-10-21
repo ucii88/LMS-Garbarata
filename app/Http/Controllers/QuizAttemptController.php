@@ -61,20 +61,23 @@ class QuizAttemptController extends Controller
         $this->ensureCorrectActivityRoute($quiz);
 
         if (!$quiz->isPractice() && $quiz->availability_status === 'upcoming') {
+            $label = $quiz->isFinalQuiz() ? __('Ujian') : __('Kuis');
             return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
-                             ->withErrors(['msg' => 'Quiz belum dibuka. Silakan tunggu hingga jadwal yang ditentukan.']);
+                             ->withErrors(['msg' => __(':label belum dibuka. Silakan tunggu hingga jadwal yang ditentukan.', ['label' => $label])]);
         }
 
         if (!$quiz->isPractice() && $quiz->availability_status === 'closed') {
+            $label = $quiz->isFinalQuiz() ? __('Ujian') : __('Kuis');
             return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
-                             ->withErrors(['msg' => 'Quiz sudah ditutup dan tidak dapat dikerjakan lagi.']);
+                             ->withErrors(['msg' => __(':label sudah ditutup dan tidak dapat dikerjakan lagi.', ['label' => $label])]);
         }
 
         $user = Auth::user();
 
         if (!$quiz->canAttempt($user->id)) {
+            $label = $quiz->isPractice() ? __('latihan') : ($quiz->isFinalQuiz() ? __('ujian') : __('kuis'));
             return redirect()->route($this->routeName($quiz, 'start'), [$course, $quiz])
-                             ->withErrors(['msg' => 'Kamu sudah mencapai batas percobaan untuk quiz ini.']);
+                             ->withErrors(['msg' => __('Kamu sudah mencapai batas percobaan untuk :label ini.', ['label' => $label])]);
         }
 
         // Batalkan attempt yang belum selesai jika ada

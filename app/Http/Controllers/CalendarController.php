@@ -104,7 +104,7 @@ class CalendarController extends Controller
             // Case A: Both start & end fall on the exact same date -> Combine into 1 single event card
             if ($startTime && $endTime && $startTime->toDateString() === $endTime->toDateString()) {
                 $dateKey = $startTime->toDateString();
-                $badgeText = $isPractice ? __('Latihan') : ($isFinal ? __('Ujian Akhir') : __('Quiz'));
+                $badgeText = $isPractice ? __('Latihan') : ($isFinal ? __('Ujian Akhir') : __('Kuis'));
                 $color = $isPractice ? 'blue' : ($isFinal ? 'amber' : 'emerald');
                 $timeStr = $startTime->format('H:i') . ' - ' . $endTime->format('H:i') . ' WIB';
 
@@ -126,7 +126,7 @@ class CalendarController extends Controller
                 // Case B: Start and End are on different dates -> Create separate start and end event markers
                 if ($startTime) {
                     $dateKey = $startTime->toDateString();
-                    $badgeText = $isPractice ? __('Latihan (Dibuka)') : ($isFinal ? __('Ujian (Dibuka)') : __('Quiz (Dibuka)'));
+                    $badgeText = $isPractice ? __('Latihan (Dibuka)') : ($isFinal ? __('Ujian (Dibuka)') : __('Kuis (Dibuka)'));
                     $color = $isPractice ? 'blue' : ($isFinal ? 'amber' : 'emerald');
 
                     $events[$dateKey][] = [
@@ -147,7 +147,7 @@ class CalendarController extends Controller
 
                 if ($endTime) {
                     $dateKey = $endTime->toDateString();
-                    $badgeText = $isPractice ? __('Latihan (Tenggat)') : ($isFinal ? __('Ujian (Tenggat)') : __('Quiz (Tenggat)'));
+                    $badgeText = $isPractice ? __('Latihan (Tenggat)') : ($isFinal ? __('Ujian (Tenggat)') : __('Kuis (Tenggat)'));
                     $color = 'rose';
 
                     $events[$dateKey][] = [

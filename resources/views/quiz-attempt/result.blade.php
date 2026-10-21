@@ -1,4 +1,4 @@
-@section('topbar_title', __('Hasil Quiz') . ' — ' . $quiz->title)
+@section('topbar_title', ($quiz->isPractice() ? __('Hasil Latihan') : ($quiz->isFinalQuiz() ? __('Hasil Ujian') : __('Hasil Kuis'))) . ' — ' . $quiz->title)
 
 <x-app-layout>
 <div class="max-w-3xl mx-auto space-y-6">
@@ -81,7 +81,7 @@
             <div class="flex-1">
                 <h3 class="font-bold text-amber-800">{{ __('Sertifikat Diterbitkan!') }}</h3>
                 <p class="text-sm text-amber-700 mt-0.5">
-                    {{ __('Kamu telah menyelesaikan semua quiz dalam course ini. Sertifikatmu sudah siap!') }}
+                    {{ __('Kamu telah menyelesaikan semua kuis dan materi dalam course ini. Sertifikatmu sudah siap!') }}
                 </p>
             </div>
             <a href="{{ route('certificate.show', $certificate) }}"
@@ -111,7 +111,7 @@
 
         @if($quiz->review_policy === 'hide_all')
             <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center text-slate-500 italic text-sm">
-                {{ __('Detail review jawaban untuk quiz ini dinonaktifkan oleh instruktur.') }}
+                {{ __('Detail review jawaban untuk kuis ini dinonaktifkan oleh instruktur.') }}
             </div>
         @elseif($quiz->review_policy === 'points_only')
             @foreach($attempt->answers->sortBy('question_id') as $i => $answer)

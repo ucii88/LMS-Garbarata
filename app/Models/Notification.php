@@ -50,7 +50,7 @@ class Notification extends Model
         $label = match(true) {
             $quiz->isPractice()  => 'Latihan',
             $quiz->isFinalQuiz() => 'Ujian',
-            default              => 'Quiz',
+            default              => 'Kuis',
         };
 
         $course = $quiz->course;
@@ -87,7 +87,7 @@ class Notification extends Model
         $label = match(true) {
             $quiz->isPractice()  => 'Latihan',
             $quiz->isFinalQuiz() => 'Ujian',
-            default              => 'Quiz',
+            default              => 'Kuis',
         };
 
         $course = $quiz->course;

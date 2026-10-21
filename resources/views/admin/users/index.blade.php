@@ -18,19 +18,8 @@
         }"
     >
         {{-- Flash Messages --}}
-        @if (session('success'))
-            <div class="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 text-sm font-semibold text-emerald-800 shadow-sm flex items-center gap-2">
-                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="rounded-xl border border-rose-100 bg-rose-50/60 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center gap-2">
-                <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
+        <x-flash-message type="success" />
+        <x-flash-message type="error" />
 
         {{-- Page Header --}}
         <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 shadow-sm border border-slate-800">

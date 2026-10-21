@@ -61,7 +61,7 @@
 
             <button type="button" onclick="confirmSubmit()"
                     class="quiz-submit-btn px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                Submit {{ $quiz->isPractice() ? __('Latihan') : __('Quiz') }}
+                Submit {{ $quiz->isPractice() ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis')) }}
             </button>
         </div>
 
@@ -268,7 +268,7 @@
                     </div>
                     <button type="button" onclick="confirmSubmit()"
                             class="quiz-submit-btn w-full py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition">
-                        Submit {{ $quiz->isPractice() ? __('Latihan') : __('Quiz') }}
+                        Submit {{ $quiz->isPractice() ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis')) }}
                     </button>
                 </div>
             </div>
@@ -281,7 +281,7 @@
 <div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
         <div class="text-center mb-4">
-            <h3 class="text-base font-bold text-slate-800">{{ __('Yakin submit quiz?') }}</h3>
+            <h3 class="text-base font-bold text-slate-800">{{ __('Yakin submit ') }}{{ $quiz->isPractice() ? __('latihan') : ($quiz->isFinalQuiz() ? __('ujian') : __('kuis')) }}?</h3>
             <p class="text-base text-slate-500 mt-1" id="unanswered-msg"></p>
         </div>
         <div class="flex gap-3">
@@ -305,7 +305,7 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <h3 class="text-base font-bold text-red-600">{{ __('Peringatan Keamanan!') }}</h3>
-            <p class="text-sm text-slate-700 font-semibold">{{ __('Anda terdeteksi meninggalkan halaman quiz.') }}</p>
+            <p class="text-sm text-slate-700 font-semibold">{{ __('Anda terdeteksi meninggalkan halaman kuis.') }}</p>
             <p class="text-xs text-slate-500 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100" id="cheat-warning-msg"></p>
         </div>
         <button type="button" onclick="closeCheatModal()"
@@ -428,11 +428,11 @@ function handleFocusLoss() {
     
     if (focusLossCount >= MAX_FOCUS_LOSS) {
         window.isSubmittingQuiz = true;
-        showGlobalAlert(@js(__('Pelanggaran Keamanan')), @js(__('Quiz Anda otomatis dikirim karena melanggar aturan fokus halaman quiz sebanyak 3 kali.')));
+        showGlobalAlert(@js(__('Pelanggaran Keamanan')), @js(__('Kuis Anda otomatis dikirim karena melanggar aturan fokus halaman kuis sebanyak 3 kali.')));
         document.getElementById('quiz-form').submit();
     } else {
         const remaining = MAX_FOCUS_LOSS - focusLossCount;
-        const msg = @js(__('Peringatan')) + ` ${focusLossCount}/${MAX_FOCUS_LOSS}: ` + @js(__('Harap tetap fokus pada halaman quiz. Jika Anda meninggalkan halaman ini sebanyak')) + ` ${remaining} ` + @js(__('kali lagi, jawaban Anda akan otomatis dikirim secara paksa!'));
+        const msg = @js(__('Peringatan')) + ` ${focusLossCount}/${MAX_FOCUS_LOSS}: ` + @js(__('Harap tetap fokus pada halaman kuis. Jika Anda meninggalkan halaman ini sebanyak')) + ` ${remaining} ` + @js(__('kali lagi, jawaban Anda akan otomatis dikirim secara paksa!'));
         
         document.getElementById('cheat-warning-msg').textContent = msg;
         document.getElementById('cheat-modal').classList.remove('hidden');
@@ -473,7 +473,7 @@ function showConnectionStatus(isOnline) {
             banner.classList.add('hidden');
         }, 4000);
     } else {
-        text.textContent = @js(__('Koneksi Internet Terputus! Harap jangan menutup halaman quiz ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.'));
+        text.textContent = @js(__('Koneksi Internet Terputus! Harap jangan menutup halaman kuis ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.'));
         banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-sm font-bold bg-rose-600 text-white shadow-md transition-all duration-300';
         banner.classList.remove('hidden');
         

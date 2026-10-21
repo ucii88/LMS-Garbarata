@@ -108,8 +108,8 @@ class QuizController extends Controller
             'order'             => $maxOrder + 1,
         ]);
 
-        return redirect($this->activityRoute('edit', $course, $quiz))
-                         ->with('success', ($isPractice ? __('Latihan') : __('Quiz')) . ' ' . __('dibuat. Pilih soal dengan total tepat 100 poin untuk menyelesaikannya.'));
+        return redirect($this->activityRoute('edit', $course, $quiz) . '?step=questions')
+                         ->with('success', ($isPractice ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis'))) . ' ' . __('berhasil dibuat. Silakan pilih soal dari bank soal hingga total tepat 100 poin.'));
     }
 
     /**
@@ -200,8 +200,8 @@ class QuizController extends Controller
             'end_time'          => $endTime,
         ]);
 
-        return redirect($this->activityRoute('edit', $course, $quiz))
-                         ->with('success', __('Quiz berhasil diperbarui.'));
+        return redirect($this->activityRoute('edit', $course, $quiz) . '?step=questions')
+                         ->with('success', ($isPractice ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis'))) . ' ' . __('berhasil diperbarui. Silakan lanjutkan pemilihan soal.'));
     }
 
     /** Publikasikan atau simpan kembali aktivitas sebagai draft. */
@@ -222,7 +222,7 @@ class QuizController extends Controller
         }
 
         $quiz->update(['is_active' => $published]);
-        $label = $quiz->isPractice() ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Quiz'));
+        $label = $quiz->isPractice() ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis'));
 
         // Kirim notifikasi ke semua peserta saat dipublish
         if ($published) {
@@ -285,10 +285,10 @@ class QuizController extends Controller
         $count = count($questionIds);
         $msg = __(':count soal berhasil disimpan (:points/100 poin).', ['count' => $count, 'points' => $totalPoints]);
         if ($totalPoints !== 100) {
-            $msg .= ' ' . __('Status quiz disimpan sebagai Draft sampai total poin tepat 100/100.');
+            $msg .= ' ' . __('Status kuis disimpan sebagai Draft sampai total poin tepat 100/100.');
         }
 
-        return back()->with('success', $msg);
+        return redirect($this->activityRoute('index', $course))->with('success', $msg);
     }
 
     /**
@@ -301,7 +301,7 @@ class QuizController extends Controller
         $quiz->delete();
 
         return redirect($this->activityRoute('index', $course, $quiz))
-                         ->with('success', ($quiz->isPractice() ? __('Latihan') : __('Quiz')) . ' ' . __('berhasil dihapus.'));
+                         ->with('success', ($quiz->isPractice() ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis'))) . ' ' . __('berhasil dihapus.'));
     }
 
     /**
@@ -340,7 +340,7 @@ class QuizController extends Controller
             Certificate::where('user_id', $userId)->where('course_id', $course->id)->delete();
         }
 
-        return back()->with('success', __('Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan quiz ini kembali dan sertifikat sebelumnya telah dicabut.'));
+        return back()->with('success', __('Percobaan peserta berhasil di-reset. Peserta sekarang memiliki kesempatan untuk mengerjakan kuis ini kembali dan sertifikat sebelumnya telah dicabut.'));
     }
 
     /**

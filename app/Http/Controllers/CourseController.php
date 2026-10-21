@@ -143,11 +143,11 @@ class CourseController extends Controller
         $sections = $isPractice
             ? [['title' => __('Latihan Mandiri'), 'description' => __('Kerjakan latihan mandiri untuk menguji pemahaman Anda.'), 'items' => $activities, 'theme' => 'violet']]
             : [
-                ['title' => __('Quiz Chapter'), 'description' => __('Quiz evaluasi pada masing-masing chapter.'), 'items' => $activities->filter(fn (Quiz $activity) => ! $activity->isFinalQuiz()), 'theme' => 'blue'],
+                ['title' => __('Kuis Chapter'), 'description' => __('Kuis evaluasi pada masing-masing chapter.'), 'items' => $activities->filter(fn (Quiz $activity) => ! $activity->isFinalQuiz()), 'theme' => 'blue'],
                 ['title' => __('Ujian'), 'description' => __('Ujian akhir course tersedia di halaman ini.'), 'items' => $activities->filter(fn (Quiz $activity) => $activity->isFinalQuiz()), 'theme' => 'amber'],
             ];
 
-        $pageTitle = $isPractice ? __('Latihan') : __('Quiz & Ujian');
+        $pageTitle = $isPractice ? __('Latihan') : __('Kuis & Ujian');
 
         return view('courses.activities', compact('course', 'lastAttempts', 'sections', 'pageTitle'));
     }

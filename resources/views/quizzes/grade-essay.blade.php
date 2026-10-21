@@ -1,4 +1,4 @@
-@section('topbar_title', __('Nilai Jawaban') . ' — ' . $attempt->user->name)
+@section('topbar_title', __('Penilaian Jawaban') . ' — ' . $attempt->user->name)
 
 <x-app-layout>
 <div class="max-w-4xl mx-auto space-y-6">
@@ -7,11 +7,11 @@
     <div>
         <a href="{{ route($isPractice ? 'practices.attempts' : 'quizzes.attempts', [$course, $quiz]) }}"
            class="inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
-            ← {{ __('Kembali ke Daftar Peserta') }}
+            &larr; {{ $isPractice ? __('Kembali ke Hasil Latihan Peserta') : ($quiz->isFinalQuiz() ? __('Kembali ke Hasil Ujian Peserta') : __('Kembali ke Hasil Kuis Peserta')) }}
         </a>
         <div class="flex items-start justify-between gap-4">
             <div>
-                <h1 class="text-xl font-bold text-slate-800">{{ __('Evaluasi Jawaban') }}</h1>
+                <h1 class="text-xl font-bold text-slate-800">{{ __('Penilaian Jawaban') }}</h1>
                 <p class="text-sm text-slate-500 mt-1">
                     <span class="font-semibold text-blue-600">{{ $quiz->title }}</span>
                     · {{ __('Peserta:') }} <span class="font-semibold text-slate-700">{{ $attempt->user->name }}</span>
@@ -39,11 +39,7 @@
     </div>
 
     {{-- Flash Messages --}}
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-base px-4 py-3 rounded-xl">
-            {{ session('success') }}
-        </div>
-    @endif
+    <x-flash-message type="success" />
 
     {{-- Form Penilaian --}}
     <form action="{{ route($isPractice ? 'practices.attempts.grade.submit' : 'quizzes.attempts.grade.submit', [$course, $quiz, $attempt]) }}"

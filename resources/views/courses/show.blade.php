@@ -9,19 +9,8 @@
                 </a>
             </div>
 
-            @if (session('success'))
-                <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-sm font-semibold text-emerald-700 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    <span>{{ session('success') }}</span>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="rounded-xl border border-rose-100 bg-rose-50 p-4 text-sm font-semibold text-rose-700 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>{{ session('error') }}</span>
-                </div>
-            @endif
+            <x-flash-message type="success" />
+            <x-flash-message type="error" />
 
             <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 md:p-10 shadow-sm border border-slate-800">
                 <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
@@ -164,8 +153,8 @@
                     @if(auth()->user()->isInstruktur())
                     <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 overflow-hidden">
                         <div class="p-6 border-b border-indigo-50">
-                            <h3 class="text-base font-bold text-slate-800">{{ __('Manajemen Quiz') }}</h3>
-                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">{{ __('Kelola Quiz dan Ujian Evaluasi Pembelajaran.') }}</p>
+                            <h3 class="text-base font-bold text-slate-800">{{ __('Manajemen Kuis & Ujian') }}</h3>
+                            <p class="text-sm text-slate-500 mt-1 leading-relaxed">{{ __('Kelola Kuis dan Ujian Evaluasi Pembelajaran.') }}</p>
                         </div>
                         <div class="p-6 space-y-2">
                             <a href="{{ route('quizzes.index', $course) }}"
@@ -173,14 +162,14 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
-                                {{ __('Lihat Semua Quiz') }}
+                                {{ __('Lihat Semua Kuis & Ujian') }}
                             </a>
                             <a href="{{ route('quizzes.create', $course) }}"
                                class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-bold rounded-xl transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                 </svg>
-                                {{ __('Buat Quiz Baru') }}
+                                {{ __('Buat Kuis Baru') }}
                             </a>
                         </div>
                     </div>

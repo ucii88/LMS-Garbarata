@@ -37,24 +37,8 @@
     @endphp
 
     <div class="space-y-8 select-none" x-data="{ showModal: {{ $errors->any() ? 'true' : 'false' }}, selectedUserProgress: null, userProgress: @js($adminUserProgress ?? []), participantTab: 'materi', upcomingModal: null }">
-        <!-- Flash Messages -->
-        @if (session('success'))
-            <div class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-sm font-semibold text-emerald-800 shadow-sm flex items-center space-x-2">
-                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="rounded-xl border border-rose-100 bg-rose-50/50 p-4 text-sm font-semibold text-rose-800 shadow-sm flex items-center space-x-2">
-                <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
+        <x-flash-message type="success" />
+        <x-flash-message type="error" />
 
         <!-- Premium Hero Welcome Banner -->
         <section class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 md:p-10 shadow-sm border border-slate-800">
@@ -116,7 +100,7 @@
             <div class="border-b border-[#f0f0f0]">
                 <nav class="-mb-px flex gap-6 sm:gap-8" aria-label="Menu pembelajaran">
                     <button type="button" @click="participantTab = 'materi'" :class="participantTab === 'materi' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">{{ __('Materi Belajar') }}</button>
-                    <button type="button" @click="participantTab = 'quiz'" :class="participantTab === 'quiz' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">{{ __('Quiz & Ujian') }}</button>
+                    <button type="button" @click="participantTab = 'quiz'" :class="participantTab === 'quiz' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">{{ __('Kuis & Ujian') }}</button>
                     <button type="button" @click="participantTab = 'latihan'" :class="participantTab === 'latihan' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-400 hover:text-gray-600'" class="border-b-2 py-3 px-1 text-base font-semibold transition">{{ __('Latihan Mandiri') }}</button>
                 </nav>
             </div>
@@ -322,22 +306,22 @@
                     <section id="quiz-ujian" x-cloak x-show="participantTab === 'quiz'" class="rounded-2xl border border-[#f0f0f0] bg-white p-6 shadow-sm">
                         <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 sm:flex-row sm:items-center sm:justify-between">
                             <div>
-                                <h2 class="text-base font-bold text-slate-800">{{ __('Quiz & Ujian') }}</h2>
-                                <p class="text-sm text-slate-400 mt-1">{{ __('Kerjakan quiz chapter dan ujian akhir dari kursus yang tersedia.') }}</p>
+                                <h2 class="text-base font-bold text-slate-800">{{ __('Kuis & Ujian') }}</h2>
+                                <p class="text-sm text-slate-400 mt-1">{{ __('Kerjakan kuis chapter dan ujian akhir dari kursus yang tersedia.') }}</p>
                             </div>
                         </div>
                         <div class="mt-5 space-y-3">
                             @forelse ($participantQuizzes as $quiz)
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-wider {{ $quiz->isFinalQuiz() ? 'text-amber-600' : 'text-blue-600' }}">{{ $quiz->isFinalQuiz() ? __('Ujian Akhir') : __('Quiz Chapter') }} · {{ $quiz->course->title }}</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider {{ $quiz->isFinalQuiz() ? 'text-amber-600' : 'text-blue-600' }}">{{ $quiz->isFinalQuiz() ? __('Ujian Akhir') : __('Kuis Chapter') }} · {{ $quiz->course->title }}</p>
                                         <h3 class="mt-1 text-base font-bold text-slate-800">{{ $quiz->title }}</h3>
                                         <p class="mt-1 text-xs text-slate-500">{{ $quiz->questions_count }} {{ __('soal') }}{{ $quiz->chapter ? ' · ' . $quiz->chapter->title : '' }}</p>
                                     </div>
                                     <a href="{{ route('quiz.start', [$quiz->course, $quiz]) }}" class="shrink-0 inline-flex items-center justify-center rounded-lg {{ $quiz->isFinalQuiz() ? 'bg-amber-500 hover:bg-amber-600' : 'bg-blue-600 hover:bg-blue-700' }} px-4 py-2 text-sm font-bold text-white transition">{{ __('Mulai') }} →</a>
                                 </article>
                             @empty
-                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400">{{ __('Belum ada quiz atau ujian yang tersedia.') }}</div>
+                                <div class="rounded-xl border border-dashed border-[#f0f0f0] bg-slate-50 p-8 text-center text-sm text-slate-400">{{ __('Belum ada kuis atau ujian yang tersedia.') }}</div>
                             @endforelse
                         </div>
                     </section>
@@ -423,11 +407,11 @@
                                     <div class="flex items-center justify-between gap-2">
                                         <h3 class="text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-blue-600 transition">{{ $event['title'] }}</h3>
                                         @if(!empty($event['is_modal']))
-                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Belum Dibuka</span>
+                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">{{ __('Belum Dibuka') }}</span>
                                         @elseif(($event['status'] ?? '') === 'closed')
-                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Selesai/Tutup</span>
+                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{{ __('Selesai') }}</span>
                                         @else
-                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Aktif</span>
+                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">{{ __('Dibuka') }}</span>
                                         @endif
                                     </div>
                                     <div class="flex items-center gap-1.5 text-[10px] text-slate-500">
@@ -537,7 +521,7 @@
                             <div class="space-y-3">
                                 <p class="text-sm font-bold text-slate-800">{{ __('Aktivitas Evaluasi') }}</p>
                                 <template x-for="section in [
-                                    { key: 'quizzes', title: '{{ __('Quiz') }}', tone: 'blue' },
+                                    { key: 'quizzes', title: '{{ __('Kuis') }}', tone: 'blue' },
                                     { key: 'exams', title: '{{ __('Ujian') }}', tone: 'amber' },
                                     { key: 'practices', title: '{{ __('Latihan') }}', tone: 'violet' }
                                 ]" :key="section.key">
@@ -644,14 +628,14 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <div>
-                            <h3 class="text-base font-bold text-slate-800">Quiz Belum Dibuka</h3>
-                            <p class="text-xs text-slate-400">Jadwal pengerjaan quiz mendatang</p>
+                            <h3 class="text-base font-bold text-slate-800">{{ __('Kuis Belum Dibuka') }}</h3>
+                            <p class="text-xs text-slate-400">{{ __('Jadwal pengerjaan kuis mendatang') }}</p>
                         </div>
                     </div>
 
                     <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs">
                         <div>
-                            <span class="text-slate-400 font-semibold block mb-0.5">Judul Quiz</span>
+                            <span class="text-slate-400 font-semibold block mb-0.5">{{ __('Judul Kuis') }}</span>
                             <p class="font-bold text-slate-800 text-sm" x-text="upcomingModal?.title"></p>
                         </div>
                         <template x-if="upcomingModal?.course">

@@ -49,7 +49,7 @@ class NotificationController extends Controller
             return __('Pengguna Baru: :name', ['name' => $matches[1]], 'en');
         }
 
-        if (preg_match('/^(Latihan|Ujian|Quiz) Baru: (.+)$/u', $notification->title, $matches)) {
+        if (preg_match('/^(Latihan|Ujian|Quiz|Kuis) Baru: (.+)$/u', $notification->title, $matches)) {
             $label = __($matches[1], [], 'en');
             return __(':label Baru: :title', ['label' => $label, 'title' => $matches[2]], 'en');
         }
@@ -86,14 +86,14 @@ class NotificationController extends Controller
             default => __('Quiz', [], 'en'),
         };
 
-        if (preg_match('/^(?:Latihan|Ujian|Quiz) baru telah dipublikasikan di (.+)\. Mulai sekarang!$/u', $body, $matches)) {
+        if (preg_match('/^(?:Latihan|Ujian|Quiz|Kuis) baru telah dipublikasikan di (.+)\. Mulai sekarang!$/u', $body, $matches)) {
             return __(':label baru telah dipublikasikan di :target. Mulai sekarang!', [
                 'label' => $label,
                 'target' => $matches[1],
             ], 'en');
         }
 
-        if (preg_match('/^(.+?) telah mengumpulkan (?:Latihan|Ujian|Quiz) [\\"]?(.+?)[\\"]? di (.+)\.$/u', $body, $matches)) {
+        if (preg_match('/^(.+?) telah mengumpulkan (?:Latihan|Ujian|Quiz|Kuis) [\\"]?(.+?)[\\"]? di (.+)\.$/u', $body, $matches)) {
             return __(':name telah mengumpulkan :label ":title" di :course.', [
                 'name' => $matches[1],
                 'label' => $label,

@@ -116,7 +116,7 @@ class AdminUserController extends Controller
                     ->map(function ($attempts) {
                         $best  = $attempts->sortByDesc('score')->first();
                         $quiz  = $best->quiz;
-                        $label = $quiz?->title ?: ('Quiz ' . ($quiz?->chapter?->order ?? $quiz?->id));
+                        $label = $quiz?->title ?: ('Kuis ' . ($quiz?->chapter?->order ?? $quiz?->id));
                         return $label . ': ' . $this->formatScore($best->score);
                     })
                     ->implode(', ');

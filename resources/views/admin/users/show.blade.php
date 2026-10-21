@@ -29,8 +29,8 @@
         {{-- Quiz & Exam History --}}
         <section class="rounded-2xl border border-[#f0f0f0] bg-white shadow-sm overflow-hidden">
             <div class="border-b border-[#f0f0f0] px-6 py-4">
-                <h2 class="text-base font-bold text-slate-800">{{ __('Riwayat Quiz & Ujian') }}</h2>
-                <p class="text-[10px] text-slate-400 mt-0.5">{{ __('Daftar semua quiz dan ujian akhir yang pernah diikuti.') }}</p>
+                <h2 class="text-base font-bold text-slate-800">{{ __('Riwayat Kuis & Ujian') }}</h2>
+                <p class="text-[10px] text-slate-400 mt-0.5">{{ __('Daftar semua kuis dan ujian akhir yang pernah diikuti.') }}</p>
             </div>
             
             <div class="overflow-x-auto">
@@ -53,7 +53,7 @@
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <span class="inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold capitalize {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-blue-50 text-blue-600 border-blue-100' }}">
-                                        {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? __('Ujian Akhir') : __('Quiz Chapter') }}
+                                        {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? __('Ujian Akhir') : __('Kuis Chapter') }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-3.5 text-slate-500">
@@ -77,7 +77,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="px-5 py-10 text-center text-sm text-slate-400">
-                                    {{ __('Tidak ada riwayat quiz atau ujian.') }}
+                                    {{ __('Tidak ada riwayat kuis atau ujian.') }}
                                 </td>
                             </tr>
                         @endforelse

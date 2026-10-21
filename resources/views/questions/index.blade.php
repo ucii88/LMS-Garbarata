@@ -6,9 +6,9 @@
     {{-- Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-            <a href="{{ route('courses.chapters.show', [$course->id, $chapter->id]) }}"
+            <a href="{{ route('courses.show', $course->id) }}"
                class="inline-flex items-center text-sm font-bold text-slate-500 hover:text-blue-600 transition mb-2">
-                {{ __('← Kembali ke Chapter') }}
+                &larr; {{ __('Kembali ke Kelola Materi') }}
             </a>
             <h1 class="text-xl font-bold text-slate-800">{{ __('Bank Soal') }}</h1>
             <p class="text-sm text-slate-500 mt-0.5">
@@ -26,11 +26,8 @@
     </div>
 
     {{-- Flash Messages --}}
-    @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-base px-4 py-3 rounded-xl">
-            {{ session('success') }}
-        </div>
-    @endif
+    <x-flash-message type="success" />
+    <x-flash-message type="error" />
 
     {{-- Daftar Soal --}}
     @if($questions->isEmpty())
