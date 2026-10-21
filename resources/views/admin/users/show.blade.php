@@ -49,11 +49,11 @@
                             <tr class="hover:bg-slate-50/50 transition">
                                 <td class="px-5 py-3.5">
                                     <div class="font-bold text-slate-800">{{ $attempt->quiz->course->title ?? '-' }}</div>
-                                    <div class="text-[11px] text-slate-500">{{ $attempt->quiz->chapter ? $attempt->quiz->chapter->title : __('Ujian Akhir Course') }}</div>
+                                    <div class="text-[11px] text-slate-500">{{ $attempt->quiz->chapter ? $attempt->quiz->chapter->title : __('Ujian Akhir') }}</div>
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <span class="inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold capitalize {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? 'bg-purple-50 text-purple-600 border-purple-100' : 'bg-blue-50 text-blue-600 border-blue-100' }}">
-                                        {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? __('Ujian Akhir') : __('Kuis Chapter') }}
+                                        {{ $attempt->quiz->activity_type === 'quiz' && is_null($attempt->quiz->chapter_id) ? __('Ujian Akhir') : __('Kuis Bab') }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-3.5 text-slate-500">

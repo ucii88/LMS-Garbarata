@@ -14,7 +14,7 @@
 {{-- ========== QUIZ CARD ========== --}}
 @if($chapterQuiz)
 <div class="mt-8 px-4 sm:px-0">
-    <p class="text-sm font-bold text-blue-700 uppercase tracking-wider">{{ __('Kuis Chapter') }}</p>
+    <p class="text-sm font-bold text-blue-700 uppercase tracking-wider">{{ __('Kuis Bab') }}</p>
 </div>
 <div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border-2 overflow-hidden
@@ -51,7 +51,7 @@
                         @if($chapterQuizAttempt?->is_passed) text-emerald-600
                         @elseif($chapterQuizAttempt) text-red-500
                         @else text-blue-600 @endif">
-                        {{ __('Kuis Chapter') }}
+                        {{ __('Kuis Bab') }}
                     </span>
                     @if($chapterQuizAttempt?->is_passed)
                         <span class="text-sm px-2 py-0.5 bg-emerald-500 text-white rounded-full font-semibold">
@@ -134,11 +134,11 @@
 <div class="mt-8 px-4 sm:px-0">
     <div class="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-5 py-4 flex items-center justify-between gap-4">
         <div>
-            <p class="text-sm font-semibold text-slate-500">{{ __('Kuis untuk chapter ini belum dibuat') }}</p>
+            <p class="text-sm font-semibold text-slate-500">{{ __('Kuis untuk bab ini belum dibuat') }}</p>
         </div>
         <a href="{{ route('quizzes.create', $course) }}"
            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shrink-0">
-            + {{ __('Buat Kuis Chapter') }}
+            + {{ __('Buat Kuis Bab') }}
         </a>
     </div>
 </div>
@@ -175,7 +175,7 @@
                         </span>
                     @else
                         <span class="text-sm px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-semibold">
-                            Ujian Akhir Course
+                            {{ __('Ujian Akhir') }}
                         </span>
                     @endif
                 </div>

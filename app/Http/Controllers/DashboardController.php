@@ -103,7 +103,7 @@ class DashboardController extends Controller
             $primaryCourse = $items->first();
             $cards = [
                 ['title' => __('Kelola Materi'), 'description' => __('Atur course, modul, dan isi pembelajaran.'), 'meta' => __('Materi'), 'action' => __('Kelola Materi'), 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#kelola-kursus', 'tone' => 'blue', 'button' => true],
-                ['title' => __('Kelola Quiz & Ujian'), 'description' => __('Atur quiz chapter dan ujian akhir course.'), 'meta' => __('Evaluasi'), 'action' => __('Kelola Quiz & Ujian'), 'href' => $primaryCourse ? route('quizzes.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'amber', 'button' => true],
+                ['title' => __('Kelola Kuis & Ujian'), 'description' => __('Atur kuis bab dan ujian akhir.'), 'meta' => __('Evaluasi'), 'action' => __('Kelola Kuis & Ujian'), 'href' => $primaryCourse ? route('quizzes.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'amber', 'button' => true],
                 ['title' => __('Kelola Latihan'), 'description' => __('Atur latihan mandiri untuk setiap chapter.'), 'meta' => __('Latihan'), 'action' => __('Kelola Latihan'), 'href' => $primaryCourse ? route('practices.index', $primaryCourse) : '#kelola-kursus', 'tone' => 'slate', 'button' => true],
             ];
             
@@ -166,7 +166,7 @@ class DashboardController extends Controller
             $primaryCourse = $items->first();
             $cards = [
                 ['title' => __('Materi Garbarata'), 'description' => __('Masuk ke kursus interaktif untuk mempelajari komponen utama.'), 'meta' => __('Belajar sekarang'), 'action' => __('Mulai Belajar'), 'href' => $primaryCourse ? route('courses.show', $primaryCourse) : '#materi-kursus', 'tone' => 'blue'],
-                ['title' => __('Kuis & Ujian'), 'description' => __('Kerjakan kuis chapter dan ujian akhir yang tersedia.'), 'meta' => __('Evaluasi'), 'action' => __('Lihat Kuis & Ujian'), 'href' => $primaryCourse ? route('courses.quizzes', $primaryCourse) : '#quiz-ujian', 'tone' => 'amber'],
+                ['title' => __('Kuis & Ujian'), 'description' => __('Kerjakan kuis bab dan ujian akhir yang tersedia.'), 'meta' => __('Evaluasi'), 'action' => __('Lihat Kuis & Ujian'), 'href' => $primaryCourse ? route('courses.quizzes', $primaryCourse) : '#quiz-ujian', 'tone' => 'amber'],
                 ['title' => __('Latihan Mandiri'), 'description' => __('Asah pemahaman lewat seluruh latihan yang tersedia.'), 'meta' => __('Latihan'), 'action' => __('Lihat Latihan'), 'href' => $primaryCourse ? route('courses.practices', $primaryCourse) : '#latihan-mandiri', 'tone' => 'slate'],
             ];
             $activities = Quiz::with(['course', 'chapter'])->withCount('questions')
@@ -242,7 +242,15 @@ class DashboardController extends Controller
         foreach ($timedQuizzes as $q) {
             $start = $q->start_time ? \Carbon\Carbon::parse($q->start_time)->timezone('Asia/Jakarta') : null;
             $end = $q->end_time ? \Carbon\Carbon::parse($q->end_time)->timezone('Asia/Jakarta') : null;
-            $prefix = $q->isFinalQuiz() ? __('Final Exam:') . ' ' : ($q->isPractice() ? __('Latihan:') . ' ' : __('Kuis:') . ' ');
+            $isUjian = $q->isFinalQuiz();
+            $isLatihan = $q->isPractice();
+            if ($isUjian) {
+                $prefix = (stripos($q->title, 'ujian') !== false || stripos($q->title, 'ujan') !== false) ? '' : __('Ujian Akhir:') . ' ';
+            } elseif ($isLatihan) {
+                $prefix = stripos($q->title, 'latihan') !== false ? '' : __('Latihan:') . ' ';
+            } else {
+                $prefix = stripos($q->title, 'kuis') !== false ? '' : __('Kuis Bab:') . ' ';
+            }
             $quizTitle = $q->title;
             $courseTitle = $q->course?->title ?? '';
 
@@ -301,7 +309,7 @@ class DashboardController extends Controller
                     $scheduleEvents[] = [
                         'day_num' => $start->day,
                         'month_name' => strtoupper($start->translatedFormat('M')),
-                        'title' => $prefix . $q->title . ' ' . __('(Opened)'),
+                        'title' => $prefix . $q->title . ' ' . __('(Dibuka)'),
                         'time_or_loc' => $start->format('H:i') . ' WIB · Online LMS',
                         'icon' => 'lock-open',
                         'url' => $url,
@@ -317,7 +325,7 @@ class DashboardController extends Controller
                     $scheduleEvents[] = [
                         'day_num' => $end->day,
                         'month_name' => strtoupper($end->translatedFormat('M')),
-                        'title' => $prefix . $q->title . ' ' . __('(Deadline)'),
+                        'title' => $prefix . $q->title . ' ' . __('(Tenggat)'),
                         'time_or_loc' => $end->format('H:i') . ' WIB · Online LMS',
                         'icon' => 'lock',
                         'url' => $url,

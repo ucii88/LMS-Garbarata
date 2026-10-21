@@ -48,7 +48,7 @@
                             @endif
                         </div>
                         <p class="text-sm text-slate-500">
-                            {{ $isPractice ? __('Latihan Chapter:') . ' ' . ($quiz->chapter?->title ?? '-') : ($quiz->isFinalQuiz() ? __('Ujian Akhir Course') : __('Kuis Chapter:') . ' ' . ($quiz->chapter?->title ?? '-')) }}
+                            {{ $isPractice ? __('Latihan Chapter:') . ' ' . ($quiz->chapter?->title ?? '-') : ($quiz->isFinalQuiz() ? __('Ujian Akhir') : __('Kuis Bab:') . ' ' . ($quiz->chapter?->title ?? '-')) }}
                         </p>
                         <div class="flex items-center gap-3 mt-1.5 text-sm text-slate-400">
                             <span>{{ $quiz->questions_count }} {{ __('soal') }}</span>

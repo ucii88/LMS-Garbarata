@@ -31,7 +31,7 @@
                         @php $attempt = $lastAttempts->get($activity->id); @endphp
                         <div class="border border-slate-100 rounded-xl p-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
                             <div>
-                                <p class="text-sm text-slate-400">{{ $activity->chapter?->title ?? __('Ujian akhir course') }}</p>
+                                <p class="text-sm text-slate-400">{{ $activity->chapter?->title ?? __('Ujian Akhir') }}</p>
                                 <h3 class="font-semibold text-slate-800 mt-1">{{ $activity->title }}</h3>
                                  <p class="text-sm text-slate-500 mt-1">
                                     {{ $activity->questions_count }} {{ __('soal') }} ·

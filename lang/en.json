@@ -934,5 +934,17 @@
     "Pengaturan ulang kata sandi akun LMS Garbarata dilakukan secara terpusat oleh sistem. Silakan hubungi atau konfirmasi langsung ke Administrator kelas LMS untuk mereset kata sandi Anda.": "Password reset for LMS Garbarata accounts is managed centrally. Please contact or confirm with the LMS class Administrator to reset your password.",
     "Kembali ke Halaman Masuk": "Back to Login Page",
     "Mengerti": "Got It",
+    "Kuis Bab": "Chapter Quiz",
+    "Kuis Bab:": "Chapter Quiz:",
+    "Buat Kuis Bab": "Create Chapter Quiz",
+    "Kuis evaluasi pada masing-masing bab.": "Evaluation quiz for each chapter.",
+    "Kerjakan kuis bab dan ujian akhir dari kursus yang tersedia.": "Take chapter quizzes and final exams from available courses.",
+    "Kerjakan kuis bab dan ujian akhir yang tersedia.": "Take available chapter quizzes and final exams.",
+    "Kuis untuk bab ini belum dibuat": "Quiz for this chapter has not been created yet",
+    "Ujian akhir tersedia di halaman ini.": "Final exams are available on this page.",
+    "Atur kuis bab dan ujian akhir.": "Manage chapter quizzes and final exams.",
+    "Ujian Akhir:": "Final Exam:",
+    "(Dibuka)": "(Opened)",
+    "(Tenggat)": "(Deadline)",
     "auth.password": "The provided password is incorrect."
 }

@@ -307,14 +307,14 @@
                         <div class="flex flex-col gap-4 border-b border-[#f0f0f0] pb-5 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                                 <h2 class="text-base font-bold text-slate-800">{{ __('Kuis & Ujian') }}</h2>
-                                <p class="text-sm text-slate-400 mt-1">{{ __('Kerjakan kuis chapter dan ujian akhir dari kursus yang tersedia.') }}</p>
+                                <p class="text-sm text-slate-400 mt-1">{{ __('Kerjakan kuis bab dan ujian akhir dari kursus yang tersedia.') }}</p>
                             </div>
                         </div>
                         <div class="mt-5 space-y-3">
                             @forelse ($participantQuizzes as $quiz)
                                 <article class="rounded-xl border border-[#f0f0f0] bg-slate-50/30 p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
-                                        <p class="text-[10px] font-bold uppercase tracking-wider {{ $quiz->isFinalQuiz() ? 'text-amber-600' : 'text-blue-600' }}">{{ $quiz->isFinalQuiz() ? __('Ujian Akhir') : __('Kuis Chapter') }} · {{ $quiz->course->title }}</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider {{ $quiz->isFinalQuiz() ? 'text-amber-600' : 'text-blue-600' }}">{{ $quiz->isFinalQuiz() ? __('Ujian Akhir') : __('Kuis Bab') }} · {{ $quiz->course->title }}</p>
                                         <h3 class="mt-1 text-base font-bold text-slate-800">{{ $quiz->title }}</h3>
                                         <p class="mt-1 text-xs text-slate-500">{{ $quiz->questions_count }} {{ __('soal') }}{{ $quiz->chapter ? ' · ' . $quiz->chapter->title : '' }}</p>
                                     </div>
