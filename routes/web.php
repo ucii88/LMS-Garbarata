@@ -31,6 +31,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
     Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/admin/certificates/{certificate}/download', [CertificateController::class, 'download'])->name('admin.certificates.download');
+
+    // Konfigurasi Sertifikat (Customizable Certificate System)
+    Route::get('/admin/certificate-config', [\App\Http\Controllers\Admin\CertificateConfigurationController::class, 'index'])->name('admin.certificate-config.index');
+    Route::get('/admin/certificate-config/{course}', [\App\Http\Controllers\Admin\CertificateConfigurationController::class, 'show'])->name('admin.certificate-config.show');
+    Route::post('/admin/certificate-config/{course}', [\App\Http\Controllers\Admin\CertificateConfigurationController::class, 'update'])->name('admin.certificate-config.update');
+    Route::get('/admin/certificate-config/{course}/preview', [\App\Http\Controllers\Admin\CertificateConfigurationController::class, 'preview'])->name('admin.certificate-config.preview');
+    Route::post('/admin/kepala-signature', [\App\Http\Controllers\Admin\CertificateConfigurationController::class, 'saveKepalaSignature'])->name('admin.kepala-signature.save');
+    Route::get('/admin/instructor-signature/{user}', [\App\Http\Controllers\Admin\CertificateConfigurationController::class, 'instructorSignaturePreview'])->name('admin.instructor-signature.preview');
 });
 
 // Rute yang membutuhkan Login
@@ -40,6 +48,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Manajemen Tanda Tangan Digital (Instruktur)
+    Route::post('/profile/signature', [ProfileController::class, 'saveSignature'])->name('profile.signature.save');
+    Route::post('/profile/signature/upload', [ProfileController::class, 'uploadSignature'])->name('profile.signature.upload');
+    Route::get('/profile/signature', [ProfileController::class, 'showSignature'])->name('profile.signature.show');
 
     // Notifikasi
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

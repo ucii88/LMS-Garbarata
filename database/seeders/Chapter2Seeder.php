@@ -20,9 +20,9 @@ class Chapter2Seeder extends Seeder
             <p>
                 Model dan jenis Garbarata bervariasi bergantung permintaan konsumen. Untuk penamaan tipe
                 Garbarata ditentukan berdasarkan panjang Garbarata dari titik pusat Rotunda sampai ujung
-                bumper cabin pada saat pendek dan panjang maksimum. Garbarata Bandara Internasional Sultah Hasanuddin, 
-                Makassar memiliki tipe B3 - 22/39 dan B2 - 21/28 yang merupakan Garbarata tiga tunnel atau dua tunnel 
-                dengan panjang minimum Garbarata saat diperpendek sesuai dengan tipe yang sudah ditentukan. Sebagai contoh, 
+                bumper cabin pada saat pendek dan panjang maksimum. Garbarata Bandara Internasional Sultah Hasanuddin,
+                Makassar memiliki tipe B3 - 22/39 dan B2 - 21/28 yang merupakan Garbarata tiga tunnel atau dua tunnel
+                dengan panjang minimum Garbarata saat diperpendek sesuai dengan tipe yang sudah ditentukan. Sebagai contoh,
                 B3 - 22/39 yang memiliki arti 22 menter saat Garbarata memendek maksimal dan 39 meter saat diperpanjang maksimal
                 Begitu juga memiliki kesamaan arti dengan tipe B2 - 21/28.
             </p>

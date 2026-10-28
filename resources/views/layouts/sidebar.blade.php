@@ -43,6 +43,16 @@
                     </svg>
                     <span>{{ __('Kelola Pengguna') }}</span>
                 </a>
+
+                <a
+                    href="{{ route('admin.certificate-config.index') }}"
+                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-base font-semibold transition-all duration-150 {{ request()->routeIs('admin.certificate-config.*') ? 'bg-[#e6f4ff] text-[#0091ff]' : 'text-gray-500 hover:bg-[#f5f5f5] hover:text-gray-800' }}"
+                >
+                    <svg class="w-5 h-5 {{ request()->routeIs('admin.certificate-config.*') ? 'text-[#0091ff]' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                    <span>{{ __('Kelola Sertifikat') }}</span>
+                </a>
             @endif
 
             @if(Auth::user()->isInstruktur())
@@ -97,6 +107,7 @@
                     </svg>
                     <span>{{ __('Kelola Kuis dan Ujian') }}</span>
                 </a>
+
             @endif
 
             @if(Auth::user()->isPeserta())
@@ -189,7 +200,7 @@
         <button
             type="button"
             class="w-full flex items-center space-x-3 p-2 rounded-xl select-none text-left"
-            title="Profil pengguna"
+            title="{{ __('Profil pengguna') }}"
         >
             @if(Auth::user()->avatar)
                 <img src="{{ Storage::url(Auth::user()->avatar) }}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shadow-sm shrink-0" alt="Avatar">
@@ -207,11 +218,17 @@
         </button>
 
         <!-- Language Switcher -->
-        <div class="flex items-center justify-between px-3 py-2 text-xs border border-gray-100 rounded-lg bg-gray-50 mb-2">
-            <span class="text-gray-500 font-semibold">{{ __('Selected Language') }}</span>
-            <div class="flex space-x-1.5">
-                <a href="{{ route('lang.switch', 'id') }}" class="px-2 py-0.5 rounded font-bold transition {{ App::getLocale() === 'id' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">ID</a>
-                <a href="{{ route('lang.switch', 'en') }}" class="px-2 py-0.5 rounded font-bold transition {{ App::getLocale() === 'en' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">EN</a>
+        <div class="flex items-center justify-between px-2.5 py-1.5 border border-gray-100 rounded-lg bg-gray-50 mb-2">
+            <span class="text-gray-500 font-semibold text-[11px] whitespace-nowrap">{{ __('Selected Language') }}</span>
+            <div class="flex items-center space-x-1 shrink-0">
+                <a href="{{ route('lang.switch', 'id') }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-bold transition {{ App::getLocale() === 'id' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">
+                    <x-flag-id class="w-3.5 h-2.5" />
+                    <span>ID</span>
+                </a>
+                <a href="{{ route('lang.switch', 'en') }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-bold transition {{ App::getLocale() === 'en' ? 'bg-[#0091ff] text-white shadow-sm' : 'text-gray-500 hover:bg-gray-200' }}">
+                    <x-flag-en class="w-3.5 h-2.5" />
+                    <span>EN</span>
+                </a>
             </div>
         </div>
 
@@ -228,7 +245,7 @@
     </div>
 </aside>
 <aside x-cloak x-show="$store.ui.sidebarCollapsed" class="w-14 bg-white border-r border-[#f0f0f0] h-screen sticky top-0 shrink-0 flex justify-center pt-6">
-    <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="Buka sidebar">
+    <button type="button" @click="$store.ui.toggleSidebar()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100" aria-label="{{ __('Buka sidebar') }}">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <rect width="18" height="18" x="3" y="3" rx="2"></rect>
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v18"></path>

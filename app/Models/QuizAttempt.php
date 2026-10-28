@@ -78,6 +78,24 @@ class QuizAttempt extends Model
     }
 
     /**
+     * Perbarui status lulus jika batas nilai quiz berubah.
+     */
+    public function recalculatePassingStatus(): void
+    {
+        if (!$this->isSubmitted() || $this->isPendingEssay() || $this->quiz->isPractice()) {
+            return;
+        }
+
+        $isPassed = (float) $this->score >= (float) $this->quiz->passing_score;
+
+        $this->update(['is_passed' => $isPassed]);
+
+        if ($isPassed) {
+            Certificate::tryIssue($this->user_id, $this->quiz->course_id);
+        }
+    }
+
+    /**
      * Hitung ulang skor setelah semua soal esai dinilai.
      * Dipanggil oleh QuizController::submitGrading().
      */
@@ -123,4 +141,3 @@ class QuizAttempt extends Model
         }
     }
 }
-

@@ -297,6 +297,7 @@
     </div>
 </div>
 
+@unless($quiz->isPractice())
 {{-- Cheating Alert Modal --}}
 <div id="cheat-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-red-200">
@@ -314,6 +315,7 @@
         </button>
     </div>
 </div>
+@endunless
 
 @unless($quiz->isPractice())
 {{-- Exam Navigation Locked Modal --}}
@@ -474,6 +476,7 @@ window.addEventListener('keydown', function(e) {
     }
 });
 @endunless
+@unless($quiz->isPractice())
 const ATTEMPT_STORAGE_KEY = 'garbarata_attempt_{{ $attempt->id }}';
 let focusLossCount = parseInt(localStorage.getItem(ATTEMPT_STORAGE_KEY + '_focus_loss') || '0', 10);
 const MAX_FOCUS_LOSS = 3;
@@ -585,6 +588,7 @@ function closeCheatModal() {
     if (focusLossCount >= MAX_FOCUS_LOSS) return; // Tidak bisa ditutup manual saat auto-submit
     document.getElementById('cheat-modal').classList.add('hidden');
 }
+@endunless
 
 function showOfflineModal(customMsg = null) {
     const modal = document.getElementById('offline-modal');
@@ -886,6 +890,7 @@ updateNavColors();
 if (!navigator.onLine) {
     showConnectionStatus(false);
 }
+@unless($quiz->isPractice())
 if (isPendingForceSubmit || focusLossCount >= MAX_FOCUS_LOSS) {
     if (navigator.onLine) {
         showCheatForceSubmitModal();
@@ -895,5 +900,6 @@ if (isPendingForceSubmit || focusLossCount >= MAX_FOCUS_LOSS) {
         lockQuizInputsDueToCheat();
     }
 }
+@endunless
 </script>
 </x-app-layout>
