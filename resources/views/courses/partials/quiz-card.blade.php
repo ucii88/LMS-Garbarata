@@ -79,7 +79,7 @@
                         @if($chapterQuiz->availability_status === 'upcoming')
                             <span class="text-amber-600 font-semibold">{{ __('Dibuka:') }} {{ $chapterQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
                         @elseif($chapterQuiz->availability_status === 'closed')
-                            <span class="text-red-500 font-semibold">{{ __('Sudah Ditutup') }} ({{ __('Selesai:') }} {{ $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
+                            <span class="text-red-500 font-semibold">{{ __('Sudah Ditutup') }} ({{ __('Ditutup:') }} {{ $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
                         @else
                             <span class="text-emerald-600 font-semibold">{{ __('S/d:') }} {{ $chapterQuiz->end_time ? $chapterQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : __('Seterusnya') }}</span>
                         @endif
@@ -191,7 +191,7 @@
                         @if($finalQuiz->availability_status === 'upcoming')
                             <span class="text-amber-600 font-semibold">{{ __('Dibuka:') }} {{ $finalQuiz->start_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB</span>
                         @elseif($finalQuiz->availability_status === 'closed')
-                            <span class="text-red-500 font-semibold">{{ __('Sudah Ditutup') }} ({{ __('Selesai:') }} {{ $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
+                            <span class="text-red-500 font-semibold">{{ __('Sudah Ditutup') }} ({{ __('Ditutup:') }} {{ $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') }} WIB)</span>
                         @else
                             <span class="text-emerald-600 font-semibold">{{ __('S/d:') }} {{ $finalQuiz->end_time ? $finalQuiz->end_time->timezone('Asia/Jakarta')->format('d M H:i') . ' WIB' : __('Seterusnya') }}</span>
                         @endif

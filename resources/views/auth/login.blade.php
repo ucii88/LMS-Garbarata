@@ -1,5 +1,27 @@
 <x-guest-layout>
-<div x-data="{ showForgotModal: false }">
+<div x-data="{
+    showForgotModal: false,
+    email: '{{ old('email') }}',
+    password: '',
+    emailError: '{{ $errors->first('email') }}',
+    passwordError: '{{ $errors->first('password') }}',
+    handleSubmit(e) {
+        this.emailError = '';
+        this.passwordError = '';
+        let isValid = true;
+        if (!this.email || !this.email.trim()) {
+            this.emailError = @js(__('Email wajib diisi.'));
+            isValid = false;
+        }
+        if (!this.password || !this.password.trim()) {
+            this.passwordError = @js(__('Kata sandi wajib diisi.'));
+            isValid = false;
+        }
+        if (!isValid) {
+            e.preventDefault();
+        }
+    }
+}">
     <!-- Welcome Header Inside Form -->
     <div class="text-center mb-2">
         <h2 class="font-outfit text-2xl font-bold text-slate-900 tracking-tight">{{ __('Selamat Datang') }}</h2>
@@ -9,7 +31,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4 text-sm font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-2.5 rounded-xl" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-4">
+    <form method="POST" action="{{ route('login') }}" novalidate @submit="handleSubmit($event)" class="flex flex-col gap-4">
         @csrf
 
         <!-- Email Address -->
@@ -17,17 +39,20 @@
             <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">{{ __('Alamat Email') }}</label>
             <div class="relative">
                 <input id="email" 
-                       class="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-base text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" 
+                       x-model="email"
+                       @input="emailError = ''"
+                       :class="emailError ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20' : 'border-slate-200 focus:ring-blue-500 bg-slate-50/50'"
+                       class="w-full border rounded-xl px-4 py-3 text-base text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition duration-200" 
                        type="email" 
                        name="email" 
                        value="{{ old('email') }}" 
                        placeholder="nama@email.com"
-                       required 
                        autofocus 
                        autocomplete="username" />
             </div>
+            <p x-show="emailError" x-text="emailError" class="text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1"></p>
             @if ($errors->has('email'))
-                <p class="text-[11px] text-rose-600 mt-1 font-medium">{{ $errors->first('email') }}</p>
+                <p x-show="!emailError" class="text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1">{{ $errors->first('email') }}</p>
             @endif
         </div>
 
@@ -43,15 +68,18 @@
             </div>
             <div class="relative">
                 <input id="password" 
-                       class="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-base text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" 
+                       x-model="password"
+                       @input="passwordError = ''"
+                       :class="passwordError ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20' : 'border-slate-200 focus:ring-blue-500 bg-slate-50/50'"
+                       class="w-full border rounded-xl px-4 py-3 text-base text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition duration-200" 
                        type="password" 
                        name="password" 
                        placeholder="••••••••"
-                       required 
                        autocomplete="current-password" />
             </div>
+            <p x-show="passwordError" x-text="passwordError" class="text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1"></p>
             @if ($errors->has('password'))
-                <p class="text-[11px] text-rose-600 mt-1 font-medium">{{ $errors->first('password') }}</p>
+                <p x-show="!passwordError" class="text-xs text-rose-600 mt-1.5 font-medium flex items-center gap-1">{{ $errors->first('password') }}</p>
             @endif
         </div>
 

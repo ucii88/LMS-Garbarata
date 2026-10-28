@@ -141,12 +141,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/courses/{course}/quizzes/{quiz}/begin', [QuizAttemptController::class, 'begin'])->name('quiz.begin');
         Route::get('/courses/{course}/quizzes/{quiz}/attempt', [QuizAttemptController::class, 'attempt'])->name('quiz.attempt');
         Route::post('/courses/{course}/quizzes/{quiz}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
+        Route::get('/courses/{course}/quizzes/{quiz}/submit', fn ($course, $quiz) => redirect()->route('quiz.result', [$course, $quiz]));
         Route::get('/courses/{course}/quizzes/{quiz}/result', [QuizAttemptController::class, 'result'])->name('quiz.result');
         Route::post('/courses/{course}/quizzes/{quiz}/save-answer', [QuizAttemptController::class, 'saveAnswer'])->name('quiz.save-answer');
         Route::get('/courses/{course}/practices/{quiz}/start', [QuizAttemptController::class, 'start'])->name('practice.start');
         Route::post('/courses/{course}/practices/{quiz}/begin', [QuizAttemptController::class, 'begin'])->name('practice.begin');
         Route::get('/courses/{course}/practices/{quiz}/attempt', [QuizAttemptController::class, 'attempt'])->name('practice.attempt');
         Route::post('/courses/{course}/practices/{quiz}/submit', [QuizAttemptController::class, 'submit'])->name('practice.submit');
+        Route::get('/courses/{course}/practices/{quiz}/submit', fn ($course, $quiz) => redirect()->route('practice.result', [$course, $quiz]));
         Route::get('/courses/{course}/practices/{quiz}/result', [QuizAttemptController::class, 'result'])->name('practice.result');
         Route::post('/courses/{course}/practices/{quiz}/save-answer', [QuizAttemptController::class, 'saveAnswer'])->name('practice.save-answer');
         Route::get('/certificates/{certificate}', [CertificateController::class, 'show'])->name('certificate.show');

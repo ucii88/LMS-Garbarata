@@ -27,6 +27,12 @@
     @include('courses.partials.tts-engine')
     @include('courses.partials.module-diagram-script')
 
+    @if(session('success') || session('error'))
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4">
+            <x-flash-message type="success" />
+            <x-flash-message type="error" />
+        </div>
+    @endif
 
     @if($chapter->order == 1)
         @include('courses.partials.chapters.chapter-1')

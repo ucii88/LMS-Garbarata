@@ -44,6 +44,10 @@ class AuthenticatedSessionController extends Controller
 
         $redirectTo = $request->input('redirect_to', '/');
 
-        return redirect(str_starts_with($redirectTo, '/') ? $redirectTo : '/');
+        $aman = str_starts_with($redirectTo, '/')
+            && ! str_starts_with($redirectTo, '//')
+            && ! str_contains($redirectTo, '\\');
+
+        return redirect($aman ? $redirectTo : '/');
     }
 }

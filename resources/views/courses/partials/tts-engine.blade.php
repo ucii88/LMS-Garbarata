@@ -15,6 +15,12 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
     }
 
+    /* Pembeda visual jelas saat TTS dijeda (Paused): Warna oranye bersih tanpa emot/teks */
+    .tts-paragraph-highlight.tts-paused-highlight {
+        background-color: #fff7ed !important; /* orange-50 */
+        border-left: 4px solid #ea580c !important; /* orange-600 indicator bar */
+    }
+
     /* TTS Audio Bar Container */
     .tts-controls-group {
         display: inline-flex;
@@ -89,6 +95,26 @@
     .tts-play-btn-playing {
         background: #1d4ed8 !important;
         border-color: #1e40af !important;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3) !important;
+    }
+    /* Tombol saat status JEDA (Paused: Oranye amber cerah agar sangat kontras di screenshot) */
+    .tts-ctrl-btn.tts-play-btn.tts-play-btn-paused,
+    .tts-ctrl-btn.tts-play-btn-paused,
+    .tts-play-btn.tts-play-btn-paused,
+    button.tts-play-btn-paused,
+    .tts-play-btn-paused {
+        background: #ea580c !important; /* orange-600 */
+        border-color: #c2410c !important; /* orange-700 */
+        box-shadow: 0 0 0 3.5px rgba(234, 88, 12, 0.4) !important;
+        animation: tts-pulse 2s infinite ease-in-out !important;
+    }
+    .tts-ctrl-btn.tts-play-btn.tts-play-btn-paused:hover,
+    .tts-ctrl-btn.tts-play-btn-paused:hover,
+    .tts-play-btn.tts-play-btn-paused:hover,
+    button.tts-play-btn-paused:hover,
+    .tts-play-btn-paused:hover {
+        background: #c2410c !important;
+        border-color: #9a3412 !important;
     }
     .tts-play-btn svg,
     .tts-play-btn svg path,
@@ -122,16 +148,18 @@
         
         const ttsI18n = {
             id: {
-                listen:   'Dengarkan',
-                reading:  'Sedang Dibaca...',
-                resume:   'Lanjutkan',
-                langCode: 'id-ID',
+                listen:      'Dengarkan',
+                reading:     'Sedang Dibaca...',
+                resume:      'Lanjutkan (Jeda)',
+                pausedBadge: '⏸ DIJEDA',
+                langCode:    'id-ID',
             },
             en: {
-                listen:   'Listen',
-                reading:  'Reading...',
-                resume:   'Resume',
-                langCode: 'en-US',
+                listen:      'Listen',
+                reading:     'Reading...',
+                resume:      'Resume (Paused)',
+                pausedBadge: '⏸ PAUSED',
+                langCode:    'en-US',
             }
         };
 
@@ -177,7 +205,7 @@
         
         function clearHighlight() {
             document.querySelectorAll('.tts-paragraph-highlight').forEach(el => {
-                el.classList.remove('tts-paragraph-highlight');
+                el.classList.remove('tts-paragraph-highlight', 'tts-paused-highlight');
             });
         }
 
@@ -185,6 +213,9 @@
             clearHighlight();
             if (!el) return;
             el.classList.add('tts-paragraph-highlight');
+            if (isPaused) {
+                el.classList.add('tts-paused-highlight');
+            }
             el.scrollIntoView({ block: 'center', behavior: 'smooth' });
         }
 
@@ -195,18 +226,30 @@
                 const icon = btn.querySelector('.tts-icon') || btn;
                 if (btnId === String(id) && state !== 'idle') {
                     if (state === 'playing') {
+                        btn.classList.remove('tts-play-btn-paused');
                         btn.classList.add('tts-play-btn-playing');
                         icon.innerHTML = SVG_PAUSE;
                         btn.title = t('reading') || 'Pause';
                     } else {
                         btn.classList.remove('tts-play-btn-playing');
+                        btn.classList.add('tts-play-btn-paused');
                         icon.innerHTML = SVG_PLAY;
                         btn.title = t('resume') || 'Resume';
                     }
                 } else {
                     btn.classList.remove('tts-play-btn-playing');
+                    btn.classList.remove('tts-play-btn-paused');
                     icon.innerHTML = SVG_PLAY;
                     btn.title = t('listen') || 'Play';
+                }
+            });
+
+            // Update status visual paragraf yang sedang aktif
+            document.querySelectorAll('.tts-paragraph-highlight').forEach(el => {
+                if (state === 'paused') {
+                    el.classList.add('tts-paused-highlight');
+                } else {
+                    el.classList.remove('tts-paused-highlight');
                 }
             });
 
