@@ -200,6 +200,12 @@ class QuizController extends Controller
             'end_time'          => $endTime,
         ]);
 
+        $quiz->load('attempts.quiz');
+        $quiz->attempts
+             ->whereNotNull('submitted_at')
+             ->each
+             ->recalculatePassingStatus();
+
         return redirect($this->activityRoute('edit', $course, $quiz) . '?step=questions')
                          ->with('success', ($isPractice ? __('Latihan') : ($quiz->isFinalQuiz() ? __('Ujian') : __('Kuis'))) . ' ' . __('berhasil diperbarui. Silakan lanjutkan pemilihan soal.'));
     }

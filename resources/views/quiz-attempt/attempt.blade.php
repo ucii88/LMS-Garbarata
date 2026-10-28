@@ -297,6 +297,7 @@
     </div>
 </div>
 
+@unless($quiz->isPractice())
 {{-- Cheating Alert Modal --}}
 <div id="cheat-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-red-200">
@@ -314,6 +315,7 @@
         </button>
     </div>
 </div>
+@endunless
 
 @unless($quiz->isPractice())
 {{-- Leave / Reload Warning Modal (LMS Custom Dialog) --}}
@@ -411,6 +413,7 @@ window.addEventListener('keydown', function(e) {
     }
 });
 @endunless
+@unless($quiz->isPractice())
 let focusLossCount = 0;
 const MAX_FOCUS_LOSS = 3;
 
@@ -442,6 +445,7 @@ function handleFocusLoss() {
 function closeCheatModal() {
     document.getElementById('cheat-modal').classList.add('hidden');
 }
+@endunless
 
 // Detektor Koneksi Internet
 window.addEventListener('online', function() {

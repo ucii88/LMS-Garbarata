@@ -111,6 +111,8 @@
             @csrf
         </form>
 
+        @stack('scripts')
+
         <script>
             let globalConfirmCallback = null;
 

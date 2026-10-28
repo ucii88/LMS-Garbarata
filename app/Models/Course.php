@@ -62,6 +62,14 @@ class Course extends Model
     }
 
     /**
+     * Get the certificate configuration for this course.
+     */
+    public function certificateConfiguration(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Models\CertificateConfiguration::class);
+    }
+
+    /**
      * Get all questions (bank soal) across all chapters in this course.
      */
     public function questions(): HasManyThrough

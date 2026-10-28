@@ -67,10 +67,16 @@
 
             <!-- Auth Buttons -->
             <nav class="flex items-center gap-4">
-                <div class="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-1 py-1 text-xs font-bold shadow-sm">
-                    <span class="px-1 text-[10px] text-slate-400">{{ __('Selected Language') }}</span>
-                    <a href="{{ route('lang.switch', 'id') }}" class="rounded px-2 py-1 {{ app()->getLocale() === 'id' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:bg-slate-100' }}">ID</a>
-                    <a href="{{ route('lang.switch', 'en') }}" class="rounded px-2 py-1 {{ app()->getLocale() === 'en' ? 'bg-blue-600 text-white' : 'text-slate-500 hover:bg-slate-100' }}">EN</a>
+                <div class="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-1.5 py-1 text-xs font-bold shadow-sm">
+                    <span class="px-1 text-[10px] text-slate-400 font-medium">{{ __('Selected Language') }}</span>
+                    <a href="{{ route('lang.switch', 'id') }}" class="inline-flex items-center gap-1.5 rounded px-2 py-1 transition-all {{ app()->getLocale() === 'id' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-500 hover:bg-slate-100' }}">
+                        <x-flag-id class="w-4 h-2.5" />
+                        <span>ID</span>
+                    </a>
+                    <a href="{{ route('lang.switch', 'en') }}" class="inline-flex items-center gap-1.5 rounded px-2 py-1 transition-all {{ app()->getLocale() === 'en' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-500 hover:bg-slate-100' }}">
+                        <x-flag-en class="w-4 h-2.5" />
+                        <span>EN</span>
+                    </a>
                 </div>
                 @if (Route::has('login'))
                     @auth

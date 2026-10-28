@@ -27,16 +27,17 @@
                     </div>
                 @endif
             </div>
-            <label class="block">
-                <span class="sr-only">Choose profile photo</span>
-                <input type="file" name="avatar" accept="image/*" class="block w-full text-base text-slate-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-full file:border-0
-                    file:text-base file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100
-                "/>
-            </label>
+            <div class="flex items-center gap-0">
+                <input type="file" name="avatar" id="avatar_file_input" accept="image/*" class="sr-only"
+                       onchange="document.getElementById('avatar_filename_display').textContent = this.files[0] ? this.files[0].name : '{{ __('Tidak ada file yang dipilih') }}';">
+                <label for="avatar_file_input" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold cursor-pointer transition select-none">
+                    <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    {{ __('Pilih File') }}
+                </label>
+                <div id="avatar_filename_display" class="py-2 px-3 text-xs text-gray-500 border border-gray-300 rounded-r-lg bg-gray-50 min-w-[150px] truncate select-none">
+                    {{ __('Tidak ada file yang dipilih') }}
+                </div>
+            </div>
             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
         </div>
 
