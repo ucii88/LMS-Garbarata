@@ -41,7 +41,7 @@
                 <input id="email" 
                        x-model="email"
                        @input="emailError = ''"
-                       :class="emailError ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20' : 'border-slate-200 focus:ring-blue-500 bg-slate-50/50'"
+                       :class="emailError ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20' : 'border-slate-200 focus:ring-blue-600 focus:border-blue-600 bg-slate-50/50'"
                        class="w-full border rounded-xl px-4 py-3 text-base text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition duration-200" 
                        type="email" 
                        name="email" 
@@ -62,7 +62,7 @@
                 <label for="password" class="block text-sm font-semibold text-slate-700">{{ __('Kata Sandi') }}</label>
                 <button type="button" 
                         @click="showForgotModal = true"
-                        class="text-[11px] text-blue-600 hover:text-blue-500 transition duration-200 font-medium cursor-pointer">
+                        class="text-[11px] text-blue-600 hover:text-blue-700 transition duration-200 font-semibold cursor-pointer">
                     {{ __('Lupa sandi?') }}
                 </button>
             </div>
@@ -70,7 +70,7 @@
                 <input id="password" 
                        x-model="password"
                        @input="passwordError = ''"
-                       :class="passwordError ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20' : 'border-slate-200 focus:ring-blue-500 bg-slate-50/50'"
+                       :class="passwordError ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20' : 'border-slate-200 focus:ring-blue-600 focus:border-blue-600 bg-slate-50/50'"
                        class="w-full border rounded-xl px-4 py-3 text-base text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent transition duration-200" 
                        type="password" 
                        name="password" 
@@ -88,7 +88,7 @@
             <label for="remember_me" class="inline-flex items-center cursor-pointer select-none">
                 <input id="remember_me" 
                        type="checkbox" 
-                       class="rounded border-slate-300 bg-white text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" 
+                       class="rounded border-slate-300 bg-white text-blue-600 focus:ring-blue-600 w-4 h-4 cursor-pointer" 
                        name="remember">
                 <span class="ms-2.5 text-sm text-slate-500 hover:text-slate-700 transition duration-200">{{ __('Ingat saya di perangkat ini') }}</span>
             </label>
@@ -97,10 +97,11 @@
         <!-- Submit Action -->
         <div class="mt-2">
             <button type="submit"
-                    style="background: linear-gradient(to right, #2563eb, #4f46e5); color: #fff; width: 100%; padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(37,99,235,0.25); transition: box-shadow 0.3s, opacity 0.3s;"
-                    onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    style="background: #2563eb; color: #fff; width: 100%; padding: 0.8rem 1.25rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); transition: all 0.2s;"
+                    onmouseover="this.style.background='#1d4ed8'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#2563eb'; this.style.transform='translateY(0)';"
+                    class="font-outfit">
                 <span>{{ __('Masuk Sekarang') }}</span>
-                <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg style="width:1.15rem;height:1.15rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
             </button>
@@ -110,7 +111,7 @@
         @if (Route::has('register'))
             <p class="text-sm text-slate-500 text-center mt-3">
                 {{ __('Belum terdaftar?') }} 
-                <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-500 font-semibold transition duration-200">{{ __('Buat akun baru') }}</a>
+                <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-700 font-semibold transition duration-200">{{ __('Buat akun baru') }}</a>
             </p>
         @endif
     </form>
@@ -138,7 +139,7 @@
             </div>
             <button type="button" 
                     @click="showForgotModal = false"
-                    class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition cursor-pointer shadow-sm">
+                    class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition cursor-pointer shadow-md shadow-blue-600/20">
                 {{ __('Mengerti') }}
             </button>
         </div>

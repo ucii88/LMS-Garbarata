@@ -53,16 +53,12 @@
         <!-- Navigation Bar -->
         <header class="w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between relative z-10">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                    <!-- Custom Aviation Wing Icon -->
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#0091ff] to-[#40a9ff] flex items-center justify-center shadow-md shadow-[#0091ff]/25">
+                    <svg class="w-5.5 h-5.5 text-white transform -rotate-12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"></path>
                     </svg>
                 </div>
-                <div>
-                    <span class="font-outfit font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-blue-700 bg-clip-text text-transparent">GARBARATA</span>
-                    <span class="block text-[9px] font-semibold text-blue-600 tracking-widest uppercase">LMS Portal</span>
-                </div>
+                <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-900">GARBAR<span class="text-[#0091ff]">ATA</span></span>
             </div>
 
             <!-- Auth Buttons -->
@@ -81,7 +77,7 @@
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ route('dashboard') }}" 
-                           class="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 transition-premium flex items-center gap-1.5">
+                           class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/25 transition-premium flex items-center gap-1.5">
                             {{ __('Masuk Dashboard') }}
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -109,7 +105,7 @@
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 text-sm font-semibold tracking-wide">
                 <span class="flex h-2 w-2 relative">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
                 </span>
                 {{ __('Interactive Training Portal') }}
             </div>
@@ -119,7 +115,7 @@
                     {{ __('Master Interactive Boarding Bridge Operations') }}
                 @else
                     {{ __('Kuasai Kompetensi') }} <br>
-                    <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent">Garbarata</span> {{ __('Interaktif') }}
+                    <span class="text-blue-600">Garbarata</span> {{ __('Interaktif') }}
                 @endif
             </h1>
             
@@ -130,8 +126,8 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-2 w-full sm:w-auto">
                 @auth
                     <a href="{{ route('dashboard') }}"
-                       style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:linear-gradient(to right,#2563eb,#4f46e5);color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.2);transition:opacity 0.3s;"
-                       onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                       style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:#2563eb;color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.3);transition:all 0.2s;"
+                       onmouseover="this.style.background='#1d4ed8';this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#2563eb';this.style.transform='translateY(0)';">
                         {{ __('Mulai Belajar Sekarang') }}
                         <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -139,8 +135,8 @@
                     </a>
                 @else
                     <a href="{{ route('login') }}"
-                       style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:linear-gradient(to right,#2563eb,#4f46e5);color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.2);transition:opacity 0.3s;"
-                       onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                       style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:1rem 2rem;border-radius:0.75rem;background:#2563eb;color:#fff;font-size:1rem;font-weight:600;text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,0.3);transition:all 0.2s;"
+                       onmouseover="this.style.background='#1d4ed8';this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#2563eb';this.style.transform='translateY(0)';">
                         {{ __('Masuk & Mulai Belajar') }}
                         <svg style="width:1rem;height:1rem;flex-shrink:0;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -194,7 +190,7 @@
 
                 <!-- Feature Card 2 -->
                 <div class="p-6 rounded-2xl light-card transition-premium flex flex-col gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[#0091ff]">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>

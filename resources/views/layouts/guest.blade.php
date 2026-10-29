@@ -40,22 +40,18 @@
     <body class="text-slate-800 antialiased min-h-screen flex items-center justify-center p-6 relative overflow-x-hidden bg-grid-pattern">
         
         <!-- Soft Ambient Lights -->
-        <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/5 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-600/5 rounded-full blur-[140px] pointer-events-none"></div>
 
         <div class="w-full max-w-md flex flex-col items-center gap-6 relative z-10">
             <!-- Header Brand Logo -->
             <a href="/" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition duration-300">
-                    <!-- Custom Aviation Wing Icon -->
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#0091ff] to-[#40a9ff] flex items-center justify-center shadow-md shadow-[#0091ff]/25 group-hover:scale-105 transition duration-300">
+                    <svg class="w-5.5 h-5.5 text-white transform -rotate-12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"></path>
                     </svg>
                 </div>
-                <div>
-                    <span class="font-outfit font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-blue-700 bg-clip-text text-transparent">GARBARATA</span>
-                    <span class="block text-[9px] font-semibold text-blue-600 tracking-widest uppercase">LMS Portal</span>
-                </div>
+                <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-900">GARBAR<span class="text-[#0091ff]">ATA</span></span>
             </a>
 
             <!-- Form Wrapper Container -->

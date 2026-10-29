@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Quiz;
+use App\Models\QuizAttempt;
 use App\Models\Chapter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -79,6 +80,15 @@ class CalendarController extends Controller
             ->with(['course', 'chapter'])
             ->get();
 
+        $userQuizAttempts = collect();
+        if ($user->isPeserta() && $timedQuizzes->isNotEmpty()) {
+            $userQuizAttempts = QuizAttempt::where('user_id', $user->id)
+                ->whereIn('quiz_id', $timedQuizzes->pluck('id'))
+                ->whereNotNull('submitted_at')
+                ->get(['quiz_id', 'is_passed', 'score'])
+                ->keyBy('quiz_id');
+        }
+
         foreach ($timedQuizzes as $quiz) {
             $courseName = $quiz->course ? $quiz->course->title : __('Kursus LMS');
             $chapterName = $quiz->chapter ? $quiz->chapter->title : null;
@@ -90,15 +100,43 @@ class CalendarController extends Controller
             $isPractice = $quiz->isPractice();
             $type = $isPractice ? 'practice' : ($isFinal ? 'exam' : 'quiz');
 
+            $status = $quiz->availability_status; // 'upcoming', 'open', 'closed'
+            $statusBadge = match($status) {
+                'upcoming' => __('Belum Dibuka'),
+                'closed'   => __('Ditutup'),
+                'open'     => __('Dibuka'),
+            };
+
+            $hasSubmitted = $userQuizAttempts->has($quiz->id);
+
             $actionUrl = '#';
-            if ($user->isPeserta() && $quiz->course_id) {
-                $actionUrl = $isPractice
-                    ? route('practice.start', [$quiz->course_id, $quiz->id])
-                    : route('quiz.start', [$quiz->course_id, $quiz->id]);
-            } elseif ($user->isInstruktur() && $quiz->course_id) {
-                $actionUrl = $isPractice
-                    ? route('practices.edit', [$quiz->course_id, $quiz->id])
-                    : route('quizzes.edit', [$quiz->course_id, $quiz->id]);
+            $actionLabel = '';
+            $isDisabled = false;
+
+            if ($user->isPeserta()) {
+                if ($hasSubmitted) {
+                    $actionUrl = route($isPractice ? 'practice.result' : 'quiz.result', [$quiz->course_id, $quiz->id]);
+                    $actionLabel = __('Lihat Hasil');
+                } elseif ($status === 'upcoming') {
+                    $actionUrl = '#';
+                    $actionLabel = __('Belum Dibuka');
+                    $isDisabled = true;
+                } elseif ($status === 'closed') {
+                    $actionUrl = route($isPractice ? 'practice.result' : 'quiz.result', [$quiz->course_id, $quiz->id]);
+                    $actionLabel = __('Sudah Ditutup');
+                    $isDisabled = true;
+                } else {
+                    $actionUrl = route($isPractice ? 'practice.start' : 'quiz.start', [$quiz->course_id, $quiz->id]);
+                    $actionLabel = $isFinal ? __('Mulai Ujian') : ($isPractice ? __('Mulai Latihan') : __('Mulai Kuis'));
+                }
+            } elseif ($user->isInstruktur()) {
+                if ($status === 'upcoming') {
+                    $actionUrl = route($isPractice ? 'practices.edit' : 'quizzes.edit', [$quiz->course_id, $quiz->id]);
+                    $actionLabel = $isPractice ? __('Edit Latihan') : __('Edit Kuis');
+                } else {
+                    $actionUrl = route($isPractice ? 'practices.attempts' : 'quizzes.attempts', [$quiz->course_id, $quiz->id]);
+                    $actionLabel = __('Hasil Peserta');
+                }
             }
 
             // Case A: Both start & end fall on the exact same date -> Combine into 1 single event card
@@ -116,11 +154,14 @@ class CalendarController extends Controller
                     'chapter_title' => $chapterName,
                     'type' => $type,
                     'badge_text' => $badgeText,
+                    'status' => $status,
+                    'status_badge' => $statusBadge,
                     'time_str' => $timeStr,
                     'color' => $color,
                     'description' => __('Waktu pengerjaan dibuka dari :start sampai :end WIB.', ['start' => $startTime->format('H:i'), 'end' => $endTime->format('H:i')]),
                     'action_url' => $actionUrl,
-                    'action_label' => $user->isPeserta() ? __('Kerjakan Sekarang') : __('Kelola Evaluasi'),
+                    'action_label' => $actionLabel,
+                    'is_disabled' => $isDisabled,
                 ];
             } else {
                 // Case B: Start and End are on different dates -> Create separate start and end event markers
@@ -137,11 +178,14 @@ class CalendarController extends Controller
                         'chapter_title' => $chapterName,
                         'type' => $type,
                         'badge_text' => $badgeText,
+                        'status' => $status,
+                        'status_badge' => $statusBadge,
                         'time_str' => $startTime->format('H:i') . ' WIB',
                         'color' => $color,
                         'description' => $quiz->description ?: __('Pembukaan waktu pengerjaan evaluasi.'),
                         'action_url' => $actionUrl,
-                        'action_label' => $user->isPeserta() ? __('Kerjakan Sekarang') : __('Kelola Evaluasi'),
+                        'action_label' => $actionLabel,
+                        'is_disabled' => $isDisabled,
                     ];
                 }
 
@@ -158,11 +202,14 @@ class CalendarController extends Controller
                         'chapter_title' => $chapterName,
                         'type' => $type,
                         'badge_text' => $badgeText,
+                        'status' => $status,
+                        'status_badge' => $statusBadge,
                         'time_str' => $endTime->format('H:i') . ' WIB',
                         'color' => $color,
                         'description' => __('Batas akhir pengumpulan / pengerjaan evaluasi.'),
                         'action_url' => $actionUrl,
-                        'action_label' => $user->isPeserta() ? __('Kerjakan Sebelum Ditutup') : __('Kelola Evaluasi'),
+                        'action_label' => $actionLabel,
+                        'is_disabled' => $isDisabled,
                     ];
                 }
             }
