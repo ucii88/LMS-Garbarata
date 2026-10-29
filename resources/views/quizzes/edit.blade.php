@@ -6,7 +6,7 @@
         $currentStep = request('step', 'questions');
     @endphp
 
-    <div class="max-w-5xl mx-auto space-y-6" x-data="{ activeStep: '{{ $currentStep }}' }">
+    <div class="max-w-5xl mx-auto space-y-6" x-data="{ activeStep: '{{ $errors->any() ? 'config' : $currentStep }}' }">
         {{-- Header Navigation & Stepper --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -50,7 +50,7 @@
         <x-flash-message type="success" />
         @if ($errors->any())
             <div class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-semibold text-rose-700 space-y-1">
-                @foreach ($errors->all() as $error)<p>• {{ __( $error ) }}</p>@endforeach
+                @foreach ($errors->all() as $error)<p>{{ __( $error ) }}</p>@endforeach
             </div>
         @endif
 

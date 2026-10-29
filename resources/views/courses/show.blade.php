@@ -1,4 +1,4 @@
-@section('topbar_title', __('Silabus Pembelajaran'))
+@section('topbar_title', __('Daftar Bab & Modul'))
 
 <x-app-layout>
     <div class="py-6 select-none" x-data="{ showCreateModal: false, showEditModal: false, editChapter: { id: null, title: '', order: 1 }, editAction: '' }">
@@ -194,13 +194,18 @@
                 <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
                     <div x-show="showCreateModal" x-transition.opacity @click="showCreateModal = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"></div>
 
-                    <div x-show="showCreateModal" x-transition class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 flex items-center justify-between text-white">
-                            <h3 class="text-base font-bold flex items-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                <span>{{ __('Tambah Bab Baru') }}</span>
-                            </h3>
-                            <button @click="showCreateModal = false" class="text-white/80 hover:text-white font-bold text-lg">&times;</button>
+                    <div x-show="showCreateModal" x-transition class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-gray-100">
+                        <div class="p-6 pb-4 border-b border-gray-100 flex items-center justify-between bg-white">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-slate-800 leading-tight">{{ __('Tambah Bab Baru') }}</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">{{ __('Tambahkan bab baru ke dalam kursus') }}</p>
+                                </div>
+                            </div>
+                            <button @click="showCreateModal = false" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-50 transition text-xl font-bold leading-none">&times;</button>
                         </div>
 
                         <form action="{{ route('courses.chapters.store', $course->id) }}" method="POST" class="p-6 space-y-4">
@@ -209,12 +214,6 @@
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">{{ __('Judul Bab') }} <span class="text-rose-500">*</span></label>
                                 <input type="text" name="title" required placeholder="{{ __('Contoh: BAB 8: Pemeliharaan dan Perawatan Berkala') }}" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition">
                                 <p class="text-[11px] text-slate-400 mt-1">{{ __('Tuliskan judul bab secara lengkap beserta nomor bab.') }}</p>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">{{ __('Nomor Urut Bab (Order)') }}</label>
-                                <input type="number" name="order" min="1" value="{{ ($course->chapters->max('order') ?? 0) + 1 }}" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition">
-                                <p class="text-[11px] text-slate-400 mt-1">{{ __('Urutan posisi bab pada silabus (otomatis terisi nilai berikutnya).') }}</p>
                             </div>
 
                             <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
@@ -238,13 +237,18 @@
                 <div class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
                     <div x-show="showEditModal" x-transition.opacity @click="showEditModal = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"></div>
 
-                    <div x-show="showEditModal" x-transition class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md">
-                        <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-4 flex items-center justify-between text-white">
-                            <h3 class="text-base font-bold flex items-center gap-2">
-                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                <span>{{ __('Edit Judul / Urutan Bab') }}</span>
-                            </h3>
-                            <button @click="showEditModal = false" class="text-white/80 hover:text-white font-bold text-lg">&times;</button>
+                    <div x-show="showEditModal" x-transition class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-gray-100">
+                        <div class="p-6 pb-4 border-b border-gray-100 flex items-center justify-between bg-white">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-slate-800 leading-tight">{{ __('Edit Bab Pembelajaran') }}</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">{{ __('Ubah nama judul atau urutan bab') }}</p>
+                                </div>
+                            </div>
+                            <button @click="showEditModal = false" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-50 transition text-xl font-bold leading-none">&times;</button>
                         </div>
 
                         <form :action="editAction" method="POST" class="p-6 space-y-4">
@@ -256,7 +260,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">{{ __('Nomor Urut Bab (Order)') }}</label>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">{{ __('Nomor Urut Bab') }}</label>
                                 <input type="number" name="order" min="1" x-model="editChapter.order" required class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm font-semibold focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition">
                             </div>
 

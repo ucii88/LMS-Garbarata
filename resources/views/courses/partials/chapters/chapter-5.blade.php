@@ -46,7 +46,7 @@
     getSingleModule(tab) {
         let m = this.modules.find(m => m.title === tab || m.title.startsWith(tab + ' ') || m.title.startsWith(tab + '.'));
         if (!m) m = this.modules.find(m => m.title.startsWith(tab));
-        return m || { title: tab, content: '' };
+        return m || { title: tab, content: '', image_path: null };
     },
     toggleModule(id) {
         this.expandedModuleId = this.expandedModuleId === id ? null : id;
@@ -106,7 +106,7 @@
         <!-- Navigation Back & Title Bar -->
         <div class="flex items-center justify-between">
             <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                &larr; {{ __('Kembali ke Silabus Kursus') }}
+                &larr; {{ __('Kembali ke Daftar Bab') }}
             </a>
 
             <div class="flex items-center gap-2">
@@ -277,14 +277,16 @@
                                         <!-- Action Buttons for Instructor inside Accordion -->
                                         @if(auth()->user()->isInstruktur())
                                             <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                                <a href="/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/{{ $module->id }}/edit" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                    {{ __('Edit Modul Ini') }}
+                                                <a href="/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/{{ $module->id }}/edit" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                    <span>{{ __('Edit Modul Ini') }}</span>
                                                 </a>
                                                 <form action="/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/{{ $module->id }}" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                        {{ __('Hapus Modul') }}
+                                                    <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                        <span>{{ __('Hapus Modul') }}</span>
                                                     </button>
                                                 </form>
                                             </div>
@@ -356,6 +358,13 @@
                             
                             <div id="ch5main-tts-content" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content"></div>
                             
+                            <!-- Gambar Modul Jika Diunggah -->
+                            <template x-if="getSingleModule(activeTab).image_path">
+                                <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-xs my-4 max-w-2xl mx-auto">
+                                    <img :src="getSingleModule(activeTab).image_path.startsWith('/') ? getSingleModule(activeTab).image_path : '/' + getSingleModule(activeTab).image_path" class="w-full max-h-80 object-contain rounded-lg select-none mx-auto" :alt="getSingleModule(activeTab).title">
+                                </div>
+                            </template>
+                            
                             <!-- Module Diagram Component for Single Module Tab -->
                             <div x-show="(getSingleModule(activeTab).diagrams && getSingleModule(activeTab).diagrams.length > 0) || getSingleModule(activeTab).diagram || @js(auth()->user()->isInstruktur())">
                                 <div class="my-6 p-4 rounded-2xl border border-slate-100 bg-slate-50/50 shadow-2xs"
@@ -386,14 +395,16 @@
                             @if(auth()->user()->isInstruktur())
                                 <template x-if="getSingleModule(activeTab).id">
                                     <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                            {{ __('Edit Modul Ini') }}
+                                        <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                            <span>{{ __('Edit Modul Ini') }}</span>
                                         </a>
                                         <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs">
-                                                {{ __('Hapus Modul') }}
+                                            <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                <span>{{ __('Hapus Modul') }}</span>
                                             </button>
                                         </form>
                                     </div>

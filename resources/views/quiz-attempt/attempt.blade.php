@@ -318,88 +318,151 @@
 @endunless
 
 @unless($quiz->isPractice())
-{{-- Leave / Reload Warning Modal (LMS Custom Dialog) --}}
-<div id="leave-warning-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+{{-- Exam Navigation Locked Modal --}}
+<div id="exam-locked-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-amber-200">
         <div class="text-center mb-5 space-y-2">
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 text-amber-600 font-bold mb-1">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
             </div>
-            <h3 class="text-base font-bold text-slate-800" id="leave-modal-title">{{ __('Tinggalkan Halaman Ujian?') }}</h3>
-            <p class="text-xs text-slate-600 leading-relaxed bg-amber-50/70 p-3 rounded-xl border border-amber-100 text-left" id="leave-modal-desc">
-                {{ __('Ujian Anda sedang berlangsung. Jika Anda berpindah ke halaman lain atau memuat ulang halaman, waktu pengerjaan tetap berjalan.') }}
+            <h3 class="text-base font-bold text-slate-800">{{ __('Menu Terkunci Selama Ujian') }}</h3>
+            <p class="text-xs text-slate-600 leading-relaxed bg-amber-50/70 p-3 rounded-xl border border-amber-100 text-left">
+                {{ __('Anda sedang dalam mode ujian. Untuk menjaga integritas ujian, menu navigasi LMS dikunci dan tidak dapat diakses hingga Anda menyelesaikan dan mengirimkan ujian ini.') }}
+            </p>
+        </div>
+        <button type="button" onclick="closeExamLockedModal()"
+                class="w-full py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition cursor-pointer shadow-sm">
+            {{ __('Mengerti, Tetap Kerjakan Ujian') }}
+        </button>
+    </div>
+</div>
+
+{{-- Reload Warning Modal --}}
+<div id="reload-warning-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-amber-200">
+        <div class="text-center mb-5 space-y-2">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 text-amber-600 font-bold mb-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-800">{{ __('Muat Ulang Halaman Ujian?') }}</h3>
+            <p class="text-xs text-slate-600 leading-relaxed bg-amber-50/70 p-3 rounded-xl border border-amber-100 text-left">
+                {{ __('Ujian Anda sedang berlangsung dan timer tetap berjalan di server. Memuat ulang halaman tidak menambah waktu pengerjaan.') }}
             </p>
         </div>
         <div class="flex gap-3">
-            <button type="button" onclick="closeLeaveWarningModal()"
+            <button type="button" onclick="closeReloadModal()"
                     class="flex-1 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition cursor-pointer shadow-sm">
                 {{ __('Tetap di Ujian') }}
             </button>
-            <button type="button" onclick="confirmLeaveExam()"
+            <button type="button" onclick="confirmReloadExam()"
                     class="flex-1 py-2.5 text-sm font-semibold text-rose-600 border border-rose-200 hover:bg-rose-50 rounded-xl transition cursor-pointer">
-                {{ __('Ya, Tinggalkan') }}
+                {{ __('Muat Ulang') }}
             </button>
         </div>
     </div>
 </div>
+
+<style>
+    /* Kunci tampilan menu navigasi luar (sidebar dan topbar) saat ujian */
+    aside a, header a, nav a:not(.quiz-internal-nav) {
+        opacity: 0.55 !important;
+        cursor: not-allowed !important;
+        filter: grayscale(40%);
+        transition: all 0.2s ease;
+    }
+</style>
 @endunless
+
+{{-- Offline Alert Modal --}}
+<div id="offline-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-rose-200">
+        <div class="text-center mb-5 space-y-2">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 text-rose-600 font-bold mb-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.166a1 1 0 111.414 1.414M1 1l22 22"/>
+                </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-800">{{ __('Koneksi Internet Terputus!') }}</h3>
+            <p class="text-xs text-slate-600 leading-relaxed bg-rose-50/70 p-3 rounded-xl border border-rose-100 text-left" id="offline-modal-msg">
+                {{ __('Tidak dapat mengirimkan kuis saat offline. Harap pastikan perangkat terhubung kembali ke internet. Jawaban Anda tetap aman.') }}
+            </p>
+        </div>
+        <button type="button" onclick="closeOfflineModal()"
+                class="w-full py-2.5 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition cursor-pointer shadow-sm">
+            {{ __('Mengerti') }}
+        </button>
+    </div>
+</div>
 
 <script>
 @unless($quiz->isPractice())
-let pendingLeaveUrl = null;
-let pendingLeaveIsReload = false;
-
-function openLeaveWarningModal(url = null, isReload = false) {
-    pendingLeaveUrl = url;
-    pendingLeaveIsReload = isReload;
-    const titleEl = document.getElementById('leave-modal-title');
-    const descEl = document.getElementById('leave-modal-desc');
-    
-    if (isReload) {
-        if (titleEl) titleEl.textContent = @js(__('Muat Ulang Halaman Ujian?'));
-        if (descEl) descEl.textContent = @js(__('Ujian Anda sedang berlangsung. Memuat ulang halaman dapat mengganggu proses pengerjaan dan timer ujian tetap berjalan.'));
-    } else {
-        if (titleEl) titleEl.textContent = @js(__('Tinggalkan Halaman Ujian?'));
-        if (descEl) descEl.textContent = @js(__('Ujian Anda sedang berlangsung. Jika Anda meninggalkan halaman ini, waktu pengerjaan tetap berjalan.'));
-    }
-    
-    const modal = document.getElementById('leave-warning-modal');
+function openExamLockedModal() {
+    const modal = document.getElementById('exam-locked-modal');
     if (modal) modal.classList.remove('hidden');
 }
 
-function closeLeaveWarningModal() {
-    pendingLeaveUrl = null;
-    pendingLeaveIsReload = false;
-    const modal = document.getElementById('leave-warning-modal');
+function closeExamLockedModal() {
+    const modal = document.getElementById('exam-locked-modal');
     if (modal) modal.classList.add('hidden');
 }
 
-function confirmLeaveExam() {
-    window.isSubmittingQuiz = true; // Nonaktifkan native beforeunload alert
-    if (pendingLeaveIsReload) {
-        window.location.reload();
-    } else if (pendingLeaveUrl) {
-        window.location.href = pendingLeaveUrl;
-    } else {
-        closeLeaveWarningModal();
-    }
+function openReloadModal() {
+    const modal = document.getElementById('reload-warning-modal');
+    if (modal) modal.classList.remove('hidden');
 }
 
-// Cegat klik tautan/navigasi di dalam LMS (misal menu sidebar, logo, breadcrumbs)
+function closeReloadModal() {
+    const modal = document.getElementById('reload-warning-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function confirmReloadExam() {
+    window.isSubmittingQuiz = true; // Nonaktifkan native beforeunload alert
+    window.location.reload();
+}
+
+// Fungsi pengunci fisik seluruh link navigasi luar (sidebar & header)
+function lockOuterNavLinks() {
+    document.querySelectorAll('aside a, header a, nav a:not(.quiz-internal-nav)').forEach(function(link) {
+        if (!link.hasAttribute('data-exam-locked')) {
+            link.setAttribute('data-exam-locked', 'true');
+            link.setAttribute('data-original-href', link.getAttribute('href') || '');
+            link.setAttribute('href', 'javascript:void(0)');
+            link.style.cursor = 'not-allowed';
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                openExamLockedModal();
+                return false;
+            }, true);
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', lockOuterNavLinks);
+} else {
+    lockOuterNavLinks();
+}
+setTimeout(lockOuterNavLinks, 400);
+
+// Cegat total di fase CAPTURE (sebelum link sempat diproses browser)
 document.addEventListener('click', function(e) {
     if (window.isSubmittingQuiz) return;
-    const anchor = e.target.closest('a');
-    if (!anchor) return;
-    
-    const href = anchor.getAttribute('href');
-    if (!href || href === '#' || href.startsWith('javascript:')) return;
-    if (anchor.target === '_blank') return;
-
-    e.preventDefault();
-    openLeaveWarningModal(anchor.href, false);
-});
+    const anchor = e.target.closest('aside a, header a, nav a:not(.quiz-internal-nav)');
+    if (anchor) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        openExamLockedModal();
+        return false;
+    }
+}, true); // useCapture = true
 
 // Cegat shortcut keyboard reload (F5, Ctrl+R, Cmd+R)
 window.addEventListener('keydown', function(e) {
@@ -409,30 +472,109 @@ window.addEventListener('keydown', function(e) {
     
     if (isF5 || isCtrlR) {
         e.preventDefault();
-        openLeaveWarningModal(null, true);
+        openReloadModal();
     }
 });
 @endunless
 @unless($quiz->isPractice())
-let focusLossCount = 0;
+const ATTEMPT_STORAGE_KEY = 'garbarata_attempt_{{ $attempt->id }}';
+let focusLossCount = parseInt(localStorage.getItem(ATTEMPT_STORAGE_KEY + '_focus_loss') || '0', 10);
 const MAX_FOCUS_LOSS = 3;
+let isPendingForceSubmit = localStorage.getItem(ATTEMPT_STORAGE_KEY + '_locked') === 'true';
+let lastFocusLossTime = 0;
+const FOCUS_LOSS_COOLDOWN = 1200; // 1.2 detik cooldown pencegah hitungan ganda
 
-// Deteksi perpindahan tab / keluar halaman (Anti-Cheat)
+function triggerFocusLoss() {
+    if (window.isSubmittingQuiz) return;
+    const now = Date.now();
+    if (now - lastFocusLossTime < FOCUS_LOSS_COOLDOWN) {
+        return;
+    }
+    lastFocusLossTime = now;
+    handleFocusLoss();
+}
+
+// 1. Deteksi perpindahan tab atau jendela diminimalkan (Page Visibility API)
 document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-        handleFocusLoss();
+        triggerFocusLoss();
     }
 });
+
+// 2. Deteksi klik ke luar jendela kuis / split-screen window (Window Blur API)
+window.addEventListener('blur', function() {
+    triggerFocusLoss();
+});
+
+function lockQuizInputsDueToCheat() {
+    showOfflineModal(@js(__('Pelanggaran Keamanan! Anda telah berpindah tab sebanyak 3 kali. Karena koneksi internet sedang terputus, lembar kuis dikunci permanen dan akan otomatis dikirimkan ke server begitu koneksi internet terhubung kembali.')));
+    // Nonaktifkan semua input agar jawaban tidak bisa diubah lagi saat offline
+    document.querySelectorAll('input, textarea, select').forEach(el => el.disabled = true);
+    document.querySelectorAll('.quiz-submit-btn, button[onclick="confirmSubmit()"], button[onclick="submitQuiz()"]').forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+    });
+}
+
+function showCheatForceSubmitModal() {
+    window.isSubmittingQuiz = true;
+    if (window.quizTimerInterval) {
+        clearInterval(window.quizTimerInterval); // Hentikan timer utama agar tidak bertabrakan
+    }
+
+    // Kunci seluruh input jawaban segera
+    document.querySelectorAll('input, textarea, select').forEach(el => el.disabled = true);
+    document.querySelectorAll('.quiz-submit-btn, button[onclick="confirmSubmit()"], button[onclick="submitQuiz()"]').forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+    });
+
+    const modalTitle = document.querySelector('#cheat-modal h3');
+    const modalSubtitle = document.querySelector('#cheat-modal p.font-semibold');
+    const modalMsg = document.getElementById('cheat-warning-msg');
+    const modalBtn = document.querySelector('#cheat-modal button');
+
+    if (modalTitle) modalTitle.textContent = @js(__('Batas Pelanggaran Tercapai!'));
+    if (modalSubtitle) modalSubtitle.textContent = @js(__('Anda telah meninggalkan halaman kuis sebanyak 3 kali.'));
+
+    let countdown = 3;
+    if (modalMsg) {
+        modalMsg.textContent = @js(__('Kuis otomatis dikirim dalam')) + ` ${countdown} ` + @js(__('detik...'));
+    }
+    if (modalBtn) {
+        modalBtn.textContent = @js(__('Mengirimkan Kuis...'));
+        modalBtn.disabled = true;
+        modalBtn.classList.add('opacity-75', 'cursor-not-allowed');
+    }
+
+    document.getElementById('cheat-modal').classList.remove('hidden');
+
+    const forceTimer = setInterval(function() {
+        countdown--;
+        if (countdown > 0) {
+            if (modalMsg) modalMsg.textContent = @js(__('Kuis otomatis dikirim dalam')) + ` ${countdown} ` + @js(__('detik...'));
+        } else {
+            clearInterval(forceTimer);
+            submitQuiz(); // Delegasikan ke submitQuiz() yang memiliki validasi koneksi & proteksi double-submit
+        }
+    }, 1000);
+}
 
 function handleFocusLoss() {
     if (window.isSubmittingQuiz) return;
     
     focusLossCount++;
+    localStorage.setItem(ATTEMPT_STORAGE_KEY + '_focus_loss', focusLossCount);
     
     if (focusLossCount >= MAX_FOCUS_LOSS) {
-        window.isSubmittingQuiz = true;
-        showGlobalAlert(@js(__('Pelanggaran Keamanan')), @js(__('Kuis Anda otomatis dikirim karena melanggar aturan fokus halaman kuis sebanyak 3 kali.')));
-        document.getElementById('quiz-form').submit();
+        localStorage.setItem(ATTEMPT_STORAGE_KEY + '_locked', 'true');
+        if (!navigator.onLine) {
+            isPendingForceSubmit = true;
+            window.isSubmittingQuiz = true;
+            lockQuizInputsDueToCheat();
+            return;
+        }
+        showCheatForceSubmitModal();
     } else {
         const remaining = MAX_FOCUS_LOSS - focusLossCount;
         const msg = @js(__('Peringatan')) + ` ${focusLossCount}/${MAX_FOCUS_LOSS}: ` + @js(__('Harap tetap fokus pada halaman kuis. Jika Anda meninggalkan halaman ini sebanyak')) + ` ${remaining} ` + @js(__('kali lagi, jawaban Anda akan otomatis dikirim secara paksa!'));
@@ -443,13 +585,35 @@ function handleFocusLoss() {
 }
 
 function closeCheatModal() {
+    if (focusLossCount >= MAX_FOCUS_LOSS) return; // Tidak bisa ditutup manual saat auto-submit
     document.getElementById('cheat-modal').classList.add('hidden');
 }
 @endunless
 
+function showOfflineModal(customMsg = null) {
+    const modal = document.getElementById('offline-modal');
+    const msgEl = document.getElementById('offline-modal-msg');
+    if (msgEl && customMsg) {
+        msgEl.textContent = customMsg;
+    }
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeOfflineModal() {
+    const modal = document.getElementById('offline-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
 // Detektor Koneksi Internet
 window.addEventListener('online', function() {
     showConnectionStatus(true);
+    closeOfflineModal();
+    if (isPendingForceSubmit || (typeof secondsLeft !== 'undefined' && secondsLeft <= 0)) {
+        window.isSubmittingQuiz = true;
+        localStorage.removeItem(ATTEMPT_STORAGE_KEY + '_locked');
+        localStorage.removeItem(ATTEMPT_STORAGE_KEY + '_focus_loss');
+        document.getElementById('quiz-form').submit();
+    }
 });
 
 window.addEventListener('offline', function() {
@@ -477,7 +641,7 @@ function showConnectionStatus(isOnline) {
             banner.classList.add('hidden');
         }, 4000);
     } else {
-        text.textContent = @js(__('Koneksi Internet Terputus! Harap jangan menutup halaman kuis ini. Jawaban Anda akan otomatis tersinkronisasi kembali ketika internet aktif.'));
+        text.textContent = @js(__('Koneksi Internet Terputus! Harap jangan menutup halaman kuis ini. Jawaban Anda tetap tersimpan pada halaman ini dan akan dikirim setelah koneksi aktif.'));
         banner.className = 'fixed top-0 left-0 right-0 z-50 px-4 py-2.5 text-center text-sm font-bold bg-rose-600 text-white shadow-md transition-all duration-300';
         banner.classList.remove('hidden');
         
@@ -648,7 +812,7 @@ function jumpTo(num) {
 
 function confirmSubmit() {
     if (!navigator.onLine) {
-        alert(@js(__('Koneksi internet terputus. Harap tunggu hingga koneksi terhubung kembali untuk mengirimkan jawaban.')));
+        showOfflineModal(@js(__('Koneksi internet terputus. Harap tunggu hingga koneksi terhubung kembali untuk mengirimkan jawaban.')));
         return;
     }
 
@@ -673,12 +837,19 @@ function confirmSubmit() {
     document.getElementById('confirm-modal').classList.remove('hidden');
 }
 
+let isSubmitDispatched = false;
+
 function submitQuiz() {
+    if (isSubmitDispatched) return;
     if (!navigator.onLine) {
-        alert(@js(__('Koneksi internet terputus. Tidak dapat mengirimkan kuis saat offline.')));
+        showOfflineModal(@js(__('Koneksi internet terputus. Tidak dapat mengirimkan kuis saat offline. Harap pastikan perangkat terhubung kembali ke internet.')));
         return;
     }
+    isSubmitDispatched = true;
     window.isSubmittingQuiz = true;
+    if (window.quizTimerInterval) clearInterval(window.quizTimerInterval);
+    localStorage.removeItem(ATTEMPT_STORAGE_KEY + '_locked');
+    localStorage.removeItem(ATTEMPT_STORAGE_KEY + '_focus_loss');
     document.getElementById('quiz-form').submit();
 }
 
@@ -689,8 +860,10 @@ const timerEl = document.getElementById('timer-display');
 const timerWrap = document.getElementById('timer');
 
 function tick() {
+    if (window.isSubmittingQuiz || isSubmitDispatched) return;
     if (secondsLeft <= 0) {
         if (timerEl) timerEl.textContent = '00:00';
+        if (window.quizTimerInterval) clearInterval(window.quizTimerInterval);
         // Auto submit
         submitQuiz();
         return;
@@ -709,7 +882,7 @@ function tick() {
         timerWrap.classList.add('bg-red-100', 'text-red-600');
     }
 }
-setInterval(tick, 1000);
+window.quizTimerInterval = setInterval(tick, 1000);
 @endif
 
 // Init
@@ -717,5 +890,16 @@ updateNavColors();
 if (!navigator.onLine) {
     showConnectionStatus(false);
 }
+@unless($quiz->isPractice())
+if (isPendingForceSubmit || focusLossCount >= MAX_FOCUS_LOSS) {
+    if (navigator.onLine) {
+        showCheatForceSubmitModal();
+    } else {
+        isPendingForceSubmit = true;
+        window.isSubmittingQuiz = true;
+        lockQuizInputsDueToCheat();
+    }
+}
+@endunless
 </script>
 </x-app-layout>

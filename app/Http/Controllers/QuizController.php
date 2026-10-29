@@ -70,6 +70,8 @@ class QuizController extends Controller
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
             'start_time'        => 'nullable|date',
             'end_time'          => 'nullable|date|after:start_time',
+        ], [
+            'end_time.after'    => __('Waktu penutupan harus setelah waktu pembukaan.'),
         ]);
 
         // Pastikan chapter_id milik course ini
@@ -169,6 +171,8 @@ class QuizController extends Controller
             'review_policy'     => 'required|in:show_all,points_only,hide_all',
             'start_time'        => 'nullable|date',
             'end_time'          => 'nullable|date|after:start_time',
+        ], [
+            'end_time.after'    => __('Waktu penutupan harus setelah waktu pembukaan.'),
         ]);
 
         if (!empty($validated['chapter_id'])) {

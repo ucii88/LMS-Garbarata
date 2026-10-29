@@ -113,7 +113,11 @@ class QuizAttemptController extends Controller
                                ->where('quiz_id', $quiz->id)
                                ->whereNull('submitted_at')
                                ->latest()
-                               ->firstOrFail();
+                               ->first();
+
+        if (! $attempt) {
+            return redirect()->route($quiz->isPractice() ? 'practice.result' : 'quiz.result', [$course, $quiz]);
+        }
 
         // Ambil soal — shuffle jika diaktifkan
         $questions = $quiz->questions()->with('options')->get();
@@ -202,7 +206,11 @@ class QuizAttemptController extends Controller
                                ->where('quiz_id', $quiz->id)
                                ->whereNull('submitted_at')
                                ->latest()
-                               ->firstOrFail();
+                               ->first();
+
+        if (! $attempt) {
+            return redirect()->route($quiz->isPractice() ? 'practice.result' : 'quiz.result', [$course, $quiz]);
+        }
 
         // Cek timer — auto-submit jika waktu habis
         if ($quiz->time_limit) {

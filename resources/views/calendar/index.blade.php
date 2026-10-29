@@ -232,17 +232,28 @@
                                  'border-indigo-200 bg-indigo-50/50': event.color === 'indigo'
                              }">
                             <div class="flex items-start justify-between gap-2">
-                                <div>
-                                    <span class="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wide"
-                                          :class="{
-                                              'bg-rose-100 text-rose-700': event.color === 'rose',
-                                              'bg-amber-100 text-amber-700': event.color === 'amber',
-                                              'bg-blue-100 text-blue-700': event.color === 'blue',
-                                              'bg-emerald-100 text-emerald-700': event.color === 'emerald',
-                                              'bg-indigo-100 text-indigo-700': event.color === 'indigo'
-                                          }"
-                                          x-text="event.badge_text"></span>
-                                    <h4 class="text-sm font-bold text-slate-900 mt-1.5" x-text="event.title"></h4>
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <span class="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wide"
+                                              :class="{
+                                                  'bg-rose-100 text-rose-700': event.color === 'rose',
+                                                  'bg-amber-100 text-amber-700': event.color === 'amber',
+                                                  'bg-blue-100 text-blue-700': event.color === 'blue',
+                                                  'bg-emerald-100 text-emerald-700': event.color === 'emerald',
+                                                  'bg-indigo-100 text-indigo-700': event.color === 'indigo'
+                                              }"
+                                              x-text="event.badge_text"></span>
+                                        <template x-if="event.status_badge">
+                                            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold"
+                                                  :class="{
+                                                      'bg-amber-100 text-amber-700': event.status === 'upcoming',
+                                                      'bg-slate-100 text-slate-600': event.status === 'closed',
+                                                      'bg-emerald-100 text-emerald-700': event.status === 'open'
+                                                  }"
+                                                  x-text="event.status_badge"></span>
+                                        </template>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-slate-900 mt-1" x-text="event.title"></h4>
                                 </div>
                                 <span class="text-xs font-semibold text-slate-500 bg-white/80 px-2 py-1 rounded-md border border-slate-200 shrink-0" x-text="event.time_str"></span>
                             </div>
@@ -252,11 +263,18 @@
                             <div class="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-200/60">
                                 <span class="font-medium truncate max-w-[200px]" x-text="event.course_title"></span>
 
-                                <a :href="event.action_url" 
-                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow-2xs">
-                                    <span x-text="event.action_label"></span>
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </a>
+                                <template x-if="event.is_disabled">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 bg-slate-100 cursor-not-allowed">
+                                        <span x-text="event.action_label"></span>
+                                    </span>
+                                </template>
+                                <template x-if="!event.is_disabled">
+                                    <a :href="event.action_url" 
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow-2xs">
+                                        <span x-text="event.action_label"></span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                    </a>
+                                </template>
                             </div>
                         </div>
                     </template>

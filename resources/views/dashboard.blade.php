@@ -409,7 +409,7 @@
                                         @if(!empty($event['is_modal']))
                                             <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">{{ __('Belum Dibuka') }}</span>
                                         @elseif(($event['status'] ?? '') === 'closed')
-                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{{ __('Selesai') }}</span>
+                                            <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{{ __('Ditutup') }}</span>
                                         @else
                                             <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">{{ __('Dibuka') }}</span>
                                         @endif

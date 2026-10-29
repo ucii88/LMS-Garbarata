@@ -123,7 +123,7 @@
         <!-- Navigation Back & Title Bar -->
         <div class="flex items-center justify-between">
             <a href="{{ route('courses.show', $course->id) }}" class="inline-flex items-center text-xs font-bold text-gray-500 hover:text-blue-600 transition">
-                &larr; {{ __('Kembali ke Silabus Kursus') }}
+                &larr; {{ __('Kembali ke Daftar Bab') }}
             </a>
 
             <div class="flex items-center gap-2">
@@ -202,9 +202,60 @@
 
                     <!-- Main Sub-Bab Title and HTML Content -->
                     <div class="space-y-4">
-                        <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="getSingleModule(activeTab).title">
-                            Memuat materi...
-                        </h2>
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <h2 class="text-lg font-bold text-slate-800 leading-snug" x-text="getSingleModule(activeTab).title">
+                                Memuat materi...
+                            </h2>
+                            <template x-if="getSingleModule(activeTab).content">
+                                <div class="tts-controls-group">
+                                    <select class="tts-speed-select" onchange="window.LmsTTS.setRate(this.value)" title="{{ app()->getLocale() === 'en' ? 'Voice Speed' : 'Kecepatan Suara' }}">
+                                        <option value="0.8">0.8x</option>
+                                        <option value="1" selected>1.0x</option>
+                                        <option value="1.2">1.2x</option>
+                                        <option value="1.4">1.4x</option>
+                                        <option value="1.6">1.6x</option>
+                                        <option value="1.8">1.8x</option>
+                                        <option value="2">2.0x</option>
+                                    </select>
+                                    <div class="tts-divider"></div>
+                                    <button
+                                        type="button"
+                                        class="tts-ctrl-btn"
+                                        onclick="window.LmsTTS.prevParagraph()"
+                                        title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
+                                    >
+                                        <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3 6l9 6V6z"/></svg>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="tts-ctrl-btn"
+                                        onclick="window.LmsTTS.stop()"
+                                        title="{{ app()->getLocale() === 'en' ? 'Stop' : 'Berhenti' }}"
+                                    >
+                                        <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1.5"/></svg>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="tts-ctrl-btn tts-play-btn"
+                                        :data-tts-id="'defmod_' + getSingleModule(activeTab).id"
+                                        @click="window.ttsToggle('defmod_' + getSingleModule(activeTab).id, getSingleModule(activeTab).content, 'def-tts-content-' + getSingleModule(activeTab).id)"
+                                        title="{{ app()->getLocale() === 'en' ? 'Play / Pause' : 'Putar / Jeda' }}"
+                                    >
+                                        <span class="tts-icon">
+                                            <svg class="w-4 h-4 ml-0.5" fill="#ffffff" viewBox="0 0 24 24"><path fill="#ffffff" d="M8 5.14v13.72a1 1 0 0 0 1.53.85l11-6.86a1 1 0 0 0 0-1.7l-11-6.86a1 1 0 0 0-1.53.85z"/></svg>
+                                        </span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="tts-ctrl-btn"
+                                        onclick="window.LmsTTS.nextParagraph()"
+                                        title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
+                                    >
+                                        <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 18l9-6-9-6v12zm10-12h2v12h-2z"/></svg>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
 
                         <template x-if="getSingleModule(activeTab).image_path">
                             <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-sm my-3 max-w-2xl mx-auto">
@@ -237,23 +288,23 @@
                         </template>
 
                         <!-- Active Module Content body (rendered with HTML) -->
-                        <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content">
+                        <div :id="'def-tts-content-' + getSingleModule(activeTab).id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="getSingleModule(activeTab).content">
                             Memuat isi modul pembelajaran...
                         </div>
 
                         @if(auth()->user()->isInstruktur())
                             <template x-if="getSingleModule(activeTab).id">
                                 <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                    <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                        <span>Edit Modul Ini</span>
+                                        <span>{{ __('Edit Modul Ini') }}</span>
                                     </a>
                                     <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + getSingleModule(activeTab).id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus modul ini?') }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                        <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                            <span>Hapus Modul</span>
+                                            <span>{{ __('Hapus Modul') }}</span>
                                         </button>
                                     </form>
                                 </div>
@@ -270,7 +321,58 @@
 
                             <template x-for="subModule in getTabModules(activeTab)" :key="subModule.id">
                                 <div :id="'module-' + subModule.id" :data-module-id="subModule.id" class="pt-6 first:pt-0 border-t border-slate-100 space-y-4">
-                                    <h4 class="text-base font-bold text-slate-800 leading-snug" x-text="subModule.title"></h4>
+                                    <div class="flex items-center justify-between flex-wrap gap-2">
+                                        <h4 class="text-base font-bold text-slate-800 leading-snug" x-text="subModule.title"></h4>
+                                        <template x-if="subModule.content">
+                                            <div class="tts-controls-group">
+                                                <select class="tts-speed-select" onchange="window.LmsTTS.setRate(this.value)" title="{{ app()->getLocale() === 'en' ? 'Voice Speed' : 'Kecepatan Suara' }}">
+                                                    <option value="0.8">0.8x</option>
+                                                    <option value="1" selected>1.0x</option>
+                                                    <option value="1.2">1.2x</option>
+                                                    <option value="1.4">1.4x</option>
+                                                    <option value="1.6">1.6x</option>
+                                                    <option value="1.8">1.8x</option>
+                                                    <option value="2">2.0x</option>
+                                                </select>
+                                                <div class="tts-divider"></div>
+                                                <button
+                                                    type="button"
+                                                    class="tts-ctrl-btn"
+                                                    onclick="window.LmsTTS.prevParagraph()"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Previous Paragraph' : 'Paragraf Sebelumnya' }}"
+                                                >
+                                                    <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3 6l9 6V6z"/></svg>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="tts-ctrl-btn"
+                                                    onclick="window.LmsTTS.stop()"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Stop' : 'Berhenti' }}"
+                                                >
+                                                    <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="1.5"/></svg>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="tts-ctrl-btn tts-play-btn"
+                                                    :data-tts-id="'defsub_' + subModule.id"
+                                                    @click="window.ttsToggle('defsub_' + subModule.id, subModule.content, 'def-tts-sub-' + subModule.id)"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Play / Pause' : 'Putar / Jeda' }}"
+                                                >
+                                                    <span class="tts-icon">
+                                                        <svg class="w-4 h-4 ml-0.5" fill="#ffffff" viewBox="0 0 24 24"><path fill="#ffffff" d="M8 5.14v13.72a1 1 0 0 0 1.53.85l11-6.86a1 1 0 0 0 0-1.7l-11-6.86a1 1 0 0 0-1.53.85z"/></svg>
+                                                    </span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="tts-ctrl-btn"
+                                                    onclick="window.LmsTTS.nextParagraph()"
+                                                    title="{{ app()->getLocale() === 'en' ? 'Next Paragraph' : 'Paragraf Selanjutnya' }}"
+                                                >
+                                                    <svg class="w-3.5 h-3.5 fill-slate-800" viewBox="0 0 24 24"><path d="M6 18l9-6-9-6v12zm10-12h2v12h-2z"/></svg>
+                                                </button>
+                                            </div>
+                                        </template>
+                                    </div>
 
                                     <template x-if="subModule.image_path">
                                         <div class="rounded-xl border border-gray-200 bg-gray-50 p-3 shadow-xs my-3 max-w-2xl mx-auto">
@@ -302,20 +404,20 @@
                                         </div>
                                     </template>
 
-                                    <div class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
+                                    <div :id="'def-tts-sub-' + subModule.id" class="text-sm text-slate-600 leading-relaxed space-y-3.5 prose prose-slate max-w-none prose-sm" x-html="subModule.content"></div>
 
                                     @if(auth()->user()->isInstruktur())
                                         <div class="flex items-center gap-2 pt-3 border-t border-slate-100">
-                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                            <a :href="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id + '/edit'" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                                <span>Edit Sub-Modul Ini</span>
+                                                <span>{{ __('Edit Modul Ini') }}</span>
                                             </a>
                                             <form :action="'/courses/{{ $course->id }}/chapters/{{ $chapter->id }}/modules/' + subModule.id" method="POST" data-confirm="{{ __('Apakah Anda yakin ingin menghapus sub-modul ini?') }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1">
+                                                <button type="submit" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1.5">
                                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                    <span>Hapus Sub-Modul</span>
+                                                    <span>{{ __('Hapus Modul') }}</span>
                                                 </button>
                                             </form>
                                         </div>
