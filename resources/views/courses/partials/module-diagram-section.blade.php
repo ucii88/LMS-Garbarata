@@ -625,12 +625,12 @@
 
             <form @submit.prevent="saveHotspotForm()" class="space-y-4 text-xs">
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">{{ __('Nomor / Label Hotspot Dot (misal: 1, 2, 3...)') }}</label>
+                    <label class="block font-bold text-slate-700 mb-1">{{ __('Nomor / Label Hotspot Dot (misal: 1, 2, 3...)') }} <span class="text-[10px] text-blue-500 lowercase font-normal">({{ __('otomatis diterjemahkan') }})</span></label>
                     <input type="text" x-model="activeHotspot.label" required placeholder="{{ __('Contoh: 1') }}" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">{{ __('Nama Part / Deskripsi Singkat') }}</label>
+                    <label class="block font-bold text-slate-700 mb-1">{{ __('Nama Part / Deskripsi Singkat') }} <span class="text-[10px] text-blue-500 lowercase font-normal">({{ __('otomatis diterjemahkan') }})</span></label>
                     <input type="text" x-model="activeHotspot.popup_title" placeholder="{{ __('Contoh: 1. Barrel Rotunda Curtain Assembly') }}" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500">
                 </div>
 
@@ -644,7 +644,7 @@
 
                 <template x-if="activeHotspot.action_type === 'popup'">
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1">{{ __('Isi Detail Pop-up Info') }}</label>
+                        <label class="block font-bold text-slate-700 mb-1">{{ __('Isi Detail Pop-up Info') }} <span class="text-[10px] text-blue-500 lowercase font-normal">({{ __('otomatis diterjemahkan') }})</span></label>
                         <textarea x-model="activeHotspot.popup_content" rows="3" placeholder="{{ __('Tuliskan spesifikasi/penjelasan detail komponen ini...') }}" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
                 </template>

@@ -146,11 +146,11 @@
 
             {{-- Pertanyaan --}}
             <div class="space-y-3">
-                <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Pertanyaan') }} <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">{{ __('Pertanyaan') }} <span class="text-red-500">*</span> <span class="text-xs text-slate-400 font-normal">({{ __('Cukup isi salah satu bahasa, bahasa lainnya otomatis diterjemahkan') }})</span></label>
                 <div class="grid gap-3 md:grid-cols-2">
                     <div class="space-y-1">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('Bahasa Indonesia') }}</span>
-                        <textarea name="question_text[id]" rows="3" required
+                        <textarea name="question_text[id]" rows="3"
                                   class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
                                   placeholder="{{ __('Tulis pertanyaan di sini...') }}"></textarea>
                     </div>
@@ -361,7 +361,7 @@ function mcOptionRow(i, label) {
             </label>
         </div>
         <div class="grid gap-2 flex-1 md:grid-cols-2">
-            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.optionPlaceholder} ${label} (ID)" required
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.optionPlaceholder} ${label} (ID)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
             <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.optionPlaceholder} ${label} (EN)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
@@ -418,7 +418,7 @@ function buildFillBlankOption() {
     wrap.innerHTML = `
         <input type="hidden" name="options[0][is_correct]" value="1">
         <div class="grid gap-2 md:grid-cols-2">
-            <input type="text" name="options[0][text][id]" required placeholder="Ketik jawaban yang benar (ID)"
+            <input type="text" name="options[0][text][id]" placeholder="Ketik jawaban yang benar (ID)"
                    class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
             <input type="text" name="options[0][text][en]" placeholder="Type the correct answer (EN)"
                    class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-base focus:ring-2 focus:ring-blue-500 outline-none">
@@ -460,14 +460,14 @@ function matchingRow(i, letter) {
         <span class="opt-label text-sm font-bold text-slate-500 w-6">${letter}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
         <div class="grid gap-2 md:grid-cols-2">
-            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.leftItem} (ID)" required
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.leftItem} (ID)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
             <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.leftItem} (EN)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
         <span class="hidden md:block text-slate-400 text-center">→</span>
         <div class="grid gap-2 md:grid-cols-2">
-            <input type="text" name="options[${i}][match_label][id]" data-field="match_label" data-locale="id" placeholder="${_t.rightItem} (ID)" required
+            <input type="text" name="options[${i}][match_label][id]" data-field="match_label" data-locale="id" placeholder="${_t.rightItem} (ID)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
             <input type="text" name="options[${i}][match_label][en]" data-field="match_label" data-locale="en" placeholder="${_t.rightItem} (EN)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
@@ -498,7 +498,7 @@ function orderingRow(i) {
         <span class="opt-label text-sm font-bold text-slate-500 w-6">${i+1}.</span>
         <input type="hidden" name="options[${i}][is_correct]" value="1">
         <div class="grid gap-2 flex-1 md:grid-cols-2">
-            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.stepPlaceholder}${i+1} (ID)" required
+            <input type="text" name="options[${i}][text][id]" data-field="text" data-locale="id" placeholder="${_t.stepPlaceholder}${i+1} (ID)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">
             <input type="text" name="options[${i}][text][en]" data-field="text" data-locale="en" placeholder="${_t.stepPlaceholder}${i+1} (EN)"
                    class="w-full border border-slate-200 rounded-lg px-3 py-2 text-base focus:ring-2 focus:ring-blue-500 outline-none">

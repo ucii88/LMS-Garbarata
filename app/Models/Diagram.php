@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use App\Traits\HasTranslations;
+
 class Diagram extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'chapter_id',
@@ -17,6 +19,10 @@ class Diagram extends Model
         'title',
         'image_path',
         'order',
+    ];
+
+    protected $translatable = [
+        'title',
     ];
 
     /**

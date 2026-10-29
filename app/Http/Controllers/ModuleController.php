@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Chapter;
 use App\Models\Module;
+use App\Services\TranslationService;
 use Illuminate\Http\Request;
 
 class ModuleController extends Controller
@@ -26,25 +27,30 @@ class ModuleController extends Controller
     public function store(Request $request, Course $course, Chapter $chapter)
     {
         $validated = $request->validate([
-            'title.id' => 'required|string|max:255',
-            'title.en' => 'nullable|string|max:255',
-            'content.id' => 'required|string',
+            'title.id'   => 'nullable|string|max:255',
+            'title.en'   => 'nullable|string|max:255',
+            'content.id' => 'nullable|string',
             'content.en' => 'nullable|string',
             'image_path' => 'nullable|string|max:255',
-            'order' => 'required|integer|min:1',
+            'order'      => 'required|integer|min:1',
         ]);
 
+        // Require at least one language for title and content
+        if (empty($validated['title']['id'] ?? '') && empty($validated['title']['en'] ?? '')) {
+            return back()->withErrors(['title.id' => __('Judul wajib diisi dalam salah satu bahasa.')])->withInput();
+        }
+        if (empty($validated['content']['id'] ?? '') && empty($validated['content']['en'] ?? '')) {
+            return back()->withErrors(['content.id' => __('Konten wajib diisi dalam salah satu bahasa.')])->withInput();
+        }
+
+        [$titleId, $titleEn]     = $this->autoTranslatePair($validated['title']['id'] ?? '', $validated['title']['en'] ?? '');
+        [$contentId, $contentEn] = $this->autoTranslatePair($validated['content']['id'] ?? '', $validated['content']['en'] ?? '');
+
         $data = [
-            'title' => [
-                'id' => $validated['title']['id'],
-                'en' => $validated['title']['en'] ?? '',
-            ],
-            'content' => [
-                'id' => $validated['content']['id'],
-                'en' => $validated['content']['en'] ?? '',
-            ],
+            'title'      => ['id' => $titleId,   'en' => $titleEn],
+            'content'    => ['id' => $contentId, 'en' => $contentEn],
             'image_path' => $validated['image_path'] ?? null,
-            'order' => $validated['order'],
+            'order'      => $validated['order'],
         ];
 
         $module = new Module($data);
@@ -80,25 +86,30 @@ class ModuleController extends Controller
         }
 
         $validated = $request->validate([
-            'title.id' => 'required|string|max:255',
-            'title.en' => 'nullable|string|max:255',
-            'content.id' => 'required|string',
+            'title.id'   => 'nullable|string|max:255',
+            'title.en'   => 'nullable|string|max:255',
+            'content.id' => 'nullable|string',
             'content.en' => 'nullable|string',
             'image_path' => 'nullable|string|max:255',
-            'order' => 'required|integer|min:1',
+            'order'      => 'required|integer|min:1',
         ]);
 
+        // Require at least one language for title and content
+        if (empty($validated['title']['id'] ?? '') && empty($validated['title']['en'] ?? '')) {
+            return back()->withErrors(['title.id' => __('Judul wajib diisi dalam salah satu bahasa.')])->withInput();
+        }
+        if (empty($validated['content']['id'] ?? '') && empty($validated['content']['en'] ?? '')) {
+            return back()->withErrors(['content.id' => __('Konten wajib diisi dalam salah satu bahasa.')])->withInput();
+        }
+
+        [$titleId, $titleEn]     = $this->autoTranslatePair($validated['title']['id'] ?? '', $validated['title']['en'] ?? '');
+        [$contentId, $contentEn] = $this->autoTranslatePair($validated['content']['id'] ?? '', $validated['content']['en'] ?? '');
+
         $data = [
-            'title' => [
-                'id' => $validated['title']['id'],
-                'en' => $validated['title']['en'] ?? '',
-            ],
-            'content' => [
-                'id' => $validated['content']['id'],
-                'en' => $validated['content']['en'] ?? '',
-            ],
+            'title'      => ['id' => $titleId,   'en' => $titleEn],
+            'content'    => ['id' => $contentId, 'en' => $contentEn],
             'image_path' => $validated['image_path'] ?? null,
-            'order' => $validated['order'],
+            'order'      => $validated['order'],
         ];
 
         $module->update($data);
@@ -123,5 +134,19 @@ class ModuleController extends Controller
         return redirect()
             ->route('courses.chapters.show', [$course->id, $chapter->id])
             ->with('success', __('Modul berhasil dihapus.'));
+    }
+
+    /**
+     * Auto-fill missing language translation for a string pair.
+     * If both are filled, returns as-is.
+     * If only `id` is filled, translates id -> en.
+     * If only `en` is filled, translates en -> id.
+     *
+     * @return array [string $id, string $en]
+     */
+    private function autoTranslatePair(string $textId, string $textEn): array
+    {
+        $res = TranslationService::autoTranslatePair($textId, $textEn);
+        return [$res['id'], $res['en']];
     }
 }

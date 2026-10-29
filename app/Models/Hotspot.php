@@ -24,6 +24,7 @@ class Hotspot extends Model
     ];
 
     protected $translatable = [
+        'label',
         'popup_title',
         'popup_content',
     ];

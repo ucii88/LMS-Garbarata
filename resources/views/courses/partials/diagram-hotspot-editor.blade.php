@@ -103,7 +103,7 @@
 
         <form @submit.prevent="saveHotspotForm()" class="mt-4 space-y-4">
             <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{{ __('Label Hotspot') }}</label>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{{ __('Label Hotspot') }} <span class="text-[10px] text-blue-500 lowercase font-normal">({{ __('otomatis diterjemahkan') }})</span></label>
                 <input type="text" x-model="activeHotspot.label" required placeholder="{{ __('Contoh: Titik 1 atau Katup Utama') }}"
                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm font-semibold text-slate-800 outline-none transition">
             </div>
@@ -149,12 +149,12 @@
             {{-- Fields for Pop-up Action --}}
             <div x-show="activeHotspot.action_type === 'popup'" class="space-y-3">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{{ __('Judul Pop-Up') }}</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{{ __('Judul Pop-Up') }} <span class="text-[10px] text-blue-500 lowercase font-normal">({{ __('otomatis diterjemahkan') }})</span></label>
                     <input type="text" x-model="activeHotspot.popup_title" placeholder="{{ __('Contoh: Penjelasan Pompa Utama') }}"
                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm font-semibold text-slate-800 outline-none transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{{ __('Isi Penjelasan Pop-Up') }}</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{{ __('Isi Penjelasan Pop-Up') }} <span class="text-[10px] text-blue-500 lowercase font-normal">({{ __('otomatis diterjemahkan') }})</span></label>
                     <textarea x-model="activeHotspot.popup_content" rows="3" placeholder="{{ __('Tuliskan penjelasan rinci mengenai komponen ini...') }}"
                               class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm font-medium text-slate-800 outline-none transition resize-none"></textarea>
                 </div>

@@ -12,6 +12,7 @@ use App\Models\Module;
 use App\Models\ModuleProgress;
 use App\Models\Quiz;
 use App\Models\QuizAttempt;
+use App\Services\TranslationService;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -225,7 +226,7 @@ class CourseController extends Controller
             $diagram = Diagram::updateOrCreate(
                 ['chapter_id' => $chapter->id],
                 [
-                    'title' => $request->title ?? ('Diagram ' . $chapter->title),
+                    'title' => $this->autoTranslatePlain($request->title ?? ('Diagram ' . $chapter->title)),
                     'image_path' => $imagePath,
                 ]
             );
@@ -272,14 +273,18 @@ class CourseController extends Controller
         ]);
 
         $hotspot = Hotspot::create([
-            'diagram_id' => $diagram->id,
-            'label' => $request->label,
-            'action_type' => $request->action_type,
+            'diagram_id'       => $diagram->id,
+            'label'            => $this->autoTranslatePlain($request->label),
+            'action_type'      => $request->action_type,
             'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
-            'popup_title' => $request->action_type === 'popup' ? $request->popup_title : null,
-            'popup_content' => $request->action_type === 'popup' ? $request->popup_content : null,
-            'x_percent' => $request->x_percent,
-            'y_percent' => $request->y_percent,
+            'popup_title'      => $request->action_type === 'popup'
+                ? $this->autoTranslatePlain($request->popup_title ?? $request->label ?? '')
+                : null,
+            'popup_content'    => $request->action_type === 'popup'
+                ? $this->autoTranslatePlain($request->popup_content ?? '')
+                : null,
+            'x_percent'        => $request->x_percent,
+            'y_percent'        => $request->y_percent,
         ]);
 
         return response()->json([
@@ -304,13 +309,17 @@ class CourseController extends Controller
         ]);
 
         $hotspot->update([
-            'label' => $request->label,
-            'action_type' => $request->action_type,
+            'label'            => $this->autoTranslatePlain($request->label),
+            'action_type'      => $request->action_type,
             'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
-            'popup_title' => $request->action_type === 'popup' ? $request->popup_title : null,
-            'popup_content' => $request->action_type === 'popup' ? $request->popup_content : null,
-            'x_percent' => $request->x_percent,
-            'y_percent' => $request->y_percent,
+            'popup_title'      => $request->action_type === 'popup'
+                ? $this->autoTranslatePlain($request->popup_title ?? $request->label ?? '')
+                : null,
+            'popup_content'    => $request->action_type === 'popup'
+                ? $this->autoTranslatePlain($request->popup_content ?? '')
+                : null,
+            'x_percent'        => $request->x_percent,
+            'y_percent'        => $request->y_percent,
         ]);
 
         return response()->json([
@@ -350,7 +359,7 @@ class CourseController extends Controller
             if ($request->filled('diagram_id')) {
                 $diagram = Diagram::where('module_id', $module->id)->where('id', $request->diagram_id)->firstOrFail();
                 $diagram->update([
-                    'title' => $request->title ?? $diagram->title,
+                    'title' => $this->autoTranslatePlain($request->title ?? $diagram->title),
                     'image_path' => $imagePath,
                 ]);
             } else {
@@ -358,7 +367,7 @@ class CourseController extends Controller
                 $diagram = Diagram::create([
                     'module_id' => $module->id,
                     'chapter_id' => null,
-                    'title' => $request->title ?? ($module->title . ' Technical Drawing ' . ($maxOrder > 0 ? ($maxOrder + 1) : '')),
+                    'title' => $this->autoTranslatePlain($request->title ?? ($module->title . ' Technical Drawing ' . ($maxOrder > 0 ? ($maxOrder + 1) : ''))),
                     'image_path' => $imagePath,
                     'order' => $maxOrder + 1,
                 ]);
@@ -415,13 +424,13 @@ class CourseController extends Controller
         }
 
         $hotspot = $diagram->hotspots()->create([
-            'label' => $request->label,
-            'action_type' => $request->action_type,
+            'label'            => $this->autoTranslatePlain($request->label),
+            'action_type'      => $request->action_type,
             'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
-            'popup_title' => $request->popup_title ?? $request->label,
-            'popup_content' => $request->popup_content,
-            'x_percent' => $request->x_percent,
-            'y_percent' => $request->y_percent,
+            'popup_title'      => $this->autoTranslatePlain($request->popup_title ?? $request->label ?? ''),
+            'popup_content'    => $this->autoTranslatePlain($request->popup_content ?? ''),
+            'x_percent'        => $request->x_percent,
+            'y_percent'        => $request->y_percent,
         ]);
 
         return response()->json([
@@ -467,13 +476,13 @@ class CourseController extends Controller
         ]);
 
         $hotspot->update([
-            'label' => $request->label,
-            'action_type' => $request->action_type,
+            'label'            => $this->autoTranslatePlain($request->label),
+            'action_type'      => $request->action_type,
             'target_module_id' => $request->action_type !== 'popup' ? $request->target_module_id : null,
-            'popup_title' => $request->popup_title ?? $request->label,
-            'popup_content' => $request->popup_content,
-            'x_percent' => $request->x_percent,
-            'y_percent' => $request->y_percent,
+            'popup_title'      => $this->autoTranslatePlain($request->popup_title ?? $request->label ?? ''),
+            'popup_content'    => $this->autoTranslatePlain($request->popup_content ?? ''),
+            'x_percent'        => $request->x_percent,
+            'y_percent'        => $request->y_percent,
         ]);
 
         return response()->json([
@@ -534,5 +543,17 @@ class CourseController extends Controller
         $chapter->delete();
 
         return redirect()->route('courses.show', $course->id)->with('success', __('Bab berhasil dihapus.'));
+    }
+
+    /**
+     * Auto-translate text for multilanguage support.
+     * Returns an array ['id' => string, 'en' => string].
+     *
+     * @param  mixed  $value
+     * @return array  ['id' => string, 'en' => string]
+     */
+    private function autoTranslatePlain(mixed $value): array
+    {
+        return TranslationService::autoTranslatePayload($value);
     }
 }

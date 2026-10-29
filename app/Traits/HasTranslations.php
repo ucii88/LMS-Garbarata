@@ -79,6 +79,12 @@ trait HasTranslations
         if (is_string($raw)) {
             $decoded = json_decode($raw, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                if (isset($decoded['id']) && is_string($decoded['id']) && str_starts_with(trim($decoded['id']), '{')) {
+                    $inner = json_decode($decoded['id'], true);
+                    if (is_array($inner) && (isset($inner['id']) || isset($inner['en']))) {
+                        return $inner;
+                    }
+                }
                 return $decoded;
             }
 

@@ -9,28 +9,15 @@ use App\Models\QuestionOption;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\TranslationService;
 use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
-    private function normalizeLocalePayload(?array $value, string $fallback = ''): array
+    private function normalizeLocalePayload(?array $value): array
     {
         $value = is_array($value) ? $value : [];
-        $id = trim((string) ($value['id'] ?? ''));
-        $en = trim((string) ($value['en'] ?? ''));
-
-        if ($id === '' && $en !== '') {
-            $id = $en;
-        }
-
-        if ($en === '' && $id !== '') {
-            $en = $fallback !== '' ? $fallback : $id;
-        }
-
-        return [
-            'id' => $id,
-            'en' => $en,
-        ];
+        return TranslationService::autoTranslatePair($value['id'] ?? null, $value['en'] ?? null);
     }
 
     /**
@@ -52,7 +39,7 @@ class QuestionController extends Controller
     public function store(Request $request, Course $course, Chapter $chapter)
     {
         $validated = $request->validate([
-            'question_text.id'      => 'required|string',
+            'question_text.id'      => 'nullable|string',
             'question_text.en'      => 'nullable|string',
             'question_image'        => 'nullable|image|max:5120',
             'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
@@ -62,13 +49,37 @@ class QuestionController extends Controller
             'topic_tag'             => 'nullable|string|max:100',
             // Pilihan jawaban (tidak diperlukan untuk tipe essay)
             'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
-            'options.*.text.id'     => 'required_unless:type,essay|string',
+            'options.*.text.id'     => 'nullable|string',
             'options.*.text.en'     => 'nullable|string',
             'options.*.image'       => 'nullable|image|max:5120',
             'options.*.is_correct'  => 'nullable|boolean',
             'options.*.match_label.id' => 'nullable|string|max:255',
             'options.*.match_label.en' => 'nullable|string|max:255',
         ]);
+
+        // Minimal salah satu bahasa terisi untuk pertanyaan
+        if (empty(trim($validated['question_text']['id'] ?? '')) && empty(trim($validated['question_text']['en'] ?? ''))) {
+            return back()->withErrors(['question_text.id' => __('Pertanyaan wajib diisi dalam salah satu bahasa.')])->withInput();
+        }
+
+        // Minimal salah satu bahasa terisi untuk opsi jawaban (kecuali essay)
+        if ($validated['type'] !== 'essay') {
+            foreach ($validated['options'] ?? [] as $i => $opt) {
+                $hasTextId = !empty(trim($opt['text']['id'] ?? ''));
+                $hasTextEn = !empty(trim($opt['text']['en'] ?? ''));
+                if (!$hasTextId && !$hasTextEn) {
+                    return back()->withErrors(["options.{$i}.text.id" => __('Pilihan jawaban wajib diisi dalam salah satu bahasa.')])->withInput();
+                }
+
+                if ($validated['type'] === 'matching') {
+                    $hasMatchId = !empty(trim($opt['match_label']['id'] ?? ''));
+                    $hasMatchEn = !empty(trim($opt['match_label']['en'] ?? ''));
+                    if (!$hasMatchId && !$hasMatchEn) {
+                        return back()->withErrors(["options.{$i}.match_label.id" => __('Pasangan mencocokkan wajib diisi dalam salah satu bahasa.')])->withInput();
+                    }
+                }
+            }
+        }
 
         DB::transaction(function () use ($validated, $request, $course, $chapter) {
             // Upload gambar soal
@@ -120,7 +131,7 @@ class QuestionController extends Controller
     public function update(Request $request, Course $course, Chapter $chapter, Question $question)
     {
         $validated = $request->validate([
-            'question_text.id'      => 'required|string',
+            'question_text.id'      => 'nullable|string',
             'question_text.en'      => 'nullable|string',
             'question_image'        => 'nullable|image|max:5120',
             'type'                  => 'required|in:multiple_choice,true_false,essay,matching,ordering',
@@ -131,13 +142,37 @@ class QuestionController extends Controller
             // Pilihan jawaban (tidak diperlukan untuk tipe essay)
             'options'               => $request->input('type') === 'essay' ? 'nullable|array' : 'required|array|min:1',
             'options.*.id'          => 'nullable|integer|exists:question_options,id',
-            'options.*.text.id'     => 'required_unless:type,essay|string',
+            'options.*.text.id'     => 'nullable|string',
             'options.*.text.en'     => 'nullable|string',
             'options.*.image'       => 'nullable|image|max:5120',
             'options.*.is_correct'  => 'nullable|boolean',
             'options.*.match_label.id' => 'nullable|string|max:255',
             'options.*.match_label.en' => 'nullable|string|max:255',
         ]);
+
+        // Minimal salah satu bahasa terisi untuk pertanyaan
+        if (empty(trim($validated['question_text']['id'] ?? '')) && empty(trim($validated['question_text']['en'] ?? ''))) {
+            return back()->withErrors(['question_text.id' => __('Pertanyaan wajib diisi dalam salah satu bahasa.')])->withInput();
+        }
+
+        // Minimal salah satu bahasa terisi untuk opsi jawaban (kecuali essay)
+        if ($validated['type'] !== 'essay') {
+            foreach ($validated['options'] ?? [] as $i => $opt) {
+                $hasTextId = !empty(trim($opt['text']['id'] ?? ''));
+                $hasTextEn = !empty(trim($opt['text']['en'] ?? ''));
+                if (!$hasTextId && !$hasTextEn) {
+                    return back()->withErrors(["options.{$i}.text.id" => __('Pilihan jawaban wajib diisi dalam salah satu bahasa.')])->withInput();
+                }
+
+                if ($validated['type'] === 'matching') {
+                    $hasMatchId = !empty(trim($opt['match_label']['id'] ?? ''));
+                    $hasMatchEn = !empty(trim($opt['match_label']['en'] ?? ''));
+                    if (!$hasMatchId && !$hasMatchEn) {
+                        return back()->withErrors(["options.{$i}.match_label.id" => __('Pasangan mencocokkan wajib diisi dalam salah satu bahasa.')])->withInput();
+                    }
+                }
+            }
+        }
 
         DB::transaction(function () use ($validated, $request, $question) {
             // Update gambar soal
